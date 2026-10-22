@@ -30,7 +30,8 @@ echo "==> migratsiya (xavfsizlik uchun yana bir bor)"
 
 if grep -qE '^TELEGRAM_BOT_TOKEN=.+' .env.production; then
   echo "==> Telegram webhook"
-  "${DC[@]}" exec -T app php artisan telegram:set-webhook
+  # Domen hali ishlamasa webhook o'rnatilmaydi, lekin deploy to'xtamasligi kerak
+  "${DC[@]}" exec -T app php artisan telegram:set-webhook || echo "OGOHLANTIRISH: webhook o'rnatilmadi (domen/HTTPS tayyormi?)"
 else
   echo "TELEGRAM_BOT_TOKEN bo'sh, webhook o'tkazib yuborildi"
 fi

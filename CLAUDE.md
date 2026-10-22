@@ -7,8 +7,9 @@
 
 ## Loyiha
 
-- Reja: `docs/REJA.md`, bozor tahlili: `docs/BOZOR_TAHLILI.md`.
-- `backend/`: Laravel 13 API (`/api/v1`). Admin panel keyinchalik Filament bilan qilinadi.
+- **Avval o'qing: `docs/HOLAT.md`** — joriy holat, server ogohlantirishlari va keyingi ishlar.
+- Reja: `docs/REJA.md`, bozor tahlili: `docs/BOZOR_TAHLILI.md`, marketing: `docs/MARKETING_REJA.md`.
+- `backend/`: Laravel 13 API (`/api/v1`), admin panel Filament (`/admin`).
 - `frontend/`: Nuxt 4, Nuxt UI, @nuxtjs/i18n (uz — asosiy, ru).
 - Jamoa: 1 dasturchi va Claude. Oddiy, tayyor yechimlarni afzal ko'r.
 - **Tokenlarni tejash:** oddiy va o'rtacha ishlarni (CRUD, API, testlar, tarjima, qidiruv) subagentlarga `model: sonnet` yoki `haiku` bilan ber, natijani asosiy sessiya tekshiradi (testlar, diff ko'rib chiqish). Qiyin arxitektura va dizayn qarorlarini asosiy model qiladi.
@@ -20,3 +21,4 @@
 - Biometrik ma'lumot (selfi, yuz) chet eldagi serverda saqlanmaydi (ZRU-1125).
 - Nishonlar `badges` jadvalida turadi. Yangi nishon qo'shish kod emas, ma'lumot sifatida qilinadi.
 - Backend o'zgarishidan keyin: `php artisan test` va `./vendor/bin/pint --test`. Frontend o'zgarishidan keyin: `pnpm build`.
+- **Server umumiy (40+ boshqa sayt):** Nginx, firewall, PHP va tizim paketlariga tegilmaydi. enagalar faqat Docker (`127.0.0.1:8095`) va o'zining Nginx sayt fayli orqali ishlaydi. Tizim darajasidagi o'zgarishdan oldin foydalanuvchidan so'ra.
