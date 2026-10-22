@@ -96,14 +96,14 @@ export function useApiError() {
   return { toastError, ok }
 }
 
-/** Ota-onaning bitta e'lonini roʻyxatdan topadi (alohida GET yoʻq). */
+/** Ota-onaning bitta e'loni (GET /my/vacancies/{id}); topilmasa yoki boshqaniki bo'lsa null. */
 export async function fetchMyVacancy(api: ReturnType<typeof useApi>, id: number | string): Promise<OwnVacancy | null> {
-  let page = 1
-  for (;;) {
-    const res = await api<Paginated<OwnVacancy>>('/my/vacancies', { query: { page } })
-    const found = res.data.find(v => String(v.id) === String(id))
-    if (found) return found
-    if (page >= res.meta.last_page) return null
-    page++
+  try {
+    const res = await api<{ data: OwnVacancy }>(`/my/vacancies/${id}`)
+    return res.data
+  } catch (e: any) {
+    const status = e?.statusCode ?? e?.response?.status
+    if (status === 404 || status === 403) return null
+    throw e
   }
 }
