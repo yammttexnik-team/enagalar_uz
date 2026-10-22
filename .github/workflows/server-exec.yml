@@ -3,6 +3,9 @@ name: Server exec
 # Diagnostika va xizmat buyruqlari (deploy foydalanuvchisi nomidan, ~/enagalar_uz/deploy ichida).
 # DC o'zgaruvchisi: "docker compose --env-file .env.production -f docker-compose.prod.yml".
 # Misol: $DC ps ; $DC logs --tail 100 app ; $DC exec -T app php artisan migrate:status
+# !!! MUHIM: bu workflow serverda ixtiyoriy buyruq bajaradi. GitHub'da `production` environment
+# uchun "Required reviewers" MAJBURIY yoqilgan bo'lishi kerak (Settings -> Environments -> production),
+# aks holda write huquqi bor har kim serverda buyruq ishga tushira oladi.
 # Diqqat: .env.production qiymatlarini chiqaradigan buyruqlar ishlatmang (loglar repo a'zolariga ko'rinadi).
 on:
   workflow_dispatch:
@@ -13,6 +16,10 @@ on:
         type: string
         default: "$DC ps; $DC logs --tail 80 app"
 
+# Minimal huquq: workflow faqat kodni o'qiy oladi (serverga SSH orqali kiradi, GitHub API kerak emas).
+permissions:
+  contents: read
+
 jobs:
   exec:
     runs-on: ubuntu-latest
@@ -20,6 +27,8 @@ jobs:
     timeout-minutes: 20
     env:
       HOST: ${{ secrets.SERVER_HOST }}
+      # Ixtiyoriy: known_hosts qatori (TOFU'dan himoya). Bo'sh bo'lsa ssh-keyscan ishlatiladi.
+      SERVER_HOST_KEY: ${{ secrets.SERVER_HOST_KEY }}
     steps:
       - name: SSH sozlash
         env:
@@ -28,7 +37,17 @@ jobs:
           install -m 700 -d ~/.ssh
           printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "$HOST" > ~/.ssh/known_hosts
+          if [ -n "${SERVER_HOST_KEY:-}" ]; then printf '%s\n' "$SERVER_HOST_KEY" > ~/.ssh/known_hosts; else ssh-keyscan -H "$HOST" > ~/.ssh/known_hosts; fi
+
+      - name: Sirlar chiqib ketishidan himoya (taxminiy)
+        env:
+          CMD: ${{ inputs.command }}
+        run: |
+          # To'liq himoya emas, faqat ehtiyotsizlikdan saqlaydi. Asosiy himoya: environment reviewers.
+          if printf '%s' "$CMD" | grep -Eiq '(^|[[:space:];|&(`$])(env|printenv)([[:space:];|&)]|$)|\.env\.production|cat[[:space:]]+[^;|&]*\.env|[[:space:]]config([[:space:]]|$)|docker[[:space:]]+inspect'; then
+            echo "XATO: buyruqda sirlarni chiqarishi mumkin bo'lgan qism bor (env, printenv, .env.production, cat .env, config, inspect). Rad etildi."
+            exit 1
+          fi
 
       - name: Buyruq
         env:

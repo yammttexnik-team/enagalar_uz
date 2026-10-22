@@ -3,6 +3,8 @@ name: Deploy
 # main'dagi CI muvaffaqiyatli tugagach serverga avtomatik joylaydi.
 # Qo'lda ishga tushirish: Actions → Deploy → Run workflow.
 # Server avval "Server setup" workflow'i bilan sozlangan bo'lishi kerak.
+# ESLATMA: hozircha `main` branch yo'q (yagona branch: ccr-93c85ef7-iqkyo9), shuning uchun avtomatik
+# deploy ishlamaydi, faqat qo'lda (workflow_dispatch). `main` yaratilgach avtomatik yoqiladi.
 on:
   workflow_run:
     workflows: [CI]
@@ -14,14 +16,26 @@ concurrency:
   group: deploy-production
   cancel-in-progress: false
 
+# Minimal huquq: workflow faqat kodni o'qiy oladi (serverga SSH orqali kiradi, GitHub API kerak emas).
+permissions:
+  contents: read
+
 jobs:
   deploy:
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    # Faqat shu repo'dagi push'dan chiqqan muvaffaqiyatli CI deploy qilinadi
+    # (fork'dan yoki pull_request'dan kelgan workflow_run hech qachon deploy qilmaydi).
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_repository.full_name == github.repository &&
+       github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-latest
     environment: production
     timeout-minutes: 30
     env:
       HOST: ${{ secrets.SERVER_HOST }}
+      # Ixtiyoriy: known_hosts qatori (TOFU'dan himoya). Bo'sh bo'lsa ssh-keyscan ishlatiladi.
+      SERVER_HOST_KEY: ${{ secrets.SERVER_HOST_KEY }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,7 +48,7 @@ jobs:
           install -m 700 -d ~/.ssh
           printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "$HOST" > ~/.ssh/known_hosts
+          if [ -n "${SERVER_HOST_KEY:-}" ]; then printf '%s\n' "$SERVER_HOST_KEY" > ~/.ssh/known_hosts; else ssh-keyscan -H "$HOST" > ~/.ssh/known_hosts; fi
 
       - name: Kodni yuborish
         run: |

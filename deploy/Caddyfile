@@ -4,7 +4,8 @@
 {
 	auto_https off
 	servers {
-		trusted_proxies static private_ranges
+		# Faqat host Nginx: u Docker bridge gateway (172.16.0.0/12) yoki loopback orqali keladi.
+		trusted_proxies static 127.0.0.1/32 172.16.0.0/12
 	}
 }
 

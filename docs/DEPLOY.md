@@ -2,6 +2,9 @@
 
 Bitta Contabo VPS, Docker Compose. Hamma narsa `deploy/` papkasida.
 
+> **Server umumiy (40+ boshqa sayt).** Mavjud Nginx, firewall, PHP va tizim paketlariga tegilmaydi.
+> enagalar faqat Docker (`127.0.0.1:8095`) va o'zining Nginx sayt fayli (`enagalar-<domen>`) orqali ishlaydi.
+
 ## 0. GitHub Actions orqali (tavsiya etiladi)
 
 Serverni qo'lda sozlash shart emas: GitHub serverga SSH orqali o'zi ulanadi.
@@ -11,7 +14,8 @@ Serverni qo'lda sozlash shart emas: GitHub serverga SSH orqali o'zi ulanadi.
 | Nomi | Qiymati |
 |---|---|
 | `SERVER_HOST` | Server IP manzili |
-| `SERVER_ROOT_PASSWORD` | Root paroli (faqat birinchi sozlash uchun; keyin o'chirsa bo'ladi) |
+| `SERVER_ROOT_PASSWORD` | Root paroli. **Server setup** va **Nginx site** workflow'lari uchun; Nginx site har ishga tushganda kerak bo'ladi (o'chirib qo'ymang) |
+| `SERVER_HOST_KEY` | Ixtiyoriy, lekin tavsiya etiladi: serverning `known_hosts` qatori (pastdagi "Xavfsizlik sozlamalari" bo'limi) |
 | `DEPLOY_SSH_KEY` | Deploy uchun SSH maxfiy kaliti (ed25519, to'liq: BEGIN…END qatorlari bilan) |
 | `TELEGRAM_BOT_TOKEN` | @BotFather bergan token |
 | `ANTHROPIC_API_KEY` | Claude API kaliti |
@@ -20,16 +24,33 @@ Serverni qo'lda sozlash shart emas: GitHub serverga SSH orqali o'zi ulanadi.
 
 **2. DNS:** `enagalar.uz` va `www.enagalar.uz` uchun A yozuvini server IP'siga yo'naltiring (2-bo'lim).
 
-**3. Server setup:** **Actions → Server setup → Run workflow**. U Docker, firewall, fail2ban va `deploy` foydalanuvchisini o'rnatadi, kodni yuboradi, `.env.production` ni tasodifiy parollar bilan yaratadi, ishga tushiradi va admin yaratadi.
+**3. Server setup:** **Actions → Server setup → Run workflow**. U Docker va `deploy` foydalanuvchisini o'rnatadi, kodni yuboradi, `.env.production` ni tasodifiy parollar bilan yaratadi, ishga tushiradi va admin yaratadi. **ufw, fail2ban, `apt upgrade` va swap faqat `FULL_SETUP=1` bilan** ishlaydi (`server-setup.sh`). Umumiy serverda bu yoqilmaydi, chunki boshqa saytlarga ta'sir qiladi.
 
-**4. Keyingi yangilanishlar:** **Actions → Deploy → Run workflow** (yoki `main` branch'ga push qilinganda CI'dan keyin avtomatik).
+**4. Nginx site:** **Actions → Nginx site → Run workflow** (`domain` kiriting). Mavjud Nginx'ga faqat `/etc/nginx/sites-available/enagalar-<domen>` faylini qo'shadi, `nginx -t` o'tsa reload qiladi, so'ng `certbot --nginx` bilan HTTPS oladi. `nginx -t` xato bersa, faqat o'zimizning fayl olib tashlanadi. Root paroli (`SERVER_ROOT_PASSWORD`) **har ishga tushganda** ishlatiladi.
+
+**5. Keyingi yangilanishlar:** **Actions → Deploy → Run workflow**. Avtomatik deploy `main` branch'dagi push'dan keyingi CI muvaffaqiyatidan so'ng ishlaydi, lekin faqat shu repo'dagi `push` hodisasi uchun (fork va pull request'dan emas). **Hozircha `main` branch yo'q** (yagona branch: `ccr-93c85ef7-iqkyo9`), shuning uchun avtomatik deploy ishlamaydi, faqat qo'lda. `main` yaratilgach o'zi yoqiladi.
+
+### Boshqa workflow'lar
+
+| Workflow | Vazifasi |
+|---|---|
+| **Set domain** | `.env.production` dagi domenni almashtiradi (masalan, vaqtinchalik `161-97-88-95.sslip.io` dan `enagalar.uz` ga) va qayta deploy qiladi. Kodni rsync qilmaydi, kod o'zgarishi uchun avval **Deploy** ishlating. |
+| **Nginx site** | Yuqorida (4-qadam). Domen o'zgarganda qayta ishga tushiring. |
+| **Server exec** | Diagnostika buyruqlari (`$DC ps`, `$DC logs --tail 100 app`). Qarang: pastdagi ogohlantirish. |
+
+### Xavfsizlik sozlamalari (bir marta qiling)
+
+- **`production` environment'ga reviewers qo'shing** (Settings → Environments → production → Required reviewers). **Server exec** serverda ixtiyoriy buyruq bajaradi; reviewer talabisiz write huquqi bor har kim uni ishga tushira oladi. Workflow'da `env`/`printenv`/`.env.production`/`cat .env` kabi buyruqlarni rad etuvchi taxminiy himoya bor, lekin u asosiy to'siq emas.
+- **SSH host kaliti (`SERVER_HOST_KEY`).** Secret bo'lmasa workflow'lar `ssh-keyscan` ishlatadi (birinchi ulanishga ishonish, TOFU: tarmoqdagi hujumchi soxta serverni ko'rsatishi mumkin). Himoya uchun o'z kompyuteringizdan: `ssh-keyscan -H SERVER_IP`, chiqqan qator(lar)ni serverning haqiqiy barmoq izi bilan solishtirib, to'liq `SERVER_HOST_KEY` secret'iga joylang. Secret bor bo'lsa, workflow'lar uni `known_hosts` sifatida ishlatadi.
+- Workflow'larda `permissions: contents: read` bor va uchinchi tomon action'lar (`shivammathur/setup-php`, `pnpm/action-setup`) to'liq commit SHA'ga mahkamlangan. Yangilash uchun: `git ls-remote https://github.com/OWNER/REPO refs/tags/TAG refs/tags/TAG^{}` (annotated tag bo'lsa `^{}` dagi SHA olinadi).
 
 Pastdagi qo'lda bajariladigan bo'limlar shu workflow ichida avtomatik bajariladi; ular muammo bo'lganda tushunish uchun qoldirildi.
 
 ## Arxitektura
 
 ```
-Internet -> Caddy (80/443, avtomatik HTTPS)
+Internet -> host Nginx (80/443, TLS: certbot, X-Forwarded-For = $remote_addr)
+  -> 127.0.0.1:8095 -> Caddy (faqat ichki HTTP, auto_https off)
   /api/* /admin* /livewire* /broadcasting/* /filament* /sanctum/* /up -> app (php-fpm)
   /storage/*  -> faqat storage/app/public (statik)
   /app/*      -> reverb:8080 (websocket)
@@ -38,6 +59,8 @@ Ichki tarmoq: app, queue, scheduler, reverb, nuxt, postgres, redis (portlari tas
 ```
 
 Volume'lar: `pgdata`, `redisdata`, `storage` (Laravel storage/, pasport fayllari `storage/app/verification` ham shu yerda, veb orqali berilmaydi), `public`, `caddy_data`, `caddy_config`.
+
+Caddy tashqariga to'g'ridan-to'g'ri chiqmaydi: sertifikatni Caddy emas, host Nginx + certbot (Nginx site workflow) oladi.
 
 ## 1. Server buyurtma qilish
 
@@ -54,9 +77,9 @@ Volume'lar: `pgdata`, `redisdata`, `storage` (Laravel storage/, pasport fayllari
 | `enagalar.uz` | A | server IPv4 |
 | `www.enagalar.uz` | A | server IPv4 |
 
-Tarqalishini tekshiring: `dig +short enagalar.uz`. DNS tayyor bo'lmasa Caddy sertifikat ololmaydi.
+Tarqalishini tekshiring: `dig +short enagalar.uz`. DNS tayyor bo'lmasa certbot (Nginx site workflow) sertifikat ololmaydi.
 
-## 3. Serverni sozlash
+## 3. Serverni sozlash (qo'lda; odatda kerak emas, workflow bajaradi)
 
 ```bash
 ssh root@SERVER_IP
@@ -65,15 +88,15 @@ git clone https://github.com/<akkaunt>/enagalar_uz.git /opt/enagalar_uz-tmp   # 
 bash /opt/enagalar_uz-tmp/deploy/scripts/server-setup.sh deploy "$(cat ~/.ssh/authorized_keys | head -1)"
 ```
 
-Script: Docker, ufw (22/80/443), fail2ban, avtomatik yangilanishlar, 2 GB swap, `deploy` foydalanuvchisini yaratadi. Qayta ishga tushirsa ham xavfli emas.
+Script (oddiy rejim): Docker va `deploy` foydalanuvchisini o'rnatadi. Qayta ishga tushirsa ham xavfli emas. **Faqat bo'sh, alohida serverda** `FULL_SETUP=1 bash server-setup.sh ...` bilan ufw (22/80/443), fail2ban, `apt upgrade`, avtomatik yangilanishlar va 2 GB swap ham o'rnatiladi. Umumiy serverda `FULL_SETUP=1` ishlatmang.
 Keyin **yangi oynada** `ssh deploy@SERVER_IP` bilan kirib ko'ring, ishlasa ish davom etadi.
 
 ## 4. Kodni olish va sozlash
 
+Serverda git yo'q: kod GitHub Actions orqali **rsync** bilan `~/enagalar_uz/` ga yuboriladi. Qo'lda sozlashda ham kodni kompyuterdan yuboring: `rsync -az --exclude .git --exclude node_modules --exclude vendor ./ deploy@SERVER_IP:enagalar_uz/`.
+
 ```bash
-cd ~
-git clone https://github.com/<akkaunt>/enagalar_uz.git
-cd enagalar_uz/deploy
+cd ~/enagalar_uz/deploy
 cp .env.production.example .env.production
 chmod 600 .env.production
 nano .env.production
@@ -95,7 +118,7 @@ docker compose --env-file .env.production -f docker-compose.prod.yml run --rm --
 ./scripts/deploy.sh --no-pull
 ```
 
-`deploy.sh` image'larni quradi, hamma xizmatni ko'taradi, migratsiyani bajaradi, Telegram webhook o'rnatadi. Tekshirish: `https://enagalar.uz` va `https://enagalar.uz/up`.
+`deploy.sh` build'dan oldin joriy image'larni `:prev` deb belgilaydi, so'ng image'larni quradi, hamma xizmatni ko'taradi, migratsiyani bajaradi, Telegram webhook o'rnatadi. Tekshirish: serverda `curl http://127.0.0.1:8095/up`; Nginx site tayyor bo'lgach `https://enagalar.uz/up`.
 
 ## 6. Admin yaratish
 
@@ -118,19 +141,17 @@ Javobda `"ok":true` bo'lishi kerak. Webhook manzili: `https://enagalar.uz/api/v1
 
 ## 8. Backup (cron)
 
+Cron avtomatik o'rnatilmaydi. `deploy` foydalanuvchisi bilan bir marta qo'lda o'rnating:
+
 ```bash
 mkdir -p ~/backups && chmod 700 ~/backups
-crontab -e
-```
-
-Qo'shing:
-
-```
-15 3 * * * /home/deploy/enagalar_uz/deploy/scripts/backup.sh >> /home/deploy/backups/backup.log 2>&1
+chmod +x ~/enagalar_uz/deploy/scripts/backup.sh
+( crontab -l 2>/dev/null; echo '15 3 * * * /home/deploy/enagalar_uz/deploy/scripts/backup.sh >> /home/deploy/backups/backup.log 2>&1' ) | crontab -
+crontab -l   # tekshirish
 ```
 
 - Bazaning gzip dump'i va `storage` volume arxivi saqlanadi, 14 kundan eskilari o'chadi.
-- Tashqi nusxa uchun: `rclone config` (remote nomi, masalan `eu-s3`), keyin `.env.production` da `RCLONE_REMOTE=eu-s3:enagalar-backups`. Remote **faqat EI/EU serverda** bo'lsin (ZRU-1125), arxivda pasport ma'lumotlari bor, shuning uchun `rclone crypt` tavsiya etiladi.
+- Tashqi nusxa uchun: `rclone config` (remote nomi, masalan `eu-s3`), keyin `.env.production` da `RCLONE_REMOTE=eu-s3:enagalar-backups`. Remote **faqat ishonchli (EU) mamlakat serverida** bo'lsin (ZRU-1125). Arxivda pasport ma'lumotlari bor, shuning uchun tashqi nusxa **`rclone crypt` remote** orqali yuborilsin (`rclone config` da `crypt` turidagi remote yarating: fayl nomlari va mazmuni shifrlanadi), masalan `RCLONE_REMOTE=eu-crypt:enagalar-backups`. Crypt parollarini (`password`, `password2`) serverdan tashqarida ham saqlang, aks holda nusxani ochib bo'lmaydi.
 - Qo'lda sinab ko'ring: `./scripts/backup.sh`. Tiklash: `./scripts/restore.sh ~/backups/db-....sql.gz ~/backups/storage-....tar.gz`. Tiklashni kamida bir marta sinab ko'ring.
 
 ## 9. Shaxsiy ma'lumotlar bazasini ro'yxatdan o'tkazish
@@ -139,12 +160,21 @@ Eslatma: ma'lumotlar bazasini **pd.gov.uz** da davlat reestriga ro'yxatdan o'tka
 
 ## 10. Yangilash
 
-```bash
-cd ~/enagalar_uz
-./deploy/scripts/deploy.sh
-```
+Odatiy yo'l: **Actions → Deploy → Run workflow**. U kodni serverga `rsync -az --delete` bilan yuboradi (serverda git repo yo'q) va `deploy.sh --no-pull` ni ishga tushiradi. `deploy.sh` build'dan oldin joriy image'larni `enagalar/backend:prev` va `enagalar/frontend:prev` deb belgilaydi (`docker image prune` ularga tegmaydi), so'ng build, `up -d`, migratsiya va webhook ni bajaradi. Kutish: bir necha soniya, `app` sog'lom bo'lguncha.
 
-Script `git pull`, build, `up -d`, migratsiya, webhook ni bajaradi. Kutish: bir necha soniya, `app` sog'lom bo'lguncha. Orqaga qaytish: `git checkout <oldingi-commit> && ./deploy/scripts/deploy.sh --no-pull`.
+### Orqaga qaytish (rollback)
+
+Serverda git yo'qligi uchun `git pull`/`git checkout` ishlamaydi. Ikki yo'l:
+
+1. **Tez: oldingi image'ga qaytish.** Server exec yoki SSH orqali:
+   ```bash
+   cd ~/enagalar_uz/deploy
+   docker tag enagalar/backend:prev enagalar/backend:latest
+   docker tag enagalar/frontend:prev enagalar/frontend:latest
+   docker compose --env-file .env.production -f docker-compose.prod.yml up -d --no-build --force-recreate app queue scheduler reverb nuxt
+   ```
+   Eslatma: `:prev` faqat bitta oldingi deploy'ni saqlaydi. Migratsiya orqaga qaytmaydi; yangi versiya sxemani buzgan bo'lsa, bazani backup'dan tiklang (8-bo'lim).
+2. **Eski commit'ni qayta deploy qilish:** lokal repo'da kerakli commit'dan branch yarating, push qiling va **Deploy** ni `workflow_dispatch` bilan shu branch'dan ishga tushiring.
 
 ## 11. Muammolarni topish
 
@@ -153,7 +183,7 @@ Hamma buyruq `deploy/` papkasida: `alias dc='docker compose --env-file .env.prod
 ```bash
 dc ps                          # holat
 dc logs -f --tail=100 app      # Laravel / php-fpm
-dc logs -f caddy               # HTTPS, kirish loglari
+dc logs -f caddy               # ichki HTTP, kirish loglari
 dc logs -f queue reverb nuxt   # navbat, websocket, frontend
 dc exec app php artisan about
 dc exec app php artisan queue:failed
@@ -162,7 +192,7 @@ docker stats                   # RAM/CPU
 ```
 
 Tez-tez uchraydigan holatlar:
-- **Sertifikat olinmayapti**: DNS A yozuvi noto'g'ri yoki 80/443 yopiq (`sudo ufw status`). `dc logs caddy`.
+- **Sertifikat olinmayapti**: DNS A yozuvi noto'g'ri yoki 80/443 yopiq. Nginx site workflow logini tekshiring (Let's Encrypt limiti, masalan sslip.io uchun, tugagan bo'lishi mumkin: u holda sayt HTTP orqali ishlaydi). Caddy sertifikat olmaydi (`auto_https off`).
 - **500 xato**: `dc logs app`, `.env.production` o'zgargan bo'lsa `dc up -d --force-recreate app queue scheduler reverb`.
 - **Websocket ulanmayapti**: `NUXT_PUBLIC_REVERB_*` va `REVERB_APP_KEY` mosligini tekshiring; frontend env o'zgargach `dc up -d --force-recreate nuxt`.
 - **Admin CSS yuklanmayapti**: `dc exec app php artisan filament:assets`, `app` ni qayta ishga tushiring.

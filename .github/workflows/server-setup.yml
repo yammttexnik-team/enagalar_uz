@@ -15,6 +15,10 @@ concurrency:
   group: deploy-production
   cancel-in-progress: false
 
+# Minimal huquq: workflow faqat kodni o'qiy oladi (serverga SSH orqali kiradi, GitHub API kerak emas).
+permissions:
+  contents: read
+
 jobs:
   setup:
     runs-on: ubuntu-latest
@@ -22,6 +26,8 @@ jobs:
     timeout-minutes: 60
     env:
       HOST: ${{ secrets.SERVER_HOST }}
+      # Ixtiyoriy: known_hosts qatori (TOFU'dan himoya). Bo'sh bo'lsa ssh-keyscan ishlatiladi.
+      SERVER_HOST_KEY: ${{ secrets.SERVER_HOST_KEY }}
     steps:
       - uses: actions/checkout@v4
 
@@ -33,7 +39,7 @@ jobs:
           install -m 700 -d ~/.ssh
           printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "$HOST" > ~/.ssh/known_hosts
+          if [ -n "${SERVER_HOST_KEY:-}" ]; then printf '%s\n' "$SERVER_HOST_KEY" > ~/.ssh/known_hosts; else ssh-keyscan -H "$HOST" > ~/.ssh/known_hosts; fi
           ssh-keygen -y -f ~/.ssh/deploy_key > ~/.ssh/deploy_key.pub
 
       - name: Serverni sozlash (root)

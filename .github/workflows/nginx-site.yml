@@ -14,6 +14,10 @@ concurrency:
   group: deploy-production
   cancel-in-progress: false
 
+# Minimal huquq: workflow faqat kodni o'qiy oladi (serverga SSH orqali kiradi, GitHub API kerak emas).
+permissions:
+  contents: read
+
 jobs:
   nginx:
     runs-on: ubuntu-latest
@@ -21,6 +25,8 @@ jobs:
     timeout-minutes: 15
     env:
       HOST: ${{ secrets.SERVER_HOST }}
+      # Ixtiyoriy: known_hosts qatori (TOFU'dan himoya). Bo'sh bo'lsa ssh-keyscan ishlatiladi.
+      SERVER_HOST_KEY: ${{ secrets.SERVER_HOST_KEY }}
       DOMAIN: ${{ inputs.domain }}
       PORT: "8095"
       EMAIL: ${{ secrets.ADMIN_EMAIL }}
@@ -36,7 +42,7 @@ jobs:
       - name: Nginx sayt fayli va sertifikat
         run: |
           sudo apt-get install -y -qq sshpass >/dev/null
-          install -m 700 -d ~/.ssh && ssh-keyscan -H "$HOST" > ~/.ssh/known_hosts
+          install -m 700 -d ~/.ssh && if [ -n "${SERVER_HOST_KEY:-}" ]; then printf '%s\n' "$SERVER_HOST_KEY" > ~/.ssh/known_hosts; else ssh-keyscan -H "$HOST" > ~/.ssh/known_hosts; fi
           sed -e "s/__DOMAIN__/$DOMAIN/g" -e "s/__PORT__/$PORT/g" deploy/nginx/enagalar.conf.template > /tmp/site.conf
           sshpass -e scp /tmp/site.conf "root@$HOST:/tmp/enagalar-site.conf"
           sshpass -e ssh "root@$HOST" "DOMAIN='$DOMAIN' EMAIL='$EMAIL' bash -s" <<'SH'

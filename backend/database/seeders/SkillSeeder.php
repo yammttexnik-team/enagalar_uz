@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 
 class SkillSeeder extends Seeder
 {
+    // Ko'nikmalar nomini admin o'zgartirishi mumkin: mavjudlari qayta yozilmaydi.
     public function run(): void
     {
         $skills = [
@@ -23,7 +24,7 @@ class SkillSeeder extends Seeder
         ];
 
         foreach ($skills as [$slug, $uz, $ru]) {
-            Skill::updateOrCreate(['slug' => $slug], ['name_uz' => $uz, 'name_ru' => $ru]);
+            Skill::firstOrCreate(['slug' => $slug], ['name_uz' => $uz, 'name_ru' => $ru]);
         }
     }
 }
