@@ -38,6 +38,15 @@ echo "==> build"
 echo "==> up -d (app healthy bo'lguncha kutiladi; migratsiya entrypoint'da)"
 "${DC[@]}" up -d --remove-orphans --wait --wait-timeout 300
 
+# Caddyfile bitta fayl sifatida mount qilingan: rsync uni yangi inode bilan almashtiradi,
+# ishlab turgan konteyner esa eskisini ko'radi. O'zgargan bo'lsa Caddy qayta ishga tushiriladi.
+CADDY_SUM="$(sha256sum Caddyfile | cut -d' ' -f1)"
+if [ "$(cat .caddyfile.sha 2>/dev/null || true)" != "$CADDY_SUM" ]; then
+  echo "==> Caddyfile o'zgargan: caddy qayta ishga tushirilmoqda"
+  "${DC[@]}" restart caddy
+  echo "$CADDY_SUM" > .caddyfile.sha
+fi
+
 echo "==> migratsiya (xavfsizlik uchun yana bir bor)"
 "${DC[@]}" exec -T app php artisan migrate --force --no-interaction
 

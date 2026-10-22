@@ -46,8 +46,8 @@
 		reverse_proxy reverb:8080
 	}
 
-	# Laravel (php-fpm)
-	@laravel path /api/* /admin /admin/* /livewire /livewire/* /broadcasting/* /filament /filament/* /sanctum/* /up /js/filament/* /css/filament/* /fonts/filament/* /vendor/*
+	# Laravel (php-fpm). Livewire 4 skript va update yo'li: /livewire-<hash>/...
+	@laravel path /api/* /admin /admin/* /livewire /livewire/* /livewire-* /broadcasting/* /filament /filament/* /sanctum/* /up /js/filament/* /css/filament/* /fonts/filament/* /vendor/*
 	handle @laravel {
 		root * /var/www/html/public
 		php_fastcgi app:9000

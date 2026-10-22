@@ -55,7 +55,7 @@ jobs:
           rsync -az --delete -e "ssh -i ~/.ssh/deploy_key" \
             --exclude .git --exclude node_modules --exclude vendor --exclude .nuxt --exclude .output \
             --exclude 'backend/.env' --exclude 'backend/storage' --exclude 'backend/database/*.sqlite' \
-            --exclude 'deploy/.env.production' \
+            --exclude 'deploy/.env.production' --exclude 'deploy/.caddyfile.sha' \
             ./ "deploy@$HOST:enagalar_uz/"
 
       - name: Deploy
