@@ -2,6 +2,30 @@
 
 Bitta Contabo VPS, Docker Compose. Hamma narsa `deploy/` papkasida.
 
+## 0. GitHub Actions orqali (tavsiya etiladi)
+
+Serverni qo'lda sozlash shart emas: GitHub serverga SSH orqali o'zi ulanadi.
+
+**1. Secret'larni qo'shing:** GitHub → repo → **Settings → Secrets and variables → Actions → New repository secret**.
+
+| Nomi | Qiymati |
+|---|---|
+| `SERVER_HOST` | Server IP manzili |
+| `SERVER_ROOT_PASSWORD` | Root paroli (faqat birinchi sozlash uchun; keyin o'chirsa bo'ladi) |
+| `DEPLOY_SSH_KEY` | Deploy uchun SSH maxfiy kaliti (ed25519, to'liq: BEGIN…END qatorlari bilan) |
+| `TELEGRAM_BOT_TOKEN` | @BotFather bergan token |
+| `ANTHROPIC_API_KEY` | Claude API kaliti |
+| `ADMIN_EMAIL` | Admin panelga kirish emaili |
+| `ADMIN_PASSWORD` | Admin paroli (kamida 10 belgi) |
+
+**2. DNS:** `enagalar.uz` va `www.enagalar.uz` uchun A yozuvini server IP'siga yo'naltiring (2-bo'lim).
+
+**3. Server setup:** **Actions → Server setup → Run workflow**. U Docker, firewall, fail2ban va `deploy` foydalanuvchisini o'rnatadi, kodni yuboradi, `.env.production` ni tasodifiy parollar bilan yaratadi, ishga tushiradi va admin yaratadi.
+
+**4. Keyingi yangilanishlar:** **Actions → Deploy → Run workflow** (yoki `main` branch'ga push qilinganda CI'dan keyin avtomatik).
+
+Pastdagi qo'lda bajariladigan bo'limlar shu workflow ichida avtomatik bajariladi; ular muammo bo'lganda tushunish uchun qoldirildi.
+
 ## Arxitektura
 
 ```
