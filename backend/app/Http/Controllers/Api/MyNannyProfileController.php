@@ -15,6 +15,9 @@ use Illuminate\Validation\ValidationException;
 /** Enaganing o'z anketasi (routes: has_role:nanny). */
 class MyNannyProfileController extends Controller
 {
+    /** Tahrirlansa anketa qayta moderatsiyaga ketadigan erkin matn maydonlari. */
+    private const MODERATED_FIELDS = ['bio'];
+
     public function show(Request $request): OwnNannyProfileResource
     {
         return $this->resource($this->profile($request));
@@ -25,7 +28,21 @@ class MyNannyProfileController extends Controller
         $profile = $this->profile($request);
         $data = $request->validated();
 
-        $profile->update(collect($data)->except('skills')->all());
+        $fields = collect($data)->except('skills')->all();
+
+        // Viloyat o'zgarib, tuman berilmasa — eski viloyatning tumani qolib ketmasin.
+        if (array_key_exists('region_id', $fields) && (int) $fields['region_id'] !== (int) $profile->region_id && ! array_key_exists('district_id', $fields)) {
+            $fields['district_id'] = null;
+        }
+
+        $profile->fill($fields);
+
+        // Faol anketaning matni o'zgarsa — qayta moderatsiyaga (e'lonlardagi kabi).
+        if ($profile->status === NannyProfileStatus::Active && $profile->isDirty(self::MODERATED_FIELDS)) {
+            $profile->status = NannyProfileStatus::Pending;
+        }
+
+        $profile->save();
 
         if (array_key_exists('skills', $data)) {
             $profile->skills()->sync(Skill::whereIn('slug', $data['skills'])->pluck('id'));
@@ -39,8 +56,8 @@ class MyNannyProfileController extends Controller
     {
         $profile = $this->profile($request);
 
-        if (! in_array($profile->status, [NannyProfileStatus::Draft, NannyProfileStatus::Rejected, NannyProfileStatus::Hidden], true)) {
-            throw ValidationException::withMessages(['status' => ['Anketa allaqachon yuborilgan yoki faol.']]);
+        if (! in_array($profile->status, [NannyProfileStatus::Draft, NannyProfileStatus::Rejected], true)) {
+            throw ValidationException::withMessages(['status' => ['Anketa allaqachon yuborilgan, faol yoki moderator tomonidan yashirilgan.']]);
         }
 
         Validator::make($profile->only(['region_id', 'bio', 'experience_years', 'price_amount', 'work_formats', 'languages']), [

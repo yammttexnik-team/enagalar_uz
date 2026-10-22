@@ -71,7 +71,13 @@ class ApplicationController extends Controller
     {
         $this->authorize('update', $application);
 
-        $application->update(['status' => $request->validated('status')]);
+        $to = ApplicationStatus::from($request->validated('status'));
+
+        if (! $application->status->canTransitionTo($to)) {
+            throw ValidationException::withMessages(['status' => ['Bu holatga o\'tish mumkin emas.']]);
+        }
+
+        $application->update(['status' => $to]);
 
         return new ApplicationResource($application);
     }

@@ -9,3 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('bonus:expire')->dailyAt('03:00');
+Schedule::command('verification:prune')->dailyAt('03:30');
