@@ -4,6 +4,7 @@
 > - Frontend Nuxt (Vue) ga o'zgardi.
 > - Jamoa: 1 dasturchi va Claude.
 > - Yangi qonun (ZRU-1125) hisobga olindi.
+> - Qarorlar: server Contabo, kirish faqat Telegram bot orqali, birdan barcha viloyatlarda ishga tushirish, faqat "enaga" kategoriyasi, admin panel Filament'da, dispanser nishoni qo'shildi.
 > - Pasport orqali "Tasdiqlangan" nishoni va moslashuvchan nishonlar tizimi qo'shildi.
 >
 > Batafsil bozor tahlili: [BOZOR_TAHLILI.md](BOZOR_TAHLILI.md)
@@ -95,9 +96,10 @@ Boshlang'ich nishonlar:
 
 | Nishon | Qanday beriladi | Bosqich |
 |---|---|---|
-| 📱 Telefon tasdiqlangan | SMS yoki Telegram orqali, avtomatik | 1 |
+| 📱 Telefon tasdiqlangan | Telegram bot orqali raqam yuborilganda, avtomatik | 1 |
 | ✅ **Tasdiqlangan foydalanuvchi** | Foydalanuvchi pasport ma'lumotlarini kiritadi (seriya va raqam, JShShIR, F.I.Sh., tug'ilgan sana), pasport rasmini yuklaydi, moderator tekshiradi | 1 |
 | 🩺 Tibbiy ma'lumotnoma | Hujjat yuklanadi va tekshiriladi, muddati bor (masalan, 1 yil) | 1 |
+| 🛡 Dispanser hisobida turmaydi | Narkologik va psixonevrologik dispanserdan ma'lumotnoma yuklanadi, moderator tekshiradi, 1 yil amal qiladi | 1 |
 | 🎓 Sertifikat yoki ma'lumot (pedagog, hamshira, birinchi yordam) | Hujjat yuklanadi va tekshiriladi | 1 |
 | ⭐ Tavsiya qilingan | 3+ ijobiy sharh va 4,5+ reyting, avtomatik | 2 |
 | ⚡ Tez javob beradi | O'rtacha javob vaqti 1 soatdan kam, avtomatik | 2 |
@@ -178,8 +180,8 @@ Bitta dasturchi bo'lgani uchun **admin panelni alohida yozmaymiz.** Uni Laravel 
 | Frontend | Nuxt 4, Vue 3, TypeScript, Nuxt UI (Tailwind), @nuxtjs/i18n (UZ lotin, UZ kirill, RU), Pinia, Laravel Echo |
 | Ma'lumotlar bazasi | PostgreSQL 16 |
 | Infratuzilma | Docker Compose, GitHub Actions (CI/CD), Sentry, kunlik backup |
-| Server | Germaniya (Hetzner), yangi qonunga ko'ra ruxsat etilgan. Biometrik ma'lumot saqlamaymiz. |
-| Tashqi xizmatlar | Claude API, Telegram Bot API, Eskiz (SMS), Payme, Click, Uzum, keyinchalik MyID |
+| Server | **Contabo** (Yevropa Ittifoqi, Germaniyadagi data-markaz tanlanishi kerak, chunki u "adekvat" ro'yxatda). Pasport rasmlari shu serverdagi yopiq papkada turadi, tekshiruvdan keyin o'chiriladi. Biometrik ma'lumot saqlamaymiz. |
+| Tashqi xizmatlar | Claude API, Telegram Bot API (kirish shu orqali, SMS kerak emas), Payme, Click, Uzum, keyinchalik MyID |
 
 ### 5.2 Repozitoriya tuzilishi
 
@@ -235,7 +237,10 @@ Claude bilan ishlaganda kod yozish tezlashadi. Lekin dizayn, test, moderatsiya v
 - [x] Laravel va Nuxt karkasi
 - [ ] Docker Compose, CI (lint va testlar)
 - [ ] Asosiy migratsiyalar va modellar, viloyat va tumanlar seed'i
-- [ ] Auth: telefon va SMS kodi, Telegram Login, rol tanlash
+- [x] Auth: Telegram bot orqali kirish (raqam bot orqali yuboriladi), rol tanlash API
+- [x] Filament admin panel: pasport va hujjat tekshiruvi, nishonlar, foydalanuvchilar, anketa va vakansiya moderatsiyasi
+- [x] Barcha viloyatlar, tuman va shaharlar (UZ lotin, UZ kirill, RU)
+- [ ] Brend, logotip va dizayn tizimi (dizayn agentlari ishlamoqda)
 - [ ] Dizayn: 10–12 asosiy ekran (Nuxt UI asosida, mobile-first)
 - [ ] Ma'lumotlar bazasini pd.gov.uz da ro'yxatdan o'tkazish, maxfiylik siyosati va oferta
 
@@ -246,7 +251,7 @@ Claude bilan ishlaganda kod yozish tezlashadi. Lekin dizayn, test, moderatsiya v
 - Hafta 4: otklik, sevimlilar, pasport orqali tekshiruv va nishonlar tizimi.
 - Hafta 5–6: **chat v1** (Reverb), push va Telegram bot bildirishnomalari.
 - Hafta 7: **AI v1** (yozuvchi va avto-moderatsiya), Telegram kanalga avto-post.
-- Hafta 8: test, xatolarni tuzatish, beta (50–100 foydalanuvchi), keyin **ishga tushirish**.
+- Hafta 8: test, xatolarni tuzatish, beta (50–100 foydalanuvchi), keyin **barcha viloyatlarda birdan ishga tushirish**.
 
 ### 2-bosqich: o'sish (6–8 hafta)
 
@@ -254,7 +259,7 @@ Claude bilan ishlaganda kod yozish tezlashadi. Lekin dizayn, test, moderatsiya v
 - Sharh va reyting, avtomatik nishonlar, saqlangan qidiruv.
 - Telegram Mini App.
 - To'lovlar: TOP e'lon, PRO anketa, tez tekshiruv.
-- Viloyatlar bo'yicha marketing, o'zbek kirill alifbosi.
+- O'zbek kirill alifbosi.
 
 ### 3-bosqich: kengayish
 

@@ -28,6 +28,14 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'telegram' => [
+        'bot_token' => env('TELEGRAM_BOT_TOKEN'),
+        'bot_username' => env('TELEGRAM_BOT_USERNAME', 'enagalar_bot'),
+        // setWebhook da beriladi, Telegram har so'rovda sarlavhada qaytaradi
+        'webhook_secret' => env('TELEGRAM_WEBHOOK_SECRET'),
+        'login_ttl_minutes' => 10,
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),

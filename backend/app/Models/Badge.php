@@ -20,6 +20,9 @@ class Badge extends Model
 
     public const CERTIFICATE = 'certificate';
 
+    /** Narkologik va psixonevrologik dispanser hisobida turmasligi haqida ma'lumotnoma. */
+    public const DISPENSARY_CLEAR = 'dispensary-clear';
+
     protected function casts(): array
     {
         return [

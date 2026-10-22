@@ -60,7 +60,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('badge_id')->nullable()->constrained()->nullOnDelete();
             $table->string('type', 30);
-            $table->string('path');
+            $table->string('path')->nullable();
             $table->date('issued_at')->nullable();
             $table->string('status', 20)->default('pending');
             $table->string('rejection_reason')->nullable();

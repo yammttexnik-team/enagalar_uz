@@ -3,56 +3,49 @@
 namespace Database\Seeders;
 
 use App\Models\Region;
+use App\Support\UzTransliterator;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class RegionSeeder extends Seeder
 {
     public function run(): void
     {
         $regions = [
-            ['tashkent-city', 'Toshkent shahri', 'Тошкент шаҳри', 'г. Ташкент'],
-            ['tashkent', 'Toshkent viloyati', 'Тошкент вилояти', 'Ташкентская область'],
-            ['andijan', 'Andijon viloyati', 'Андижон вилояти', 'Андижанская область'],
-            ['bukhara', 'Buxoro viloyati', 'Бухоро вилояти', 'Бухарская область'],
-            ['fergana', "Farg'ona viloyati", 'Фарғона вилояти', 'Ферганская область'],
-            ['jizzakh', 'Jizzax viloyati', 'Жиззах вилояти', 'Джизакская область'],
-            ['kashkadarya', 'Qashqadaryo viloyati', 'Қашқадарё вилояти', 'Кашкадарьинская область'],
-            ['khorezm', 'Xorazm viloyati', 'Хоразм вилояти', 'Хорезмская область'],
-            ['namangan', 'Namangan viloyati', 'Наманган вилояти', 'Наманганская область'],
-            ['navoi', 'Navoiy viloyati', 'Навоий вилояти', 'Навоийская область'],
-            ['samarkand', 'Samarqand viloyati', 'Самарқанд вилояти', 'Самаркандская область'],
-            ['surkhandarya', 'Surxondaryo viloyati', 'Сурхондарё вилояти', 'Сурхандарьинская область'],
-            ['syrdarya', 'Sirdaryo viloyati', 'Сирдарё вилояти', 'Сырдарьинская область'],
-            ['karakalpakstan', "Qoraqalpog'iston Respublikasi", 'Қорақалпоғистон Республикаси', 'Республика Каракалпакстан'],
+            ['tashkent-city', 'Toshkent shahri', 'г. Ташкент'],
+            ['tashkent', 'Toshkent viloyati', 'Ташкентская область'],
+            ['andijan', 'Andijon viloyati', 'Андижанская область'],
+            ['bukhara', 'Buxoro viloyati', 'Бухарская область'],
+            ['fergana', "Farg'ona viloyati", 'Ферганская область'],
+            ['jizzakh', 'Jizzax viloyati', 'Джизакская область'],
+            ['kashkadarya', 'Qashqadaryo viloyati', 'Кашкадарьинская область'],
+            ['khorezm', 'Xorazm viloyati', 'Хорезмская область'],
+            ['namangan', 'Namangan viloyati', 'Наманганская область'],
+            ['navoi', 'Navoiy viloyati', 'Навоийская область'],
+            ['samarkand', 'Samarqand viloyati', 'Самаркандская область'],
+            ['surkhandarya', 'Surxondaryo viloyati', 'Сурхандарьинская область'],
+            ['syrdarya', 'Sirdaryo viloyati', 'Сырдарьинская область'],
+            ['karakalpakstan', "Qoraqalpog'iston Respublikasi", 'Республика Каракалпакстан'],
         ];
 
-        foreach ($regions as $sort => [$slug, $uz, $cyrl, $ru]) {
-            Region::updateOrCreate(['slug' => $slug], [
-                'name_uz' => $uz, 'name_uz_cyrl' => $cyrl, 'name_ru' => $ru, 'sort' => $sort,
-            ]);
-        }
+        $districts = require database_path('data/districts.php');
 
-        // Boshlanishda faqat Toshkent shahri tumanlari; viloyatlar tumanlari keyin qo'shiladi.
-        $tashkent = Region::where('slug', 'tashkent-city')->first();
-        $districts = [
-            ['bektemir', 'Bektemir', 'Бектемир', 'Бектемирский'],
-            ['chilanzar', 'Chilonzor', 'Чилонзор', 'Чиланзарский'],
-            ['mirabad', 'Mirobod', 'Миробод', 'Мирабадский'],
-            ['mirzo-ulugbek', "Mirzo Ulug'bek", 'Мирзо Улуғбек', 'Мирзо-Улугбекский'],
-            ['olmazor', 'Olmazor', 'Олмазор', 'Алмазарский'],
-            ['sergeli', 'Sergeli', 'Сергели', 'Сергелийский'],
-            ['shaykhantahur', 'Shayxontohur', 'Шайхонтоҳур', 'Шайхантахурский'],
-            ['uchtepa', 'Uchtepa', 'Учтепа', 'Учтепинский'],
-            ['yakkasaray', 'Yakkasaroy', 'Яккасарой', 'Яккасарайский'],
-            ['yashnobod', 'Yashnobod', 'Яшнобод', 'Яшнабадский'],
-            ['yangihayot', 'Yangihayot', 'Янгиҳаёт', 'Янгихаётский'],
-            ['yunusabad', 'Yunusobod', 'Юнусобод', 'Юнусабадский'],
-        ];
-
-        foreach ($districts as $sort => [$slug, $uz, $cyrl, $ru]) {
-            $tashkent->districts()->updateOrCreate(['slug' => $slug], [
-                'name_uz' => $uz, 'name_uz_cyrl' => $cyrl, 'name_ru' => $ru, 'sort' => $sort,
+        foreach ($regions as $sort => [$slug, $uz, $ru]) {
+            $region = Region::updateOrCreate(['slug' => $slug], [
+                'name_uz' => $uz,
+                'name_uz_cyrl' => UzTransliterator::toCyrillic($uz),
+                'name_ru' => $ru,
+                'sort' => $sort,
             ]);
+
+            foreach ($districts[$slug] ?? [] as $districtSort => [$districtUz, $districtRu]) {
+                $region->districts()->updateOrCreate(['slug' => Str::slug(str_replace("'", '', $districtUz))], [
+                    'name_uz' => $districtUz,
+                    'name_uz_cyrl' => UzTransliterator::toCyrillic($districtUz),
+                    'name_ru' => $districtRu,
+                    'sort' => $districtSort,
+                ]);
+            }
         }
     }
 }
