@@ -486,7 +486,8 @@
       "applications": "Javoblarim",
       "verification": "Tasdiqlash",
       "favorites": "Sevimlilar",
-      "settings": "Sozlamalar"
+      "settings": "Sozlamalar",
+      "messages": "Xabarlar"
     },
     "gate": {
       "parent": {
@@ -830,6 +831,129 @@
       "healthConsentLabel": "Sogʻliq haqidagi maʼlumotni qayta ishlashga roziman",
       "healthConsentText": "Tibbiy hujjatdagi sogʻliq maʼlumotlarim nishon berish maqsadida moderator tomonidan koʻrib chiqilishiga va ularni qayta ishlashga roziman. Maʼlumot boshqalarga koʻrsatilmaydi. Rozilikni istalgan payt qaytarib olish mumkin.",
       "docSubmit": "Hujjatni yuborish"
+    }
+  },
+  "chat": {
+    "title": "Xabarlar",
+    "seo": "Xabarlar — enagalar.uz",
+    "search": "Qidirish",
+    "empty": "Bu yerda suhbatlaringiz boʻladi. Yoqqan anketaga \"Xabar yozish\" tugmasini bosing.",
+    "noResults": "Hech narsa topilmadi.",
+    "loadMore": "Yana koʻrsatish",
+    "verified": "Tasdiqlangan",
+    "muted": "Ovozsiz",
+    "read": "Oʻqilgan",
+    "sent": "Yuborilgan",
+    "sending": "Yuborilmoqda",
+    "failed": "Yuborilmadi",
+    "notSent": "Yuborilmadi",
+    "retry": "Qayta yuborish",
+    "discard": "Bekor qilish",
+    "unreadCount": "{n} ta oʻqilmagan xabar",
+    "online": "onlayn",
+    "offline": "oflayn",
+    "lastSeen": "oxirgi marta {when}",
+    "typing": "yozmoqda…",
+    "photo": "Rasm",
+    "voiceMessage": "Ovozli xabar",
+    "file": "Fayl",
+    "deleted": "Xabar oʻchirildi",
+    "today": "Bugun",
+    "yesterday": "Kecha",
+    "edited": "tahrirlangan",
+    "you": "Siz",
+    "back": "Orqaga",
+    "backToList": "Xabarlarga qaytish",
+    "notFound": "Bu suhbat topilmadi yoki sizga tegishli emas.",
+    "startHint": "Salomlashing va savolingizni yozing. Tanishuvdan oldin pul oʻtkazmang.",
+    "newMessages": "{n} ta yangi xabar",
+    "toLatest": "Oxirgi xabarlar",
+    "messageActions": "Xabar amallari",
+    "jumpToReply": "Asl xabarga oʻtish",
+    "openPhoto": "Rasmni kattalashtirish",
+    "play": "Ijro etish",
+    "pause": "Toʻxtatish",
+    "seek": "Ovozli xabar joyi",
+    "voiceFailed": "Ijro etib boʻlmadi",
+    "voiceUnsupported": "Brauzeringiz ovoz yozishni qoʻllamaydi.",
+    "micDenied": "Mikrofonga ruxsat bering va qayta urinib koʻring.",
+    "imageType": "Faqat JPG, PNG yoki WebP rasm yuborish mumkin.",
+    "imageSize": "Rasm 10 MB dan oshmasligi kerak.",
+    "caption": "Rasmga izoh (ixtiyoriy)",
+    "placeholder": "Xabar yozing…",
+    "editing": "Xabarni tahrirlash",
+    "replyingTo": "{name}ga javob",
+    "cancel": "Bekor qilish",
+    "removePhoto": "Rasmni olib tashlash",
+    "recording": "Ovoz yozilmoqda",
+    "cancelRecording": "Yozuvni bekor qilish",
+    "sendVoice": "Ovozli xabarni yuborish",
+    "attachPhoto": "Rasm biriktirish",
+    "send": "Yuborish",
+    "saveEdit": "Saqlash",
+    "recordVoice": "Ovoz yozish",
+    "editFailed": "Tahrirlab boʻlmadi. Tahrirlash muddati (24 soat) oʻtgan boʻlishi mumkin.",
+    "blockedByMe": "Siz bu foydalanuvchini bloklagansiz.",
+    "blockedMe": "Xabar yuborib boʻlmaydi.",
+    "pick": {
+      "title": "Suhbatni tanlang",
+      "text": "Chap tomondagi roʻyxatdan suhbatni oching yoki yangi anketaga xabar yozing."
+    },
+    "menu": {
+      "label": "Suhbat menyusi",
+      "profile": "Profilni koʻrish",
+      "mute": "Ovozsiz qilish",
+      "unmute": "Ovozni yoqish",
+      "block": "Bloklash",
+      "unblock": "Blokdan chiqarish",
+      "report": "Shikoyat qilish",
+      "blocked": "Foydalanuvchi bloklandi.",
+      "blockTitle": "Foydalanuvchini bloklaysizmi?",
+      "blockText": "U sizga xabar yoza olmaydi. Istalgan vaqt blokdan chiqarishingiz mumkin."
+    },
+    "actions": {
+      "reply": "Javob berish",
+      "copy": "Nusxa olish",
+      "edit": "Tahrirlash",
+      "delete": "Oʻchirish",
+      "copied": "Nusxa olindi.",
+      "deleteTitle": "Xabarni oʻchirasizmi?",
+      "deleteText": "Xabar ikkala tomon uchun ham oʻchadi."
+    },
+    "warning": {
+      "title": "Ehtiyot boʻling.",
+      "text": "Tanishuvdan oldin pul oʻtkazmang va pasport rasmini yubormang. Suhbatni shu chatda davom ettiring — shunda shikoyat qilish mumkin.",
+      "dismiss": "Yopish"
+    },
+    "report": {
+      "title": "Shikoyat qilish",
+      "text": "Moderator suhbatni koʻrib chiqadi. Foydalanuvchiga shikoyat haqida aytilmaydi.",
+      "reason": "Sabab",
+      "comment": "Izoh (ixtiyoriy)",
+      "send": "Shikoyat yuborish",
+      "done": "Shikoyat yuborildi. Rahmat.",
+      "reasons": {
+        "spam": "Spam yoki reklama",
+        "fraud": "Firibgarlik, oldindan pul soʻrash",
+        "abuse": "Haqorat yoki tahdid",
+        "inappropriate": "Nomaqbul mazmun",
+        "other": "Boshqa sabab"
+      }
+    },
+    "errors": {
+      "forbidden": "Bu suhbatni boshlab boʻlmaydi. Foydalanuvchi sizni bloklagan yoki rolingiz mos emas.",
+      "nannyInactive": "Bu anketa hozir faol emas.",
+      "vacancyInactive": "Bu eʼlon yopilgan yoki faol emas.",
+      "self": "Oʻzingiz bilan suhbat boshlab boʻlmaydi.",
+      "tooMany": "Soʻrovlar koʻp. Bir daqiqadan keyin urinib koʻring."
+    },
+    "entry": {
+      "write": "Yozish",
+      "writeParent": "Ota-onaga yozish",
+      "parentsOnly": "Enaga bilan ota-onalar yozishadi",
+      "parentsOnlyText": "Yozish uchun ota-ona rolini qoʻshing. Mavjud rolingiz saqlanib qoladi.",
+      "addParent": "Ota-ona rolini qoʻshish",
+      "roleAdded": "Ota-ona roli qoʻshildi."
     }
   }
 }

@@ -5,6 +5,11 @@ export default defineNuxtConfig({
 
   modules: ['@nuxt/ui', '@nuxtjs/i18n', '@pinia/nuxt'],
 
+  // Ishlatilgan ikonkalar build ichiga kiradi (runtime'da tarmoqdan yuklanmaydi)
+  icon: {
+    clientBundle: { scan: true },
+  },
+
   css: ['~/assets/css/main.css'],
 
   runtimeConfig: {
@@ -12,6 +17,11 @@ export default defineNuxtConfig({
       apiBase: 'http://localhost:8000/api/v1',
       siteName: 'enagalar.uz',
       siteUrl: 'https://enagalar.uz',
+      // Laravel Reverb (Pusher protokoli). NUXT_PUBLIC_REVERB_* bilan almashtiriladi (deploy/docker-compose.prod.yml).
+      reverbAppKey: 'enagalar-local-key',
+      reverbHost: 'localhost',
+      reverbPort: 8080,
+      reverbScheme: 'http',
     },
   },
 

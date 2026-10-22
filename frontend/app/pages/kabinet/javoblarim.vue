@@ -6,6 +6,7 @@ const router = useRouter()
 const localePath = useLocalePath()
 const auth = useAuthStore()
 const { relativeTime } = useFormat()
+const { start, loading: starting } = useStartChat()
 
 definePageMeta({ middleware: 'auth', layout: 'kabinet' })
 useSeoMeta({ title: () => t('dashboard.applications.seo'), robots: 'noindex' })
@@ -36,7 +37,10 @@ const items = computed(() => data.value?.data ?? [])
           <div v-for="a in items" :key="a.id" class="surface overflow-hidden p-0!">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-default px-5 py-3">
               <DashboardStatusBadge kind="application" :status="a.status" />
-              <span class="text-sm text-muted">{{ t('dashboard.applications.sentAgo', { when: relativeTime(a.created_at) }) }}</span>
+              <div class="flex flex-wrap items-center gap-3">
+                <span class="text-sm text-muted">{{ t('dashboard.applications.sentAgo', { when: relativeTime(a.created_at) }) }}</span>
+                <UButton size="sm" color="primary" variant="soft" icon="i-lucide-message-circle" :loading="starting" :label="t('chat.entry.write')" @click="start({ application_id: a.id })" />
+              </div>
             </div>
             <p v-if="a.message" class="mx-5 mt-4 rounded-xl bg-sand-100 px-4 py-3 text-[15px] italic text-default dark:bg-sand-800">“{{ a.message }}”</p>
             <div v-if="a.vacancy" class="p-3"><VacancyCard :vacancy="a.vacancy" class="border-0! shadow-none!" /></div>

@@ -61,6 +61,17 @@ function startApply() {
   open.value = true
 }
 
+const { start: startChat, loading: starting } = useStartChat()
+function writeParent() {
+  notice.value = null
+  if (!auth.isLoggedIn) return navigateTo(loginTo.value)
+  if (auth.user && !auth.user.roles.includes('nanny')) {
+    notice.value = { text: t('vacancy.detail.needNanny'), action: { label: t('vacancy.detail.createProfile'), to: localePath('/kabinet/anketa') } }
+    return
+  }
+  return startChat({ vacancy_id: v.value.id })
+}
+
 interface ApiError { statusCode?: number, data?: { message?: string, errors?: Record<string, string[]> } }
 
 async function send() {
@@ -169,6 +180,17 @@ async function send() {
             <p v-else class="mt-5 flex items-center justify-center gap-2 rounded-xl bg-leaf-50 px-4 py-3 font-semibold text-leaf-700 dark:bg-leaf-950 dark:text-leaf-300">
               <UIcon name="i-lucide-circle-check" class="size-5" aria-hidden="true" />{{ t('vacancy.detail.applied') }}
             </p>
+            <UButton
+              block
+              size="xl"
+              color="neutral"
+              variant="outline"
+              class="mt-3 justify-center"
+              icon="i-lucide-message-circle"
+              :loading="starting"
+              :label="t('chat.entry.writeParent')"
+              @click="writeParent"
+            />
             <div v-if="notice" class="mt-4 rounded-xl bg-honey-50 p-4 text-sm leading-relaxed text-honey-800 dark:bg-honey-950 dark:text-honey-200" role="alert">
               <p>{{ notice.text }}</p>
               <UButton v-if="notice.action" class="mt-3" size="sm" color="neutral" variant="outline" :to="notice.action.to" :label="notice.action.label" />

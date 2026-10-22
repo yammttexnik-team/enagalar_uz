@@ -2,6 +2,7 @@
 const { t } = useI18n()
 const localePath = useLocalePath()
 const auth = useAuthStore()
+const chat = useChatStore()
 const open = ref(false)
 const route = useRoute()
 watch(() => route.fullPath, () => { open.value = false })
@@ -42,7 +43,11 @@ async function logout() {
         <LayoutLangSwitch />
         <UColorModeButton color="neutral" variant="ghost" :aria-label="t('nav.theme')" />
         <template v-if="auth.isLoggedIn">
-          <UButton :to="localePath('/kabinet')" color="neutral" variant="soft" icon="i-lucide-user-round" :label="t('nav.cabinet')" />
+          <UButton :to="localePath('/kabinet')" color="neutral" variant="soft" icon="i-lucide-user-round" :label="t('nav.cabinet')">
+            <template v-if="chat.unreadTotal" #trailing>
+              <span class="grid min-w-5 place-items-center rounded-full bg-brand-500 px-1.5 py-0.5 text-xs font-bold text-white dark:bg-brand-400 dark:text-sand-900" :aria-label="t('chat.unreadCount', { n: chat.unreadTotal })">{{ chat.unreadTotal > 99 ? '99+' : chat.unreadTotal }}</span>
+            </template>
+          </UButton>
           <UButton color="neutral" variant="ghost" icon="i-lucide-log-out" :aria-label="t('nav.logout')" @click="logout" />
         </template>
         <UButton v-else :to="localePath('/kirish')" :label="t('nav.login')" />
@@ -50,14 +55,16 @@ async function logout() {
 
       <div class="flex md:hidden items-center gap-1">
         <UColorModeButton color="neutral" variant="ghost" :aria-label="t('nav.theme')" />
-        <UButton
-          color="neutral"
-          variant="ghost"
-          icon="i-lucide-menu"
-          size="lg"
-          :aria-label="t('nav.menu')"
-          @click="open = true"
-        />
+        <UChip :show="chat.unreadTotal > 0" size="lg" color="primary" inset>
+          <UButton
+            color="neutral"
+            variant="ghost"
+            icon="i-lucide-menu"
+            size="lg"
+            :aria-label="chat.unreadTotal ? `${t('nav.menu')} (${t('chat.unreadCount', { n: chat.unreadTotal })})` : t('nav.menu')"
+            @click="open = true"
+          />
+        </UChip>
       </div>
     </UContainer>
 
@@ -80,7 +87,7 @@ async function logout() {
       <template #footer>
         <div class="flex w-full flex-col gap-2">
           <template v-if="auth.isLoggedIn">
-            <UButton :to="localePath('/kabinet')" block size="lg" color="neutral" variant="soft" icon="i-lucide-user-round" :label="t('nav.cabinet')" />
+            <UButton :to="localePath('/kabinet')" block size="lg" color="neutral" variant="soft" icon="i-lucide-user-round" :label="chat.unreadTotal ? `${t('nav.cabinet')} (${chat.unreadTotal})` : t('nav.cabinet')" />
             <UButton block size="lg" color="neutral" variant="ghost" icon="i-lucide-log-out" :label="t('nav.logout')" @click="logout" />
           </template>
           <UButton v-else :to="localePath('/kirish')" block size="lg" :label="t('nav.login')" />

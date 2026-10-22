@@ -3,10 +3,15 @@ const { t } = useI18n()
 const route = useRoute()
 const localePath = useLocalePath()
 const auth = useAuthStore()
+const chat = useChatStore()
+const isThread = computed(() => /\/kabinet\/xabarlar\/\d+/.test(route.path))
 
 const items = computed(() => {
   const roles = auth.user?.roles ?? []
-  const list = [{ to: '/kabinet', icon: 'i-lucide-layout-dashboard', label: t('dashboard.nav.overview') }]
+  const list: { to: string, icon: string, label: string, badge?: number }[] = [
+    { to: '/kabinet', icon: 'i-lucide-layout-dashboard', label: t('dashboard.nav.overview') },
+    { to: '/kabinet/xabarlar', icon: 'i-lucide-messages-square', label: t('dashboard.nav.messages'), badge: chat.unreadTotal },
+  ]
   if (roles.includes('parent')) list.push({ to: '/kabinet/vakansiyalar', icon: 'i-lucide-megaphone', label: t('dashboard.nav.vacancies') })
   if (roles.includes('nanny')) {
     list.push(
@@ -36,10 +41,10 @@ const isActive = (href: string) => {
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-inverted">
       {{ $t("nav.skip") }}
     </a>
-    <LayoutAppHeader />
+    <LayoutAppHeader :class="{ 'max-lg:hidden': isThread }" />
 
     <!-- Mobil: gorizontal aylanadigan tablar -->
-    <nav class="sticky top-16 z-30 border-b border-default bg-default/90 backdrop-blur-md lg:hidden" :aria-label="t('dashboard.nav.label')">
+    <nav v-if="!isThread" class="sticky top-16 z-30 border-b border-default bg-default/90 backdrop-blur-md lg:hidden" :aria-label="t('dashboard.nav.label')">
       <ul class="flex gap-1 overflow-x-auto px-4 py-2 [scrollbar-width:none]">
         <li v-for="i in items" :key="i.to" class="shrink-0">
           <NuxtLink
@@ -49,6 +54,7 @@ const isActive = (href: string) => {
             :class="isActive(i.href) ? 'bg-brand-500 text-white dark:bg-brand-400 dark:text-sand-900' : 'text-muted hover:bg-elevated hover:text-highlighted'"
           >
             <UIcon :name="i.icon" class="size-4" aria-hidden="true" />{{ i.label }}
+            <span v-if="i.badge" class="grid min-w-5 place-items-center rounded-full bg-apricot-500 px-1.5 text-xs font-bold text-white" :aria-label="t('chat.unreadCount', { n: i.badge })">{{ i.badge > 99 ? '99+' : i.badge }}</span>
           </NuxtLink>
         </li>
       </ul>
@@ -74,6 +80,7 @@ const isActive = (href: string) => {
                   :class="isActive(i.href) ? 'bg-brand-50 text-brand-700 dark:bg-brand-900 dark:text-brand-100' : 'text-muted hover:bg-elevated hover:text-highlighted'"
                 >
                   <UIcon :name="i.icon" class="size-5" aria-hidden="true" />{{ i.label }}
+                  <span v-if="i.badge" class="ml-auto grid min-w-5 place-items-center rounded-full bg-brand-500 px-1.5 py-0.5 text-xs font-bold text-white dark:bg-brand-400 dark:text-sand-900" :aria-label="t('chat.unreadCount', { n: i.badge })">{{ i.badge > 99 ? '99+' : i.badge }}</span>
                 </NuxtLink>
               </li>
             </ul>
@@ -85,6 +92,6 @@ const isActive = (href: string) => {
         </main>
       </UContainer>
     </div>
-    <LayoutAppFooter />
+    <LayoutAppFooter :class="{ 'max-lg:hidden': isThread }" />
   </div>
 </template>

@@ -6,6 +6,7 @@ const api = useApi()
 const { relativeTime } = useFormat()
 const { toastError, ok } = useApiError()
 const busy = ref<string | null>(null)
+const { start, loading: starting } = useStartChat()
 
 const actions = [
   { value: 'viewed' as const, icon: 'i-lucide-eye', color: 'neutral' as const },
@@ -33,6 +34,7 @@ async function setStatus(s: ApplicationStatus) {
         <span class="text-sm text-muted">{{ relativeTime(application.created_at) }}</span>
       </div>
       <div class="flex flex-wrap gap-2">
+        <UButton size="sm" color="primary" variant="soft" icon="i-lucide-message-circle" :loading="starting" :label="t('chat.entry.write')" @click="start({ application_id: application.id })" />
         <UButton
           v-for="a in actions"
           :key="a.value"

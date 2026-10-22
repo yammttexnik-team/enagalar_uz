@@ -44,9 +44,31 @@ useHead({ link: [{ rel: 'canonical', href: canonical }] })
 const badgeText = (b: NannyDetail['badges'][number]) =>
   (b.description ? localizedName(b.description as never) : '') || (te(`home.trust.badgeText.${b.slug}`) ? t(`home.trust.badgeText.${b.slug}`) : '')
 
+const { start, loading: starting } = useStartChat()
+const roleBusy = ref(false)
+async function addParentRole() {
+  roleBusy.value = true
+  try {
+    await auth.addRole('parent')
+    toast.add({ title: t('chat.entry.roleAdded'), icon: 'i-lucide-circle-check', color: 'success' })
+    await start({ nanny_profile_id: n.value.id })
+  }
+  catch { toast.add({ title: t('dashboard.common.error'), color: 'error', icon: 'i-lucide-circle-alert' }) }
+  finally { roleBusy.value = false }
+}
 function write() {
   if (!auth.isLoggedIn) return navigateTo(localePath({ path: '/kirish', query: { redirect: route.fullPath } }))
-  toast.add({ title: t('nanny.detail.chatSoon'), icon: 'i-lucide-message-circle', color: 'info' })
+  if (auth.user && !auth.user.roles.includes('parent')) {
+    toast.add({
+      title: t('chat.entry.parentsOnly'),
+      description: t('chat.entry.parentsOnlyText'),
+      icon: 'i-lucide-info',
+      color: 'info',
+      actions: [{ label: t('chat.entry.addParent'), color: 'neutral', variant: 'outline', onClick: addParentRole }],
+    })
+    return
+  }
+  return start({ nanny_profile_id: n.value.id })
 }
 function report() {
   toast.add({ title: t('nanny.detail.reportSoon'), icon: 'i-lucide-flag', color: 'neutral' })
@@ -88,7 +110,7 @@ function report() {
               <li v-for="b in n.badges" :key="b.slug"><SearchBadgeChip :badge="b" /></li>
             </ul>
             <div class="mt-6 flex flex-wrap gap-3 border-t border-default pt-5">
-              <UButton size="xl" icon="i-lucide-message-circle" class="justify-center" :label="t('nanny.detail.write')" @click="write" />
+              <UButton size="xl" icon="i-lucide-message-circle" class="justify-center" :label="t('nanny.detail.write')" :loading="starting || roleBusy" @click="write" />
               <SearchFavoriteButton type="nanny" :id="n.id" label class="rounded-xl" />
             </div>
           </section>
@@ -160,7 +182,7 @@ function report() {
           <section class="surface p-6">
             <p class="eyebrow text-muted">{{ t('nanny.detail.price') }}</p>
             <p class="mt-1.5 font-display text-3xl font-black tabular-nums text-highlighted"><AppText :text="price(n.price.amount, n.price.unit)" /></p>
-            <UButton block size="xl" class="mt-5 justify-center" icon="i-lucide-message-circle" :label="t('nanny.detail.write')" @click="write" />
+            <UButton block size="xl" class="mt-5 justify-center" icon="i-lucide-message-circle" :label="t('nanny.detail.write')" :loading="starting || roleBusy" @click="write" />
             <p v-if="n.published_at" class="mt-4 text-center text-xs text-muted">{{ t('nanny.detail.views', { when: relativeTime(n.published_at) }) }}</p>
           </section>
 
