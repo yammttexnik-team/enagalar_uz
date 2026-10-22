@@ -9,7 +9,7 @@ export interface ChatMessage {
   type: ChatMessageType
   body: string | null
   attachment: ChatAttachment | null
-  reply_to: { id: number, preview: string | null, sender_id: number | null } | null
+  reply_to: { id: number, preview: string | null, type?: ChatMessageType, sender_id: number | null } | null
   edited_at: string | null
   deleted: boolean
   created_at: string
@@ -31,7 +31,7 @@ export interface ChatOther {
   last_seen_at: string | null
 }
 
-export interface ChatLastMessage { id: number, type: ChatMessageType, preview: string, sender_is_me: boolean, created_at: string | null }
+export interface ChatLastMessage { id: number, type: ChatMessageType, preview: string, sender_is_me: boolean, created_at: string | null, deleted?: boolean }
 
 export interface Conversation {
   id: number
@@ -55,7 +55,8 @@ export const messageKey = (m: ChatMessage) => m.clientId ?? String(m.id)
 /** Serverdan kelgan (faqat oʻzbekcha) qisqa matnlarni joriy tilga moslaydi. */
 export function useChatPreview() {
   const { t } = useI18n()
-  return (type: string | undefined, preview: string | null | undefined) => {
+  return (type: string | undefined, preview: string | null | undefined, deleted?: boolean) => {
+    if (deleted) return t('chat.deleted')
     if (type === 'image' || preview === '📷 Rasm') return t('chat.photo')
     if (type === 'voice' || preview === '🎤 Ovozli xabar') return t('chat.voiceMessage')
     if (type === 'file' || preview === '📎 Fayl') return t('chat.file')
@@ -69,10 +70,6 @@ const pad = (n: number) => String(n).padStart(2, '0')
 /** Soat, kun nomi va sana — brauzerning mahalliy vaqt zonasida. */
 export function useChatFormat() {
   const { t, locale } = useI18n()
-  const MONTHS = {
-    uz: ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avgust', 'sentabr', 'oktabr', 'noyabr', 'dekabr'],
-    ru: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
-  }
   const time = (iso: string | null | undefined) => {
     if (!iso) return ''
     const d = new Date(iso)
@@ -84,8 +81,8 @@ export function useChatFormat() {
   }
   function fullDate(iso: string) {
     const d = new Date(iso)
-    const months = locale.value === 'ru' ? MONTHS.ru : MONTHS.uz
-    return `${d.getDate()} ${months[d.getMonth()]}${d.getFullYear() !== new Date().getFullYear() ? ` ${d.getFullYear()}` : ''}`
+    const sameYear = d.getFullYear() === new Date().getFullYear()
+    return new Intl.DateTimeFormat(locale.value === 'ru' ? 'ru-RU' : 'uz-Latn', { day: 'numeric', month: 'long', ...(sameYear ? {} : { year: 'numeric' }) }).format(d)
   }
   function dayLabel(iso: string) {
     const now = new Date()

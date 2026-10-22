@@ -7,6 +7,7 @@ export const useAuthStore = defineStore('auth', () => {
   const token = useCookie<string | null>('enagalar_token', {
     maxAge: 60 * 60 * 24 * 30,
     sameSite: 'lax',
+    secure: !import.meta.dev,
     path: '/',
     default: () => null,
   })
@@ -15,6 +16,10 @@ export const useAuthStore = defineStore('auth', () => {
   const api = $fetch.create({
     baseURL: config.public.apiBase,
     headers: { Accept: 'application/json' },
+    onResponseError({ response }) {
+      // Token eskirgan: foydalanuvchiga tegishli barcha holatni tozalaymiz
+      if (response.status === 401 && token.value) clear()
+    },
     onRequest({ options }) {
       const headers = new Headers(options.headers as HeadersInit | undefined)
       headers.set('Accept-Language', String(nuxtApp.$i18n.locale.value))
@@ -31,9 +36,20 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = u
   }
 
+  /** Foydalanuvchiga tegishli umumiy holat (sevimlilar, bonus, chat) — chiqishda yoki 401 da tozalanadi. */
+  function clearUserState() {
+    nuxtApp.runWithContext(() => {
+      useState<string[]>('favorites').value = []
+      useState('favorites-loaded').value = false
+      useState<number | null>('bonus-balance').value = null
+      useChatStore().reset()
+    })
+  }
+
   function clear() {
     token.value = null
     user.value = null
+    clearUserState()
   }
 
   /** Sessiyani tiklash. Token eskirgan bo'lsa tozalaydi. */

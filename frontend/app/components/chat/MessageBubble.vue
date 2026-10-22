@@ -16,7 +16,7 @@ const previewText = useChatPreview()
 
 const m = computed(() => props.message)
 const hasMenu = computed(() => !m.value.pending && props.items.flat().length > 0)
-const replyText = computed(() => (props.replyDeleted || m.value.reply_to?.preview == null ? t('chat.deleted') : previewText(undefined, m.value.reply_to.preview)))
+const replyText = computed(() => (props.replyDeleted || m.value.reply_to?.preview == null ? t('chat.deleted') : previewText(m.value.reply_to.type, m.value.reply_to.preview)))
 
 // Mobil: uzoq bosish → amallar varaqasi
 let press: ReturnType<typeof setTimeout> | undefined

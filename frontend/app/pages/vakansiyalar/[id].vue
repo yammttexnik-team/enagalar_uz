@@ -12,24 +12,30 @@ const localizedName = useLocalizedName()
 const config = useRuntimeConfig()
 const { salary, enumLabel, relativeTime, date, childAge, plural } = useFormat()
 
-const { data: vacancy } = await useAsyncData(`vacancy-${route.params.id}`, async () => {
+const loadFailed = ref(false)
+const { data: vacancy, refresh } = await useAsyncData(`vacancy-${route.params.id}`, async () => {
   try {
+    loadFailed.value = false
     return (await api<{ data: VacancyItem }>(`/vacancies/${route.params.id}`)).data
   }
   catch (e: unknown) {
     const status = (e as { statusCode?: number }).statusCode
-    throw createError({ statusCode: status === 404 ? 404 : 500, statusMessage: t('vacancy.detail.notFound'), fatal: true })
+    // Faqat 404 — xato sahifa; boshqa xatolar (tarmoq, 5xx) qayta urinish bilan koʻrsatiladi
+    if (status === 404) throw createError({ statusCode: 404, statusMessage: t('vacancy.detail.notFound'), fatal: true })
+    loadFailed.value = true
+    return null
   }
 })
 
+const retry = () => refresh()
 const v = computed(() => vacancy.value!)
 const place = computed(() => [v.value.district, v.value.region].filter(Boolean).map(p => localizedName(p!.name)).join(', '))
 const ages = computed(() => v.value.children_ages.map(a => childAge(a)).join(', '))
 const salaryText = computed(() => salary(v.value.salary))
 
-const title = computed(() => t('vacancy.detail.seoTitle', { title: v.value.title, place: place.value }))
-const description = computed(() => t('vacancy.detail.seoDescription', { salary: salaryText.value, format: enumLabel('workFormat', v.value.work_format), place: place.value }))
-const canonical = computed(() => config.public.siteUrl + localePath(`/vakansiyalar/${v.value.id}`))
+const title = computed(() => !vacancy.value ? '' : t('vacancy.detail.seoTitle', { title: v.value.title, place: place.value }))
+const description = computed(() => !vacancy.value ? '' : t('vacancy.detail.seoDescription', { salary: salaryText.value, format: enumLabel('workFormat', v.value.work_format), place: place.value }))
+const canonical = computed(() => !vacancy.value ? '' : config.public.siteUrl + localePath(`/vakansiyalar/${v.value.id}`))
 useSeoMeta({ title, description, ogTitle: title, ogDescription: description, ogUrl: canonical })
 useHead({ link: [{ rel: 'canonical', href: canonical }] })
 
@@ -225,4 +231,8 @@ async function send() {
       </template>
     </UModal>
   </div>
+  <UContainer v-else-if="loadFailed" class="max-w-lg py-20 text-center">
+    <p class="text-lg text-muted">{{ t('dashboard.common.error') }}</p>
+    <UButton class="mt-6" icon="i-lucide-refresh-cw" :label="t('search.retry')" @click="retry()" />
+  </UContainer>
 </template>

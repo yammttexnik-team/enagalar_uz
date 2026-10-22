@@ -34,7 +34,6 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      htmlAttrs: { lang: 'uz' },
       title: 'enagalar.uz',
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/brand/favicon.svg' },
@@ -52,6 +51,7 @@ export default defineNuxtConfig({
   },
 
   i18n: {
+    baseUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://enagalar.uz',
     defaultLocale: 'uz',
     strategy: 'prefix_except_default',
     locales: [

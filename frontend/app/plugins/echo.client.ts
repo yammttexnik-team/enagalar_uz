@@ -44,8 +44,8 @@ export default defineNuxtPlugin(() => {
   function teardown() {
     version++
     connectedFor = ''
+    chat.reset()
     if (instance.value) {
-      chat.reset()
       instance.value.disconnect()
       instance.value = null
     }
