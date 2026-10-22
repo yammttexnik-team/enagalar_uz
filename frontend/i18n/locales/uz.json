@@ -1,0 +1,18 @@
+{
+  "nav": { "login": "Kirish" },
+  "footer": { "tagline": "ishonchli enagalar platformasi" },
+  "home": {
+    "seoTitle": "Enaga topish — ishonchli enagalar | enagalar.uz",
+    "title": "Farzandingiz uchun ishonchli enaga",
+    "subtitle": "Tasdiqlangan enagalar, qulay chat va AI yordamchi. Bepul.",
+    "chooseRegion": "Hududni tanlang",
+    "findNanny": "Enaga topish",
+    "iAmNanny": "Men enagaman — ish topmoqchiman",
+    "features": {
+      "verified": { "title": "Tasdiqlangan enagalar", "text": "Pasport va hujjatlari tekshirilgan enagalar maxsus nishonga ega." },
+      "chat": { "title": "Qulay chat", "text": "Telefon raqam bermasdan, platformaning o'zida yozishasiz." },
+      "ai": { "title": "AI yordamchi", "text": "Anketa yozish, mos enagani topish va savollarga javob." },
+      "free": { "title": "Bepul", "text": "Obuna yo'q: e'lon joylash va aloqa qilish bepul." }
+    }
+  }
+}

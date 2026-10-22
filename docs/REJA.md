@@ -1,340 +1,294 @@
 # enagalar.uz — loyiha rejasi
 
-> Versiya: 0.1 (2026-10-22). Bu birinchi qoralama. Raqobatchilar tahlili ochiq manbalar asosida tuzilgan, bozor raqamlarini so'rovnoma va intervyular bilan tasdiqlash kerak (6-bo'lim).
+> **Versiya 0.2** (2026-10-22).
+> - Frontend Nuxt (Vue) ga o'zgardi.
+> - Jamoa: 1 dasturchi va Claude.
+> - Yangi qonun (ZRU-1125) hisobga olindi.
+> - Pasport orqali "Tasdiqlangan" nishoni va moslashuvchan nishonlar tizimi qo'shildi.
+>
+> Batafsil bozor tahlili: [BOZOR_TAHLILI.md](BOZOR_TAHLILI.md)
 
 ## 1. Loyiha g'oyasi
 
-**enagalar.uz** — ota-onalar bilan enagalarni bevosita bog'laydigan platforma. Ota-ona tekshirilgan enagani tez topadi, enaga ish topadi, ikkalasi platforma ichida xavfsiz yozishadi. AI yordamchi har bir qadamda yordam beradi.
+**enagalar.uz** — ota-onalar bilan enagalarni bevosita bog'laydigan platforma. Ota-ona tekshirilgan enagani tez topadi, enaga ish topadi, ikkalasi platforma ichida xavfsiz yozishadi, AI yordamchi har bir qadamda yordam beradi.
 
-**Asosiy farqimiz (raqobatchilarda yo'q narsalar):**
+**Asosiy farqimiz:**
 
-1. Telegramga o'xshash ichki chat: ovozli xabar, rasm, "o'qildi" belgisi, onlayn holat.
-2. Claude API asosidagi AI yordamchi: anketa yozish, aqlli qidiruv, moslashtirish, moderatsiya.
-3. Boshida obunasiz va bepul. Bozorni egallash birinchi, monetizatsiya keyin.
-4. Ishonch tizimi: hujjat tekshiruvi, "tasdiqlangan" belgilari, sharhlar, shikoyat qilish.
-5. Bir joyning o'zida veb-sayt, Telegram bot va Telegram Mini App.
+1. **Telegramga o'xshash ichki chat.** Raqobatchilarning hech birida yo'q.
+2. **Claude API asosidagi AI yordamchi.** U anketa yozadi, oddiy gap bilan qidiradi, mos nomzodlarni tanlaydi va e'lonlarni moderatsiya qiladi.
+3. **Boshida obunasiz va bepul.** bolambilan.uz oyiga 25–35 ming so'm oladi, biz esa avval bozorni egallaymiz.
+4. **Ishonch tizimi.** Pasport orqali "Tasdiqlangan" nishoni, admin boshqaradigan qo'shimcha nishonlar, sharhlar va shikoyatlar.
+5. **Ota-ona vakansiyasi bilan enaga anketasi teng huquqli.** Otklik (javob berish) tizimi bor.
+6. **Butun O'zbekiston.** Viloyatlarda bu xizmat amalda yo'q.
+7. **Sayt, Telegram bot, Telegram Mini App, keyinchalik mobil ilova.** Hammasi bitta API ustida ishlaydi.
 
----
+## 2. Bozor (qisqa)
 
-## 2. Raqobatchilar tahlili
-
-### 2.1 Ixtisoslashgan saytlar
-
-| Raqobatchi | Model | Kuchli tomoni | Zaif tomoni |
-|---|---|---|---|
-| **bolambilan.uz** (+ @bolambilan_bot, Mini App) | Enagalar bepul anketa joylaydi. Ota-ona kontaktni **obuna orqali** ochadi, yangi ota-onaga 48 soatda 2 ta kontakt bepul. Komissiya yo'q. | Moderatsiya, pasportni qo'lda tekshirish, tibbiy ma'lumotnoma va sertifikat yuklash, sharh va reyting, filtrlar (tuman, tajriba, jadval, til, ko'nikma), UZ/RU. | Ichki chat yo'q, aloqa telefon yoki Telegram orqali. Saytda tariflar ochiq ko'rsatilmagan. Ota-ona e'loni (vakansiya) asosiy oqim emas. Statistika ko'rsatilmaydi. |
-| **homecare.uz** | E'lonlar doskasi. Oilaga 3 kunda 1 ta vakansiya bepul, qo'shimchasi 20 000 so'm. Uy bog'chasi e'loni 30 000 so'm (birinchisi 15 000). Obuna yo'q. | Faqat enaga emas: uy bekasi, oshpaz, sidelka, er-xotin. 12 tuman bo'yicha filtr. Telegram bot va kanal bilan bog'langan. | Shaxs, hujjat va tajriba **tekshirilmaydi** (saytning o'zi shunday deydi). Ichki chat yo'q. Sharh yoki reyting tizimi ko'rinmaydi. |
-| **enagam.uz** | Domen hozir "Parvona — O'zbekistonda ishonchli enaga va parvarish platformasi" shiorini ko'rsatadi, boshqa kontent yo'q. | — | Hali ishga tushmagan yoki ishlab chiqilmoqda. **Kuzatib borish kerak.** |
-| **Agentliklar** (masalan, "Planeta Serdtse") | Agentlik orqali tanlash, xizmat haqi olinadi. | Shaxsiy tanlov, hujjatlar va tavsiyalar. | Qimmat, sekin, onlayn tajriba yo'q. |
-
-### 2.2 Umumiy e'lon saytlari
-
-- **OLX.uz**, **hh.uz**, **ishkop.uz**, **salexy.uz**, **uzjobs.uz**: "enaga kerak" va "няня" bo'yicha yuzlab e'lonlar bor (ishkop.uz da faqat Toshkent bo'yicha 164 ta vakansiya).
-- **Kamchiligi:** enagaga xos filtrlar yo'q (bolaning yoshi, til, tibbiy ma'lumotnoma), tekshiruv yo'q, ishonch past.
-
-### 2.3 Telegram kanallar (eng katta raqobatchi)
-
-| Kanal | Obunachi | Xususiyati |
-|---|---|---|
-| @moya_nyanyauz "Няни и домашний персонал города Ташкента" | ~25 400 | Kuniga o'nlab post, ko'pi rus tilida. Vakansiya ham, rezyume ham. Bitta post ~1000+ ko'rish yig'adi. O'zbek tilidagi postlar alohida kanalga yo'naltiriladi. |
-| @nyanidomashniypersonal "Няни, сиделки, домработницы Ташкента" | ~7 300 | Ish beruvchilar uchun reklama kanali, heshteglar (#няня, #сиделка …). Post admin orqali joylanadi. |
-| @jobuztashkent | — | Aralash: vakansiya va rezyume. |
-| @OLX_Ish, @BOR_ISH va boshqa umumiy ish kanallari | — | Enaga e'lonlari umumiy oqim ichida yo'qolib ketadi. |
-
-**Telegram bo'yicha xulosa:**
-
-- **Talab haqiqatan bor va katta.** Bitta kanalda 25 ming obunachi va kuniga o'nlab e'lon.
-- **Muammolar:** filtr ham, qidiruv ham yo'q. Eski e'lonlar o'chmaydi, tekshiruv va sharh yo'q, firibgarlik bor. Post joylash admin orqali qo'lda, ko'pincha pullik. Tillar aralashib ketgan.
-- **Bizning yo'limiz:** Telegramga qarshi chiqish emas, uni **kanal sifatida ishlatish**:
-  - O'zimizning Telegram kanallarimizga (UZ va RU alohida) yangi e'lonlar avtomatik joylanadi, saytga havola bilan.
-  - Telegram bot orqali ro'yxatdan o'tish va bildirishnoma olish.
-  - Telegram Mini App: platformaning o'zi Telegram ichida ochiladi.
-  - Login Telegram orqali bo'ladi (SMS ga pul ketmaydi).
-
-### 2.4 Bozor narxlari (ochiq e'lonlardan, 2026-oktabr)
-
-| Turi | Narx |
-|---|---|
-| Kunlik enaga yoki yordamchi | 170 000–250 000 so'm/kun |
-| Oylik enaga | 3,5–7 mln so'm/oy |
-| Uy bekasi va oshpaz | 5–6 mln so'm/oy |
-| Ota-onalar talabidagi o'rtacha diapazon | 4–6 mln so'm/oy |
-
-### 2.5 Bo'sh joy (imkoniyat)
-
-Hech bir raqobatchida bularning **hammasi birga** yo'q:
-
-1. ichki chat;
-2. ota-ona e'loni va enaga anketasining ikkalasi teng huquqli;
-3. tekshiruv va "tasdiqlangan" belgisi;
-4. AI yordamchi;
-5. bepul start;
-6. o'zbek tiliga birinchi darajali e'tibor.
-
-Bu ayniqsa viloyatlarda va o'zbek tilida so'zlashuvchi auditoriyada sezilarli.
-
----
+- Eng katta Telegram kanallarda 80 mingdan ortiq obunachi bor: @enagalar 34,9 ming, @moya_nyanyauz 25,4 ming, @enaga_samarqand 21 ming. Bu kanallarda tekshiruv yo'q.
+- **Asosiy raqobatchi bolambilan.uz.** Kontakt obuna bilan ochiladi, ichki chat yo'q.
+- **homecare.uz** e'lonlar doskasi: pullik e'lon bor, tekshiruv yo'q. **enagam.uz** hali ishga tushmagan.
+- **Narxlar:**
+  - kunlik: 100–250 ming so'm;
+  - oylik (Toshkent): 3,5–7 mln so'm;
+  - yashab turish bilan: 11 mln so'mgacha.
 
 ## 3. Rollar
 
 | Rol | Imkoniyatlari |
 |---|---|
-| **Mehmon** | E'lon va anketalarni ko'radi. Kontakt yashirin. Ro'yxatdan o'tishga taklif qilinadi. |
-| **Ota-ona** | Profil, bolalar ma'lumoti (yoshi, alohida ehtiyoji), **vakansiya e'loni**, enaga qidirish va filtrlash, sevimlilar, chat, sharh qoldirish, shikoyat, AI yordamchi. |
-| **Enaga** | Anketa (foto, tajriba, ko'nikmalar, tillar, tuman, jadval, narx), hujjat yuklash (pasport, tibbiy ma'lumotnoma, sertifikat, tavsiyanoma), vakansiyalarga **otklik** berish, bandlik holati (bo'sh/band), chat, AI yordamchi. |
-| **Agentlik va uy bog'chasi** (2-bosqich) | Bir nechta enagani boshqaradi, tashkilot profili. |
-| **Moderator** | E'lon va anketalarni tasdiqlash yoki rad etish, hujjat tekshiruvi, shikoyatlar, chatdagi shikoyat qilingan xabarlar. |
-| **Admin (to'liq)** | Hammasi: foydalanuvchilar (bloklash, rol berish), kontent, tariflar, to'lovlar, statistika va dashboard, AI sozlamalari va xarajati, bildirishnoma yuborish, Telegram kanalni boshqarish, tizim sozlamalari, audit log. |
+| **Mehmon** | E'lon va anketalarni ko'radi. Kontakt va chat yopiq. |
+| **Ota-ona** | Profil, bolalar (yoshi, alohida ehtiyoj), **vakansiya e'loni**, qidiruv va filtr, sevimlilar, chat, sharh, shikoyat, AI yordamchi. |
+| **Enaga** | Anketa (foto, tajriba, ko'nikma, til, tuman, jadval, narx), hujjatlar, nishon olish uchun so'rov, vakansiyaga otklik, "bo'sh/band" holati, chat, statistika, AI yordamchi. |
+| **Uy bog'chasi va agentlik** (3-bosqich) | Tashkilot profili, bir nechta xodim. |
+| **Moderator** | E'lon va anketa moderatsiyasi, pasport va hujjat tekshiruvi, nishon berish, shikoyatlar. |
+| **Admin (to'liq)** | Hammasi: foydalanuvchilar, rollar va ruxsatlar, nishon turlari, ma'lumotnomalar, tariflar va to'lovlar, statistika, AI sozlamalari va xarajati, Telegram, ommaviy bildirishnomalar, audit log. |
 
----
+Bitta foydalanuvchi ham ota-ona, ham enaga bo'lishi mumkin. Rol ro'yxatdan o'tganda tanlanadi, keyin ikkinchisini qo'shish mumkin.
 
 ## 4. Funksiyalar
 
 ### 4.1 E'lonlar va anketalar
 
-- **Ota-ona e'loni (vakansiya):** bolalar soni va yoshi, tuman yoki shahar, ish formati (soatbay, kunlik, doimiy, yashab turish bilan), til, talablar, maosh diapazoni, boshlash sanasi.
-- **Enaga anketasi:** foto, video tanishtiruv (2-bosqich), tajriba yillari, qaysi yoshdagi bolalar bilan ishlagan, ko'nikmalar (ovqat tayyorlash, dars tayyorlash, birinchi yordam, chaqaloq parvarishi), tillar, jadval, narx.
-- **Filtrlar:** viloyat va tuman, narx, tajriba, bolaning yoshi, til, ish formati, "tasdiqlangan", reyting, "hozir bo'sh".
-- **Holat:** e'lon muddati tugaydi (masalan, 30 kun), "topildi" tugmasi bor. Telegram kanallardagi "o'lik e'lon" muammosini shu hal qiladi.
-- **Otklik (javob berish):** enaga vakansiyaga bir tugma bilan javob beradi, ota-ona javoblar ro'yxatini ko'radi.
-- **Sevimlilar**, ko'rilganlar tarixi va saqlangan qidiruv. Saqlangan qidiruvga yangi mos e'lon chiqsa, bildirishnoma keladi.
-- **Xarita:** tuman va mo'ljal bo'yicha. Aniq manzil ko'rsatilmaydi.
+- **Vakansiya:** bolalar soni va yoshi, viloyat va tuman, ish formati (soatbay, kunlik, doimiy, yashab turish bilan), jadval, til, talablar, maosh (soat, kun yoki oy uchun), boshlash sanasi, "shoshilinch" belgisi.
+- **Enaga anketasi:** foto, tajriba yillari, qaysi yoshdagi bolalar bilan ishlagan, ko'nikmalar, tillar, jadval, narx, "bepul sinov kuni" taklifi.
+- **Filtrlar:** viloyat va tuman, narx, tajriba, bolaning yoshi, til, ish formati, yashab turish, nishonlar, reyting, "hozir bo'sh".
+- **Muddat:** e'lon 30 kundan keyin tugaydi va uni yangilash mumkin. "Topildi" tugmasi bor. Bu "o'lik e'lon" muammosini hal qiladi.
+- **Otklik:** bir tugma bilan javob beriladi, ota-ona javoblar ro'yxatini ko'radi, javob chatga aylanadi.
+- **Qo'shimcha:** sevimlilar, saqlangan qidiruv va unga mos yangi e'lon chiqsa bildirishnoma, ko'rishlar statistikasi.
+- **Manzil:** faqat tuman va mo'ljal ko'rsatiladi, aniq manzil hech qachon ko'rsatilmaydi.
 
 ### 4.2 Telegramga o'xshash chat
 
-- 1:1 chat (ota-ona ↔ enaga). Chat otklik orqali yoki "Yozish" tugmasi bilan ochiladi.
-- Matn, **ovozli xabar**, rasm va fayl, **reply**, tahrirlash va o'chirish, emoji reaksiya.
-- "Yozmoqda…" belgisi, onlayn yoki oxirgi faollik vaqti, ✓/✓✓ (yetkazildi va o'qildi).
-- Push bildirishnoma (brauzer va Telegram bot orqali), o'qilmagan xabarlar soni.
-- **Xavfsizlik:** bloklash, shikoyat qilish, birinchi xabarlarda telefon raqam va havolalarni ogohlantirish bilan ko'rsatish (firibgarlikka qarshi), spamga qarshi limit.
-- **Shablonlar:** "Suhbatga taklif", "Sinov kuni" tugmalari (2-bosqich).
-- **Texnologiyasi:** Laravel Reverb (WebSocket) + Redis, fayllar S3 ga mos xotirada.
+- **v1:** 1:1 suhbat, matn, rasm, ✓/✓✓ (yetkazildi va o'qildi), "yozmoqda…", onlayn yoki oxirgi faollik, o'qilmagan xabarlar soni, push va Telegram bot orqali bildirishnoma, bloklash va shikoyat.
+- **v2:** ovozli xabar, reply, tahrirlash va o'chirish, reaksiya, fayl, UZ↔RU tarjima (AI), "suhbatga taklif" va "sinov kuni" shablonlari.
+- **Xavfsizlik:**
+  - Birinchi xabarlarda telefon raqam va havolalar ogohlantirish bilan ko'rsatiladi, chunki firibgarlik ko'pincha boshqa joyga olib chiqishdan boshlanadi.
+  - Spam limiti qo'yiladi.
+  - Moderator faqat shikoyat qilingan suhbatni ko'radi, bu audit log'ga yoziladi.
+- **Texnologiyasi:** Laravel Reverb (WebSocket) + Redis, frontendda Laravel Echo.
 
 ### 4.3 AI yordamchi (Claude API)
 
-| Funksiya | Kim uchun | Tavsif | Model |
+| Funksiya | Kim uchun | Bosqich | Model |
 |---|---|---|---|
-| **Anketa va e'lon yozuvchi** | Enaga, ota-ona | Bir nechta savolga javob beradi, AI chiroyli va to'liq matn tayyorlaydi (UZ/RU). | `claude-sonnet-5-5` |
-| **Aqlli qidiruv** | Ota-ona | Oddiy gap bilan: "Chilonzorda 3 yoshli o'g'limga rus tilida gaplashadigan, ovqat qila oladigan enaga, 5 mln gacha". AI so'rovni filtrlarga aylantiradi. | `claude-haiku-5-5` |
-| **Moslashtirish (matching)** | Ota-ona, enaga | Vakansiya uchun eng mos 5 ta enaga, "nega mos" izohi bilan. Enagaga mos vakansiyalar. | `claude-sonnet-5-5` |
-| **Moderatsiya** | Moderator | Yangi e'lon va anketalarni avtomatik tekshirish: spam, haqorat, firibgarlik belgilari, matn ichidagi kontaktlar. Moderatorga tavsiya beradi, yakuniy qarorni inson qiladi. | `claude-haiku-5-5` |
-| **Chat tarjimoni** | Hammasi | Bir bosishda UZ ↔ RU tarjima (lotin va kirill). | `claude-haiku-5-5` |
-| **Suhbat yordamchisi** | Ota-ona | Enaga bilan suhbat uchun savollar, sinov kunini o'tkazish bo'yicha maslahat, kelishuv (shartnoma) shablonini tayyorlash. | `claude-sonnet-5-5` |
-| **Ota-ona maslahatchisi** | Ota-ona | Bola parvarishi bo'yicha umumiy maslahatlar. Tibbiy masalada "shifokorga murojaat qiling" degan ogohlantirish bilan. | `claude-sonnet-5-5` |
-| **Sharhlar xulosasi** | Ota-ona | Enaga haqidagi ko'p sharhlarni 2–3 qatorga jamlaydi. | `claude-haiku-5-5` |
-| **Admin tahlilchisi** | Admin | "Bu hafta qaysi tumanda talab ko'p?" kabi savollarga statistika asosida javob. | `claude-sonnet-5-5` |
+| Anketa va e'lon yozuvchi (UZ/RU) | Enaga, ota-ona | 1 | `claude-sonnet-5-5` |
+| Avto-moderatsiya (spam, firibgarlik, matndagi kontakt) | Moderator | 1 | `claude-haiku-5-5` |
+| Aqlli qidiruv ("Chilonzorda 3 yoshli bolaga, rus tilida, 5 mln gacha") | Ota-ona | 2 | `claude-haiku-5-5` |
+| Moslashtirish: eng mos 5 nomzod, "nega mos" izohi bilan | Ikkalasi | 2 | `claude-sonnet-5-5` |
+| Chat tarjimoni (lotin, kirill, rus) | Hammasi | 2 | `claude-haiku-5-5` |
+| Suhbat savollari, sinov kuni qo'llanmasi, kelishuv shabloni | Ota-ona | 2 | `claude-sonnet-5-5` |
+| Sharhlar xulosasi | Ota-ona | 2 | `claude-haiku-5-5` |
+| Ota-ona maslahatchisi (tibbiy ogohlantirish bilan) | Ota-ona | 3 | `claude-sonnet-5-5` |
+| Admin tahlilchisi ("qaysi tumanda talab ko'p?") | Admin | 3 | `claude-sonnet-5-5` |
 
 **AI qoidalari:**
+- Foydalanuvchi va funksiya bo'yicha kunlik limit bor. Har bir so'rov `ai_requests` jadvaliga yoziladi (tokenlar, narx).
+- Claude'ga pasport, telefon va aniq manzil yuborilmaydi.
+- Promptlar va modellar admin paneldan o'zgartiriladi.
+- So'rovlar Queue orqali fonda bajariladi. Yozuvchi uchun streaming ishlatiladi.
 
-- Har bir foydalanuvchiga kunlik limit qo'yiladi (xarajat nazorati). Barcha so'rovlar `ai_requests` jadvaliga yoziladi.
-- Claude ga **shaxsiy ma'lumot yuborilmaydi**: pasport, telefon va aniq manzil yuborishdan oldin olib tashlanadi. Foydalanuvchidan rozilik olinadi.
-- Promptlar admin panelda tahrirlanadi, modelni almashtirish sozlama orqali qilinadi.
-- AI chaqiruvlari Laravel Queue orqali fonda bajariladi. Chat va yozuvchi uchun streaming ishlatiladi.
+### 4.4 Ishonch: tekshiruv va nishonlar
 
-### 4.4 Ishonch va xavfsizlik
+**Nishonlar tizimi moslashuvchan bo'ladi.** Admin yangi nishon turini paneldan qo'shadi (nomi, ikonka, rangi, talablari, amal qilish muddati), kod yozish shart emas.
 
-- Telefon tasdiqlash (Telegram login yoki SMS).
-- Hujjat tekshiruvi. Moderator qo'lda tekshiradi, keyin belgi beriladi: ✅ "Shaxsi tasdiqlangan", 🩺 "Tibbiy ma'lumotnoma", 🎓 "Sertifikat".
-- Sharh va reyting faqat chatda haqiqiy aloqa bo'lgandan keyin qoldiriladi (soxta sharhlarga qarshi).
-- Shikoyat tizimi, qora ro'yxat, takroriy akkauntlarni aniqlash.
-- Ota-onalar uchun xavfsizlik bo'yicha qo'llanma: sinov kuni, hujjatni ko'rish, oldindan pul bermaslik.
+Boshlang'ich nishonlar:
 
-### 4.5 Monetizatsiya (bosqichma-bosqich)
+| Nishon | Qanday beriladi | Bosqich |
+|---|---|---|
+| 📱 Telefon tasdiqlangan | SMS yoki Telegram orqali, avtomatik | 1 |
+| ✅ **Tasdiqlangan foydalanuvchi** | Foydalanuvchi pasport ma'lumotlarini kiritadi (seriya va raqam, JShShIR, F.I.Sh., tug'ilgan sana), pasport rasmini yuklaydi, moderator tekshiradi | 1 |
+| 🩺 Tibbiy ma'lumotnoma | Hujjat yuklanadi va tekshiriladi, muddati bor (masalan, 1 yil) | 1 |
+| 🎓 Sertifikat yoki ma'lumot (pedagog, hamshira, birinchi yordam) | Hujjat yuklanadi va tekshiriladi | 1 |
+| ⭐ Tavsiya qilingan | 3+ ijobiy sharh va 4,5+ reyting, avtomatik | 2 |
+| ⚡ Tez javob beradi | O'rtacha javob vaqti 1 soatdan kam, avtomatik | 2 |
+| 🛡 Sudlanmaganlik ma'lumotnomasi | Hujjat yuklanadi va tekshiriladi | 2 |
+| 🆔 MyID orqali tasdiqlangan | MyID integratsiyasi | 2–3 |
+| *Boshqa nishonlar* | Siz keyin aytasiz, admin paneldan qo'shiladi | — |
 
-- **1-bosqich (0–6 oy): hammasi bepul.** Maqsad: ikki tomonlama bazani yig'ish. Taxminiy maqsad: 3 000 enaga anketasi va 5 000 ota-ona.
-- **2-bosqich:** pullik **qo'shimcha** xizmatlar (asosiy funksiya bepul qoladi):
+**Pasport ma'lumotlari xavfsizligi:**
+- Maydonlar bazada **shifrlangan holda** saqlanadi (Laravel encrypted cast).
+- Pasport rasmi alohida yopiq xotirada turadi. Tekshiruvdan keyin u o'chiriladi va faqat natija qoladi: kim, qachon tekshirgan, holat.
+- Ochiq profilda pasport ma'lumoti hech qachon ko'rinmaydi, faqat nishon ko'rinadi.
+- Ro'yxatdan o'tishda alohida rozilik olinadi: maqsad, ma'lumotlar ro'yxati, muddat.
+- Tibbiy hujjat uchun alohida yozma (elektron) rozilik olinadi.
+- Selfi va yuz rasmi biometrik ma'lumot hisoblanadi. Uni O'zbekistondan tashqarida saqlamaymiz (4.6-bo'lim).
+
+**Boshqa ishonch elementlari:**
+- Sharhni faqat haqiqiy chat bo'lgan foydalanuvchi qoldira oladi.
+- Shikoyat, bloklash, qora ro'yxat va takroriy akkauntlarni aniqlash bor.
+- Ota-onalar uchun xavfsizlik qo'llanmasi: sinov kuni o'tkazing, oldindan pul to'lamang.
+
+### 4.5 Monetizatsiya
+
+- **1-bosqich (birinchi 6 oy): hammasi bepul, obuna yo'q.** Maqsad: 3 000 enaga va 5 000 ota-ona.
+- **2-bosqich: ixtiyoriy pullik xizmatlar.**
   - E'lonni TOPga ko'tarish va "Shoshilinch" belgisi.
-  - Enaga uchun "PRO anketa": ro'yxatda yuqorida, video tanishtiruv, kengaytirilgan statistika.
-  - Tezkor hujjat tekshiruvi (24 soat ichida).
-- **3-bosqich:** ota-onalar uchun **obuna** (cheksiz chat ochish, kengaytirilgan AI, "saqlangan qidiruv" bildirishnomalari), agentlik va uy bog'chalari uchun biznes tarif, reklama.
-- **To'lov tizimlari:** Payme, Click, Uzum. Birinchi integratsiya 2-bosqichda bo'ladi.
+  - Enaga uchun PRO anketa: ro'yxatda yuqorida, kengaytirilgan statistika.
+  - Tez tekshiruv (24 soat ichida). Yoopies'dagi kabi kichik to'lov sifatsiz anketalarni ham filtrlaydi.
+- **3-bosqich:**
+  - ota-ona obunasi (cheksiz chat, kengaytirilgan AI);
+  - uy bog'chalari va agentliklar uchun biznes tarif;
+  - "konsyerj" xizmati: AI va moderator 3–5 nomzod tanlab beradi;
+  - reklama.
+- **To'lov:** Payme, Click, Uzum. Click Mini App ham bo'lishi mumkin (bolambilan shunday qilgan).
 
 ### 4.6 Admin panel (to'liq)
 
-- **Dashboard:** ro'yxatdan o'tishlar, faol e'lonlar, chatlar, konversiya (e'lon → chat → "topildi"), tumanlar bo'yicha talab va taklif, AI xarajati.
-- **Foydalanuvchilar:** qidirish, ko'rish, bloklash, rol berish, kirish tarixi.
-- **Moderatsiya navbati:** e'lon, anketa va hujjatlar. AI tavsiyasi ko'rinib turadi.
-- **Shikoyatlar** va chat xabarlarini ko'rish (faqat shikoyat qilinganlari, audit log bilan).
-- **Ma'lumotnomalar:** viloyat va tuman, ko'nikmalar, tillar, ish formatlari.
-- **Monetizatsiya:** tariflar, to'lovlar, promo-kodlar.
-- **Kontent:** sahifalar, blog va maslahatlar (SEO uchun), FAQ.
-- **Bildirishnomalar:** ommaviy xabar (push, Telegram).
-- **Telegram:** kanalga avtomatik post yuborishni sozlash va shablonlar.
-- **AI:** promptlar, limitlar, modellar, xarajat hisoboti.
-- **Rollar va ruxsatlar** (Spatie Permission), audit log.
+- **Dashboard:**
+  - ro'yxatdan o'tishlar, faol e'lonlar, chatlar;
+  - voronka: e'lon → otklik → chat → "topildi";
+  - viloyat va tumanlar bo'yicha talab va taklif;
+  - AI xarajati.
+- **Foydalanuvchilar:** qidirish, bloklash, rol berish, kirish tarixi.
+- **Moderatsiya navbati:** e'lon, anketa, pasport va hujjatlar, AI tavsiyasi bilan.
+- **Nishonlar:** turlarini yaratish va tahrirlash, berish va qaytarib olish, muddatlar.
+- **Shikoyatlar:** shikoyat qilingan chatlarni ko'rish (audit log bilan).
+- **Ma'lumotnomalar:** viloyatlar, tumanlar, ko'nikmalar, tillar, ish formatlari.
+- **To'lov va kontent:**
+  - tariflar, to'lovlar, promo-kodlar;
+  - sahifalar, blog va maslahatlar (SEO), FAQ;
+  - ommaviy bildirishnoma, Telegram kanalga avto-post shablonlari.
+- **AI:** promptlar, limitlar, modellar, xarajat.
+- **Tizim:** rollar va ruxsatlar, audit log, sozlamalar.
 
----
+## 5. Texnologiya
 
-## 5. Texnologiya bo'yicha taklif
+### 5.1 Tanlov: **Laravel 13 (API) + Nuxt 4 (Vue 3)**
 
-### 5.1 Ikki variant
+Frontend Nuxt bo'lishiga qaror qildingiz, bu to'g'ri tanlov:
+- **SEO:** SSR tufayli "enaga Chilonzor" kabi sahifalar Google'da yaxshi chiqadi.
+- **Bitta API hamma uchun:** Telegram Mini App ham, keyinchalik mobil ilova ham shu API'ni ishlatadi.
 
-| | **A. Laravel API + Next.js** (tavsiya) | **B. Faqat Laravel** (Inertia + React yoki Livewire) |
-|---|---|---|
-| SEO (e'lon sahifalari Googleda) | Next.js SSR/ISR, juda yaxshi | Inertia SSR bilan yaxshi |
-| Mobil ilova keyinchalik | Bitta API ni React Native yoki Flutter ham ishlatadi | API ni alohida yozish kerak bo'ladi |
-| Telegram Mini App | Next.js da qulay | Mumkin, lekin noqulayroq |
-| Real-time chat UI | React ekotizimi kuchli | Mumkin |
-| Ishlab chiqish tezligi | Biroz sekinroq (2 ta loyiha, 2 ta deploy) | Tezroq, bitta kod bazasi |
-| Jamoa | Backend va frontend alohida ishlay oladi | 1–2 dasturchiga qulay |
-
-### 5.2 Tavsiya: **A variant (gibrid)**
-
-Chat, mobil ilova, Telegram Mini App va SEO loyihaning yuragi. Ular uchun API-first arxitektura keyinchalik o'zini oqlaydi. Admin panelni esa **Laravel ichida Filament** bilan qilamiz. Admin uchun alohida frontend yozish shart emas, bu 4–6 hafta vaqtni tejaydi.
+Bitta dasturchi bo'lgani uchun **admin panelni alohida yozmaymiz.** Uni Laravel ichida **Filament** bilan qilamiz. Bu kamida 4–6 hafta tejaydi.
 
 ```
-                ┌─────────────────────────────┐
-  Brauzer ───▶ │ Next.js (frontend, SSR, PWA) │──┐
-  Telegram ──▶ │ Telegram Mini App (Next.js)  │  │  REST API + WebSocket
-  Mobil (3-b)─▶│ React Native / Flutter       │  │
-                └─────────────────────────────┘  ▼
-                ┌──────────────────────────────────────────────┐
-                │ Laravel 12 (API, Sanctum)                    │
-                │  • Filament — admin panel                    │
-                │  • Reverb — WebSocket (chat)                 │
-                │  • Queue + Horizon — AI, bildirishnoma, post │
-                │  • Telegram bot (webhook)                    │
-                │  • Claude API servisi                        │
-                └──────────────────────────────────────────────┘
-                   │           │            │            │
-               PostgreSQL     Redis    Meilisearch    S3 (MinIO)
+  Brauzer, Telegram Mini App ──▶ Nuxt 4 (SSR, Nuxt UI, Tailwind, i18n, Pinia)
+                                          │ REST API (Sanctum) + WebSocket (Echo)
+                                          ▼
+                       Laravel 13 ── Filament (admin /admin)
+                         │  Reverb (chat) · Queue/Horizon · Telegram bot (webhook)
+                         │  Claude API servisi · Scout
+           ┌─────────────┼──────────────┬──────────────┐
+       PostgreSQL      Redis        Meilisearch     S3 (MinIO / R2)
 ```
 
-**Stek:**
+| Qism | Texnologiya |
+|---|---|
+| Backend | Laravel 13, PHP 8.3+, Sanctum, Reverb, Horizon, Scout + Meilisearch, Spatie Permission, Filament |
+| Frontend | Nuxt 4, Vue 3, TypeScript, Nuxt UI (Tailwind), @nuxtjs/i18n (UZ lotin, UZ kirill, RU), Pinia, Laravel Echo |
+| Ma'lumotlar bazasi | PostgreSQL 16 |
+| Infratuzilma | Docker Compose, GitHub Actions (CI/CD), Sentry, kunlik backup |
+| Server | Germaniya (Hetzner), yangi qonunga ko'ra ruxsat etilgan. Biometrik ma'lumot saqlamaymiz. |
+| Tashqi xizmatlar | Claude API, Telegram Bot API, Eskiz (SMS), Payme, Click, Uzum, keyinchalik MyID |
 
-- **Backend:** Laravel 12, PHP 8.3+, Sanctum, Reverb, Horizon, Filament 3, Spatie Permission, Scout + Meilisearch.
-- **Frontend:** Next.js (App Router), TypeScript, Tailwind CSS, shadcn/ui, TanStack Query, laravel-echo (chat), next-intl (UZ lotin, UZ kirill, RU).
-- **Ma'lumotlar bazasi:** PostgreSQL (MySQL ham bo'ladi, lekin PostgreSQL ning JSON va geo imkoniyatlari foydaliroq).
-- **Infratuzilma:** Docker, **O'zbekistondagi** server (shaxsiy ma'lumotlar qonuni, 7.3-bo'limga qarang), CI/CD (GitHub Actions), Sentry, zaxira nusxa.
-- **Tashqi xizmatlar:** Claude API, Telegram Bot API, Eskiz/PlayMobile (SMS), Payme/Click/Uzum, Firebase (push).
-
-**Agar jamoa 1 kishi bo'lsa va MVP 1 oyda kerak bo'lsa:** B variant (Laravel + Inertia React + Filament). API keyinchalik qo'shiladi.
-
-### 5.3 Ma'lumotlar bazasi (asosiy jadvallar)
+### 5.2 Repozitoriya tuzilishi
 
 ```
-users            (id, name, phone, telegram_id, role, locale, status, last_seen_at)
-parent_profiles  (user_id, region_id, district_id, about)
-children         (parent_id, birth_year, gender, special_needs)
-nanny_profiles   (user_id, bio, experience_years, price_min, price_max, price_type,
-                  work_formats[], languages[], age_groups[], is_available,
-                  verification_level, rating_avg, reviews_count)
-nanny_skills     (nanny_id, skill_id)
-documents        (user_id, type, file, status, reviewed_by, reviewed_at)
-vacancies        (parent_id, title, description, district_id, work_format, schedule,
-                  salary_min, salary_max, children_info, status, expires_at, is_top)
-applications     (vacancy_id, nanny_id, message, status)
-favorites        (user_id, favoritable_type, favoritable_id)
-saved_searches   (user_id, filters json, notify)
-conversations    (id, type, vacancy_id null, last_message_at)
-conversation_participants (conversation_id, user_id, last_read_message_id, muted, blocked)
-messages         (conversation_id, sender_id, type[text|voice|image|file|system],
-                  body, attachment, reply_to_id, edited_at, deleted_at)
-reviews          (author_id, target_id, conversation_id, rating, text, status)
-reports          (reporter_id, reportable_type, reportable_id, reason, status)
-regions, districts, skills, languages
-plans, subscriptions, payments, promotions   (2-bosqich)
-ai_requests      (user_id, feature, model, input_tokens, output_tokens, cost, created_at)
-notifications, audit_logs, settings
+enagalar_uz/
+├── backend/          Laravel 13 (API + Filament admin + Reverb)
+├── frontend/         Nuxt 4
+├── docs/             Reja, bozor tahlili, API hujjatlari
+├── docker-compose.yml   PostgreSQL, Redis, Meilisearch, Mailpit
+└── CLAUDE.md
 ```
 
----
+### 5.3 Ma'lumotlar bazasi
 
-## 6. Talab va taklifni o'rganish (ishni boshlashdan oldin, 2–3 hafta)
+```
+users              id, name, phone, telegram_id, email, locale, status, last_seen_at
+roles/permissions  (Spatie) parent, nanny, moderator, admin
+regions, districts id, name_uz, name_uz_cyrl, name_ru, slug
+parent_profiles    user_id, region_id, district_id, about
+children           parent_profile_id, birth_year, gender, special_needs
+nanny_profiles     user_id, region_id, district_id, bio, experience_years,
+                   price_amount, price_unit[hour|day|month], work_formats[], languages[],
+                   age_groups[], live_in, free_trial_day, is_available, status,
+                   rating_avg, reviews_count, views_count
+skills, nanny_skill
+vacancies          parent_profile_id, title, description, region_id, district_id,
+                   work_format, schedule, salary_min, salary_max, salary_unit,
+                   children_count, children_ages[], languages[], is_urgent,
+                   status[draft|pending|active|closed|found|expired], expires_at
+applications       vacancy_id, nanny_profile_id, message, status
+identity_verifications user_id, passport_series, passport_number, pinfl, full_name,
+                   birth_date (shifrlangan), document_path, status, reviewed_by, reviewed_at
+badges             slug, name_uz, name_ru, icon, color, description, auto_rule, validity_days
+user_badges        user_id, badge_id, granted_by, granted_at, expires_at, source
+documents          user_id, type, path, status, reviewed_by
+conversations      id, vacancy_id?, last_message_at
+conversation_participants conversation_id, user_id, last_read_message_id, muted, blocked
+messages           conversation_id, sender_id, type[text|image|voice|file|system],
+                   body, attachment_path, reply_to_id, edited_at, deleted_at
+reviews            author_id, target_user_id, conversation_id, rating, text, status
+reports            reporter_id, reportable_type, reportable_id, reason, status
+favorites, saved_searches, consents, ai_requests, audit_logs, settings
+plans, subscriptions, payments, promotions     (2-bosqich)
+```
 
-1. **Telegram kanallar monitoringi:** @moya_nyanyauz, @nyanidomashniypersonal, @jobuztashkent va o'zbek tilidagi kanallarda 2 hafta davomida postlarni yig'ib (TGStat, Telemetr yoki o'zimizning skript) quyidagilarni hisoblash:
-   - vakansiya va rezyume nisbati;
-   - tumanlar, maosh, ish formati va til bo'yicha taqsimot;
-   - kunlik e'lonlar soni.
-2. **OLX, hh.uz, homecare.uz, bolambilan.uz:** e'lonlar soni, narxlar, filtrlar, foydalanuvchi sharhlari.
-3. **So'rovnoma** (Google Forms yoki Telegram bot orqali, kamida 100 ota-ona va 100 enaga). Savollar:
-   - Hozir qanday qidirasiz?
-   - Nimadan qo'rqasiz?
-   - Nima uchun pul to'lashga tayyorsiz?
-4. **Intervyular:** 10 ota-ona va 10 enaga bilan 20 daqiqalik suhbat.
-5. **Raqobatchilarni sinash:** bolambilan.uz va homecare.uz da ota-ona va enaga sifatida ro'yxatdan o'tib, butun yo'lni bosib chiqish, tariflar va kamchiliklarni yozib olish. enagam.uz (Parvona) ishga tushishini kuzatib borish.
-6. **Natija:** "Bozor hisoboti" (alohida hujjat), shu asosda MVP ro'yxati yakunlanadi.
+## 6. Bosqichlar (1 dasturchi va Claude)
 
----
+Claude bilan ishlaganda kod yozish tezlashadi. Lekin dizayn, test, moderatsiya va marketing vaqt oladi, shuning uchun muddatlar realistik qo'yildi.
 
-## 7. Bosqichlar va muddatlar
+### 0-bosqich: poydevor (1–2 hafta) — **boshlandi**
 
-> Taxmin: 1 backend + 1 frontend dasturchi + dizayner (yarim stavka).
+- [x] Bozor tahlili
+- [x] Laravel va Nuxt karkasi
+- [ ] Docker Compose, CI (lint va testlar)
+- [ ] Asosiy migratsiyalar va modellar, viloyat va tumanlar seed'i
+- [ ] Auth: telefon va SMS kodi, Telegram Login, rol tanlash
+- [ ] Dizayn: 10–12 asosiy ekran (Nuxt UI asosida, mobile-first)
+- [ ] Ma'lumotlar bazasini pd.gov.uz da ro'yxatdan o'tkazish, maxfiylik siyosati va oferta
 
-### 0-bosqich: tayyorgarlik (2–3 hafta)
+### 1-bosqich: MVP (6–8 hafta)
 
-- Bozorni o'rganish (6-bo'lim), so'rovnoma.
-- Brending, Figma da dizayn (asosiy ekranlar, mobile-first).
-- Repo, Docker, CI/CD, server.
-
-### 1-bosqich: MVP (8–10 hafta)
-
-- Ro'yxatdan o'tish: Telegram login va telefon, rol tanlash.
-- Enaga anketasi, ota-ona vakansiyasi, qidiruv va filtrlar, e'lon sahifalari (SEO).
-- Otklik, sevimlilar.
-- **Chat v1:** matn, rasm, o'qildi belgisi, onlayn holat, push.
-- Moderatsiya va hujjat tekshiruvi, belgilar.
-- Filament admin panel (foydalanuvchilar, moderatsiya, shikoyatlar, ma'lumotnomalar, dashboard).
-- **AI v1:** anketa va e'lon yozuvchi, avto-moderatsiya.
-- Telegram bot (bildirishnomalar) va kanalga avtomatik post.
-- UZ (lotin) va RU tillari.
-- **Ishga tushirish: Toshkent shahri, bepul.**
+- Hafta 1–2: enaga anketasi, ota-ona profili va vakansiya, Filament'da moderatsiya.
+- Hafta 3: qidiruv va filtrlar (Meilisearch), SEO sahifalar (tuman va kategoriya).
+- Hafta 4: otklik, sevimlilar, pasport orqali tekshiruv va nishonlar tizimi.
+- Hafta 5–6: **chat v1** (Reverb), push va Telegram bot bildirishnomalari.
+- Hafta 7: **AI v1** (yozuvchi va avto-moderatsiya), Telegram kanalga avto-post.
+- Hafta 8: test, xatolarni tuzatish, beta (50–100 foydalanuvchi), keyin **ishga tushirish**.
 
 ### 2-bosqich: o'sish (6–8 hafta)
 
-- **Chat v2:** ovozli xabar, reply, tahrirlash, reaksiyalar, tarjima.
-- **AI v2:** aqlli qidiruv, moslashtirish, suhbat yordamchisi, sharhlar xulosasi.
-- Sharh va reyting, saqlangan qidiruv bildirishnomalari.
+- Chat v2, AI v2 (qidiruv, moslashtirish, tarjima).
+- Sharh va reyting, avtomatik nishonlar, saqlangan qidiruv.
 - Telegram Mini App.
-- To'lovlar (Payme, Click, Uzum): TOP e'lon, PRO anketa.
-- Viloyatlarga kengayish, o'zbek kirill alifbosi.
+- To'lovlar: TOP e'lon, PRO anketa, tez tekshiruv.
+- Viloyatlar bo'yicha marketing, o'zbek kirill alifbosi.
 
 ### 3-bosqich: kengayish
 
-- Mobil ilova (iOS va Android).
-- Ota-onalar obunasi, agentlik va uy bog'chalari uchun biznes tarif.
-- Video tanishtiruv, onlayn suhbat (video qo'ng'iroq).
-- Shartnoma shabloni va "xavfsiz ish" funksiyalari.
-- Qo'shimcha kategoriyalar: sidelka, uy bekasi, repetitor.
+- Mobil ilova (Capacitor yoki React Native/Flutter, o'sha API bilan).
+- MyID, obunalar, uy bog'chalari va agentliklar, konsyerj xizmati.
+- Video tanishtiruv va video qo'ng'iroq, "Enagalar akademiyasi" (kurslar).
 
-### 7.1 Muvaffaqiyat ko'rsatkichlari (KPI)
+### 6.1 KPI
 
-- Faol enaga anketalari va faol vakansiyalar soni, ularning tumanlar bo'yicha nisbati.
+- Faol enagalar va faol vakansiyalar soni, viloyatlar bo'yicha.
 - Vakansiyadan birinchi otklikkacha o'tgan vaqt (maqsad: < 2 soat).
 - "Topildi" bilan yopilgan vakansiyalar ulushi.
-- Chat ochilgan juftliklar soni, takror qaytgan foydalanuvchilar.
-- 2-bosqichdan keyin: pullik xizmatga o'tish konversiyasi.
+- "Tasdiqlangan" nishonli enagalar ulushi.
+- 7 va 30 kunlik retention.
 
-### 7.2 Marketing (qisqa)
+### 6.2 Marketing
 
-- O'z Telegram kanallarimiz (UZ va RU), har bir yangi e'lon avtomatik u yerga tushadi.
-- Ota-onalar guruhlari, mommy-bloggerlar, Instagram.
-- SEO: "enaga kerak Chilonzor", "няня Юнусабад" kabi har bir tuman uchun alohida sahifa.
-- Enagalarni jalb qilish: "anketangizni AI 1 daqiqada yozib beradi, bepul".
+- **Telegram:** o'z kanallarimiz (UZ va RU) va avto-post, katta kanallarda reklama (@enagalar, @moya_nyanyauz, @enaga_samarqand).
+- **Viloyatlar:** u yerda raqobat yo'q, Samarqand, Buxoro va Farg'ona uchun alohida kanal ochish.
+- **Instagram va bloggerlar:** ota-onalar guruhlari, mommy-bloggerlar.
+- **SEO:** har bir tuman uchun alohida sahifa, blog.
+- **Enagalarni jalb qilish:** "AI anketangizni 1 daqiqada yozib beradi, bepul".
 
-### 7.3 Xavf va huquqiy masalalar
+### 6.3 Xavflar
 
-- **Shaxsiy ma'lumotlar:** O'zbekistonning "Shaxsga doir ma'lumotlar to'g'risida"gi qonuniga ko'ra fuqarolarning ma'lumotlari O'zbekiston hududidagi serverlarda saqlanishi kerak. Bundan tashqari, maxfiylik siyosati va rozilik olish shart. Claude API ga faqat anonimlashtirilgan matn yuboriladi. **Yurist bilan tekshirish kerak.**
-- **Bola xavfsizligi:** platforma enaga uchun kafolat bermaydi, lekin tekshiruv darajalarini ochiq ko'rsatadi. Shikoyatga 24 soat ichida javob beriladi.
-- **"Tovuq va tuxum" muammosi** (enagasiz ota-ona kelmaydi, ota-onasiz enaga kelmaydi): avval enagalar bazasini yig'ish kerak (AI anketa, bepul, Telegram orqali), keyin ota-onalarni jalb qilish.
-- **Raqobat:** bolambilan.uz allaqachon tekshiruv va Mini App ga ega. Bizning ustunligimiz chat, AI, bepul start va UX bo'lishi kerak.
-- **AI xarajati:** limitlar, arzon model (Haiku) ko'p ishlatiladigan vazifalar uchun, kesh.
+| Xavf | Chora |
+|---|---|
+| "Tovuq va tuxum" (enaga ham, ota-ona ham kam) | Avval enagalar: bepul, AI anketa, Telegram orqali jalb qilish |
+| Bola xavfsizligi bilan bog'liq holat | Nishonlar, shikoyatga 24 soatda javob, qo'llanma, platforma o'zini "e'lon platformasi" deb ko'rsatadi |
+| Huquqiy masalalar (ZRU-501, shaxsiy ma'lumotlar) | Bazani reestrga kiritish, rozilik, yurist maslahati |
+| bolambilan yoki boshqa raqobatchi chat qo'shishi | Tezlik, UX, AI, viloyatlarni egallash |
+| Bitta dasturchiga yuklama | Filament, Nuxt UI, tayyor paketlar, Claude, qat'iy MVP doirasi |
+| AI xarajati | Limitlar, ko'p ishlatiladigan vazifalar uchun Haiku, kesh |
 
----
+## 7. Ochiq savollar
 
-## 8. Keyingi qadamlar
-
-1. Ushbu rejani muhokama qilish, A yoki B texnologiya variantini tasdiqlash.
-2. Bozorni o'rganishni boshlash (6-bo'lim) va so'rovnoma tayyorlash.
-3. Dizayn: asosiy 10–12 ekran (bosh sahifa, qidiruv, anketa, vakansiya, chat, profil, admin).
-4. Repo strukturasini yaratish: `backend/` (Laravel) va `frontend/` (Next.js), Docker.
-5. MVP vazifalarini GitHub Issues ga bo'lib chiqish.
-
----
-
-### Manbalar
-
-- [bolambilan.uz](https://bolambilan.uz/), [homecare.uz](https://homecare.uz/), [enagam.uz](https://enagam.uz/)
-- [@moya_nyanyauz — TGStat](https://uz.tgstat.com/en/channel/@moya_nyanyauz), [@nyanidomashniypersonal](https://t.me/nyanidomashniypersonal), [@jobuztashkent — Telemetr](https://telemetr.io/en/channels/1119287109-jobuztashkent), [@BOR_ISH](https://t.me/s/BOR_ISH?before=26953)
-- [OLX.uz — няня](https://www.olx.uz/rabota/q-%D0%BD%D1%8F%D0%BD%D1%8F/), [hh.uz — няня](https://hh.uz/vacancies/nyanya), [ishkop.uz](https://ishkop.uz/), [salexy.uz](https://salexy.uz/uslugi/uslugi_nyani)
-- [Golden Pages — подбор няни](https://www.goldenpages.uz/rubrics/?Id=100836)
+[README](../README.md) va chatdagi savollarga qarang. Javoblar kelgach, reja yangilanadi.
