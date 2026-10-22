@@ -3,15 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enums\PriceUnit;
+use App\Http\Controllers\Concerns\CountsViews;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\SearchVacanciesRequest;
 use App\Http\Resources\VacancyResource;
 use App\Models\Vacancy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class VacancyController extends Controller
 {
+    use CountsViews;
+
     /** Faol va muddati o'tmagan e'lonlar bo'yicha qidiruv. */
     public function index(SearchVacanciesRequest $request): AnonymousResourceCollection
     {
@@ -38,10 +42,10 @@ class VacancyController extends Controller
         return VacancyResource::collection($query->orderByDesc('id')->paginate(20)->withQueryString());
     }
 
-    public function show(int $id): VacancyResource
+    public function show(Request $request, int $id): VacancyResource
     {
         $vacancy = Vacancy::active()->withPublic()->findOrFail($id);
-        $vacancy->increment('views_count');
+        $this->countView($request, $vacancy, $vacancy->parentProfile?->user_id);
 
         return new VacancyResource($vacancy);
     }

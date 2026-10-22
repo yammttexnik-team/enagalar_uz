@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FavoriteRequest;
 use App\Http\Resources\FavoriteResource;
-use App\Models\Favorite;
 use App\Models\NannyProfile;
 use App\Models\Vacancy;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -17,18 +16,18 @@ class FavoriteController extends Controller
 {
     public function index(Request $request): AnonymousResourceCollection
     {
+        // Faol bo'lmay qolgan yoki o'chirilgan e'lon/anketalar va sahifalash — bazada.
         $favorites = $request->user()->favorites()
+            ->where(fn ($q) => $q
+                ->where(fn ($n) => $n->where('favoritable_type', 'nanny')
+                    ->whereIn('favoritable_id', NannyProfile::active()->select('id')))
+                ->orWhere(fn ($v) => $v->where('favoritable_type', 'vacancy')
+                    ->whereIn('favoritable_id', Vacancy::query()->where('status', 'active')->select('id'))))
             ->with(['favoritable' => fn (MorphTo $morph) => $morph->morphWith([
                 NannyProfile::class => ['user.activeBadges', 'region', 'district', 'skills'],
                 Vacancy::class => ['region', 'district', 'parentProfile.user.activeBadges'],
             ])])
-            ->latest('id')->get()
-            // O'chirilgan yoki faol bo'lmay qolgan e'lon/anketalar ko'rsatilmaydi.
-            ->filter(fn (Favorite $f) => match (true) {
-                $f->favoritable instanceof NannyProfile => $f->favoritable->status->value === 'active',
-                $f->favoritable instanceof Vacancy => $f->favoritable->status->value === 'active',
-                default => false,
-            })->values();
+            ->latest('id')->paginate(50);
 
         return FavoriteResource::collection($favorites);
     }

@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
 
-#[Fillable(['vacancy_id', 'last_message_at'])]
+#[Fillable(['vacancy_id', 'last_message_at', 'pair_key'])]
 class Conversation extends Model
 {
     protected function casts(): array
@@ -54,23 +55,39 @@ class Conversation extends Model
         return $this->participants->first(fn (User $p) => $p->id !== $user->id);
     }
 
-    /** Ikki foydalanuvchi o'rtasidagi suhbatni topadi yoki yaratadi. */
+    /** Ikki foydalanuvchi uchun tartiblangan juftlik kaliti (masalan "3:17"). */
+    public static function pairKey(User $a, User $b): string
+    {
+        return min($a->id, $b->id).':'.max($a->id, $b->id);
+    }
+
+    /** Ikki foydalanuvchi o'rtasidagi suhbatni topadi yoki yaratadi (pair_key unikal, poyga bo'lsa qayta qidiradi). */
     public static function between(User $a, User $b, ?Vacancy $vacancy = null): self
     {
-        $existing = self::query()
-            ->whereHas('participants', fn ($q) => $q->whereKey($a->id))
-            ->whereHas('participants', fn ($q) => $q->whereKey($b->id))
-            ->first();
+        $key = self::pairKey($a, $b);
+
+        $existing = self::query()->where('pair_key', $key)->first()
+            // pair_key qo'yilmagan eski suhbatlar
+            ?? self::query()
+                ->whereNull('pair_key')
+                ->whereHas('participants', fn ($q) => $q->whereKey($a->id))
+                ->whereHas('participants', fn ($q) => $q->whereKey($b->id))
+                ->first();
 
         if ($existing) {
             return $existing;
         }
 
-        return DB::transaction(function () use ($a, $b, $vacancy) {
-            $conversation = self::create(['vacancy_id' => $vacancy?->id]);
-            $conversation->participants()->attach([$a->id, $b->id]);
+        try {
+            return DB::transaction(function () use ($a, $b, $vacancy, $key) {
+                $conversation = self::create(['vacancy_id' => $vacancy?->id, 'pair_key' => $key]);
+                $conversation->participants()->attach([$a->id, $b->id]);
 
-            return $conversation;
-        });
+                return $conversation;
+            });
+        } catch (UniqueConstraintViolationException) {
+            // Parallel so'rov oldin yaratib bo'lgan.
+            return self::query()->where('pair_key', $key)->firstOrFail();
+        }
     }
 }
