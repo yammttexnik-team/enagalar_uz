@@ -13,7 +13,10 @@ const { toastError, ok } = useApiError()
 
 const id = computed(() => props.conversationId)
 const conv = computed(() => chat.conversations[id.value])
-const th = computed(() => chat.thread(id.value))
+// Holat computed ichida yaratilmaydi: watch (immediate) yaratadi, computed faqat oʻqiydi
+const emptyThread = { items: [], hasMore: false, loaded: false, loading: false, error: false }
+watch(id, v => chat.thread(v), { immediate: true })
+const th = computed(() => chat.threads[id.value] ?? emptyThread)
 const me = computed(() => auth.user?.id ?? 0)
 const { typing, sendTyping } = useChatRealtime(id)
 

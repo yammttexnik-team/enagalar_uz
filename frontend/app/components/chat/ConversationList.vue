@@ -83,7 +83,7 @@ const isRead = (c: Conversation) => !!c.last_message && (chat.otherRead[c.id] ??
                     <UIcon :name="isRead(c) ? 'i-lucide-check-check' : 'i-lucide-check'" class="size-4 shrink-0" :class="isRead(c) ? 'text-brand-500' : 'text-dimmed'" aria-hidden="true" />
                     <span class="sr-only">{{ isRead(c) ? t('chat.read') : t('chat.sent') }}</span>
                   </template>
-                  <span class="truncate">{{ previewText(c.last_message?.type, c.last_message?.preview) }}</span>
+                  <span class="truncate">{{ previewText(c.last_message?.type, c.last_message?.preview, c.last_message?.deleted) }}</span>
                 </p>
                 <span
                   v-if="c.unread_count"

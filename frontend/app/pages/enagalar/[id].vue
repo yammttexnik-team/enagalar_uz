@@ -20,24 +20,30 @@ const localizedName = useLocalizedName()
 const config = useRuntimeConfig()
 const { price, plural, enumLabel, relativeTime } = useFormat()
 
-const { data: nanny } = await useAsyncData(`nanny-${route.params.id}`, async () => {
+const loadFailed = ref(false)
+const { data: nanny, refresh } = await useAsyncData(`nanny-${route.params.id}`, async () => {
   try {
+    loadFailed.value = false
     return (await api<{ data: NannyDetail }>(`/nannies/${route.params.id}`)).data
   }
   catch (e: unknown) {
     const status = (e as { statusCode?: number }).statusCode
-    throw createError({ statusCode: status === 404 ? 404 : 500, statusMessage: t('nanny.detail.notFound'), fatal: true })
+    // Faqat 404 — xato sahifa; boshqa xatolar (tarmoq, 5xx) qayta urinish bilan koʻrsatiladi
+    if (status === 404) throw createError({ statusCode: 404, statusMessage: t('nanny.detail.notFound'), fatal: true })
+    loadFailed.value = true
+    return null
   }
 })
 
+const retry = () => refresh()
 const n = computed(() => nanny.value!)
 const place = computed(() => [n.value.district, n.value.region].filter(Boolean).map(p => localizedName(p!.name)).join(', '))
 const expText = computed(() => (n.value.experience_years ? plural('format.yearsExp', n.value.experience_years) : t('nanny.noExperience')))
 const ageText = computed(() => (n.value.age ? plural('format.ageYears', n.value.age) : ''))
 
-const title = computed(() => t('nanny.detail.seoTitle', { name: n.value.name, place: place.value }))
-const description = computed(() => t('nanny.detail.seoDescription', { name: n.value.name, age: ageText.value, experience: expText.value, price: price(n.value.price.amount, n.value.price.unit) }))
-const canonical = computed(() => config.public.siteUrl + localePath(`/enagalar/${n.value.id}`))
+const title = computed(() => !nanny.value ? '' : t('nanny.detail.seoTitle', { name: n.value.name, place: place.value }))
+const description = computed(() => !nanny.value ? '' : t('nanny.detail.seoDescription', { name: n.value.name, age: ageText.value, experience: expText.value, price: price(n.value.price.amount, n.value.price.unit) }))
+const canonical = computed(() => !nanny.value ? '' : config.public.siteUrl + localePath(`/enagalar/${n.value.id}`))
 useSeoMeta({ title, description, ogTitle: title, ogDescription: description, ogUrl: canonical })
 useHead({ link: [{ rel: 'canonical', href: canonical }] })
 
@@ -200,4 +206,8 @@ function report() {
       </div>
     </UContainer>
   </div>
+  <UContainer v-else-if="loadFailed" class="max-w-lg py-20 text-center">
+    <p class="text-lg text-muted">{{ t('dashboard.common.error') }}</p>
+    <UButton class="mt-6" icon="i-lucide-refresh-cw" :label="t('search.retry')" @click="retry()" />
+  </UContainer>
 </template>

@@ -183,7 +183,8 @@ export const useChatStore = defineStore('chat', () => {
   }
 
   function preview(o: SendOpts) {
-    return o.type === 'image' ? '📷 Rasm' : o.type === 'voice' ? '🎤 Ovozli xabar' : (o.body ?? '')
+    // Rasm va ovozli xabar uchun matn saqlanmaydi: render vaqtida type boʻyicha tarjima qilinadi
+    return o.type === 'image' || o.type === 'voice' ? '' : (o.body ?? '')
   }
 
   async function transmit(convId: number, clientId: string) {
@@ -245,7 +246,7 @@ export const useChatStore = defineStore('chat', () => {
       type: o.type,
       body: o.body || null,
       attachment: o.file ? { url: URL.createObjectURL(o.file), mime: o.file.type, duration: o.duration } : null,
-      reply_to: o.replyTo ? { id: o.replyTo.id, preview: o.replyTo.body ?? (o.replyTo.type === 'image' ? '📷 Rasm' : '🎤 Ovozli xabar'), sender_id: o.replyTo.sender_id } : null,
+      reply_to: o.replyTo ? { id: o.replyTo.id, preview: o.replyTo.body ?? '', type: o.replyTo.type, sender_id: o.replyTo.sender_id } : null,
       edited_at: null,
       deleted: false,
       created_at: now,
@@ -285,7 +286,7 @@ export const useChatStore = defineStore('chat', () => {
     await api(`/messages/${m.id}`, { method: 'DELETE' })
     upsertMessage({ ...m, deleted: true, body: null, attachment: null })
     const c = conversations[m.conversation_id]
-    if (c?.last_message?.id === m.id) c.last_message = { ...c.last_message, preview: 'Xabar o\'chirildi' }
+    if (c?.last_message?.id === m.id) c.last_message = { ...c.last_message, preview: '', deleted: true }
   }
 
   async function setMuted(id: number, muted: boolean) {

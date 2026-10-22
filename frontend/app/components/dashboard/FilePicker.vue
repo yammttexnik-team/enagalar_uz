@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{ accept: string[], maxMb: number, label: string, hint?: string, error?: string, inputId: string }>()
 const file = defineModel<File | null>({ default: null })
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const localError = ref('')
 const preview = ref<string | null>(null)
 const input = ref<HTMLInputElement>()
@@ -38,7 +38,12 @@ function clear() {
 }
 watch(file, (f) => { if (!f) setPreview(null) })
 onBeforeUnmount(() => setPreview(null))
-const size = computed(() => (!file.value ? '' : file.value.size < 1024 * 1024 ? `${Math.max(1, Math.round(file.value.size / 1024))} KB` : `${(file.value.size / 1024 / 1024).toFixed(1)} MB`))
+const size = computed(() => {
+  if (!file.value) return ''
+  const mb = file.value.size >= 1024 * 1024
+  return new Intl.NumberFormat(locale.value, { style: 'unit', unit: mb ? 'megabyte' : 'kilobyte', unitDisplay: 'short', maximumFractionDigits: mb ? 1 : 0 })
+    .format(mb ? file.value.size / 1024 / 1024 : Math.max(1, Math.round(file.value.size / 1024)))
+})
 const shownError = computed(() => localError.value || props.error)
 </script>
 
