@@ -50,6 +50,8 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
+      start_period: 15s
+      start_interval: 2s
     logging: *logging
     networks: [internal]
 
@@ -72,6 +74,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 180s
+      start_interval: 3s
 
   queue:
     <<: *backend
@@ -84,6 +87,8 @@ services:
       interval: 60s
       timeout: 5s
       retries: 3
+      start_period: 30s
+      start_interval: 2s
 
   scheduler:
     <<: *backend
@@ -96,6 +101,8 @@ services:
       interval: 60s
       timeout: 5s
       retries: 3
+      start_period: 30s
+      start_interval: 2s
 
   reverb:
     <<: *backend
@@ -108,6 +115,8 @@ services:
       interval: 60s
       timeout: 5s
       retries: 3
+      start_period: 30s
+      start_interval: 2s
 
   nuxt:
     build:

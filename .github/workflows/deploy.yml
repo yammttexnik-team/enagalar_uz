@@ -52,6 +52,7 @@ jobs:
 
       - name: Kodni yuborish
         run: |
+          git rev-parse HEAD > REVISION
           rsync -az --delete -e "ssh -i ~/.ssh/deploy_key" \
             --exclude .git --exclude node_modules --exclude vendor --exclude .nuxt --exclude .output \
             --exclude 'backend/.env' --exclude 'backend/storage' --exclude 'backend/database/*.sqlite' \

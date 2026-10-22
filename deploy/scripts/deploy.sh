@@ -14,6 +14,19 @@ fi
 
 DC=(docker compose --env-file .env.production -f docker-compose.prod.yml)
 
+# Deploy natijasi Telegram'ga: .env.production da DEPLOY_NOTIFY_CHAT_ID bo'lsa (bot shu chatga yozadi)
+STARTED_AT=$(date +%s)
+REVISION="$(cat "$REPO_DIR/REVISION" 2>/dev/null | cut -c1-7 || true)"
+notify() {
+  local token chat
+  token="$(grep -E '^TELEGRAM_BOT_TOKEN=' .env.production | cut -d= -f2- || true)"
+  chat="$(grep -E '^DEPLOY_NOTIFY_CHAT_ID=' .env.production | cut -d= -f2- || true)"
+  [ -n "$token" ] && [ -n "$chat" ] || return 0
+  curl -s -m 10 -o /dev/null "https://api.telegram.org/bot${token}/sendMessage" \
+    --data-urlencode "chat_id=${chat}" --data-urlencode "text=$1" || true
+}
+trap 'notify "❌ enagalar deploy yiqildi${REVISION:+ ($REVISION)}, $(( $(date +%s) - STARTED_AT ))s. Loglar: Actions → Deploy"' ERR
+
 if [ "${1:-}" != "--no-pull" ]; then
   echo "==> git pull"
   git -C "$REPO_DIR" pull --ff-only
@@ -62,4 +75,5 @@ echo "==> eski image'larni tozalash"
 docker image prune -f >/dev/null
 
 "${DC[@]}" ps
+notify "✅ enagalar deploy tayyor${REVISION:+ ($REVISION)}, $(( $(date +%s) - STARTED_AT ))s"
 echo "Tayyor."
