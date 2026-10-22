@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\VerificationStatus;
 use App\Models\Concerns\ReviewedByModerator;
+use App\Services\Bonus\VerificationRewards;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -47,6 +48,7 @@ class Document extends Model
         DB::transaction(function () use ($moderator) {
             $this->markReviewed($moderator, VerificationStatus::Approved);
             $this->badge?->grantTo($this->user, $moderator);
+            app(VerificationRewards::class)->documentApproved($this);
         });
     }
 }

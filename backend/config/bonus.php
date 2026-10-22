@@ -12,11 +12,16 @@ return [
     'survey' => (int) env('BONUS_SURVEY', 50000),
     'listing' => (int) env('BONUS_LISTING', 30000),
     'referral' => (int) env('BONUS_REFERRAL', 15000),
+    // Moderator pasportni tasdiqlaganda va har bir tasdiqlangan hujjat (ma'lumotnoma, sertifikat) uchun.
+    'verification' => (int) env('BONUS_VERIFICATION', 15000),
+    'document' => (int) env('BONUS_DOCUMENT', 5000),
+    // Pasport + hujjat bonuslari jami shundan oshmaydi, so'm. 0 = cheklovsiz.
+    'verification_max' => (int) env('BONUS_VERIFICATION_MAX', 30000),
 
     // Bitta foydalanuvchi taklif qilib olishi mumkin bo'lgan referal bonuslari soni (0 = cheksiz).
     'referral_max_rewards' => (int) env('BONUS_REFERRAL_MAX', 5),
 
-    // Bitta foydalanuvchi hayoti davomida yig'a oladigan jami bonus (survey/listing/referral), so'm. 0 = cheklovsiz.
+    // Bitta foydalanuvchi hayoti davomida yig'a oladigan jami bonus (survey/listing/referral/verification/document), so'm. 0 = cheklovsiz.
     'lifetime_cap' => (int) env('BONUS_LIFETIME_CAP', 200000),
 
     // E'lon shuncha kundan oldin o'chirilsa, listing bonusi bekor qilinadi.

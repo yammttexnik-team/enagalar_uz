@@ -18,6 +18,7 @@ use App\Services\Matching\MatchingService;
 use App\Services\Matching\MatchRanker;
 use App\Services\Matching\RuleBasedMatchRanker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Queue;
 use Laravel\Sanctum\Sanctum;
 use Tests\Concerns\MakesListingActors;
@@ -156,6 +157,28 @@ class MatchingTest extends TestCase
 
         $this->assertCount(0, $fake->calls);
         $this->assertSame('rules', $matches[0]->source);
+    }
+
+    public function test_concurrent_ai_request_for_same_user_falls_back_to_rules(): void
+    {
+        $this->activeNanny();
+        $fake = $this->fake();
+        $parent = $this->parentUser();
+        $vacancy = $this->activeVacancy($parent);
+
+        // Boshqa so'rov shu foydalanuvchi uchun AI chaqirmoqda (qulf band) — limitni chetlab o'tib bo'lmaydi.
+        $lock = Cache::lock('ai-limit:matching:'.$parent->id, 120);
+        $this->assertTrue($lock->get());
+
+        $matches = app(MatchingService::class)->forVacancy($vacancy, refresh: true);
+        $this->assertCount(0, $fake->calls);
+        $this->assertSame('rules', $matches[0]->source);
+
+        // Qulf bo'shagach — AI ishlatiladi, qulf qaytariladi.
+        $lock->release();
+        app(MatchingService::class)->forVacancy($vacancy, refresh: true);
+        $this->assertCount(1, $fake->calls);
+        $this->assertTrue(Cache::lock('ai-limit:matching:'.$parent->id, 1)->get());
     }
 
     public function test_results_are_cached_for_six_hours_and_refresh_recomputes(): void

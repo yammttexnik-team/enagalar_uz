@@ -58,9 +58,36 @@ class SurveyTest extends TestCase
         $this->travel($afterSeconds)->seconds();
     }
 
+    /** Test so'rovnomasi enagalar uchun: rol bo'lmasa beriladi. */
     private function submit(User $user, array $answers)
     {
+        if (! $user->hasRole('nanny')) {
+            $user->assignRole('nanny');
+        }
+
         return $this->actingAs($user)->postJson('/api/v1/surveys/test/responses', ['answers' => $answers]);
+    }
+
+    public function test_survey_is_only_for_its_audience(): void
+    {
+        $parent = User::factory()->create();
+        $parent->assignRole('parent');
+        $this->open($parent);
+
+        $this->actingAs($parent)->postJson('/api/v1/surveys/test/responses', ['answers' => $this->valid()])
+            ->assertForbidden()
+            ->assertJsonPath('message', "Bu so'rovnoma faqat enagalar uchun.");
+
+        $noRole = User::factory()->create();
+        $this->open($noRole);
+        $this->actingAs($noRole)->postJson('/api/v1/surveys/test/responses', ['answers' => $this->valid()])->assertForbidden();
+
+        $this->assertDatabaseCount('survey_responses', 0);
+        $this->assertDatabaseCount('bonus_transactions', 0);
+
+        // Enaga roli qo'shilgach — qabul qilinadi.
+        $parent->assignRole('nanny');
+        $this->submit($parent, $this->valid())->assertCreated();
     }
 
     public function test_requires_auth_and_hides_checks_from_client(): void

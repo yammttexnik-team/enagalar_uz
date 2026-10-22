@@ -29,32 +29,65 @@ class BonusService
         ?string $description = null,
         ?User $by = null,
     ): ?BonusTransaction {
-        $existing = $this->find($user, $type, $reference);
-        if ($existing) {
-            return $existing;
-        }
+        // Tavan tekshiruvi va yozish bitta qulf ostida: parallel so'rovlar tavandan oshirib yubormaydi.
+        return $this->forUser($user, function () use ($user, $type, $amount, $reference, $campaign, $description, $by) {
+            $existing = $this->find($user, $type, $reference);
+            if ($existing) {
+                return $existing;
+            }
 
-        if ($amount <= 0 || ($campaign && ! $campaign->isRunning())) {
-            return null;
-        }
-
-        if (in_array($type, BonusType::earned(), true)) {
-            $amount = $this->clipToCap($user, $amount);
-            if ($amount <= 0) {
+            if ($amount <= 0 || ($campaign && ! $campaign->isRunning())) {
                 return null;
             }
-        }
 
-        return $this->insert([
-            'user_id' => $user->id,
-            'amount' => $amount,
-            'type' => $type,
-            'description' => $description,
-            'campaign_id' => $campaign?->id,
-            'reference' => $reference,
-            'expires_at' => now()->addMonths(config('bonus.expiry_months')),
-            'created_by' => $by?->id,
-        ]) ?? $this->find($user, $type, $reference);
+            if (in_array($type, BonusType::earned(), true)) {
+                $amount = $this->clipToCap($user, $amount);
+                if ($amount <= 0) {
+                    return null;
+                }
+            }
+
+            return $this->insert([
+                'user_id' => $user->id,
+                'amount' => $amount,
+                'type' => $type,
+                'description' => $description,
+                'campaign_id' => $campaign?->id,
+                'reference' => $reference,
+                'expires_at' => now()->addMonths(config('bonus.expiry_months')),
+                'created_by' => $by?->id,
+            ]) ?? $this->find($user, $type, $reference);
+        });
+    }
+
+    /**
+     * Foydalanuvchi qatorini (users) FOR UPDATE bilan qulflab, callback'ni tranzaksiyada bajaradi.
+     * Hisoblash-keyin-yozish (tavan, limit, balans) amallari shu orqali ketma-ket bajariladi.
+     * sqlite'da lockForUpdate e'tiborga olinmaydi (u yerda yozuv baribir ketma-ket).
+     *
+     * @template T
+     *
+     * @param  callable(): T  $callback
+     * @return T
+     */
+    public function forUser(User $user, callable $callback): mixed
+    {
+        return DB::transaction(function () use ($user, $callback) {
+            DB::table('users')->where('id', $user->id)->lockForUpdate()->value('id');
+
+            return $callback();
+        });
+    }
+
+    /**
+     * `revoke:<id>` yozuvi bilan bekor qilingan topilmalar id lari.
+     *
+     * @return Collection<int, int>
+     */
+    public function revokedIds(User $user): Collection
+    {
+        return BonusTransaction::where('user_id', $user->id)->where('type', BonusType::Revoke)->pluck('reference')
+            ->map(fn ($ref) => $this->referencedId('revoke:', $ref))->filter()->values();
     }
 
     /** Qo'lda tuzatish (admin): musbat — beradi (muddatli), manfiy — ayiradi. */
@@ -98,7 +131,7 @@ class BonusService
     /** Pullik xizmatlar uchun (hozircha ishlatilmaydi). Balans yetmasa InsufficientBonus. */
     public function spend(User $user, int $amount, string $reference, string $description): BonusTransaction
     {
-        return DB::transaction(function () use ($user, $amount, $reference, $description) {
+        return $this->forUser($user, function () use ($user, $amount, $reference, $description) {
             if ($existing = $this->find($user, BonusType::Spend, $reference)) {
                 return $existing;
             }
@@ -163,18 +196,35 @@ class BonusService
     }
 
     /**
-     * Har bir topilmaning sarflanmagan qoldig'i (FIFO: avval tez tugaydigan).
+     * Har bir topilmaning sarflanmagan qoldig'i. `revoke:<id>` va `expire:<id>` yozuvlari aynan o'sha
+     * topilmadan ayiriladi; qolgan chiqimlar (sarf, qo'lda ayirish) FIFO: avval tez tugaydigan.
      *
      * @return Collection<int, int> topilma id => qoldiq
      */
     public function remainders(User $user, bool $expiredOnly = false): Collection
     {
         $rows = BonusTransaction::where('user_id', $user->id)->get();
+        $ids = $rows->pluck('id')->flip();
 
-        $debits = -$rows->where('amount', '<', 0)->where('type', '!=', BonusType::Expire)->sum('amount');
-        $expired = $rows->where('type', BonusType::Expire)->mapWithKeys(
-            fn ($r) => [(int) str_replace('expire:', '', (string) $r->reference) => -$r->amount]
-        );
+        // Topilmaga bog'langan chiqimlar (id => summa) va bog'lanmagan chiqimlar yig'indisi.
+        $expired = [];
+        $revoked = [];
+        $debits = 0;
+        foreach ($rows->where('amount', '<', 0) as $r) {
+            $id = match ($r->type) {
+                BonusType::Expire => $this->referencedId('expire:', $r->reference),
+                BonusType::Revoke => $this->referencedId('revoke:', $r->reference),
+                default => null,
+            };
+
+            if ($id && $r->type === BonusType::Expire) {
+                $expired[$id] = ($expired[$id] ?? 0) - $r->amount;
+            } elseif ($id && isset($ids[$id])) {
+                $revoked[$id] = ($revoked[$id] ?? 0) - $r->amount;
+            } else {
+                $debits -= $r->amount;
+            }
+        }
 
         $earnings = $rows->where('amount', '>', 0)
             ->sortBy(fn ($r) => [$r->expires_at?->timestamp ?? PHP_INT_MAX, $r->id])
@@ -182,7 +232,7 @@ class BonusService
 
         $result = collect();
         foreach ($earnings as $e) {
-            $left = $e->amount - ($expired[$e->id] ?? 0);
+            $left = max(0, $e->amount - ($revoked[$e->id] ?? 0) - ($expired[$e->id] ?? 0));
             $take = min($left, max(0, $debits));
             $debits -= $take;
             $left -= $take;
@@ -217,17 +267,31 @@ class BonusService
             return $amount;
         }
 
+        // Bekor qilingan topilmalar tavanga kirmaydi.
         $earned = (int) BonusTransaction::where('user_id', $user->id)
             ->whereIn('type', array_map(fn ($t) => $t->value, BonusType::earned()))
-            ->where('amount', '>', 0)->sum('amount');
+            ->where('amount', '>', 0)
+            ->whereNotIn('id', $this->revokedIds($user))
+            ->sum('amount');
 
         return min($amount, max(0, $cap - $earned));
+    }
+
+    private function referencedId(string $prefix, ?string $reference): ?int
+    {
+        if (! $reference || ! str_starts_with($reference, $prefix)) {
+            return null;
+        }
+        $id = substr($reference, strlen($prefix));
+
+        return ctype_digit($id) ? (int) $id : null;
     }
 
     private function insert(array $attributes): ?BonusTransaction
     {
         try {
-            return BonusTransaction::create($attributes);
+            // Savepoint: PostgreSQL'da unique xatosi tashqi tranzaksiyani buzmasligi uchun.
+            return DB::transaction(fn () => BonusTransaction::create($attributes));
         } catch (UniqueConstraintViolationException) {
             return null;
         }

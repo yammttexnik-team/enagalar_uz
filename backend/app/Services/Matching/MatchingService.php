@@ -8,6 +8,7 @@ use App\Models\NannyProfile;
 use App\Models\Vacancy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 /** Ikki tomonlama moslashtirish: nomzod tanlash, anonim payload, saralash, saqlash. */
@@ -147,19 +148,30 @@ class MatchingService
         $source = MatchResult::SOURCE_RULES;
 
         if ($candidates !== []) {
-            $ranker = $this->rankerFor($userId);
-            $ranked = $ranker->rank($subject, $candidates, $direction);
-            $run = $ranker instanceof ReportsRun ? $ranker->lastRun() : null;
+            // Limitni tekshirish, AI chaqiruvi va AiRequest yozuvi foydalanuvchi qulfi ostida: parallel
+            // so'rovlar kunlik limitdan oshmaydi. Qulf band bo'lsa (boshqa AI so'rovi ketmoqda) — qoidalar.
+            $lock = $userId !== null ? Cache::lock('ai-limit:'.self::FEATURE.':'.$userId, 120) : null;
+            $locked = $lock?->get() ?? true;
 
-            if ($run?->calledAi()) {
-                AiRequest::create([
-                    'user_id' => $userId,
-                    'feature' => self::FEATURE,
-                    'model' => $run->model,
-                    'input_tokens' => $run->inputTokens,
-                    'output_tokens' => $run->outputTokens,
-                    'status' => $run->status,
-                ]);
+            try {
+                $ranker = $locked ? $this->rankerFor($userId) : app(RuleBasedMatchRanker::class);
+                $ranked = $ranker->rank($subject, $candidates, $direction);
+                $run = $ranker instanceof ReportsRun ? $ranker->lastRun() : null;
+
+                if ($run?->calledAi()) {
+                    AiRequest::create([
+                        'user_id' => $userId,
+                        'feature' => self::FEATURE,
+                        'model' => $run->model,
+                        'input_tokens' => $run->inputTokens,
+                        'output_tokens' => $run->outputTokens,
+                        'status' => $run->status,
+                    ]);
+                }
+            } finally {
+                if ($lock && $locked) {
+                    $lock->release();
+                }
             }
 
             $source = $run?->source ?? ($ranker instanceof RuleBasedMatchRanker ? MatchResult::SOURCE_RULES : MatchResult::SOURCE_AI);

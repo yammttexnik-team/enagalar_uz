@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\VerificationStatus;
 use App\Models\Concerns\ReviewedByModerator;
+use App\Services\Bonus\VerificationRewards;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Model;
@@ -48,6 +49,7 @@ class IdentityVerification extends Model
         DB::transaction(function () use ($moderator) {
             $this->markReviewed($moderator, VerificationStatus::Approved);
             Badge::where('slug', Badge::VERIFIED)->firstOrFail()->grantTo($this->user, $moderator);
+            app(VerificationRewards::class)->identityApproved($this);
         });
     }
 }

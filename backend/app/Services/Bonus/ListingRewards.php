@@ -3,6 +3,7 @@
 namespace App\Services\Bonus;
 
 use App\Enums\BonusType;
+use App\Enums\NannyProfileStatus;
 use App\Enums\UserStatus;
 use App\Models\BonusTransaction;
 use App\Models\NannyProfile;
@@ -55,6 +56,16 @@ class ListingRewards
         }
 
         $this->bonuses->revoke($tx, "E'lon tez o'chirildi");
+
+        // Shu e'lon sababli (listing bonusidan keyin) berilgan referal bonuslari ham bekor — ikkala tomonda,
+        // agar foydalanuvchida boshqa faol anketa qolmagan bo'lsa.
+        if ($user->nannyProfile()->where('status', NannyProfileStatus::Active)->exists()) {
+            return;
+        }
+
+        BonusTransaction::where('type', BonusType::Referral)->where('reference', 'referral:'.$user->id)->where('amount', '>', 0)
+            ->where('created_at', '>=', $tx->created_at)
+            ->get()->each(fn (BonusTransaction $referral) => $this->bonuses->revoke($referral, "Taklif qilingan do'st e'loni tez o'chirildi"));
     }
 
     private function listing(User $user, string $reference, string $description): void
@@ -75,20 +86,26 @@ class ListingRewards
         }
 
         $reference = 'referral:'.$referred->id;
-        $already = BonusTransaction::where('user_id', $referrer->id)->where('type', BonusType::Referral)->where('reference', $reference)->exists();
 
-        if (! $already) {
-            $max = (int) config('bonus.referral_max_rewards');
-            $count = BonusTransaction::where('user_id', $referrer->id)->where('type', BonusType::Referral)->where('amount', '>', 0)->count();
-            if ($max > 0 && $count >= $max) {
-                return;
+        // Sanash va berish taklif qilganning qulfi ostida: parallel faollashuvlar maksimumdan oshmaydi.
+        $this->bonuses->forUser($referrer, function () use ($referrer, $referred, $reference) {
+            $already = BonusTransaction::where('user_id', $referrer->id)->where('type', BonusType::Referral)->where('reference', $reference)->exists();
+
+            if (! $already) {
+                $max = (int) config('bonus.referral_max_rewards');
+                // Bekor qilingan referallar hisobga kirmaydi.
+                $count = BonusTransaction::where('user_id', $referrer->id)->where('type', BonusType::Referral)->where('amount', '>', 0)
+                    ->whereNotIn('id', $this->bonuses->revokedIds($referrer))->count();
+                if ($max > 0 && $count >= $max) {
+                    return;
+                }
             }
-        }
 
-        $campaign = $this->bonuses->campaignFor($referrer);
-        $amount = $campaign?->referral_bonus ?? config('bonus.referral');
+            $campaign = $this->bonuses->campaignFor($referrer);
+            $amount = $campaign?->referral_bonus ?? config('bonus.referral');
 
-        $this->bonuses->award($referrer, BonusType::Referral, $amount, $reference, $campaign, "Taklif qilgan do'stingiz e'lon joyladi");
-        $this->bonuses->award($referred, BonusType::Referral, $amount, $reference, $campaign, "Do'stingiz taklifi bo'yicha bonus");
+            $this->bonuses->award($referrer, BonusType::Referral, $amount, $reference, $campaign, "Taklif qilgan do'stingiz e'lon joyladi");
+            $this->bonuses->award($referred, BonusType::Referral, $amount, $reference, $campaign, "Do'stingiz taklifi bo'yicha bonus");
+        });
     }
 }
