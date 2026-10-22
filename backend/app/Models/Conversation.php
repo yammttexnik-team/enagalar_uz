@@ -42,6 +42,18 @@ class Conversation extends Model
         return $this->hasOne(Message::class)->latestOfMany();
     }
 
+    /** Suhbat ishtirokchisi (participants yuklangan bo'lishi kerak, aks holda yuklanadi). */
+    public function participantFor(User $user): ?User
+    {
+        return $this->participants->firstWhere('id', $user->id);
+    }
+
+    /** Suhbatdagi ikkinchi ishtirokchi. */
+    public function otherFor(User $user): ?User
+    {
+        return $this->participants->first(fn (User $p) => $p->id !== $user->id);
+    }
+
     /** Ikki foydalanuvchi o'rtasidagi suhbatni topadi yoki yaratadi. */
     public static function between(User $a, User $b, ?Vacancy $vacancy = null): self
     {

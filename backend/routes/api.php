@@ -34,7 +34,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/status/{token}', [TelegramAuthController::class, 'status']);
     });
 
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware(['auth:sanctum', 'last_seen'])->group(function () {
         Route::post('/auth/logout', [TelegramAuthController::class, 'logout']);
         Route::get('/me', [MeController::class, 'show']);
         Route::post('/me/roles', [MeController::class, 'addRole']);

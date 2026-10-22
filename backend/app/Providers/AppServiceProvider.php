@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Conversation;
 use App\Models\NannyProfile;
 use App\Models\Vacancy;
 use App\Services\Matching\ClaudeMatchRanker;
@@ -28,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Sevimlilarda to'liq klass nomi o'rniga qisqa tur saqlanadi.
-        Relation::morphMap(['nanny' => NannyProfile::class, 'vacancy' => Vacancy::class]);
+        // Sevimlilar va shikoyatlarda to'liq klass nomi o'rniga qisqa tur saqlanadi.
+        Relation::morphMap(['nanny' => NannyProfile::class, 'vacancy' => Vacancy::class, 'conversation' => Conversation::class]);
     }
 }
