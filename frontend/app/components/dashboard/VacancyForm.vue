@@ -127,6 +127,28 @@ for (const key of Object.keys(form) as (keyof typeof form)[]) {
 }
 
 const err = (k: string) => errors.value[k]
+
+// "Matnni joylash (AI)": kelgan maydonlar formaga qo'shiladi, saqlash — foydalanuvchida.
+async function applyAi(f: Record<string, any>) {
+  if (typeof f.title === 'string') form.title = f.title
+  if (typeof f.description === 'string') form.description = f.description
+  if (typeof f.region_id === 'number') form.region_id = f.region_id
+  if (typeof f.children_count === 'number') form.children_count = f.children_count
+  // Viloyat va bolalar soni watch'lari ishlab bo'lgach tuman va yoshlarni qo'yamiz.
+  await nextTick()
+  if (typeof f.district_id === 'number') form.district_id = f.district_id
+  if (Array.isArray(f.children_ages)) f.children_ages.slice(0, form.ages.length).forEach((a: number, i: number) => { form.ages[i] = String(a) })
+  if (typeof f.work_format === 'string') form.work_format = f.work_format
+  if (typeof f.schedule === 'string') form.schedule = f.schedule
+  if (typeof f.salary_min === 'number') form.salary_min = String(f.salary_min)
+  if (typeof f.salary_max === 'number') form.salary_max = String(f.salary_max)
+  if (typeof f.salary_unit === 'string') form.salary_unit = f.salary_unit
+  if (Array.isArray(f.languages) && f.languages.length) form.languages = [...f.languages]
+  if (typeof f.live_in === 'boolean') form.live_in = f.live_in
+  if (typeof f.is_urgent === 'boolean') form.is_urgent = f.is_urgent
+  if (typeof f.starts_at === 'string' && f.starts_at >= today) form.starts_at = f.starts_at
+  errors.value = {}
+}
 </script>
 
 <template>
@@ -135,7 +157,10 @@ const err = (k: string) => errors.value[k]
       <UIcon name="i-lucide-shield-check" class="mt-0.5 size-5 shrink-0" aria-hidden="true" />
       <span>{{ vacancy && vacancy.status === 'active' ? t('dashboard.vacancyForm.noteEdit') : t('dashboard.vacancyForm.note') }}</span>
     </p>
-    <p v-if="topError" class="rounded-xl bg-pomegranate-50 px-4 py-3 text-sm text-pomegranate-700 dark:bg-pomegranate-950 dark:text-pomegranate-300" role="alert">{{ topError }}</p>
+    <div class="flex justify-end">
+      <DashboardAiPaste type="vacancy" @parsed="applyAi" />
+    </div>
+    <p v-if="topError"class="rounded-xl bg-pomegranate-50 px-4 py-3 text-sm text-pomegranate-700 dark:bg-pomegranate-950 dark:text-pomegranate-300" role="alert">{{ topError }}</p>
 
     <section class="surface space-y-5 p-5 sm:p-7">
       <h2 class="font-display text-lg font-extrabold text-highlighted">{{ t('dashboard.vacancyForm.about') }}</h2>

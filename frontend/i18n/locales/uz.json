@@ -477,6 +477,21 @@
       "back": "Orqaga",
       "choose": "Tanlang"
     },
+    "aiPaste": {
+      "button": "Matnni joylash (AI)",
+      "title": "Eski e’loningizni joylang",
+      "description": "Telegramdagi eʼlon matnini qoʻying — AI formani toʻldiradi. Hech narsa avtomatik saqlanmaydi.",
+      "label": "E’lon matni",
+      "placeholderNanny": "Masalan: Assalomu alaykum, 35 yoshdaman, Chilonzorda yashayman, 8 yillik tajriba, rus va oʻzbek tillarini bilaman, soatiga 40 ming...",
+      "placeholderVacancy": "Masalan: 2 yoshli qizimga Yunusobodda enaga kerak, dushanba–juma 9:00–18:00, oyiga 4 mln...",
+      "privacy": "Telefon raqamlar, {'@'}username va havolalar AI ga yuborilmaydi — avtomatik olib tashlanadi.",
+      "submit": "Formani toʻldirish",
+      "tooShort": "Kamida {n} ta belgi yozing",
+      "filled": "Formada {n} ta maydon toʻldirildi. Tekshirib, keyin saqlang.",
+      "empty": "Matndan maydon topilmadi. Formani qoʻlda toʻldiring.",
+      "limit": "Bugungi AI soʻrovlar limiti tugadi. Ertaga urinib koʻring yoki qoʻlda toʻldiring.",
+      "unavailable": "AI hozir ishlamayapti. Formani qoʻlda toʻldiring yoki keyinroq urinib koʻring."
+    },
     "nav": {
       "label": "Kabinet menyusi",
       "overview": "Umumiy",
