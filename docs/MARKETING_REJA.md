@@ -2,6 +2,7 @@
 
 > **Versiya 0.2** · 2026-yil 22-oktabr. Asoschi qarori: kampaniya **ertaga (23-oktabr)** boshlanadi, natija kunlar ichida koʻrinishi kerak.
 > Bu fayl: **A qism** — ertangi ishga tushirish va 7 kunlik sprint (shu yerdan boshlang). **B qism (Ilova)** — uzoq muddatli reja: 90 kunlik taqvim, bonus iqtisodiyoti, PR, SEO, backlog.
+> Platforma ertaga tayyor: bonus hamyon (ledger), kampaniya havolalari, `/sorovnoma` ichki soʻrovnoma, avtomatik bonus. Hamma material **platforma havolalariga** yoʻnaltiradi (Google Form yoʻq).
 > Belgilar: **[taxmin]** — mening hisobim; **[yurist]** — ishlatishdan oldin yurist koʻrigi tavsiya etiladi.
 
 ## A0. Yakuniy bonus miqdorlari (qaror)
@@ -10,8 +11,8 @@ Bonus = platforma ichidagi kredit, **naqdga aylanmaydi**, 1 bonus soʻm = 1 soʻ
 
 | Harakat | Bonus | Shart | Nega shu summa |
 |---|---|---|---|
-| **Soʻrovnoma** (toʻliq, sifatli) | **50 000** | Tekshiruvdan oʻtgan javob. Shundan 30 000 — tekshiruvdan keyin, 20 000 — anketa/eʼlon platformada 7 kun faol tursa | bolambilan 25–35 ming/oy dan 1,4–2 baravar koʻp; 2 hafta TOP ga teng; 12 daqiqalik ish uchun yetarli |
-| **Repost** (eʼlonni koʻchirish) | **30 000** | 10 000 — moderatsiyadan oʻtganda, 20 000 — 14 kun faol tursa | homecare'da qoʻshimcha eʼlon 15–30 ming; 1 TOP + 1 Shoshilinch |
+| **Soʻrovnoma** (toʻliq tugatilgan) | **50 000** | Avtomatik, soʻrovnoma toʻliq tugaganda. Sifat tekshiruvi (AI/qoʻlda) soxtani aniqlasa — admin bonusni bekor qiladi (revoke) | bolambilan 25–35 ming/oy dan 1,4–2 baravar koʻp; 2 hafta TOP ga teng; 12 daqiqalik ish uchun yetarli |
+| **Repost** (eʼlonni koʻchirish) | **30 000** | Avtomatik, birinchi **faol** (moderatsiyadan oʻtgan) eʼlon/anketa chiqqanda; 14 kundan oldin oʻchirilsa — bekor qilinadi | homecare'da qoʻshimcha eʼlon 15–30 ming; 1 TOP + 1 Shoshilinch |
 | **Referal** | **15 000 + 15 000** | Taklif etilgan odam tasdiqlangan eʼlon joylasa; maks 5 ta | Ikki tomonlama oʻsish |
 | **Pasport tasdigʻi** | **15 000** (+5 000 har hujjatga, maks 30 000) | Nishon berilganda | Ishonch — brend asosi |
 | **Sharh** | **5 000** | Haqiqiy chatdan keyin, ≥25 soʻz, maks 3 | Sharh yigʻish |
@@ -23,34 +24,47 @@ Bonus = platforma ichidagi kredit, **naqdga aylanmaydi**, 1 bonus soʻm = 1 soʻ
 
 ## A1. Ertaga (1-kun) — soatma-soat
 
-**Rollar:** **F** = asoschi, **D** = dasturchi, **C** = Claude (matn, tahlil). **Maqsad 1-kun:** 6 admin bilan aloqa, 15 shaxsiy xabar, 1 kanal posti, 20 ta tanishga yuborish, **20 soʻrovnoma javobi**, **10 repost**.
+**Rollar:** **F** = asoschi, **D** = dasturchi (+ dasturchi agent), **C** = Claude (matn, tahlil). **1-kun maqsadi:** 6 admin bilan aloqa, 15 shaxsiy xabar, oʻz kanalga post, 20 ta tanishga yuborish, **25 ta soʻrovnoma**, **10 ta repost**.
+
+**Kampaniya kodlari (admin panelda yarating; har biri uchun miqdor va tavan sozlanadi):**
+
+| Kod | Nima uchun | Havolalar |
+|---|---|---|
+| `SURVEY_NANNY` / `SURVEY_PARENT` | Soʻrovnoma, umumiy | `https://enagalar.uz/sorovnoma?c=SURVEY_NANNY` · `t.me/enagalaruz_bot?start=c_SURVEY_NANNY` |
+| `SURVEY_DM_NANNY` / `SURVEY_DM_PARENT` | Qoʻlda shaxsiy xabar partiyasi | shu uslubda |
+| `SURVEY_ENAGALAR`, `SURVEY_MOYA`, `SURVEY_SAMARKAND`, `SURVEY_ENAGA_ISH` | Hamkor kanal postlari (soʻrovnoma) | `https://enagalar.uz/sorovnoma?c=SURVEY_ENAGALAR` |
+| `REPOST_ENAGALAR`, `REPOST_MOYA`, `REPOST_SAMARKAND`, `REPOST_ENAGA_ISH`, `REPOST_NYANI` | Repost, kanal boʻyicha | `https://enagalar.uz/kirish?c=REPOST_ENAGALAR` · `t.me/enagalaruz_bot?start=c_REPOST_ENAGALAR` |
+| `OWNCH_UZ`, `OWNCH_RU` | Oʻz kanalimiz | |
+| `FRIENDS` | Tanishlar (shaxsiy yuborish) | |
+| `REF_<foydalanuvchi_kodi>` | Referal (avto) | |
+| `ELCHI_SAMARQAND`, `ELCHI_BUXORO`, `ELCHI_FARGONA` | Viloyat elchilari | |
+
+Bonus miqdorlari: `SURVEY_*` = 50 000; `REPOST_*` = 30 000; `FRIENDS`/`OWNCH_*` = tegishli (50 000/30 000). Kampaniya tavani (`budget_cap`): ertaga 10 mln soʻm nominal, keyin kuzatib oshiramiz.
 
 | Vaqt | Kim | Nima | Qancha |
 |---|---|---|---|
-| 08:00–09:00 | C + F | Google Form (soʻrovnoma, 2 ta: enaga/ota-ona) va repost formasi yaratish (A4 dagi savollar), Google Sheet "Bonus daftari" (A5) | 3 fayl |
-| 09:00–10:00 | F | Kampaniya Telegram akkaunti (alohida, asosiy emas): ism "enagalar.uz jamoasi", logo (docs/brand/telegram-avatar.png). Havola va promo soʻzlarni tekshirish | — |
-| 10:00–10:30 | D | Botga havola: `t.me/enagalaruz_bot` ochiladi, /start xabariga "Bonus: ENAGA50 / KOCHIR30" matni qoʻshiladi (kod yozilmaydi — faqat bot matni) | 1 xabar |
-| 10:30–12:00 | F | **6 ta kanal-adminga** pitch (A3.3): @enagalar, @moya_nyanyauz, @enaga_samarqand, @enaga_ish, @nyanidomashniypersonal, @nyanya_tashkent_rabota. Kuniga 6 ta, bir-biriga nusxa emas | 6 xabar |
-| 12:00–13:00 | F | **Oʻz kanalimizga** post (A3.4) + tanishlarga: 20 ta ona/enaga tanish — shaxsan yuboring (ular allaqachon sizni biladi, spam emas) | 1 post + 20 xabar |
-| 13:00–14:00 | — | Tanaffus | |
-| 14:00–16:00 | F | **15 ta shaxsiy xabar** (A3.1 va A3.2), 10:00–17:30 oraligʻida, maks 5 ta/soat. Kimga: oxirgi 7 kunda @enagalar va @enaga_ish da **eʼlon bergan** odamlar (ochiq postlarda koʻrinadiganlar). Har biriga eʼloniga bogʻlab, qoʻlda | 15 xabar |
-| 16:00–17:00 | F + C | Kelgan javoblarni koʻrish; savollarga javob; repost eʼlonlari matnini Claude bilan qoralama qilib, **Filament admin panelida** qoʻlda yaratish (platforma ochiq boʻlsa) yoki "kutish roʻyxati" ga yozish | ~10 |
-| 17:00–17:30 | F | Daftarga yozish: kim, qaysi kod, qachon, bonus holati | — |
-| 17:30 | F + C | **Kunlik hisobot** (A2 jadvali): nechta xabar, javob, forma, sifatli. Ertangi tuzatishlar | 10 daqiqa |
+| 08:00–09:00 | D + F | Platformani tekshirish: `/sorovnoma` (2 toʻplam), `kirish?c=...`, bot `/start c_...`, bonus hamyon, hisobot. Test hisob bilan 1 ta toʻliq oʻtish. Kodlarni admin panelda yaratish | 20 kod |
+| 09:00–10:00 | F | Kampaniya Telegram akkaunti (alohida, asosiy emas): "enagalar.uz jamoasi", logo (docs/brand/telegram-avatar.png). Havolalarni telefonda sinash | — |
+| 10:00–11:30 | F | **6 ta kanal-adminga** pitch (A3.3), har biriga oʻz kodi: @enagalar, @moya_nyanyauz, @enaga_samarqand, @enaga_ish, @nyanidomashniypersonal, @nyanya_tashkent_rabota | 6 xabar |
+| 11:30–12:30 | F | **Oʻz kanalga** post (A3.4, `OWNCH_UZ` / `OWNCH_RU`) + 20 ta ona/enaga tanishga shaxsan (`FRIENDS`) — ular sizni biladi, spam emas | 1 post + 20 xabar |
+| 12:30–14:00 | — | Tanaffus | |
+| 14:00–16:00 | F | **15 ta shaxsiy xabar** (A3.1/A3.2): faqat 10:00–17:30 oraligʻida, soatiga ≤5. Kimga: oxirgi 7 kunda @enagalar yoki @enaga_ish da **eʼlon bergan** odamlar; har biriga eʼloniga bogʻlab, qoʻlda; kodlar `SURVEY_DM_*` / `REPOST_*` | 15 xabar |
+| 16:00–17:00 | F + C | Kelgan savollarga javob; admin panelda birinchi soʻrovnomalar va roʻyxatdan oʻtganlar; shubhali javoblar (dublikat, tez) — Claude'ga ismsiz tashlab tekshirish | ~25 |
+| 17:00–17:30 | F + C | Kunlik hisobot (A2 jadvali) — admin panel voronkasidan; ertangi tuzatishlar | 10 daqiqa |
 
-> **Muhim:** 17:30 dan keyin hech kimga reklama xabari yubormang. Javob berishni davom ettirish mumkin — bu reklama emas.
+> **Muhim:** 17:30 dan keyin hech kimga reklama xabari yubormang. Odam yozsa — javob berish reklama emas.
 
 ## A2. 7 kunlik sprint — kunlik maqsadlar
 
 | Kun | Asosiy ish | Xabar / kontakt | Soʻrovnoma (sifatli) | Repost | Jami roʻyxat | Eslatma |
 |---|---|---|---|---|---|---|
 | **1** (23.10) | Formalar, 6 admin, oʻz kanal, 20 tanish, 15 DM | 41 | 15 | 5 | 25 | Birinchi javob oqimi |
-| **2** | 2 admin rozi boʻlishi kutiladi; **birinchi hamkor posti**; yana 15 DM; 3 ta eslatma (A3.1) | 18 | 30 | 15 | 40 | Formani tuzatish |
-| **3** | 2-hamkor posti; birinchi bonuslar daftarga (30 000 qismi); qoʻlda sifat tekshiruvi (Claude); **D**: bonus hamyon boshlanadi | 15 | 40 | 25 | 55 | Fraud tekshiruvi |
-| **4** | Viloyat elchisi qidirish (Samarqand, Buxoro, Fargʻona): 3 ta xabar; referal soʻzi (A6) yoqiladi; kanal posti №2 | 18 | 45 | 30 | 70 | Referal start |
+| **2** | 2 admin rozi boʻlishi kutiladi; **birinchi hamkor posti**; yana 15 DM; 3 ta eslatma (A3.1) | 18 | 30 | 15 | 40 | Savollarni tuzatish |
+| **3** | 2-hamkor posti; birinchi sifat tekshiruvi (Claude, ismsiz); shubhali bonuslar revoke; **D**: kredit bilan TOP | 15 | 40 | 25 | 55 | Fraud tekshiruvi |
+| **4** | Viloyat elchisi qidirish (Samarqand, Buxoro, Fargʻona): 3 ta xabar; referal (A6) yoqiladi; kanal posti №2 | 18 | 45 | 30 | 70 | Referal start |
 | **5** | Haftalik 1-hisobot; eng yaxshi post/kanal aniqlanadi; ikkinchi davra adminlar; blogger №1 xabari | 15 | 50 | 35 | 80 | |
 | **6** | Shanba: oʻz kanalda "soʻrovnoma boryapti" natijalari (raqamsiz — faqat jami); ota-onalarga yoʻnaltirilgan post | 10 | 40 | 30 | 70 | |
-| **7** | Yakshanba: 1-hafta tahlili (savollar boʻyicha dastlabki xulosa), bonus daftarini platformaga koʻchirish; 2-hafta rejasi | 5 | 20 | 15 | 35 | Qarorlar |
+| **7** | Yakshanba: 1-hafta tahlili (savollar boʻyicha dastlabki xulosa), bonus majburiyatini tekshirish; 2-hafta rejasi | 5 | 20 | 15 | 35 | Qarorlar |
 | **Jami 7 kun** | | **~120** | **~240** | **~155** | **~375** | **[taxmin]** |
 
 **Realizm:** shaxsiy xabarlar (15/kun) 7 kunda ~100 ta xolos; asosiy hajm **kanal-adminlar postlari va tanishlar tarmogʻidan** keladi. Agar 3-kunda hech bir admin rozi boʻlmasa → **Reja B**: 1 ta pullik post (≤ 1,5 mln soʻm; narxini adminlardan soʻrang) va tanishlar orqali referal. Maqsadlar tuzatiladi, lekin tuzatishdan oldin kamida 3 kun kuting.
@@ -64,29 +78,29 @@ Bonus = platforma ichidagi kredit, **naqdga aylanmaydi**, 1 bonus soʻm = 1 soʻ
 ### A3.1 Variant 1 — Soʻrovnoma
 
 **Birinchi xabar (UZ)**
-> Assalomu alaykum! Men enagalar.uz jamoasidanman. @kanal'dagi eʼloningiz munosabati bilan yozyapman. Biz enagalar va ota-onalar uchun tekshirilgan, bepul platforma qilyapmiz va 10 daqiqalik soʻrovnoma oʻtkazyapmiz: toʻldirganlarga **50 000 soʻm bonus** (platforma ichida TOP eʼlon va boshqa xizmatlar uchun, naqdga aylanmaydi). Havola: {FORMA_HAVOLASI} (promo soʻz: ENAGA50)
+> Assalomu alaykum! Men enagalar.uz jamoasidanman. @kanal'dagi eʼloningiz munosabati bilan yozyapman. Biz enagalar va ota-onalar uchun tekshirilgan, bepul platforma qilyapmiz va 10 daqiqalik soʻrovnoma oʻtkazyapmiz: toʻldirganlarga **50 000 soʻm bonus** (platforma ichida TOP eʼlon va boshqa xizmatlar uchun, naqdga aylanmaydi). Havola: https://enagalar.uz/sorovnoma?c=SURVEY_DM_NANNY
 > Qiziq boʻlmasa, uzr — boshqa yozmaymiz.
 
 **Birinchi xabar (RU)**
-> Здравствуйте! Я из команды enagalar.uz. Пишу в связи с вашим объявлением в @канал. Мы делаем бесплатную проверенную платформу для нянь и родителей и проводим опрос на 10 минут: за заполнение — **50 000 сум бонусами** (внутри платформы, на ТОП-объявление и другие услуги; не обналичивается). Ссылка: {ССЫЛКА_НА_ФОРМУ} (промо-слово: ENAGA50)
+> Здравствуйте! Я из команды enagalar.uz. Пишу в связи с вашим объявлением в @канал. Мы делаем бесплатную проверенную платформу для нянь и родителей и проводим опрос на 10 минут: за заполнение — **50 000 сум бонусами** (внутри платформы, на ТОП-объявление и другие услуги; не обналичивается). Ссылка: https://enagalar.uz/sorovnoma?c=SURVEY_DM_NANNY
 > Если неинтересно — извините, больше не напишем.
 
-**Eslatma (3 kundan keyin, faqat 1 marta) — UZ:** "Salom! Soʻrovnoma hali ochiq — 10 daqiqa, 50 000 bonus. Qiziq boʻlmasa, bezovta qilmaymiz." **RU:** «Здравствуйте! Опрос ещё открыт — 10 минут, 50 000 бонусов. Если неактуально — не беспокоим.»
+**Eslatma (3 kundan keyin, faqat 1 marta) — UZ:** "Salom! Soʻrovnoma hali ochiq — 10 daqiqa, 50 000 bonus (havola oʻsha). Qiziq boʻlmasa, bezovta qilmaymiz." **RU:** «Здравствуйте! Опрос ещё открыт — 10 минут, 50 000 бонусов. Если неактуально — не беспокоим.»
 
-**Rahmat (roʻyxatdan keyin) — UZ:** "Rahmat, {ism}! Javoblaringiz qabul qilindi. Tekshiruvdan keyin (24 soat) hisobingizga 30 000 bonus yoziladi; qolgan 20 000 — anketangiz platformada 7 kun faol tursa. Anketani shu yerda yarating: @enagalaruz_bot" **RU:** «Спасибо, {имя}! Ответы приняты. После проверки (до 24 часов) на счёт запишем 30 000 бонусов; ещё 20 000 — когда анкета проработает 7 дней. Создать анкету: @enagalaruz_bot»
+**Rahmat (roʻyxatdan keyin) — UZ:** "Rahmat, {ism}! Javoblaringiz qabul qilindi. 50 000 bonus hisobingizga yozildi (ichki hamyonda koʻrinadi). Anketangizni yarating: @enagalaruz_bot" **RU:** «Спасибо, {имя}! Ответы приняты. 50 000 бонусов зачислены на ваш счёт. Создайте анкету: @enagalaruz_bot»
 
 ### A3.2 Variant 2 — Repost
 
 **Birinchi xabar (UZ)**
-> Assalomu alaykum! Eʼloningizni @kanal'da koʻrdim. enagalar.uz da shu eʼlonni **bepul** joylashingiz mumkin: matnni shu formaga tashlaysiz ({REPOST_FORMA}), qolganini oʻzimiz tayyorlaymiz. Tasdiqlangan eʼlon uchun **30 000 soʻm bonus** (platforma ichida). Promo soʻz: KOCHIR30.
+> Assalomu alaykum! Eʼloningizni @kanal'da koʻrdim. enagalar.uz da shu eʼlonni **bepul** joylashingiz mumkin: havolani bosing, Telegram orqali kirasiz, eʼlon matnini tashlaysiz — AI qolganini oʻzi tayyorlaydi: https://enagalar.uz/kirish?c=REPOST_ENAGALAR . Faol eʼlon uchun **30 000 soʻm bonus** (platforma ichida).
 > Qiziq boʻlmasa, uzr — boshqa yozmaymiz.
 
 **RU**
-> Здравствуйте! Видел(а) ваше объявление в @канал. На enagalar.uz его можно разместить **бесплатно**: вставьте текст в форму ({ССЫЛКА_REPOST}), остальное подготовим сами. За проверенное объявление — **30 000 сум бонусов** (внутри платформы). Промо-слово: KOCHIR30.
+> Здравствуйте! Видел(а) ваше объявление в @канал. На enagalar.uz его можно разместить **бесплатно**: перейдите по ссылке, войдите через Telegram, вставьте текст — AI подготовит остальное: https://enagalar.uz/kirish?c=REPOST_ENAGALAR . За активное объявление — **30 000 сум бонусов** (внутри платформы).
 > Если неинтересно — извините, больше не напишем.
 
 **Eslatma:** "Salom! Eʼlonni koʻchirish hali ochiq — 2 daqiqa va 30 000 bonus. Qiziq boʻlmasa, bezovta qilmaymiz." / «Здравствуйте! Перенос объявления всё ещё открыт — 2 минуты и 30 000 бонусов. Если неактуально — не беспокоим.»
-**Rahmat:** "Rahmat! Eʼloningiz tekshiruvga yuborildi (odatda 24 soat). 10 000 bonus tasdiqlangach, 20 000 — 14 kundan keyin yoziladi." / «Спасибо! Объявление на проверке (обычно 24 часа). 10 000 бонусов — после проверки, 20 000 — через 14 дней.»
+**Rahmat:** "Rahmat! Eʼloningiz tekshiruvga yuborildi (odatda 24 soat). 30 000 bonus eʼlon faol boʻlganda avtomatik yoziladi (14 kundan oldin oʻchirilsa bekor qilinadi)." / «Спасибо! Объявление на проверке (обычно 24 часа). 30 000 бонусов зачислятся автоматически, когда объявление станет активным (при удалении раньше 14 дней отменяются).»
 
 ### A3.3 Kanal-admin hamkorlik taklifi
 
@@ -107,7 +121,7 @@ Bonus = platforma ichidagi kredit, **naqdga aylanmaydi**, 1 bonus soʻm = 1 soʻ
 > • Telegramdagi eʼloningizni bizga koʻchiring — **30 000 soʻm bonus**
 > 
 > Bonus platforma ichida TOP eʼlon va boshqa xizmatlar uchun ishlatiladi (naqdga aylanmaydi). Birinchi 1 000 enagaga — "Asoschi" nishoni.
-> 👉 Soʻrovnoma: {FORMA} · Eʼlonni koʻchirish: {REPOST_FORMA} · Bot: @enagalaruz_bot
+> 👉 Soʻrovnoma: https://enagalar.uz/sorovnoma?c=OWNCH_UZ · Eʼlonni koʻchirish: https://enagalar.uz/kirish?c=REPOST_OWNCH_UZ · Bot: @enagalaruz_bot
 
 **RU**
 > **Ищете няню или работу?** 🧸
@@ -118,84 +132,105 @@ Bonus = platforma ichidagi kredit, **naqdga aylanmaydi**, 1 bonus soʻm = 1 soʻ
 > • перенесите своё объявление из Telegram — **30 000 сум бонусов**
 > 
 > Бонусы работают внутри платформы (ТОП-объявление и другие услуги), не обналичиваются. Первым 1 000 няням — значок «Основатель».
-> 👉 Опрос: {ФОРМА} · Перенос объявления: {ФОРМА_REPOST} · Бот: @enagalaruz_bot
+> 👉 Опрос: https://enagalar.uz/sorovnoma?c=OWNCH_RU · Перенос объявления: https://enagalar.uz/kirish?c=REPOST_OWNCH_RU · Бот: @enagalaruz_bot
 
-## A4. Soʻrovnoma savollari (Google Form uchun yakuniy)
+## Sorovnoma savollari
 
-> **Google Form tuzilishi:** 1-sahifa — rozilik (quyidagi matn + "Roziman" belgisi, majburiy); 2-sahifa — savollar; oxirida Telegram username + telefon. Til: UZ forma va RU forma alohida (yoki "Til" tanlovi). "Majburiy" belgisini hamma savolga qoʻying. Shkala/koʻp tanlov — Google Forms'da tayyor turlar.
-> **Rozilik matni (UZ):** "Javoblaringiz enagalar.uz platformasini yaxshilash uchun ishlatiladi. Natijalar faqat umumiy (ismsiz) koʻrinishda eʼlon qilinadi. Telefon raqamingiz bonusni hisoblash uchun saqlanadi va uchinchi shaxsga berilmaydi. Istagan payt oʻchirishni soʻrashingiz mumkin. Bonus platforma ichida ishlatiladi, naqdga aylanmaydi." **RU:** «Ответы используются для улучшения платформы enagalar.uz. Результаты публикуются только в обобщённом виде. Телефон хранится для начисления бонуса и не передаётся третьим лицам. Можно в любой момент попросить удалить данные. Бонус действует внутри платформы, не обналичивается.»
+> Dasturchi shu bo'limdan `/sorovnoma` ga seed qiladi. Har savolda: `key` (unikal), `type` (single / multi / text / number / scale), `required`, matn UZ va RU, variantlar `kod = UZ / RU`. `max=3` — ko'pi bilan 3 ta tanlash. `source=regions` — viloyat/tuman bazadan. `check` — diqqat savoli (noto'g'ri bo'lsa bonus berilmaydi). Ovozli javob (text turida) keyin.
+> **Rozilik (1-ekran, majburiy):** UZ — "Javoblaringiz enagalar.uz platformasini yaxshilash uchun ishlatiladi. Natijalar faqat umumiy (ismsiz) koʻrinishda eʼlon qilinadi. Telefon raqamingiz bonusni hisoblash uchun saqlanadi va uchinchi shaxsga berilmaydi. Istagan payt oʻchirishni soʻrashingiz mumkin. Bonus platforma ichida ishlatiladi, naqdga aylanmaydi." RU — «Ответы используются для улучшения enagalar.uz. Результаты публикуются только в обобщённом виде. Телефон хранится для начисления бонуса и не передаётся третьим лицам. Можно в любой момент попросить удалить данные. Бонус действует внутри платформы, не обналичивается.»
+> **Yakuniy qoida:** toʻliq tugaganda avtomatik 50 000 bonus; 1 Telegram akkaunt = 1 marta; min. vaqt 4 daqiqa (undan tez — "tekshiruvga" belgilanadi, bonus ushlab turiladi); admin panelda shubhali javoblarni bekor qilish.
 
-### Enagalar uchun (15 savol, ~10 daqiqa)
+### Enaga
 
-1. Viloyat va tuman? / Регион и район?
-2. Yoshingiz? (18–24 / 25–34 / 35–44 / 45–54 / 55+) / Возраст?
-3. Enagalik tajribangiz? (<1 / 1–3 / 3–5 / 5–10 / 10+ yil) / Опыт работы няней?
-4. Qaysi formatda ishlaysiz? (koʻp tanlov: soatbay, kunlik, oylik, yashab turish) / В каком формате работаете?
-5. Hozir/oxirgi ishda qancha olasiz? Soatiga ___, kuniga ___, oyiga ___ soʻm. Qancha olishni xohlaysiz? / Сколько получаете сейчас? Сколько хотели бы?
-6. Oxirgi ishni qanday topdingiz? (Telegram kanal, tanish, agentlik, OLX, bolambilan, boshqa) / Как нашли последнюю работу?
-7. Oxirgi 3 oyda nechta oilaga yozdingiz / nechtasi javob berdi / nechtasi bilan uchrashdingiz? / За 3 месяца: сколько семей написали / ответили / встретились?
-8. Ish qidirishdagi eng katta 3 muammo? (ish kam, eski/soxta eʼlonlar, javob yoʻq, maosh kam, pulni kechiktirish, xavfsizlik, qayerda qidirishni bilmayman) / Топ-3 проблемы поиска работы?
-9. Telegram kanalga eʼlon berish uchun toʻladingizmi? Qancha, qancha vaqt kutdingiz? / Платили ли за размещение? Сколько? Как долго ждали?
-10. Ishda xavfli, nohush yoki adolatsiz holat boʻlganmi? Qisqacha yozing ("yoʻq" ham mumkin). / Были ли небезопасные или неприятные ситуации? (можно «нет»)
-11. Oila haqida oldindan nimani bilishni xohlaysiz? (bolalar yoshi, tuman, maosh, jadval, oldingi enaga nega ketgan, uyda kamera bor-yoʻqligi, oila haqida sharhlar) / Что хотели бы знать о семье заранее?
-12. "Tasdiqlangan" nishoni uchun pasport bilan tekshiruvdan oʻtishga tayyormisiz? (1–5). Xavotir bor boʻlsa, nimadan? / Готовы ли пройти проверку паспорта (1–5)? Чего опасаетесь?
-13. Qaysi hujjatlarni bera olasiz? (pasport, tibbiy maʼlumotnoma, dispanser maʼlumotnomasi, sertifikat, tavsiyanoma) / Какие документы можете предоставить?
-14. Platformada eng muhim 3 narsa? (ichki chat, AI anketa yozuvchi, tasdiqlangan nishonlar, tez javob, tarjima, toʻlov kafolati) / Что важнее всего?
-15. TOP eʼlon (7 kun) ni 10 000 / 25 000 / 40 000 soʻmga sinab koʻrasizmi (har biriga ha/yoʻq)? PRO anketaga oyiga maks qancha toʻlay olasiz? ___ **+ Diqqat savoli:** "Shu savolda 'Ikkinchi variant'ni tanlang" (A / B / C). Oxirgi: ideal ish qidirish jarayoni uchun bitta narsa? / Попробуете ли ТОП за 10 000 / 25 000 / 40 000? Сколько максимум за PRO в месяц? + Проверка внимания + Одно, что сделало бы поиск идеальным?
+| № | key | type | required | UZ | RU | Variantlar (kod = UZ / RU) |
+|---|---|---|---|---|---|---|
+| 1 | n_region | single | yes | Qaysi viloyat va tumanda ishlaysiz? | В каком регионе и районе вы работаете? | source=regions |
+| 2 | n_age | single | yes | Yoshingiz? | Ваш возраст? | a1 = 18–24; a2 = 25–34; a3 = 35–44; a4 = 45–54; a5 = 55+ |
+| 3 | n_exp | single | yes | Enagalik tajribangiz qancha? | Ваш опыт работы няней? | e0 = 1 yildan kam / менее 1 года; e1 = 1–3 yil / 1–3 года; e2 = 3–5 yil / 3–5 лет; e3 = 5–10 yil / 5–10 лет; e4 = 10+ yil / 10+ лет |
+| 4 | n_formats | multi | yes | Qaysi formatda ishlaysiz? | В каком формате работаете? | hour = soatbay / почасово; day = kunlik / посуточно; month = oylik / помесячно; live = yashab turish / с проживанием; weekend = hafta oxiri / выходные |
+| 5 | n_price_hour | number | no | Hozir yoki oxirgi ishda soatiga qancha olasiz? (soʻm) | Сколько получаете в час? (сум) | min=0 |
+| 6 | n_price_day | number | no | Kuniga qancha? (soʻm) | В день? (сум) | min=0 |
+| 7 | n_price_month | number | no | Oyiga qancha? (soʻm) | В месяц? (сум) | min=0 |
+| 8 | n_price_want | number | yes | Oyiga qancha olishni xohlaysiz? (soʻm) | Сколько хотели бы получать в месяц? (сум) | min=0 |
+| 9 | n_find_job | multi | yes | Soʻnggi ishingizni qanday topdingiz? | Как нашли последнюю работу? | tg = Telegram kanal / Telegram-канал; friend = tanish-urugʻ / знакомые; agency = agentlik / агентство; olx = OLX; bolambilan = bolambilan.uz; other = boshqa / другое |
+| 10 | n_contacts_3m | number | yes | Oxirgi 3 oyda nechta oilaga yozdingiz? | Скольким семьям вы писали за 3 месяца? | min=0 |
+| 11 | n_replies_3m | number | yes | Shulardan nechtasi javob berdi? | Сколько из них ответили? | min=0 |
+| 12 | n_problems | multi (max=3) | yes | Ish qidirishdagi eng katta 3 muammo? | Топ-3 проблемы поиска работы? | few = ish kam / мало работы; old = eski yoki soxta eʼlonlar / старые или фейковые объявления; noreply = javob bermaydilar / не отвечают; lowpay = maosh kam / низкая оплата; delay = pulni kechiktirish / задержка оплаты; safety = xavfsizlik / безопасность; where = qayerda qidirishni bilmayman / не знаю, где искать |
+| 13 | n_paid_ad | single | yes | Telegram kanalga eʼlon berish uchun pul toʻladingizmi? | Платили ли вы за размещение в Telegram-канале? | no = Yoʻq / Нет; free = Bepul berdim / Размещала бесплатно; paid = Ha, toʻladim / Да, платила |
+| 14 | n_danger | text | yes | Ishda xavfli, nohush yoki adolatsiz holat boʻlganmi? Qisqacha yozing ("yoʻq" ham mumkin). | Были ли на работе небезопасные или неприятные ситуации? Кратко (можно «нет»). | minwords=1 |
+| 15 | n_family_info | multi | yes | Oila haqida oldindan nimani bilishni xohlaysiz? | Что хотели бы знать о семье заранее? | kids = bolalar yoshi / возраст детей; district = tuman / район; pay = maosh / оплата; schedule = jadval / график; prev = oldingi enaga nega ketgan / почему ушла прошлая няня; cam = uyda kamera bormi / есть ли камеры; reviews = oila haqida sharhlar / отзывы о семье |
+| 16 | n_verify_ready | scale | yes | Pasport bilan "Tasdiqlangan" nishonini olishga tayyormisiz? (1 = yoʻq, 5 = tayyorman) | Готовы ли пройти проверку паспорта? (1 = нет, 5 = готова) | 1..5 |
+| 17 | n_verify_fear | text | no | Tekshiruvdan xavotir bor boʻlsa, nimadan? | Чего опасаетесь при проверке? | |
+| 18 | n_docs | multi | yes | Qaysi hujjatlarni bera olasiz? | Какие документы можете предоставить? | passport = pasport / паспорт; med = tibbiy maʼlumotnoma / медсправка; dispensary = dispanser maʼlumotnomasi / справка из диспансера; cert = sertifikat / сертификат; refs = tavsiyanoma / рекомендации |
+| 19 | n_features | multi (max=3) | yes | Platformada eng muhim 3 narsa? | Что важнее всего на платформе? | chat = ichki chat / чат внутри; ai = AI anketa yozuvchi / AI-помощник для анкеты; badges = tasdiqlangan nishonlar / значки проверки; fast = tez javob / быстрые ответы; translate = tarjima / перевод; guarantee = toʻlov kafolati / гарантия оплаты |
+| 20 | n_pay_top10 | single | yes | TOP eʼlon (7 kun) 10 000 soʻm boʻlsa, sinab koʻrasizmi? | Попробуете ТОП-объявление (7 дней) за 10 000 сум? | yes = Ha / Да; no = Yoʻq / Нет |
+| 21 | n_pay_top25 | single | yes | 25 000 soʻm boʻlsa-chi? | А за 25 000 сум? | yes; no |
+| 22 | n_pay_top40 | single | yes | 40 000 soʻm boʻlsa-chi? | А за 40 000 сум? | yes; no |
+| 23 | n_pay_pro_max | number | yes | PRO anketa uchun oyiga maksimal qancha toʻlay olasiz? (soʻm, 0 = toʻlamayman) | Сколько максимум готовы платить за PRO-анкету в месяц? (сум, 0 = не буду) | min=0 |
+| 24 | n_check | single | yes | (Diqqat savoli) Shu savolda "Ikkinchi variant"ni tanlang. | (Проверка внимания) Выберите «второй вариант». | a = Birinchi / Первый; b = Ikkinchi / Второй; c = Uchinchi / Третий; check=b |
+| 25 | n_ideal | text | yes | Ideal ish qidirish jarayoni uchun bitta narsa nima boʻlardi? | Что одно сделало бы поиск работы идеальным? | minwords=5 |
 
-### Ota-onalar uchun (15 savol, ~10 daqiqa)
+### Ota-ona
 
-1. Viloyat va tuman? / Регион и район?
-2. Bolalar soni va yoshi? (0–1 / 1–3 / 3–6 / 6+) / Сколько детей и какого возраста?
-3. Hozir enaga bormi? (bor / qidiryapman / yaqinda kerak boʻladi) / Есть ли няня?
-4. Qanday format kerak? (soatbay, kunlik, oylik, yashab turish, yarim kun) / Какой формат нужен?
-5. Byudjet: soatiga ___, kuniga ___, oyiga ___ soʻm / Бюджет: час/день/месяц?
-6. Enagani qanday qidirdingiz? (Telegram kanal, tanish, agentlik, OLX, bolambilan, Instagram, boshqa) / Как искали няню?
-7. Oxirgi safar necha kun qidirdingiz / nechta nomzod koʻrdingiz / nechtasi bilan uchrashdingiz? / Сколько дней искали / кандидатов / встреч?
-8. Telegram kanalga eʼlon bergan boʻlsangiz: nechta javob keldi, nechtasi yaroqli edi? / Если давали объявление: сколько откликов, сколько подходящих?
-9. Eng katta 3 muammo? (ishonchsizlik, tajribasi nomaʼlum, vaqt koʻp ketadi, narx, eski eʼlonlar, javob yoʻq, yolgʻon maʼlumot, agentlik qimmat) / Топ-3 проблемы?
-10. Bolangizni begona kishiga topshirishda sizni eng koʻp nima qoʻrqitadi? (ochiq javob) / Чего больше всего боитесь, доверяя ребёнка няне?
-11. Qaysi tekshiruvlar siz uchun muhim? (pasport, tibbiy, dispanser, sudlanmaganlik, tavsiyanoma, video tanishuv, sertifikat) / Какие проверки важны?
-12. Yomon yoki yoqimsiz tajriba boʻlganmi? Qisqacha ("yoʻq" ham mumkin). / Был ли плохой опыт?
-13. Agentlikka murojaat qilganmisiz? Qancha toʻladingiz? 300 000 soʻmdan qimmat boʻlsa tayyormisiz? / Обращались ли в агентство? Сколько заплатили?
-14. Platformada eng muhim 3 narsa? (nishonlar, ichki chat, AI mos nomzod, tez javob, sharhlar, toʻlov kafolati, video) / Что важнее всего?
-15. Obuna (oyiga, cheksiz chat + AI) 15 000 / 35 000 / 60 000 soʻmga olasizmi (ha/yoʻq)? Maks qancha toʻlaysiz? ___ **+ Diqqat savoli:** "Uchinchi variant"ni tanlang. Ideal enaga qidirish qanday boʻlardi? / Купили бы подписку за 15 000 / 35 000 / 60 000? Максимум? + Проверка внимания + Идеальный поиск няни?
+| № | key | type | required | UZ | RU | Variantlar (kod = UZ / RU) |
+|---|---|---|---|---|---|---|
+| 1 | p_region | single | yes | Qaysi viloyat va tumandasiz? | В каком регионе и районе вы? | source=regions |
+| 2 | p_kids | number | yes | Nechta bolangiz bor (enaga kerak boʻladigan)? | Сколько у вас детей (для которых нужна няня)? | min=1 |
+| 3 | p_kid_age | multi | yes | Bolalar yoshi? | Возраст детей? | b0 = 0–1; b1 = 1–3; b2 = 3–6; b3 = 6+ |
+| 4 | p_status | single | yes | Hozir enaga bormi? | Есть ли сейчас няня? | have = Bor / Есть; seeking = Qidiryapman / Ищу; soon = Yaqinda kerak boʻladi / Скоро понадобится |
+| 5 | p_formats | multi | yes | Qanday format kerak? | Какой формат нужен? | hour = soatbay / почасово; day = kunlik / посуточно; month = oylik / помесячно; live = yashab turish / с проживанием; half = yarim kun / полдня |
+| 6 | p_budget_hour | number | no | Byudjet: soatiga (soʻm) | Бюджет: в час (сум) | min=0 |
+| 7 | p_budget_day | number | no | Byudjet: kuniga (soʻm) | Бюджет: в день (сум) | min=0 |
+| 8 | p_budget_month | number | no | Byudjet: oyiga (soʻm) | Бюджет: в месяц (сум) | min=0 |
+| 9 | p_find | multi | yes | Enagani qanday qidirdingiz? | Как искали няню? | tg = Telegram kanal / Telegram-канал; friend = tanish / знакомые; agency = agentlik / агентство; olx = OLX; bolambilan = bolambilan.uz; insta = Instagram; other = boshqa / другое |
+| 9a | p_days | number | yes | Oxirgi safar necha kun qidirdingiz? | Сколько дней искали в последний раз? | min=0 |
+| 10 | p_cands | number | yes | Nechta nomzod koʻrdingiz? | Сколько кандидатов рассмотрели? | min=0 |
+| 11 | p_met | number | yes | Nechtasi bilan uchrashdingiz? | С сколькими встретились? | min=0 |
+| 12 | p_ad_result | text | no | Telegram kanalga eʼlon bergan boʻlsangiz: nechta javob keldi, nechtasi yaroqli edi? | Если давали объявление: сколько откликов, сколько подходящих? | |
+| 13 | p_problems | multi (max=3) | yes | Eng katta 3 muammo? | Топ-3 проблемы? | distrust = ishonchsizlik / недоверие; unknown = tajribasi nomaʼlum / опыт неизвестен; time = vaqt koʻp ketadi / уходит много времени; price = narx / цена; old = eski eʼlonlar / старые объявления; noreply = javob bermaydilar / не отвечают; fake = yolgʻon maʼlumot / ложные данные; agency = agentlik qimmat / агентство дорого |
+| 14 | p_fear | text | yes | Bolangizni begona kishiga topshirishda sizni eng koʻp nima qoʻrqitadi? | Чего вы больше всего боитесь, доверяя ребёнка няне? | minwords=3 |
+| 15 | p_checks | multi | yes | Qaysi tekshiruvlar siz uchun muhim? | Какие проверки важны? | passport = pasport / паспорт; med = tibbiy / медицинская; dispensary = dispanser / диспансер; record = sudlanmaganlik / несудимость; refs = tavsiyanoma / рекомендации; video = video tanishuv / видеознакомство; cert = sertifikat / сертификат |
+| 16 | p_bad | text | no | Yomon yoki yoqimsiz tajriba boʻlganmi? Qisqacha ("yoʻq" ham mumkin). | Был ли плохой опыт? Кратко (можно «нет»). | |
+| 17 | p_agency | single | yes | Agentlikka murojaat qilganmisiz? | Обращались ли в агентство? | no = Yoʻq / Нет; yes = Ha / Да |
+| 18 | p_agency_pay | number | no | Agentlikka qancha toʻlagansiz yoki toʻlashga tayyormisiz? (soʻm) | Сколько заплатили или готовы заплатить агентству? (сум) | min=0 |
+| 19 | p_features | multi (max=3) | yes | Platformada eng muhim 3 narsa? | Что важнее всего на платформе? | badges = nishonlar / значки проверки; chat = ichki chat / чат внутри; ai = AI mos nomzod / AI-подбор; fast = tez javob / быстрые ответы; reviews = sharhlar / отзывы; guarantee = toʻlov kafolati / гарантия оплаты; video = video / видео |
+| 20 | p_sub15 | single | yes | Obuna (oyiga, cheksiz chat + AI) 15 000 soʻm boʻlsa, olasizmi? | Купили бы подписку (в месяц, безлимитный чат + AI) за 15 000 сум? | yes = Ha / Да; no = Yoʻq / Нет |
+| 21 | p_sub35 | single | yes | 35 000 soʻm boʻlsa-chi? | А за 35 000 сум? | yes; no |
+| 22 | p_sub60 | single | yes | 60 000 soʻm boʻlsa-chi? | А за 60 000 сум? | yes; no |
+| 23 | p_pay_max | number | yes | Oyiga maksimal qancha toʻlaysiz? (soʻm, 0 = toʻlamayman) | Сколько максимум заплатите в месяц? (сум, 0 = не буду) | min=0 |
+| 24 | p_check | single | yes | (Diqqat savoli) Shu savolda "Uchinchi variant"ni tanlang. | (Проверка внимания) Выберите «третий вариант». | a = Birinchi / Первый; b = Ikkinchi / Второй; c = Uchinchi / Третий; check=c |
+| 25 | p_ideal | text | yes | Ideal enaga qidirish tajribasi qanday boʻlardi? | Каким был бы идеальный поиск няни? | minwords=5 |
 
-**Repost formasi (alohida, 6 maydon):** Rol (enaga / ota-ona); Telegramdagi eʼlon matni (uzun javob); Viloyat va tuman; Telegram username; Telefon; Qaysi kanalda koʻrgan edik; Roziman (maʼlumotni qayta ishlash, eʼlon platformada joylanishi).
+> Vaqt: ~10–12 daqiqa. Natijalar qarorlarga qanday taʼsir qilishi — Ilova B (3.5).
 
-**Sifat qoidasi (qoʻlda, 2 daqiqa/javob):** bitta telefon = bitta bonus; ochiq javoblar mazmunli (≥10 soʻz); diqqat savoli toʻgʻri; juda tez (<4 daqiqa) yoki bir xil javoblar → rad. Shubhali javoblarni Claude'ga ismsiz tashlab tekshiring.
+## A5. Platforma tekshiruvi (bugun kechqurun) va hafta ichidagi qisqa backlog
 
-## A5. "Kodsiz" boshlash (1–3-kun) va hafta ichida kodlar
+**Ishga tushirishdan oldin tekshiring (D + F, 30 daqiqa):**
+- [ ] `kirish?c=CODE` va `start=c_CODE` ikkalasi `users.first_campaign` ni yozadi.
+- [ ] `/sorovnoma?c=SURVEY_NANNY` — Telegram login, rozilik, 2 ta toʻplam, tugaganda 50 000 avtomatik, ikkinchi marta bonus berilmaydi (idempotent).
+- [ ] Birinchi faol eʼlon chiqqanda 30 000 (repost kodlari uchun) yoziladi; 14 kundan oldin oʻchirilsa bekor qilinadi.
+- [ ] Admin: hamyon saldosi, bonusni qoʻlda bekor qilish (revoke), kod boʻyicha voronka.
+- [ ] Bonus shartlari sahifasi ("naqdga aylanmaydi", 9 oy) saytda; pd.gov.uz ariza boshlangan.
 
-**Ertaga yoʻq (kod yozilmaydi):**
-- **Soʻrovnoma** — Google Form (UZ + RU).
-- **Bonus daftari** — Google Sheet: `sana | Telegram username | telefon | harakat (survey/repost/referal) | summa | holat (kutilmoqda/30k yozildi/50k yozildi/bekor) | sabab | kampaniya | muddat (berilgandan +9 oy) | izoh`. Unikal telefon uchun "Data → duplikatlarni belgilash" formulasi (`COUNTIF`). Faqat F (asoschi) kiradi.
-- **Kampaniya kodlari = promo soʻzlar**: `ENAGA50` (soʻrovnoma), `KOCHIR30` (repost), `DOST15` (referal: "kimdan eshitdingiz? username"), kanal nomi formada alohida maydon ("Qaysi kanalda koʻrdingiz?"). Kuzatuv — Sheet'da `COUNTIF`.
-- **Eʼlon yaratish** — repost eʼloni Claude bilan qoralama qilinib, **Filament admin panelidan** qoʻlda kiritiladi (platforma ochiq boʻlmasa — kutish roʻyxati).
-- **Bonusning haqiqiy qiymati:** pullik xizmatlar hali yoʻq. Foydalanuvchiga halol ayting: "Bonus hisobingizga yoziladi va TOP eʼlon ochilganda ishlatasiz". Va'da qilingan narsa (TOP kredit bilan) hafta 3 dan ishlashi kerak.
-- **Maxfiylik:** Google Forms maʼlumoti Google serverlarida (chet elda) turadi. Faqat ism/username/telefon va fikrlarni yigʻamiz (pasport, selfi **yoʻq**). Ishlatilganidan keyin (hafta 2) platformaga koʻchirib, formadan oʻchiramiz. **[yurist]** ZRU-1125 va chet elga uzatish rozilik bandi; pd.gov.uz ariza ertagayoq boshlansin.
-
-**Hafta ichida kodga oʻtish — eng qisqa roʻyxat (D):**
+**Hafta ichida kod boʻyicha (qisqa roʻyxat):**
 
 | № | Nima | Qachon | Hajm |
 |---|---|---|---|
-| 1 | Bot: `/start c_<kamp>_<kod>` ni qabul qilish va `users.first_campaign` yozish | 2–3-kun | S |
-| 2 | Bonus ledger (jadval, idempotent berish, FIFO sarflash, muddat) — Sheet'dan import | 3–5-kun | M–L |
-| 3 | Kredit bilan TOP eʼlon (bonus sarflash joyi) | 5–7-kun | M |
-| 4 | Bot ichida soʻrovnoma (Forma oʻrniga) va repost-import (AI qoralama) | 2-hafta | L |
-| 5 | Admin hisobot: kod boʻyicha voronka, bonus berilgan/sarflangan | 2-hafta | M |
+| 1 | Kredit bilan TOP eʼlon / Shoshilinch (bonus sarflash joyi — qiymatni saqlaydi) | 3–5-kun | M |
+| 2 | Soʻrovnoma sifat tekshiruvi (AI baho, dublikat, tez javob belgisi) | 3–5-kun | M |
+| 3 | Referal kodlari (`REF_*`, ikki tomonga 15 000, maks 5) | 4–6-kun | S–M |
+| 4 | Repost-import: botga matn tashlash → AI qoralama → eʼlon | 5–7-kun | M–L |
+| 5 | Hisobot: kod/kanal boʻyicha voronka va bonus majburiyati | 5–7-kun | M |
 
-Tartib: 1 → 2 → 3 (kampaniya davomida ishlamay qolmaydigan eng kam yoʻl).
+## A6. Referal (4-kundan)
 
-## A6. Referal (2-kundan, yangi kod yozmasdan)
-
-Soʻrovnoma rahmatida: "Hamkasbingiz yoki doʻstingiz qoʻshilsa — ikkingizga **15 000 bonus**. U formada sizning username'ingizni 'kimdan eshitdingiz' maydoniga yozsin (promo: DOST15)." Daftarda qoʻlda hisoblanadi, maks 5 ta.
+Soʻrovnoma/eʼlondan keyin odam shaxsiy havola oladi: `t.me/enagalaruz_bot?start=c_REF_<kod>` yoki `https://enagalar.uz/kirish?c=REF_<kod>`. Taklif etilgan odam faol eʼlon joylasa — ikkalasiga **15 000**. Maks 5 ta, oʻz-oʻziga referal bloki.
 
 ## A7. Xavf va muvofiqlik (qisqa)
 
 1. **Telegram:** foydalanuvchilar "Report spam" bossa akkaunt cheklanadi (begonalarga yozolmaydi, avval bir necha kun, takror boʻlsa uzoqroq, davom etsa butunlay). Manba: [Telegram Spam FAQ](https://telegram.org/faq_spam). Bot birinchi xabarni yubora olmaydi — foydalanuvchi oʻzi /start bosishi kerak ([Bots FAQ](https://core.telegram.org/bots/faq)).
 2. **Xavfsiz limitlar (shaxsiy xabar):** **kuniga ≤15**, **soatiga ≤5**, faqat **10:00–17:30**, har odamga **1 xabar + maks 1 eslatma** (3 kundan keyin). Javob "yoʻq" yoki jim — boshqa yozilmaydi. Guruhga ommaviy tashlash yoʻq. Ommaviy/avtomatik DM yoʻq; kampaniya uchun **alohida akkaunt**, asosiysi emas.
-3. **Faqat eʼlon berganlarga**, eʼlonning ochiq postida koʻringan odamga, eʼloniga bogʻlab yoziladi. Guruh a'zolarini yigʻib yozish (scrape) va kontaktlarni rozilik-siz bazaga saqlash — **taqiqlangan**. Faqat formani toʻldirganlar saqlanadi.
+3. **Faqat eʼlon berganlarga**, eʼlonning ochiq postida koʻringan odamga, eʼloniga bogʻlab yoziladi. Guruh a'zolarini yigʻib yozish (scrape) va kontaktlarni rozilik-siz bazaga saqlash — **taqiqlangan**. Faqat platformada roziligini bergan odamlar saqlanadi.
 4. **Qonun:** ZRU-547 (rozilik, maqsad, olib tashlash — [Mondaq](https://www.mondaq.com/data-protection/828474/uzbekistan-enacts-first-data-protection-law), [Legal500](https://www.legal500.com/developments/thought-leadership/personal-data-compliance-in-uzbekistan/)); ZRU-1125 (2026-03-26, chet elga uzatish — [kun.uz](https://kun.uz/ru/news/2026/03/28/xraneniye-nekotoryx-personalnyx-dannyx-za-predelami-uzbekistana-razresheno)). anhor.uz maʼlumotiga koʻra **1-noyabr 2026** dan mobil reklamaga yozma/elektron rozilik va **18:00–09:00 oraligʻida reklama taqiqi** kiradi (SMS/qoʻngʻiroq haqida; messenjerlar aytilmagan — [anhor.uz](https://anhor.uz/news/v-uzbekistane-zapretyat-reklamnye-zvonki-i-sms-po-vecheram-i-nochyu/)). Ehtiyot uchun 17:30 dan keyin reklama yozmaymiz. **[yurist]** 100 dan koʻp shaxsiy xabardan oldin fikr oling.
 5. **Eʼlon matnidagi kontakt** odam bergan, lekin boshqa maqsad uchun yozish bahsli boʻlishi mumkin → xabar eʼlonga bogʻlangan, qisqa, rad etish oson.
 6. **Bonus:** "naqdga aylanmaydi" har joyda yozilgan; soxta javobda bekor qilinadi; soliq masalasi (ayniqsa elchilar) **[yurist/buxgalter]**.
@@ -614,7 +649,7 @@ Qaysi kanallar: @enagalar (34 923), @moya_nyanyauz (25 447), @enaga_samarqand (2
 
 #### 6.4.3 Referal (botdan, taklif etuvchi tarqatadi)
 
-**UZ:** "Men enagalar.uz da anketa/eʼlon joyladim. Siz ham sinab koʻring: tasdiqlangan enagalar, ichki chat, bepul. Mening havolam bilan kirsangiz ikkalamizga 15 000 bonus: t.me/enagalaruz_bot?start=c_rf_xxx"
+**UZ:** "Men enagalar.uz da anketa/eʼlon joyladim. Siz ham sinab koʻring: tasdiqlangan enagalar, ichki chat, bepul. t.me/enagalaruz_bot?start=c_REF_xxx"
 **RU:** «Я разместил(а) анкету/объявление на enagalar.uz. Попробуйте и вы: проверенные няни, чат внутри, бесплатно. По моей ссылке — по 15 000 бонусов нам обоим: t.me/enagalaruz_bot?start=c_rf_xxx»
 
 **Rahmat (referal):** "Rahmat! {ism} sizning havolangiz orqali qoʻshildi. 15 000 bonus hisobingizda." / «Спасибо! {имя} присоединился(лась) по вашей ссылке. 15 000 бонусов на вашем счёте.»
