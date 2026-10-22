@@ -14,7 +14,7 @@ const safety = computed(() => [
 ])
 const telegram = computed(() => [
   { label: t('footer.channel'), to: 'https://t.me/enagalar_uz', icon: 'i-lucide-send' },
-  { label: t('footer.bot'), to: 'https://t.me/enagalar_uz_bot', icon: 'i-lucide-bot' },
+  { label: t('footer.bot'), to: 'https://t.me/enagalaruz_bot', icon: 'i-lucide-bot' },
 ])
 </script>
 

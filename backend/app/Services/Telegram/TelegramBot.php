@@ -28,6 +28,21 @@ class TelegramBot
         ]);
     }
 
+    /** Lokal ishlab chiqish uchun: webhook o'rniga yangilanishlarni so'rab olish. */
+    public function getUpdates(int $offset, int $timeout = 25): Response
+    {
+        return $this->http()->timeout($timeout + 10)->post('getUpdates', [
+            'offset' => $offset,
+            'timeout' => $timeout,
+            'allowed_updates' => ['message'],
+        ]);
+    }
+
+    public function deleteWebhook(): Response
+    {
+        return $this->call('deleteWebhook', []);
+    }
+
     private function call(string $method, array $payload): Response
     {
         return $this->http()->post($method, $payload);
