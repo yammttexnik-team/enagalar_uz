@@ -19,6 +19,19 @@ if [ "${1:-}" != "--no-pull" ]; then
   git -C "$REPO_DIR" pull --ff-only
 fi
 
+# Orqaga qaytish uchun: build'dan oldin joriy image'larni :prev deb belgilaymiz
+# (teg bo'lgani uchun `docker image prune` ularga tegmaydi). Rollback: docs/DEPLOY.md.
+echo "==> joriy image'larni :prev deb belgilash"
+for img in $("${DC[@]}" config --images 2>/dev/null | sort -u); do
+  case "$img" in
+    enagalar/*)
+      if docker image inspect "$img" >/dev/null 2>&1; then
+        docker tag "$img" "${img%%:*}:prev" && echo "  $img -> ${img%%:*}:prev"
+      fi
+      ;;
+  esac
+done
+
 echo "==> build"
 "${DC[@]}" build
 

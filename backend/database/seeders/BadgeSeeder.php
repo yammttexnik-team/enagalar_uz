@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 
 class BadgeSeeder extends Seeder
 {
+    // Nishonlarni admin paneldan tahrirlash mumkin: mavjudlari qayta yozilmaydi, faqat yetishmaydiganlari qo'shiladi.
     public function run(): void
     {
         $badges = [
@@ -18,7 +19,7 @@ class BadgeSeeder extends Seeder
         ];
 
         foreach ($badges as $sort => [$slug, $uz, $ru, $icon, $color, $grantType, $validity]) {
-            Badge::updateOrCreate(['slug' => $slug], [
+            Badge::firstOrCreate(['slug' => $slug], [
                 'name_uz' => $uz,
                 'name_ru' => $ru,
                 'icon' => $icon,
