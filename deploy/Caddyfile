@@ -1,12 +1,14 @@
+# Server umumiy: tashqi 80/443 ni mavjud Nginx boshqaradi (boshqa saytlar ham shu yerda).
+# Caddy faqat ichki HTTP: Nginx -> 127.0.0.1:${CADDY_LOCAL_PORT} -> Caddy -> Laravel/Nuxt/Reverb.
+# HTTPS va www -> asosiy domen yo'naltirish Nginx + certbot'da (deploy/nginx/enagalar.conf).
 {
-	email {$ACME_EMAIL}
+	auto_https off
+	servers {
+		trusted_proxies static private_ranges
+	}
 }
 
-www.{$APP_DOMAIN} {
-	redir https://{$APP_DOMAIN}{uri} permanent
-}
-
-{$APP_DOMAIN} {
+:80 {
 	encode zstd gzip
 
 	request_body {

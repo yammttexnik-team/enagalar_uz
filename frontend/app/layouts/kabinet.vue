@@ -6,7 +6,9 @@ const auth = useAuthStore()
 const chat = useChatStore()
 const { balance, refreshBalance } = useBonus()
 const { money } = useFormat()
-onMounted(refreshBalance)
+// Balans faqat brauzerda ko'rsatiladi (SSR/hydration mos kelishi uchun).
+const mounted = ref(false)
+onMounted(() => { mounted.value = true; refreshBalance() })
 const isThread = computed(() => /\/kabinet\/xabarlar\/\d+/.test(route.path))
 
 const items = computed(() => {
@@ -58,7 +60,7 @@ const isActive = (href: string) => {
             :class="isActive(i.href) ? 'bg-brand-500 text-white dark:bg-brand-400 dark:text-sand-900' : 'text-muted hover:bg-elevated hover:text-highlighted'"
           >
             <UIcon :name="i.icon" class="size-4" aria-hidden="true" />{{ i.label }}
-            <span v-if="i.to === '/kabinet/bonuslar' && balance" class="rounded-full bg-apricot-500 px-1.5 text-xs font-bold tabular-nums text-white">{{ money(balance) }}</span>
+            <span v-if="mounted && i.to === '/kabinet/bonuslar' && balance" class="rounded-full bg-apricot-500 px-1.5 text-xs font-bold tabular-nums text-white">{{ money(balance) }}</span>
             <span v-if="i.badge" class="grid min-w-5 place-items-center rounded-full bg-apricot-500 px-1.5 text-xs font-bold text-white" :aria-label="t('chat.unreadCount', { n: i.badge })">{{ i.badge > 99 ? '99+' : i.badge }}</span>
           </NuxtLink>
         </li>
@@ -74,7 +76,7 @@ const isActive = (href: string) => {
               <div class="min-w-0">
                 <p class="truncate font-display font-extrabold text-highlighted">{{ auth.user.name || auth.user.telegram_username || t('auth.notSet') }}</p>
                 <p class="truncate text-sm text-muted">{{ auth.user.roles.map(r => t(`auth.role.${r}`, r)).join(' · ') }}</p>
-                <NuxtLink v-if="balance !== null" :to="localePath('/kabinet/bonuslar')" class="mt-1.5 inline-flex items-center gap-1 rounded-full bg-apricot-100 px-2.5 py-0.5 text-xs font-bold tabular-nums text-apricot-800 dark:bg-apricot-900 dark:text-apricot-100" :aria-label="t('bonus.chip', { n: money(balance) })" data-testid="bonus-chip">
+                <NuxtLink v-if="mounted && balance !== null" :to="localePath('/kabinet/bonuslar')" class="mt-1.5 inline-flex items-center gap-1 rounded-full bg-apricot-100 px-2.5 py-0.5 text-xs font-bold tabular-nums text-apricot-800 dark:bg-apricot-900 dark:text-apricot-100" :aria-label="t('bonus.chip', { n: money(balance) })" data-testid="bonus-chip">
                   <UIcon name="i-lucide-gift" class="size-3.5" aria-hidden="true" />{{ money(balance) }} {{ t('bonus.som') }}
                 </NuxtLink>
               </div>

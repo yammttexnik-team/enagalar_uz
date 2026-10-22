@@ -19,6 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Saytda sessiya yo'q (API token), sessiya faqat admin panel uchun.
         $middleware->alias(['has_role' => EnsureRole::class, 'last_seen' => UpdateLastSeen::class]);
+        // Productionda so'rovlar Nginx -> Caddy orqali keladi (ichki tarmoq): https va mijoz IP'si X-Forwarded-* dan olinadi.
+        $middleware->trustProxies(at: ['127.0.0.1', '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16']);
         $middleware->redirectGuestsTo(fn (Request $request) => $request->is('api/*') ? null : route('filament.admin.auth.login'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # Ubuntu 24.04 serverni birinchi marta sozlash. Idempotent: qayta ishga tushirsa bo'ladi.
 # Ishlatish (root sifatida): sudo bash server-setup.sh [deploy_user] [ssh_public_key]
+#
+# DIQQAT: server umumiy bo'lishi mumkin (boshqa saytlar, Nginx, PHP). Standart rejimda
+# faqat Docker va deploy foydalanuvchisi o'rnatiladi. Firewall, tizimni to'liq yangilash,
+# swap va avtomatik yangilanishlar faqat FULL_SETUP=1 bilan (bo'sh, alohida server uchun).
 set -euo pipefail
 
 DEPLOY_USER="${1:-deploy}"
@@ -11,9 +15,13 @@ SWAP_SIZE="2G"
 export DEBIAN_FRONTEND=noninteractive
 
 echo "==> apt yangilash"
+FULL_SETUP="${FULL_SETUP:-0}"
 apt-get update -y
-apt-get upgrade -y
-apt-get install -y ca-certificates curl gnupg git ufw fail2ban unattended-upgrades rclone
+apt-get install -y ca-certificates curl gnupg git rclone
+if [ "$FULL_SETUP" = "1" ]; then
+  apt-get upgrade -y
+  apt-get install -y ufw fail2ban unattended-upgrades
+fi
 
 echo "==> Docker (rasmiy repo)"
 if ! command -v docker >/dev/null 2>&1; then
@@ -45,6 +53,11 @@ elif [ -f /root/.ssh/authorized_keys ] && [ ! -f "/home/$DEPLOY_USER/.ssh/author
   cp /root/.ssh/authorized_keys "/home/$DEPLOY_USER/.ssh/authorized_keys"
   chown "$DEPLOY_USER:$DEPLOY_USER" "/home/$DEPLOY_USER/.ssh/authorized_keys"
   chmod 600 "/home/$DEPLOY_USER/.ssh/authorized_keys"
+fi
+
+if [ "$FULL_SETUP" != "1" ]; then
+  echo "==> Umumiy server rejimi: firewall, fail2ban, swap va avto-yangilanishlarga tegilmadi."
+  exit 0
 fi
 
 echo "==> Firewall (ufw): 22, 80, 443"

@@ -1,0 +1,78 @@
+name: Nginx site
+
+# Serverdagi MAVJUD Nginx'ga enagalar uchun alohida sayt faylini qo'shadi va certbot bilan HTTPS oladi.
+# Boshqa saytlarning fayllariga tegilmaydi; nginx -t o'tmasa, faqat o'zimizning fayl olib tashlanadi.
+on:
+  workflow_dispatch:
+    inputs:
+      domain:
+        description: "Domen (masalan: enagalar.uz yoki 161-97-88-95.sslip.io)"
+        required: true
+        type: string
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  nginx:
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 15
+    env:
+      HOST: ${{ secrets.SERVER_HOST }}
+      DOMAIN: ${{ inputs.domain }}
+      PORT: "8095"
+      EMAIL: ${{ secrets.ADMIN_EMAIL }}
+      SSHPASS: ${{ secrets.SERVER_ROOT_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Domenni tekshirish
+        run: |
+          echo "$DOMAIN" | grep -Eq '^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$' \
+            || { echo "Noto'g'ri domen"; exit 1; }
+
+      - name: Nginx sayt fayli va sertifikat
+        run: |
+          sudo apt-get install -y -qq sshpass >/dev/null
+          install -m 700 -d ~/.ssh && ssh-keyscan -H "$HOST" > ~/.ssh/known_hosts
+          sed -e "s/__DOMAIN__/$DOMAIN/g" -e "s/__PORT__/$PORT/g" deploy/nginx/enagalar.conf.template > /tmp/site.conf
+          sshpass -e scp /tmp/site.conf "root@$HOST:/tmp/enagalar-site.conf"
+          sshpass -e ssh "root@$HOST" "DOMAIN='$DOMAIN' EMAIL='$EMAIL' bash -s" <<'SH'
+          set -euo pipefail
+          NAME="enagalar-$DOMAIN"
+          AVAIL="/etc/nginx/sites-available/$NAME"
+          ENABLED="/etc/nginx/sites-enabled/$NAME"
+          if [ -f "$AVAIL" ] && grep -q "managed by Certbot" "$AVAIL"; then
+            echo "Mavjud (sertifikat bilan), qayta yozilmadi."
+          else
+            install -m 644 /tmp/enagalar-site.conf "$AVAIL"
+            ln -sfn "$AVAIL" "$ENABLED"
+          fi
+          rm -f /tmp/enagalar-site.conf
+          if ! nginx -t; then
+            echo "nginx -t xato: o'zimizning fayl olib tashlanmoqda, Nginx qayta yuklanmaydi."
+            rm -f "$ENABLED"
+            exit 1
+          fi
+          systemctl reload nginx
+          echo "==> certbot"
+          if certbot --nginx --non-interactive --agree-tos -m "$EMAIL" --redirect -d "$DOMAIN" -d "www.$DOMAIN"; then
+            echo "Sertifikat olindi."
+          else
+            echo "OGOHLANTIRISH: sertifikat olinmadi (DNS hali tayyor emasmi?). Sayt HTTP orqali ishlaydi."
+          fi
+          nginx -t && systemctl reload nginx
+          SH
+
+      - name: Tekshirish
+        run: |
+          for i in $(seq 1 12); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' -m 10 "https://$DOMAIN/up" || true)
+            [ "$code" = "200" ] && { echo "OK: https://$DOMAIN"; exit 0; }
+            code=$(curl -s -o /dev/null -w '%{http_code}' -m 10 "http://$DOMAIN/up" || true)
+            [ "$code" = "200" ] && { echo "OK (faqat HTTP): http://$DOMAIN"; exit 0; }
+            sleep 10
+          done
+          echo "Sayt javob bermadi"; exit 1

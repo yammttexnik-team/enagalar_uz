@@ -28,10 +28,9 @@ services:
   caddy:
     image: caddy:2-alpine
     restart: unless-stopped
+    # Faqat lokal: tashqaridan Nginx orqali kiriladi
     ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
+      - "127.0.0.1:${CADDY_LOCAL_PORT:-8095}:80"
     environment:
       APP_DOMAIN: ${APP_DOMAIN:?APP_DOMAIN kerak}
       ACME_EMAIL: ${ACME_EMAIL:?ACME_EMAIL kerak}

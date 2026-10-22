@@ -49,11 +49,8 @@ jobs:
 
       - name: Tekshirish
         run: |
-          for i in $(seq 1 12); do
-            if curl -fsSk --resolve "enagalar.uz:443:$HOST" -o /dev/null https://enagalar.uz/up; then echo "OK"; exit 0; fi
-            sleep 10
-          done
-          echo "Server javob bermadi"; exit 1
+          ssh -i ~/.ssh/deploy_key "deploy@$HOST" \
+            'for i in $(seq 1 12); do curl -fsS -o /dev/null http://127.0.0.1:8095/up && { echo OK; exit 0; }; sleep 10; done; echo "Ichki port (8095) javob bermadi"; exit 1'
 
       - name: Kalitni o'chirish
         if: always()

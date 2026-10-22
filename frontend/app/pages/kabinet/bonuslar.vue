@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BonusWallet, SurveyListItem } from '~/composables/useBonus'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const localePath = useLocalePath()
 const auth = useAuthStore()
 const api = useApi()
@@ -44,7 +44,11 @@ const isParent = computed(() => !!auth.user?.roles.includes('parent'))
 const mySurvey = computed(() => surveys.value.find(s => s.audience === (isNanny.value ? 'nanny' : 'parent')) ?? surveys.value[0])
 const listingTo = computed(() => localePath(isNanny.value ? '/kabinet/anketa' : '/kabinet/vakansiyalar/yangi'))
 
-const fmtDate = (iso: string) => new Date(iso).toLocaleDateString(locale.value === 'ru' ? 'ru-RU' : 'en-GB')
+// Server va brauzer bir xil chiqarishi uchun (hydration) vaqt zonasi qat'iy: Toshkent.
+const fmtDate = (iso: string) => {
+  const p = Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Tashkent', day: '2-digit', month: '2-digit', year: 'numeric' }).formatToParts(new Date(iso)).map(x => [x.type, x.value]))
+  return `${p.day}.${p.month}.${p.year}`
+}
 const link = computed(() => wallet.value?.referral_link ?? '')
 const telegramShare = computed(() => `https://t.me/share/url?url=${encodeURIComponent(link.value)}&text=${encodeURIComponent(t('bonus.share.text'))}`)
 async function copy() {
