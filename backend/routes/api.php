@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\MatchController;
 use App\Http\Controllers\Api\MeController;
 use App\Http\Controllers\Api\MyNannyProfileController;
 use App\Http\Controllers\Api\MyVacancyController;
+use App\Http\Controllers\Api\MyVerificationController;
 use App\Http\Controllers\Api\NannyController;
 use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\SkillController;
@@ -37,6 +38,12 @@ Route::prefix('v1')->group(function () {
         Route::post('/auth/logout', [TelegramAuthController::class, 'logout']);
         Route::get('/me', [MeController::class, 'show']);
         Route::post('/me/roles', [MeController::class, 'addRole']);
+
+        // Tasdiqlash: pasport va hujjatlar (yopiq diskka)
+        Route::get('/my/verification', [MyVerificationController::class, 'show']);
+        Route::post('/my/verification/identity', [MyVerificationController::class, 'storeIdentity'])->middleware('throttle:20,1');
+        Route::post('/my/verification/documents', [MyVerificationController::class, 'storeDocument'])->middleware('throttle:20,1');
+        Route::delete('/my/verification/documents/{document}', [MyVerificationController::class, 'destroyDocument'])->whereNumber('document');
 
         // Ota-ona: e'lonlar va kelgan arizalar
         Route::middleware('has_role:parent')->group(function () {

@@ -29,7 +29,13 @@ class DocumentInfolist
                 Section::make('Hujjat')
                     ->description('Tekshiruvdan keyin fayl avtomatik o\'chiriladi.')
                     ->schema([
+                        TextEntry::make('document_pdf')
+                            ->label('PDF hujjat')
+                            ->state('Ochish')
+                            ->url(fn (Document $record) => ReviewFileController::url('document', $record->id), shouldOpenInNewTab: true)
+                            ->visible(fn (Document $record) => $record->path && str_ends_with(strtolower($record->path), '.pdf')),
                         ImageEntry::make('document_preview')
+                            ->visible(fn (Document $record) => ! ($record->path && str_ends_with(strtolower($record->path), '.pdf')))
                             ->hiddenLabel()
                             ->state(fn (Document $record) => $record->path ? ReviewFileController::url('document', $record->id) : null)
                             ->imageHeight(360)
