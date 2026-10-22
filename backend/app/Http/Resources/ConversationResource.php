@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Services\Chat\ChatService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Str;
 
 /**
  * Suhbat (ko'ruvchi nuqtai nazaridan). `participants.activeBadges`, `participants.nannyProfile`,
