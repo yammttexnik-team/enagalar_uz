@@ -1,0 +1,106 @@
+/*
+ * enagalar.uz brend ranglari va shriftlari (Tailwind v4 @theme).
+ * Manba: docs/brand/BRAND.md. Qoʻlda oʻzgartirmang — avval BRAND.md ni yangilang.
+ *
+ * Ulash: main.css da `@import "tailwindcss"; @import "@nuxt/ui";` dan keyin
+ *   @import "./brand.css";
+ * app.config.ts: ui.colors = { primary: 'brand', secondary: 'apricot', neutral: 'sand',
+ *   success: 'leaf', warning: 'honey', error: 'pomegranate', info: 'azure' }
+ */
+
+@theme static {
+  /* Shriftlar: sarlavha — Mulish, matn/UI — Inter (ikkalasi ham oʻ gʻ ʼ va ў қ ғ ҳ ni toʻliq qoʻllaydi) */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-display: 'Mulish', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* brand: Firuza — primary */
+  --color-brand-50: #edfbfa;
+  --color-brand-100: #d9f4f4;
+  --color-brand-200: #b5e8e8;
+  --color-brand-300: #81d3d5;
+  --color-brand-400: #3eb5ba;
+  --color-brand-500: #018186;
+  --color-brand-600: #006e74;
+  --color-brand-700: #025a5f;
+  --color-brand-800: #01494f;
+  --color-brand-900: #033a40;
+  --color-brand-950: #022428;
+
+  /* apricot: Oʻrik — secondary/accent */
+  --color-apricot-50: #fef6f2;
+  --color-apricot-100: #ffebe0;
+  --color-apricot-200: #fed4be;
+  --color-apricot-300: #feb38e;
+  --color-apricot-400: #f88950;
+  --color-apricot-500: #c55205;
+  --color-apricot-600: #b34602;
+  --color-apricot-700: #963700;
+  --color-apricot-800: #7a2a02;
+  --color-apricot-900: #632105;
+  --color-apricot-950: #3f0f00;
+
+  /* sand: Qum — neutral (iliq kulrang) */
+  --color-sand-50: #fcfaf7;
+  --color-sand-100: #f5f2ee;
+  --color-sand-200: #e7e3dd;
+  --color-sand-300: #d5d0c9;
+  --color-sand-400: #a9a49c;
+  --color-sand-500: #777169;
+  --color-sand-600: #665f57;
+  --color-sand-700: #504941;
+  --color-sand-800: #3a342c;
+  --color-sand-900: #27221b;
+  --color-sand-950: #15110a;
+
+  /* leaf: Barg — success */
+  --color-leaf-50: #effbf1;
+  --color-leaf-100: #def6e2;
+  --color-leaf-200: #bfebc7;
+  --color-leaf-300: #95dba3;
+  --color-leaf-400: #62bf79;
+  --color-leaf-500: #00873c;
+  --color-leaf-600: #037835;
+  --color-leaf-700: #02612a;
+  --color-leaf-800: #004e20;
+  --color-leaf-900: #003f18;
+  --color-leaf-950: #01270d;
+
+  /* honey: Asal — warning */
+  --color-honey-50: #fffaee;
+  --color-honey-100: #fef1d3;
+  --color-honey-200: #fbe0ab;
+  --color-honey-300: #f7ca75;
+  --color-honey-400: #efb237;
+  --color-honey-500: #d79706;
+  --color-honey-600: #9f6c04;
+  --color-honey-700: #825604;
+  --color-honey-800: #6a4402;
+  --color-honey-900: #563501;
+  --color-honey-950: #361e00;
+
+  /* pomegranate: Anor — error */
+  --color-pomegranate-50: #fff4f3;
+  --color-pomegranate-100: #fee6e5;
+  --color-pomegranate-200: #fecdca;
+  --color-pomegranate-300: #ffaaa7;
+  --color-pomegranate-400: #fa686a;
+  --color-pomegranate-500: #ce2739;
+  --color-pomegranate-600: #b7162d;
+  --color-pomegranate-700: #9b0d23;
+  --color-pomegranate-800: #7d0c1c;
+  --color-pomegranate-900: #650d17;
+  --color-pomegranate-950: #420008;
+
+  /* azure: Osmon — info */
+  --color-azure-50: #f1f8fe;
+  --color-azure-100: #e0effe;
+  --color-azure-200: #c1defe;
+  --color-azure-300: #96c9fe;
+  --color-azure-400: #50a3f4;
+  --color-azure-500: #0177cc;
+  --color-azure-600: #0465af;
+  --color-azure-700: #015493;
+  --color-azure-800: #004478;
+  --color-azure-900: #013762;
+  --color-azure-950: #00203e;
+}
