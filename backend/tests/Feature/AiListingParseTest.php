@@ -85,7 +85,8 @@ class AiListingParseTest extends TestCase
         $this->assertSame(['hourly'], $fields['work_formats']);
         $this->assertSame(['ru', 'uz'], $fields['languages']);
         $this->assertSame(['cooking'], $fields['skills']);
-        $this->assertFalse($fields['live_in']);
+        // false = "matnda aytilmagan": formadagi qiymatni bosib ketmasligi uchun qaytarilmaydi
+        $this->assertArrayNotHasKey('live_in', $fields);
         $this->assertStringNotContainsString('998', $fields['bio']);
 
         // Claude'ga kontaktlar yuborilmadi
