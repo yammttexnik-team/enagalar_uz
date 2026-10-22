@@ -25,7 +25,7 @@ class VacancyController extends Controller
             // Maosh: yuqori chegara (yoki yagona qiymat) so'ralgan minimumdan kam bo'lmasin.
             ->when($f['salary_min'] ?? null, fn (Builder $q, $v) => $q
                 ->where('salary_unit', $f['salary_unit'] ?? PriceUnit::Month->value)
-                ->whereRaw('coalesce(salary_max, salary_min) >= ?', [$v]))
+                ->whereRaw('coalesce(salary_max, salary_min) >= ?', [(int) $v]))
             ->when($request->boolean('live_in'), fn (Builder $q) => $q->where('live_in', true))
             ->when($request->boolean('is_urgent'), fn (Builder $q) => $q->where('is_urgent', true))
             ->when(isset($f['children_age']), fn (Builder $q) => $q->whereJsonContains('children_ages', (int) $f['children_age']));

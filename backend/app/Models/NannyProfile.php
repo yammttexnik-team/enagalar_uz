@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\NannyProfileStatus;
 use App\Enums\PriceUnit;
+use App\Enums\UserStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -64,7 +65,9 @@ class NannyProfile extends Model
 
     public function scopeActive(Builder $query): void
     {
-        $query->where('status', NannyProfileStatus::Active);
+        // Bloklangan foydalanuvchining anketasi ko'rinmaydi.
+        $query->where('status', NannyProfileStatus::Active)
+            ->whereHas('user', fn ($u) => $u->where('status', UserStatus::Active));
     }
 
     /** Ochiq ko'rinish uchun kerakli bog'lamalar (N+1 bo'lmasligi uchun). */

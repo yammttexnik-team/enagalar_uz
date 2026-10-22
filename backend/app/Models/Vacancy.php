@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PriceUnit;
+use App\Enums\UserStatus;
 use App\Enums\VacancyStatus;
 use App\Enums\WorkFormat;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -64,7 +65,8 @@ class Vacancy extends Model
     public function scopeActive(Builder $query): void
     {
         $query->where('status', VacancyStatus::Active)
-            ->where(fn ($q) => $q->whereNull('expires_at')->orWhere('expires_at', '>', now()));
+            ->where(fn ($q) => $q->whereNull('expires_at')->orWhere('expires_at', '>', now()))
+            ->whereHas('parentProfile.user', fn ($u) => $u->where('status', UserStatus::Active));
     }
 
     /** Ochiq ko'rinish uchun kerakli bog'lamalar (N+1 bo'lmasligi uchun). */

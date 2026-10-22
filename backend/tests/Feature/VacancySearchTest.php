@@ -28,6 +28,11 @@ class VacancySearchTest extends TestCase
         return Vacancy::factory()->active()->create($attrs + ['parent_profile_id' => $this->parentUser()->parentProfile->id]);
     }
 
+    private function vacancyOf($parent): Vacancy
+    {
+        return Vacancy::factory()->active()->create(['parent_profile_id' => $parent->parentProfile->id]);
+    }
+
     public function test_only_active_non_expired_are_listed(): void
     {
         $ok = $this->make();
@@ -65,13 +70,14 @@ class VacancySearchTest extends TestCase
 
     public function test_public_payload_hides_parent_contacts(): void
     {
-        $vacancy = $this->make();
+        $parent = $this->parentUser();
+        $vacancy = $this->vacancyOf($parent);
 
         $list = $this->getJson('/api/v1/vacancies')->assertOk()->assertJsonPath('data.0.parent.name', 'Aziza R.');
         $show = $this->getJson('/api/v1/vacancies/'.$vacancy->id)->assertOk()->assertJsonPath('data.parent.name', 'Aziza R.');
 
         foreach ([$list->getContent(), $show->getContent()] as $body) {
-            $this->assertStringNotContainsString('998901112233', $body);
+            $this->assertStringNotContainsString($parent->phone, $body);
             $this->assertStringNotContainsString('Rahimova', $body);
             $this->assertStringNotContainsString('phone', $body);
         }

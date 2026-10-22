@@ -20,7 +20,8 @@ class FavoriteTest extends TestCase
 
     public function test_add_list_and_remove_favorites(): void
     {
-        $nanny = $this->nannyUser(['status' => 'active'])->nannyProfile;
+        $nannyUser = $this->nannyUser(['status' => 'active']);
+        $nanny = $nannyUser->nannyProfile;
         $vacancy = Vacancy::factory()->active()->create(['parent_profile_id' => $this->parentUser()->parentProfile->id]);
         Sanctum::actingAs($this->parentUser());
 
@@ -30,7 +31,7 @@ class FavoriteTest extends TestCase
 
         $response = $this->getJson('/api/v1/favorites')->assertOk()->assertJsonCount(2, 'data');
         $this->assertEqualsCanonicalizing(['nanny', 'vacancy'], collect($response->json('data'))->pluck('type')->all());
-        $this->assertStringNotContainsString('998907778899', $response->getContent());
+        $this->assertStringNotContainsString($nannyUser->phone, $response->getContent());
 
         $this->deleteJson('/api/v1/favorites', ['type' => 'nanny', 'id' => $nanny->id])->assertNoContent();
         $this->getJson('/api/v1/favorites')->assertJsonCount(1, 'data');

@@ -12,7 +12,7 @@ trait MakesListingActors
 {
     protected function parentUser(): User
     {
-        $user = User::factory()->create(['name' => 'Aziza Rahimova', 'phone' => '+998901112233']);
+        $user = User::factory()->create(['name' => 'Aziza Rahimova']);
         $user->assignRole(Role::Parent->value);
         ParentProfile::factory()->create(['user_id' => $user->id]);
 
@@ -22,7 +22,7 @@ trait MakesListingActors
     /** @param  array<string, mixed>  $profile */
     protected function nannyUser(array $profile = [], string $name = 'Dilnoza Karimova'): User
     {
-        $user = User::factory()->create(['name' => $name, 'phone' => '+998907778899', 'telegram_username' => 'dilnoza_secret']);
+        $user = User::factory()->create(['name' => $name, 'telegram_username' => 'dilnoza_secret_'.uniqid()]);
         $user->assignRole(Role::Nanny->value);
         NannyProfile::factory()->create($profile + ['user_id' => $user->id]);
 

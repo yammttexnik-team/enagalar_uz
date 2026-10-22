@@ -34,6 +34,14 @@ class NannySearchTest extends TestCase
         $this->assertSame([$active->id], $this->ids());
     }
 
+    public function test_blocked_users_are_hidden(): void
+    {
+        $visible = $this->nannyUser(['status' => 'active'])->nannyProfile;
+        $this->nannyUser(['status' => 'active'])->update(['status' => 'blocked']);
+
+        $this->assertSame([$visible->id], $this->ids());
+    }
+
     public function test_filter_by_region_and_work_format(): void
     {
         $tashkent = Region::where('slug', 'tashkent-city')->first();
@@ -109,14 +117,15 @@ class NannySearchTest extends TestCase
 
     public function test_public_payload_hides_contacts_and_shows_short_name(): void
     {
-        $profile = $this->nannyUser(['status' => 'active'])->nannyProfile;
+        $user = $this->nannyUser(['status' => 'active']);
+        $profile = $user->nannyProfile;
 
         $list = $this->getJson('/api/v1/nannies')->assertOk()->assertJsonPath('data.0.name', 'Dilnoza K.');
         $show = $this->getJson('/api/v1/nannies/'.$profile->id)->assertOk()->assertJsonPath('data.name', 'Dilnoza K.');
 
         foreach ([$list->getContent(), $show->getContent()] as $body) {
-            $this->assertStringNotContainsString('998907778899', $body);
-            $this->assertStringNotContainsString('dilnoza_secret', $body);
+            $this->assertStringNotContainsString($user->phone, $body);
+            $this->assertStringNotContainsString('dilnoza_secret_', $body);
             $this->assertStringNotContainsString('Karimova', $body);
             $this->assertStringNotContainsString('passport', $body);
             $this->assertStringNotContainsString('phone', $body);

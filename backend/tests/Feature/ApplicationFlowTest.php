@@ -76,7 +76,7 @@ class ApplicationFlowTest extends TestCase
         Sanctum::actingAs($owner);
         $response = $this->getJson("/api/v1/my/vacancies/{$vacancy->id}/applications")
             ->assertOk()->assertJsonCount(1, 'data')->assertJsonPath('data.0.nanny.name', 'Dilnoza K.');
-        $this->assertStringNotContainsString('998907778899', $response->getContent());
+        $this->assertStringNotContainsString($nanny->phone, $response->getContent());
 
         $this->patchJson("/api/v1/applications/{$application->id}", ['status' => 'shortlisted'])
             ->assertOk()->assertJsonPath('data.status', 'shortlisted');
