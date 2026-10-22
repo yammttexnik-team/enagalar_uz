@@ -487,7 +487,8 @@
       "verification": "Tasdiqlash",
       "favorites": "Sevimlilar",
       "settings": "Sozlamalar",
-      "messages": "Xabarlar"
+      "messages": "Xabarlar",
+      "bonus": "Bonuslar"
     },
     "gate": {
       "parent": {
@@ -955,5 +956,113 @@
       "addParent": "Ota-ona rolini qoʻshish",
       "roleAdded": "Ota-ona roli qoʻshildi."
     }
+  },
+  "bonus": {
+    "seo": "Bonuslar",
+    "title": "Bonuslar",
+    "subtitle": "Bonus bilan platforma xizmatlaridan foydalaning. Bonus faqat platforma ichida ishlatiladi.",
+    "balance": "Bonus balansi",
+    "som": "soʻm",
+    "note": "Bonuslar faqat platforma xizmatlari uchun; naqd pulga almashtirilmaydi.",
+    "expiryNote": "Berilgan bonus 9 oy amal qiladi.",
+    "earnTitle": "Bonusni qanday olish mumkin",
+    "earn": {
+      "survey": {
+        "title": "Soʻrovnomani toʻldiring",
+        "text": "10–12 daqiqa. Toʻliq tugatsangiz, bonus avtomatik yoziladi.",
+        "cta": "Soʻrovnomaga oʻtish",
+        "done": "Toʻldirilgan"
+      },
+      "listing": {
+        "titleNanny": "Anketangiz faollashsin",
+        "titleParent": "Birinchi eʼloningiz chiqsin",
+        "text": "Moderatsiyadan oʻtib, birinchi anketa yoki eʼlon faol boʻlganda bonus yoziladi.",
+        "ctaNanny": "Anketa yaratish",
+        "ctaParent": "Eʼlon joylash"
+      },
+      "referral": {
+        "title": "Doʻstingizni taklif qiling",
+        "text": "Doʻstingiz roʻyxatdan oʻtib, birinchi eʼlonini joylasa — ikkalangizga bonus (koʻpi bilan 5 ta taklif)."
+      }
+    },
+    "share": {
+      "link": "Sizning havolangiz",
+      "copy": "Nusxa olish",
+      "copied": "Havola nusxalandi.",
+      "telegram": "Telegramda ulashish",
+      "text": "enagalar.uz — ishonchli enagalar platformasi. Roʻyxatdan oʻting va bonus oling:"
+    },
+    "history": {
+      "title": "Tarix",
+      "empty": "Hozircha bonus yozuvlari yoʻq. Yuqoridagi usullardan birini sinab koʻring.",
+      "more": "Yana yuklash",
+      "expires": "Muddati: {date}"
+    },
+    "type": {
+      "survey": "Soʻrovnoma uchun",
+      "listing": "Eʼlon / anketa uchun",
+      "referral": "Doʻst taklifi uchun",
+      "manual": "Qoʻlda tuzatish",
+      "spend": "Xizmatga sarflandi",
+      "expire": "Muddati oʻtdi",
+      "revoke": "Bekor qilindi"
+    },
+    "chip": "Bonus balansi: {n} soʻm",
+    "overview": {
+      "title": "Bonus balansi",
+      "cta": "Bonus olish yoʻllari",
+      "survey": "Soʻrovnomani toʻldiring: +{n} soʻm"
+    }
+  },
+  "survey": {
+    "seo": "Soʻrovnoma",
+    "landingTitle": "Soʻrovnoma — bonus oling",
+    "landingText": "Qisqa soʻrovnomani toʻldiring va platforma ichida ishlatiladigan bonus oling. Javoblaringiz platformani siz uchun yaxshilashga yordam beradi.",
+    "chooseTitle": "Siz kimsiz?",
+    "audience": {
+      "nanny": "Men enagaman",
+      "parent": "Men ota-onaman"
+    },
+    "bonus": "+{n} soʻm bonus",
+    "done": "Toʻldirilgan",
+    "start": "Boshlash",
+    "continue": "Davom ettirish",
+    "intro": {
+      "time": "Taxminan 10–12 daqiqa",
+      "draft": "Javoblaringiz avtomatik saqlanadi — keyin davom ettirishingiz mumkin.",
+      "consent": "Roziman",
+      "consentError": "Davom etish uchun rozilikni belgilang."
+    },
+    "progress": "{n} / {total}",
+    "required": "Bu savolga javob bering.",
+    "minLength": "Kamida {n} ta belgi yozing.",
+    "minWords": "Kamida {n} ta soʻz yozing.",
+    "maxSelect": "Koʻpi bilan {n} ta tanlang.",
+    "invalidNumber": "Son kiriting (0 yoki undan katta).",
+    "optional": "ixtiyoriy",
+    "maxHint": "Koʻpi bilan {n} ta tanlang",
+    "scaleLow": "Yoʻq",
+    "scaleHigh": "Ha",
+    "back": "Orqaga",
+    "next": "Keyingi",
+    "submit": "Yuborish",
+    "submitting": "Yuborilmoqda…",
+    "placeholderText": "Javobingizni yozing…",
+    "placeholderNumber": "Masalan: 3000000",
+    "tooFast": "Juda tez toʻldirildi. Savollarni diqqat bilan oʻqib, qayta yuboring.",
+    "error": "Yuborib boʻlmadi. Birozdan keyin qayta urinib koʻring.",
+    "success": {
+      "title": "Rahmat!",
+      "text": "Javoblaringiz qabul qilindi.",
+      "earned": "Hisobingizga yozildi",
+      "flagged": "Javoblaringiz tekshiruvga yuborildi. Tasdiqlangach bonus hisobingizga yoziladi (odatda 24 soat ichida).",
+      "balance": "Joriy balans: {n} soʻm",
+      "already": "Siz bu soʻrovnomani allaqachon toʻldirgansiz. Rahmat!",
+      "ctaNanny": "Anketa yaratish",
+      "ctaParent": "Eʼlon joylash",
+      "bonuses": "Bonuslarim"
+    },
+    "loadError": "Soʻrovnomani yuklab boʻlmadi.",
+    "retry": "Qayta urinish"
   }
 }

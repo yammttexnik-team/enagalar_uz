@@ -45,6 +45,18 @@ onMounted(async () => {
   }
 })
 
+const { balance } = useBonus()
+const { money } = useFormat()
+const todoSurvey = ref<{ slug: string, bonus: number } | null>(null)
+onMounted(async () => {
+  try {
+    const list = (await api<{ data: { slug: string, audience: string, bonus: number, completed: boolean }[] }>('/surveys')).data
+    const want = isNanny.value ? 'nanny' : 'parent'
+    todoSurvey.value = list.find(x => x.audience === want && !x.completed) ?? null
+  }
+  catch { /* bonus kartasi soʻrovnomasiz ham ishlaydi */ }
+})
+
 const verifState = computed(() => verification.value?.identity.status ?? 'none')
 const verifTone = computed(() => ({
   approved: 'bg-leaf-50! border-leaf-200! dark:bg-leaf-950/50! dark:border-leaf-800!',
@@ -93,6 +105,18 @@ async function addMissing() {
         :to="localePath('/kabinet/tasdiqlash')"
       />
       <UButton v-else size="lg" color="neutral" variant="outline" class="justify-center" icon="i-lucide-file-plus-2" :label="t('dashboard.overview.verif.docs')" :to="localePath('/kabinet/tasdiqlash')" />
+    </section>
+
+    <!-- Bonus -->
+    <section class="surface mb-6 flex flex-col gap-4 bg-apricot-50! p-5 dark:bg-apricot-950/40! sm:flex-row sm:items-center sm:p-6" :aria-label="t('bonus.overview.title')">
+      <span class="grid size-14 shrink-0 place-items-center rounded-2xl bg-white/70 text-apricot-700 dark:bg-white/10 dark:text-apricot-200"><UIcon name="i-lucide-gift" class="size-7" aria-hidden="true" /></span>
+      <div class="min-w-0 flex-1">
+        <h2 class="font-display text-lg font-extrabold text-highlighted">{{ t('bonus.overview.title') }}: <span class="tabular-nums">{{ money(balance ?? 0) }} {{ t('bonus.som') }}</span></h2>
+        <p v-if="todoSurvey" class="mt-1 text-muted">{{ t('bonus.overview.survey', { n: money(todoSurvey.bonus) }) }}</p>
+        <p v-else class="mt-1 text-muted">{{ t('bonus.note') }}</p>
+      </div>
+      <UButton v-if="todoSurvey" size="lg" class="justify-center" icon="i-lucide-clipboard-list" :label="t('bonus.earn.survey.cta')" :to="localePath(`/sorovnoma/${todoSurvey.slug}`)" />
+      <UButton v-else size="lg" color="neutral" variant="outline" class="justify-center" icon="i-lucide-gift" :label="t('bonus.overview.cta')" :to="localePath('/kabinet/bonuslar')" />
     </section>
 
     <!-- Statistika -->

@@ -7,6 +7,7 @@ export function useTelegramLogin() {
   const auth = useAuthStore()
   const localePath = useLocalePath()
   const route = useRoute()
+  const { campaign, referral } = useAttribution()
   const status = ref<Status>('idle')
   const botUrl = ref('')
   let timer: ReturnType<typeof setInterval> | undefined
@@ -45,7 +46,10 @@ export function useTelegramLogin() {
     stop()
     status.value = 'starting'
     try {
-      const res = await auth.api<{ token: string, bot_url: string }>('/auth/telegram/start', { method: 'POST' })
+      const res = await auth.api<{ token: string, bot_url: string }>('/auth/telegram/start', {
+        method: 'POST',
+        body: { campaign: campaign.value || undefined, referral: referral.value || undefined },
+      })
       botUrl.value = res.bot_url
       status.value = 'waiting'
       window.open(res.bot_url, '_blank', 'noopener')
