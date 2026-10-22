@@ -67,7 +67,8 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "SCRIPT_NAME=/up SCRIPT_FILENAME=/var/www/html/public/index.php REQUEST_METHOD=GET REQUEST_URI=/up cgi-fcgi -bind -connect 127.0.0.1:9000 | grep -q '200 OK'"]
+      # FPM 200 javobda "Status" sarlavhasini yubormaydi: javob bor va 4xx/5xx emasligini tekshiramiz.
+      test: ["CMD-SHELL", "out=$$(SCRIPT_NAME=/up SCRIPT_FILENAME=/var/www/html/public/index.php REQUEST_METHOD=GET REQUEST_URI=/up cgi-fcgi -bind -connect 127.0.0.1:9000) || exit 1; echo \"$$out\" | grep -qE '^Status: [45]' && exit 1; echo \"$$out\" | grep -qi '^Content-Type:'"]
       interval: 15s
       timeout: 5s
       retries: 5
