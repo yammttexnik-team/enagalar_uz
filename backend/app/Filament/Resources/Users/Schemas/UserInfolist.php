@@ -37,6 +37,16 @@ class UserInfolist
                 TextEntry::make('last_seen_at')
                     ->dateTime()
                     ->placeholder('-'),
+                TextEntry::make('bonus_balance')
+                    ->label('Bonus balansi')
+                    ->state(fn (User $record): string => number_format($record->bonusBalance(), 0, '', ' ')." so'm"),
+                TextEntry::make('campaign.code')
+                    ->label('Kampaniya')
+                    ->badge()
+                    ->placeholder('-'),
+                TextEntry::make('referredBy.name')
+                    ->label('Kim taklif qilgan')
+                    ->placeholder('-'),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),

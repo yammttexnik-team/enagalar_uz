@@ -21,6 +21,7 @@ class UsersTable
                 TextColumn::make('telegram_username')->label('Telegram')->prefix('@')->placeholder('—'),
                 TextColumn::make('roles.name')->label('Rollar')->badge(),
                 TextColumn::make('badges.name_uz')->label('Nishonlar')->badge()->color('success')->limitList(2),
+                TextColumn::make('campaign.code')->label('Kampaniya')->badge()->color('gray')->placeholder('—')->toggleable(),
                 TextColumn::make('status')->label('Holat')->badge(),
                 TextColumn::make('created_at')->label('Ro\'yxatdan o\'tgan')->dateTime('d.m.Y')->sortable(),
                 TextColumn::make('last_seen_at')->label('Oxirgi faollik')->since()->placeholder('—')->toggleable(),

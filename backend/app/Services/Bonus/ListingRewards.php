@@ -21,7 +21,7 @@ class ListingRewards
             return;
         }
 
-        $this->listing($user, 'listing:nanny:'.$profile->id, "Anketa faollashtirildi");
+        $this->listing($user, 'listing:nanny:'.$profile->id, 'Anketa faollashtirildi');
     }
 
     public function vacancyPublished(Vacancy $vacancy): void

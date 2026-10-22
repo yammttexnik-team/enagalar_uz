@@ -13,7 +13,7 @@ class ExpireBonuses extends Command
 {
     public function handle(BonusService $bonuses): int
     {
-        $this->info($bonuses->expireAll()." ta expire yozuvi yozildi.");
+        $this->info($bonuses->expireAll().' ta expire yozuvi yozildi.');
 
         return self::SUCCESS;
     }

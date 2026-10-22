@@ -17,7 +17,7 @@ class CampaignSeeder extends Seeder
             'SURVEY_MOYA' => "So'rovnoma — Moya kanali",
             'SURVEY_SAMARKAND' => "So'rovnoma — Samarqand kanali",
             'SURVEY_ENAGA_ISH' => "So'rovnoma — Enaga ish kanali",
-            'REPOST_ENAGALAR' => "Repost — @enagalar kanali",
+            'REPOST_ENAGALAR' => 'Repost — @enagalar kanali',
             'REPOST_MOYA' => 'Repost — Moya kanali',
             'REPOST_SAMARKAND' => 'Repost — Samarqand kanali',
             'REPOST_ENAGA_ISH' => 'Repost — Enaga ish kanali',
