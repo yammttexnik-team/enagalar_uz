@@ -7,6 +7,7 @@ use App\Filament\Resources\Surveys\Pages\EditSurvey;
 use App\Filament\Resources\Surveys\Pages\ListSurveys;
 use App\Filament\Resources\Surveys\Pages\ViewSurvey;
 use App\Filament\Resources\Surveys\RelationManagers\ResponsesRelationManager;
+use App\Filament\Support\AdminOnly;
 use App\Models\Survey;
 use BackedEnum;
 use Filament\Actions\EditAction;
@@ -29,6 +30,8 @@ use UnitEnum;
 
 class SurveyResource extends Resource
 {
+    use AdminOnly;
+
     protected static ?string $model = Survey::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentList;

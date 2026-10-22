@@ -25,6 +25,7 @@ class ViewUser extends ViewRecord
                 ->icon('heroicon-o-gift')
                 ->color('warning')
                 ->modalHeading("Qo'lda bonus berish yoki ayirish")
+                ->authorize(fn () => (bool) auth()->user()?->isAdmin())
                 ->schema([
                     Select::make('direction')->label('Amal')->options(['add' => 'Bonus berish (+)', 'remove' => 'Bonusni ayirish (-)'])->default('add')->required(),
                     TextInput::make('amount')->label("Summa (so'm)")->numeric()->minValue(1)->maxValue(10_000_000)->required(),

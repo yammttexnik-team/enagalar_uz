@@ -51,7 +51,6 @@ class ViewReport extends ViewRecord
                 ->action(function (Report $record) {
                     $user = $record->reportedUser();
                     $user->update(['status' => UserStatus::Blocked]);
-                    $user->tokens()->delete();
                     $record->update(['status' => ReportStatus::Reviewed, 'handled_by' => auth()->id()]);
                     Log::notice('Moderator foydalanuvchini blokladi', ['user_id' => $user->id, 'report_id' => $record->id, 'moderator_id' => auth()->id()]);
                     Notification::make()->title('Foydalanuvchi bloklandi')->warning()->send();

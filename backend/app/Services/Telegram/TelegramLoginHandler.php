@@ -68,9 +68,14 @@ class TelegramLoginHandler
         // Telefon raqami bor foydalanuvchi qayta kontakt yubormaydi.
         $user = User::where('telegram_id', $from['id'])->whereNotNull('phone')->first();
 
+        if ($user?->isBlocked()) {
+            $this->bot->sendMessage($from['id'], $this->t('blocked', $lang), ['remove_keyboard' => true]);
+
+            return;
+        }
+
         if ($user) {
-            $request->approve($user);
-            $this->bot->sendMessage($from['id'], $this->t('approved', $lang), ['remove_keyboard' => true]);
+            $this->sendCode($from['id'], $request->approve($user), $lang);
 
             return;
         }
@@ -120,12 +125,17 @@ class TelegramLoginHandler
             return;
         }
 
-        $user = DB::transaction(function () use ($contact, $from, $lang, $request) {
-            $phone = '+'.preg_replace('/\D/', '', $contact['phone_number']);
+        $phone = '+'.preg_replace('/\D/', '', $contact['phone_number']);
+        $existing = User::where('telegram_id', $from['id'])->first() ?? User::where('phone', $phone)->first();
 
-            $user = User::where('telegram_id', $from['id'])->first()
-                ?? User::where('phone', $phone)->first()
-                ?? new User(['locale' => $lang]);
+        if ($existing?->isBlocked()) {
+            $this->bot->sendMessage($from['id'], $this->t('blocked', $lang), ['remove_keyboard' => true]);
+
+            return;
+        }
+
+        [$user, $code] = DB::transaction(function () use ($existing, $phone, $from, $lang, $request) {
+            $user = $existing ?? new User(['locale' => $lang]);
 
             $isNew = ! $user->exists;
 
@@ -142,12 +152,17 @@ class TelegramLoginHandler
             $user->save();
 
             Badge::where('slug', Badge::PHONE_VERIFIED)->first()?->grantTo($user);
-            $request->approve($user);
 
-            return $user;
+            return [$user, $request->approve($user)];
         });
 
-        $this->bot->sendMessage($from['id'], $this->t('approved', $user->locale), ['remove_keyboard' => true]);
+        $this->sendCode($from['id'], $code, $user->locale);
+    }
+
+    /** Kirish kodini yuboradi: foydalanuvchi uni saytga o'zi kiritadi, shuning uchun begona havola orqali kirib bo'lmaydi. */
+    private function sendCode(int $chatId, string $code, string $lang): void
+    {
+        $this->bot->sendMessage($chatId, sprintf($this->t('code', $lang), $code), ['remove_keyboard' => true]);
     }
 
     /** Yangi foydalanuvchini kampaniyaga va taklif qilgan odamga bog'laydi (faqat birinchi kirishda). */
@@ -190,9 +205,13 @@ class TelegramLoginHandler
                 'uz' => 'Iltimos, faqat o\'zingizning raqamingizni tugma orqali yuboring.',
                 'ru' => 'Пожалуйста, отправьте свой номер с помощью кнопки.',
             ],
-            'approved' => [
-                'uz' => '✅ Kirish tasdiqlandi! Saytga qaytishingiz mumkin.',
-                'ru' => '✅ Вход подтверждён! Можете вернуться на сайт.',
+            'code' => [
+                'uz' => "✅ Kirish kodi: <code>%s</code>\nBu kodni faqat <b>enagalar.uz</b> saytiga kiriting. Hech kimga bermang!\nAgar siz hozir saytga kirmayotgan bo'lsangiz, bu xabarni e'tiborsiz qoldiring.",
+                'ru' => "✅ Код для входа: <code>%s</code>\nВведите его только на сайте <b>enagalar.uz</b>. Никому не сообщайте!\nЕсли вы сейчас не входите на сайт, просто проигнорируйте это сообщение.",
+            ],
+            'blocked' => [
+                'uz' => 'Akkauntingiz bloklangan. Savollar bo\'lsa, qo\'llab-quvvatlash xizmatiga yozing.',
+                'ru' => 'Ваш аккаунт заблокирован. По вопросам обратитесь в поддержку.',
             ],
             'expired' => [
                 'uz' => 'Havola eskirgan. Saytda «Telegram orqali kirish» tugmasini qaytadan bosing.',

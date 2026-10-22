@@ -7,6 +7,7 @@ use App\Filament\Resources\Campaigns\Pages\EditCampaign;
 use App\Filament\Resources\Campaigns\Pages\ListCampaigns;
 use App\Filament\Resources\Campaigns\Schemas\CampaignForm;
 use App\Filament\Resources\Campaigns\Tables\CampaignsTable;
+use App\Filament\Support\AdminOnly;
 use App\Models\Campaign;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -17,6 +18,8 @@ use UnitEnum;
 
 class CampaignResource extends Resource
 {
+    use AdminOnly;
+
     protected static ?string $model = Campaign::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMegaphone;

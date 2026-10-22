@@ -40,9 +40,10 @@ Route::prefix('v1')->group(function () {
     Route::prefix('auth/telegram')->middleware('throttle:30,1')->group(function () {
         Route::post('/start', [TelegramAuthController::class, 'start']);
         Route::get('/status/{token}', [TelegramAuthController::class, 'status']);
+        Route::post('/status/{token}/confirm', [TelegramAuthController::class, 'confirm']);
     });
 
-    Route::middleware(['auth:sanctum', 'last_seen'])->group(function () {
+    Route::middleware(['auth:sanctum', 'not_blocked', 'last_seen'])->group(function () {
         Route::post('/auth/logout', [TelegramAuthController::class, 'logout']);
         Route::get('/me', [MeController::class, 'show']);
         Route::post('/me/roles', [MeController::class, 'addRole']);

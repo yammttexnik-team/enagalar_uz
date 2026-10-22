@@ -32,7 +32,7 @@ class TelegramAuthController extends Controller
     {
         $login = TelegramLoginRequest::where('token', $token)->first();
 
-        if (! $login || $login->status === LoginRequestStatus::Consumed || $login->isExpired()) {
+        if (! $login || $login->status === LoginRequestStatus::Consumed || $login->isExpired() || $login->attemptsExhausted()) {
             return response()->json(['status' => 'expired'], 410);
         }
 
@@ -40,8 +40,45 @@ class TelegramAuthController extends Controller
             return response()->json(['status' => 'pending']);
         }
 
-        $login->update(['status' => LoginRequestStatus::Consumed]);
+        // Token faqat bot yuborgan kod bilan beriladi (confirm), polling hech qachon token qaytarmaydi.
+        return response()->json(['status' => 'awaiting_code']);
+    }
+
+    /** Foydalanuvchi botdan olgan 6 xonali kodni kiritadi, to'g'ri bo'lsa Sanctum tokeni beriladi. */
+    public function confirm(Request $request, string $token): JsonResponse
+    {
+        $data = $request->validate(['code' => ['required', 'string', 'digits:6']]);
+        $login = TelegramLoginRequest::where('token', $token)->first();
+
+        if (! $login || $login->status === LoginRequestStatus::Consumed || $login->isExpired() || $login->attemptsExhausted()) {
+            return response()->json(['status' => 'expired'], 410);
+        }
+
+        if ($login->status === LoginRequestStatus::Pending) {
+            return response()->json(['status' => 'pending'], 409);
+        }
+
+        if (! $login->checkCode($data['code'])) {
+            if ($login->attemptsExhausted()) {
+                return response()->json(['status' => 'expired'], 410);
+            }
+
+            return response()->json([
+                'message' => __('Kod noto\'g\'ri.'),
+                'errors' => ['code' => [__('Kod noto\'g\'ri.')]],
+                'attempts_left' => TelegramLoginRequest::MAX_ATTEMPTS - $login->attempts,
+            ], 422);
+        }
+
         $user = $login->user;
+
+        if ($user->isBlocked()) {
+            return response()->json(['status' => 'blocked'], 403);
+        }
+
+        if (! $login->consume()) {
+            return response()->json(['status' => 'expired'], 410);
+        }
 
         return response()->json([
             'status' => 'approved',

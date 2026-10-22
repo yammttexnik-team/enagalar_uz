@@ -2,7 +2,13 @@
 const { t, tm, rt } = useI18n()
 const localePath = useLocalePath()
 const auth = useAuthStore()
-const { status, botUrl, start } = useTelegramLogin()
+const { status, botUrl, start, confirm, confirming, codeError, attemptsLeft } = useTelegramLogin()
+const pin = ref<string[]>([])
+const code = computed(() => pin.value.join(''))
+
+function submitCode() {
+  if (code.value.length === 6) confirm(code.value)
+}
 
 useSeoMeta({ title: () => t('auth.loginSeo'), robots: 'noindex' })
 
@@ -24,12 +30,37 @@ const waiting = computed(() => status.value === 'waiting')
           <UIcon name="i-lucide-send" class="size-7" aria-hidden="true" />
         </span>
 
-        <template v-if="!waiting">
+        <template v-if="status === 'code'">
+          <h1 class="h2-title mt-6 text-highlighted">{{ t('auth.codeTitle') }}</h1>
+          <p class="mt-3 text-muted">{{ t('auth.codeText') }}</p>
+          <form class="mt-7 flex flex-col items-center gap-4" @submit.prevent="submitCode">
+            <UPinInput
+              v-model="pin"
+              :length="6"
+              type="number"
+              otp
+              size="xl"
+              autofocus
+              :highlight="codeError"
+              color="error"
+              :aria-label="t('auth.codeLabel')"
+              @complete="submitCode"
+            />
+            <p v-if="codeError" class="text-sm text-pomegranate-700 dark:text-pomegranate-300" role="alert">
+              {{ attemptsLeft !== null ? t('auth.codeWrongLeft', { n: attemptsLeft }) : t('auth.codeWrong') }}
+            </p>
+            <UButton type="submit" class="justify-center" block size="xl" :loading="confirming" :disabled="code.length !== 6" :label="t('auth.codeSubmit')" />
+          </form>
+          <UButton class="mt-4" variant="link" icon="i-lucide-external-link" :to="botUrl" target="_blank" rel="noopener" :label="t('auth.openBot')" />
+        </template>
+
+        <template v-else-if="!waiting">
           <h1 class="h2-title mt-6 text-highlighted">{{ t('auth.loginTitle') }}</h1>
           <p class="mt-3 text-muted">{{ t('auth.loginText') }}</p>
 
           <p v-if="status === 'expired'" class="mt-5 rounded-xl bg-honey-50 px-4 py-3 text-sm text-honey-800 dark:bg-honey-950 dark:text-honey-200" role="alert">{{ t('auth.expired') }}</p>
-          <p v-if="status === 'error'" class="mt-5 rounded-xl bg-pomegranate-50 px-4 py-3 text-sm text-pomegranate-700 dark:bg-pomegranate-950 dark:text-pomegranate-300" role="alert">{{ t('auth.error') }}</p>
+          <p v-if="status === 'blocked'" class="mt-5 rounded-xl bg-pomegranate-50 px-4 py-3 text-sm text-pomegranate-700 dark:bg-pomegranate-950 dark:text-pomegranate-300" role="alert">{{ t('auth.blocked') }}</p>
+          <p v-if="status === 'error'"class="mt-5 rounded-xl bg-pomegranate-50 px-4 py-3 text-sm text-pomegranate-700 dark:bg-pomegranate-950 dark:text-pomegranate-300" role="alert">{{ t('auth.error') }}</p>
 
           <UButton
             class="mt-7 justify-center"

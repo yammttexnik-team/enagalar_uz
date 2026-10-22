@@ -161,6 +161,26 @@ class User extends Authenticatable implements FilamentUser
         return preg_match('/^[A-Z0-9]{8}$/', $code) ? $code : null;
     }
 
+    protected static function booted(): void
+    {
+        // Qayerdan bloklanmasin (admin panel, shikoyat), barcha API tokenlari darhol bekor qilinadi.
+        static::saved(function (User $user) {
+            if ($user->wasChanged('status') && $user->isBlocked()) {
+                $user->tokens()->delete();
+            }
+        });
+    }
+
+    public function isBlocked(): bool
+    {
+        return $this->status === UserStatus::Blocked;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasRole(Role::Admin->value);
+    }
+
     public function canAccessPanel(Panel $panel): bool
     {
         return $this->status === UserStatus::Active

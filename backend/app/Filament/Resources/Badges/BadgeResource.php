@@ -9,6 +9,7 @@ use App\Filament\Resources\Badges\Pages\ViewBadge;
 use App\Filament\Resources\Badges\Schemas\BadgeForm;
 use App\Filament\Resources\Badges\Schemas\BadgeInfolist;
 use App\Filament\Resources\Badges\Tables\BadgesTable;
+use App\Filament\Support\AdminOnly;
 use App\Models\Badge;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -19,6 +20,8 @@ use UnitEnum;
 
 class BadgeResource extends Resource
 {
+    use AdminOnly;
+
     protected static ?string $model = Badge::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCheckBadge;

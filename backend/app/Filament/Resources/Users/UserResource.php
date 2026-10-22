@@ -15,6 +15,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use UnitEnum;
 
@@ -59,6 +60,24 @@ class UserResource extends Resource
     public static function canCreate(): bool
     {
         return false;
+    }
+
+    // Moderator foydalanuvchilarni faqat ko'radi: rol, nishon va holatni admin o'zgartiradi
+    // (aks holda moderator o'ziga admin rolini yoki "Tasdiqlangan" nishonini berib qo'yishi mumkin edi).
+    // Shikoyat bo'yicha bloklash Reports sahifasidagi alohida amal orqali qoladi.
+    public static function canEdit(Model $record): bool
+    {
+        return (bool) auth()->user()?->isAdmin();
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return (bool) auth()->user()?->isAdmin();
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return (bool) auth()->user()?->isAdmin();
     }
 
     public static function getPages(): array

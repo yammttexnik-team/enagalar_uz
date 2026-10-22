@@ -4,6 +4,7 @@ namespace App\Filament\Resources\BonusTransactions;
 
 use App\Enums\BonusType;
 use App\Filament\Resources\BonusTransactions\Pages\ListBonusTransactions;
+use App\Filament\Support\AdminOnly;
 use App\Models\BonusTransaction;
 use App\Services\Bonus\BonusService;
 use BackedEnum;
@@ -20,6 +21,8 @@ use UnitEnum;
 /** Bonus daftari: faqat ko'rish; tuzatish "Qo'lda bonus" (foydalanuvchi sahifasi) va "Bekor qilish" orqali. */
 class BonusTransactionResource extends Resource
 {
+    use AdminOnly;
+
     protected static ?string $model = BonusTransaction::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedWallet;

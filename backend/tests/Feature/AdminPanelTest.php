@@ -6,6 +6,8 @@ use App\Enums\Role;
 use App\Enums\VerificationStatus;
 use App\Filament\Resources\Documents\Pages\ViewDocument;
 use App\Filament\Resources\IdentityVerifications\Pages\ViewIdentityVerification;
+use App\Filament\Resources\Users\Pages\EditUser;
+use App\Filament\Resources\Users\Pages\ViewUser;
 use App\Http\Controllers\Admin\ReviewFileController;
 use App\Models\Badge;
 use App\Models\Document;
@@ -15,6 +17,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
+use Spatie\Permission\Models\Role as SpatieRole;
 use Tests\TestCase;
 
 class AdminPanelTest extends TestCase
@@ -121,5 +124,51 @@ class AdminPanelTest extends TestCase
         $this->actingAs($this->admin)->get($url)->assertOk();
         $this->actingAs($this->admin)->get("/admin/review-file/identity/{$verification->id}")->assertForbidden();
         $this->actingAs(User::factory()->create())->get($url)->assertForbidden();
+    }
+
+    public function test_moderator_can_moderate_but_not_manage_users_or_marketing(): void
+    {
+        $moderator = User::factory()->create()->assignRole(Role::Moderator->value);
+        $verification = $this->verification();
+
+        $this->actingAs($moderator);
+
+        foreach (['/admin', '/admin/users', "/admin/users/{$moderator->id}", '/admin/identity-verifications',
+            "/admin/identity-verifications/{$verification->id}", '/admin/documents', '/admin/nanny-profiles', '/admin/vacancies'] as $url) {
+            $this->get($url)->assertOk();
+        }
+
+        foreach (["/admin/users/{$moderator->id}/edit", "/admin/users/{$this->admin->id}/edit", '/admin/badges', '/admin/badges/create',
+            '/admin/campaigns', '/admin/surveys', '/admin/bonus-transactions'] as $url) {
+            $this->get($url)->assertForbidden();
+        }
+    }
+
+    public function test_moderator_cannot_make_himself_admin_or_give_bonus(): void
+    {
+        $moderator = User::factory()->create()->assignRole(Role::Moderator->value);
+
+        $this->actingAs($moderator);
+
+        Livewire::test(EditUser::class, ['record' => $moderator->getRouteKey()])->assertForbidden();
+        Livewire::test(ViewUser::class, ['record' => $moderator->getRouteKey()])->assertActionHidden('manualBonus');
+
+        $this->assertFalse($moderator->fresh()->hasRole(Role::Admin->value));
+    }
+
+    public function test_admin_can_edit_roles_and_badges(): void
+    {
+        $user = User::factory()->create();
+        $verifiedBadge = Badge::where('slug', Badge::VERIFIED)->value('id');
+
+        $this->actingAs($this->admin);
+
+        Livewire::test(EditUser::class, ['record' => $user->getRouteKey()])
+            ->fillForm(['roles' => [SpatieRole::findByName(Role::Moderator->value)->id], 'badges' => [$verifiedBadge]])
+            ->call('save')
+            ->assertHasNoFormErrors();
+
+        $this->assertTrue($user->fresh()->hasRole(Role::Moderator->value));
+        $this->assertTrue($user->badges()->whereKey($verifiedBadge)->exists());
     }
 }

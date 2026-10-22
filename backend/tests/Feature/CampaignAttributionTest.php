@@ -49,7 +49,7 @@ class CampaignAttributionTest extends TestCase
         $this->webhook(['text' => "/start login_{$token}"], $tgId);
         $this->webhook(['contact' => ['phone_number' => $phone, 'first_name' => 'Dilnoza', 'user_id' => $tgId]], $tgId);
 
-        $this->getJson("/api/v1/auth/telegram/status/{$token}")->assertJsonPath('status', 'approved');
+        $this->getJson("/api/v1/auth/telegram/status/{$token}")->assertJsonPath('status', 'awaiting_code');
 
         return User::where('telegram_id', $tgId)->firstOrFail();
     }
