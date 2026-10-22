@@ -1,0 +1,172 @@
+# Production: enagalar.uz (bitta VPS).
+# Ishga tushirish (deploy/ papkasidan):
+#   docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
+name: enagalar
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-backend: &backend
+  build:
+    context: ../backend
+    dockerfile: ../deploy/backend.Dockerfile
+    additional_contexts:
+      deploy: .
+  image: enagalar/backend:latest
+  env_file: .env.production
+  restart: unless-stopped
+  init: true
+  logging: *logging
+  networks: [internal]
+  volumes:
+    - storage:/var/www/html/storage
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:?APP_DOMAIN kerak}
+      ACME_EMAIL: ${ACME_EMAIL:?ACME_EMAIL kerak}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - public:/var/www/html/public:ro
+      - storage:/srv/storage:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      app:
+        condition: service_healthy
+      nuxt:
+        condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:2019/config/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging: *logging
+    networks: [internal]
+
+  app:
+    <<: *backend
+    environment:
+      RUN_BOOTSTRAP: "true"
+    volumes:
+      - storage:/var/www/html/storage
+      - public:/var/www/html/public
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "SCRIPT_NAME=/up SCRIPT_FILENAME=/var/www/html/public/index.php REQUEST_METHOD=GET REQUEST_URI=/up cgi-fcgi -bind -connect 127.0.0.1:9000 | grep -q '200 OK'"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 180s
+
+  queue:
+    <<: *backend
+    command: ["php", "artisan", "queue:work", "redis", "--tries=3", "--max-time=3600", "--sleep=3"]
+    depends_on:
+      app:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f 'queue:work' > /dev/null || exit 1"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+
+  scheduler:
+    <<: *backend
+    command: ["php", "artisan", "schedule:work"]
+    depends_on:
+      app:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f 'schedule:work' > /dev/null || exit 1"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+
+  reverb:
+    <<: *backend
+    command: ["php", "artisan", "reverb:start", "--host=0.0.0.0", "--port=8080"]
+    depends_on:
+      app:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f 'reverb:start' > /dev/null || exit 1"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+
+  nuxt:
+    build:
+      context: ../frontend
+      dockerfile: ../deploy/frontend.Dockerfile
+    image: enagalar/frontend:latest
+    restart: unless-stopped
+    init: true
+    environment:
+      NUXT_PUBLIC_API_BASE: ${NUXT_PUBLIC_API_BASE:?NUXT_PUBLIC_API_BASE kerak}
+      NUXT_PUBLIC_SITE_URL: ${NUXT_PUBLIC_SITE_URL:?NUXT_PUBLIC_SITE_URL kerak}
+      NUXT_PUBLIC_REVERB_APP_KEY: ${REVERB_APP_KEY}
+      NUXT_PUBLIC_REVERB_HOST: ${NUXT_PUBLIC_REVERB_HOST:-}
+      NUXT_PUBLIC_REVERB_PORT: ${NUXT_PUBLIC_REVERB_PORT:-443}
+      NUXT_PUBLIC_REVERB_SCHEME: ${NUXT_PUBLIC_REVERB_SCHEME:-https}
+    logging: *logging
+    networks: [internal]
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:?DB_DATABASE kerak}
+      POSTGRES_USER: ${DB_USERNAME:?DB_USERNAME kerak}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD kerak}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    logging: *logging
+    networks: [internal]
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["sh", "-c", "exec redis-server --appendonly yes --requirepass \"$$REDIS_PASSWORD\""]
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?REDIS_PASSWORD kerak}
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$$REDIS_PASSWORD\" --no-auth-warning ping | grep -q PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    logging: *logging
+    networks: [internal]
+
+networks:
+  internal:
+
+volumes:
+  pgdata:
+  redisdata:
+  storage:   # storage/ (jumladan app/verification: pasport rasmlari, hech qachon veb orqali berilmaydi)
+  public:    # public/ nusxasi (app yozadi, Caddy o'qiydi)
+  caddy_data:
+  caddy_config:

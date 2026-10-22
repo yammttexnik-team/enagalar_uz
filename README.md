@@ -40,3 +40,8 @@ PostgreSQL bilan ishlash uchun: `docker compose up -d`, so'ng `backend/.env` da 
 cd backend && php artisan test && ./vendor/bin/pint --test
 cd frontend && pnpm build
 ```
+
+## Deploy
+
+- [Production'ga chiqarish qo'llanmasi](docs/DEPLOY.md) (Docker Compose, bitta VPS)
+- Fayllar: `deploy/` (Dockerfile'lar, `docker-compose.prod.yml`, `Caddyfile`, `.env.production.example`, `scripts/`)

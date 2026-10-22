@@ -1,0 +1,58 @@
+{
+	email {$ACME_EMAIL}
+}
+
+www.{$APP_DOMAIN} {
+	redir https://{$APP_DOMAIN}{uri} permanent
+}
+
+{$APP_DOMAIN} {
+	encode zstd gzip
+
+	request_body {
+		max_size 25MB
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "SAMEORIGIN"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(self), geolocation=()"
+		-Server
+	}
+
+	log {
+		output stderr
+		format console
+	}
+
+	# Yashirin fayllar
+	@dotfiles path */.*
+	respond @dotfiles 404
+
+	# Faqat public disk ochiq beriladi (storage/app/public). Pasport: storage/app/verification, bu yerga umuman ulanmagan.
+	handle_path /storage/* {
+		root * /srv/storage/app/public
+		header Cache-Control "public, max-age=2592000"
+		file_server
+	}
+
+	# Reverb websocket (mijoz: wss://domen/app/<key>)
+	handle /app/* {
+		reverse_proxy reverb:8080
+	}
+
+	# Laravel (php-fpm)
+	@laravel path /api/* /admin /admin/* /livewire /livewire/* /broadcasting/* /filament /filament/* /sanctum/* /up /js/filament/* /css/filament/* /fonts/filament/* /vendor/*
+	handle @laravel {
+		root * /var/www/html/public
+		php_fastcgi app:9000
+		file_server
+	}
+
+	# Qolgan hammasi: Nuxt SSR
+	handle {
+		reverse_proxy nuxt:3000
+	}
+}
