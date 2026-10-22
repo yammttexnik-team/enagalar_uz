@@ -17,7 +17,7 @@ export interface Region extends District {
 export interface Badge {
   slug: string
   name: LocalizedName
-  description: LocalizedName
+  description: { uz: string | null, ru: string | null }
   icon: string
   color: string
 }

@@ -1,5 +1,7 @@
 {
-  "brand": { "name": "enagalar.uz" },
+  "brand": {
+    "name": "enagalar.uz"
+  },
   "nav": {
     "nannies": "Enagalar",
     "vacancies": "Vakansiyalar",
@@ -98,10 +100,22 @@
       "title": "Toʻrt qadamda — Telegram orqali",
       "subtitle": "Parol va uzun anketalar yoʻq. Raqamingizni Telegram bot orqali yuborasiz, xolos.",
       "steps": [
-        { "title": "Telegram orqali kiring", "text": "Botga oʻting va raqamingizni yuboring. Parol eslab yurish shart emas." },
-        { "title": "E’lon yoki anketa joylang", "text": "Ota-ona nimaga ehtiyoj borligini yozadi, enaga oʻzi haqida gapirib beradi." },
-        { "title": "AI mos nomzodlarni tanlaydi", "text": "Yordamchi tajriba, hudud, til va jadvalga qarab eng mos 5 nomzodni koʻrsatadi." },
-        { "title": "Chatda gaplashing", "text": "Savol bering, sinov kunini kelishing. Tanishuvdan oldin pul oʻtkazmang." }
+        {
+          "title": "Telegram orqali kiring",
+          "text": "Botga oʻting va raqamingizni yuboring. Parol eslab yurish shart emas."
+        },
+        {
+          "title": "E’lon yoki anketa joylang",
+          "text": "Ota-ona nimaga ehtiyoj borligini yozadi, enaga oʻzi haqida gapirib beradi."
+        },
+        {
+          "title": "AI mos nomzodlarni tanlaydi",
+          "text": "Yordamchi tajriba, hudud, til va jadvalga qarab eng mos 5 nomzodni koʻrsatadi."
+        },
+        {
+          "title": "Chatda gaplashing",
+          "text": "Savol bering, sinov kunini kelishing. Tanishuvdan oldin pul oʻtkazmang."
+        }
       ]
     },
     "trust": {
@@ -121,16 +135,32 @@
         "title": "Maʼlumotlar yashirin",
         "text": "Pasport maʼlumotlari shifrlangan holda saqlanadi va profilda hech kimga koʻrinmaydi — faqat nishon."
       },
-      "tip": "Ehtiyot boʻling: tanishuvdan oldin pul oʻtkazmang va pasport rasmini yubormang."
+      "tip": "Ehtiyot boʻling: tanishuvdan oldin pul oʻtkazmang va pasport rasmini yubormang.",
+      "badgeText": {
+        "phone-verified": "Raqam Telegram bot orqali tasdiqlangan.",
+        "verified": "Pasport maʼlumotlari moderator tomonidan tekshirilgan.",
+        "medical-certificate": "Tibbiy maʼlumotnoma yuklangan va tekshirilgan.",
+        "dispensary-clear": "Narkologik va psixonevrologik dispanserda hisobda turmaydi.",
+        "certificate": "Pedagog, hamshira yoki birinchi yordam sertifikati bor."
+      }
     },
     "ai": {
       "eyebrow": "AI yordamchi",
       "title": "Yozish, qidirish va tarjima — yordamchi bajaradi",
       "subtitle": "Sizdan faqat oddiy gap kerak. Qolganini AI yordamchi qiladi.",
       "items": [
-        { "title": "Mos nomzodlarni topadi", "text": "“Chilonzorda 3 yoshli bolaga, rus tilida” deb yozing — yordamchi eng mos 5 ta nomzodni “nega mos” izohi bilan koʻrsatadi." },
-        { "title": "Anketa va e’lon yozadi", "text": "Bir necha soʻz aytasiz — tayyor, tartibli matn olasiz. Oʻzbekcha va ruscha." },
-        { "title": "Chatda tarjima qiladi", "text": "Oʻzbekcha va ruscha yozishuv oʻzaro tushunarli boʻladi: lotin, kirill va rus tilida." }
+        {
+          "title": "Mos nomzodlarni topadi",
+          "text": "“Chilonzorda 3 yoshli bolaga, rus tilida” deb yozing — yordamchi eng mos 5 ta nomzodni “nega mos” izohi bilan koʻrsatadi."
+        },
+        {
+          "title": "Anketa va e’lon yozadi",
+          "text": "Bir necha soʻz aytasiz — tayyor, tartibli matn olasiz. Oʻzbekcha va ruscha."
+        },
+        {
+          "title": "Chatda tarjima qiladi",
+          "text": "Oʻzbekcha va ruscha yozishuv oʻzaro tushunarli boʻladi: lotin, kirill va rus tilida."
+        }
       ],
       "cta": "AI bilan yozish",
       "promptLabel": "Siz yozasiz",
@@ -147,12 +177,30 @@
       "eyebrow": "Savollar",
       "title": "Koʻp beriladigan savollar",
       "items": [
-        { "label": "Xizmat pullikmi?", "content": "Yoʻq. Dastlabki oylarda roʻyxatdan oʻtish, e’lon joylash, anketa yaratish va chat — hammasi bepul. Yashirin toʻlov yoʻq." },
-        { "label": "Roʻyxatdan qanday oʻtaman?", "content": "Telegram bot orqali. “Kirish” tugmasini bosing, botga oʻting va raqamingizni yuboring — parol kerak emas." },
-        { "label": "“Tasdiqlangan” nishoni nima?", "content": "Foydalanuvchi pasport maʼlumotlarini kiritadi, moderator tekshiradi. Pasport rasmi tekshiruvdan keyin oʻchiriladi, profilda faqat nishon koʻrinadi." },
-        { "label": "Enaganing telefon raqamini koʻraman?", "content": "Dastlab yozishuv platformaning ichki chatida boʻladi. Tanishuvdan oldin pul oʻtkazmang va pasport rasmini yubormang." },
-        { "label": "Enaga boʻlsam, nima qilishim kerak?", "content": "Telegram orqali kiring, “Men enagaman” ni tanlang va anketa yarating. AI yordamchi matnni yozishda yordam beradi." },
-        { "label": "Ruscha ishlaydimi?", "content": "Ha. Sayt va chat oʻzbekcha va ruscha ishlaydi, AI yordamchi xabarlarni tarjima qiladi." }
+        {
+          "label": "Xizmat pullikmi?",
+          "content": "Yoʻq. Dastlabki oylarda roʻyxatdan oʻtish, e’lon joylash, anketa yaratish va chat — hammasi bepul. Yashirin toʻlov yoʻq."
+        },
+        {
+          "label": "Roʻyxatdan qanday oʻtaman?",
+          "content": "Telegram bot orqali. “Kirish” tugmasini bosing, botga oʻting va raqamingizni yuboring — parol kerak emas."
+        },
+        {
+          "label": "“Tasdiqlangan” nishoni nima?",
+          "content": "Foydalanuvchi pasport maʼlumotlarini kiritadi, moderator tekshiradi. Pasport rasmi tekshiruvdan keyin oʻchiriladi, profilda faqat nishon koʻrinadi."
+        },
+        {
+          "label": "Enaganing telefon raqamini koʻraman?",
+          "content": "Dastlab yozishuv platformaning ichki chatida boʻladi. Tanishuvdan oldin pul oʻtkazmang va pasport rasmini yubormang."
+        },
+        {
+          "label": "Enaga boʻlsam, nima qilishim kerak?",
+          "content": "Telegram orqali kiring, “Men enagaman” ni tanlang va anketa yarating. AI yordamchi matnni yozishda yordam beradi."
+        },
+        {
+          "label": "Ruscha ishlaydimi?",
+          "content": "Ha. Sayt va chat oʻzbekcha va ruscha ishlaydi, AI yordamchi xabarlarni tarjima qiladi."
+        }
       ]
     },
     "cta": {
@@ -176,7 +224,11 @@
     "retry": "Qayta urinish",
     "error": "Nimadir xato ketdi. Bir daqiqadan keyin qayta urinib koʻring.",
     "note": "Davom etib, siz foydalanish shartlariga rozilik bildirasiz.",
-    "points": ["Bepul", "Parolsiz", "Xavfsiz"],
+    "points": [
+      "Bepul",
+      "Parolsiz",
+      "Xavfsiz"
+    ],
     "startSeo": "Boshlash — enagalar.uz",
     "startTitle": "Siz kimsiz?",
     "startText": "Rolni hozir tanlang. Keyinroq ikkinchisini ham qoʻshish mumkin.",
@@ -195,6 +247,9 @@
     "noBadges": "Hozircha nishon yoʻq. Tasdiqlanish uchun tez orada hujjat yuklash mumkin boʻladi.",
     "notSet": "Koʻrsatilmagan",
     "soon": "Ish stoli tez orada: e’lonlar, anketa, chatlar shu yerda boʻladi.",
-    "role": { "parent": "Ota-ona", "nanny": "Enaga" }
+    "role": {
+      "parent": "Ota-ona",
+      "nanny": "Enaga"
+    }
   }
 }

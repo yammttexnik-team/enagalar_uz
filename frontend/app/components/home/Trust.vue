@@ -2,7 +2,7 @@
 import type { Badge } from '~/composables/useApi'
 
 defineProps<{ badges: Badge[] }>()
-const { t } = useI18n()
+const { t, te } = useI18n()
 const localizedName = useLocalizedName()
 
 const tones: Record<string, string> = {
@@ -12,6 +12,8 @@ const tones: Record<string, string> = {
   warning: 'bg-honey-50 text-honey-800 border-honey-200 dark:bg-honey-950 dark:text-honey-300 dark:border-honey-800',
   neutral: 'bg-sand-100 text-sand-700 border-sand-200 dark:bg-sand-800 dark:text-sand-200 dark:border-sand-700',
 }
+const description = (b: Badge) =>
+  (b.description ? localizedName(b.description as never) : '') || (te(`home.trust.badgeText.${b.slug}`) ? t(`home.trust.badgeText.${b.slug}`) : '')
 const tone = (c: string) => tones[c] ?? tones.neutral
 
 const facts = computed(() => [
@@ -53,7 +55,7 @@ const facts = computed(() => [
               </span>
               <div class="min-w-0">
                 <p class="font-semibold leading-snug text-highlighted">{{ localizedName(b.name) }}</p>
-                <p class="mt-1 text-sm leading-snug text-muted">{{ localizedName(b.description) }}</p>
+                <p v-if="description(b)" class="mt-1 text-sm leading-snug text-muted">{{ description(b) }}</p>
               </div>
             </li>
           </ul>

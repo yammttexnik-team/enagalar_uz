@@ -48,4 +48,4 @@ h1, h2, h3, .font-display {
 .float-slow { animation: float-y 7s ease-in-out infinite; }
 
 /* Mulish'dagi ʻ (U+02BB) yon boʻshliqlarini kamaytirish */
-.apos { margin-inline: -0.09em -0.02em; }
+.apos { margin-inline: -0.08em -0.17em; }
