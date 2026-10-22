@@ -204,12 +204,12 @@ const rangeScale = computed(() => {
       <!-- Muvaffaqiyat / allaqachon toʻldirilgan -->
       <div v-else-if="result || alreadyDone" class="surface p-6 text-center sm:p-10" data-testid="survey-success">
         <span class="mx-auto grid size-16 place-items-center rounded-full bg-leaf-500 text-white"><UIcon name="i-lucide-party-popper" class="size-8" aria-hidden="true" /></span>
-        <h1 class="h2-title mt-6 text-highlighted">{{ t('survey.success.title') }}</h1>
+        <h1 class="h2-title mt-6 text-highlighted"><AppText :text="t('survey.success.title')" /></h1>
         <template v-if="result">
           <p class="mt-3 text-muted">{{ t('survey.success.text') }}</p>
           <div v-if="result.bonus_awarded" class="mx-auto mt-6 max-w-xs rounded-2xl bg-apricot-50 px-5 py-4 dark:bg-apricot-950/40">
             <p class="eyebrow text-apricot-700 dark:text-apricot-300">{{ t('survey.success.earned') }}</p>
-            <p class="font-display text-4xl font-black tabular-nums text-highlighted" data-testid="survey-bonus">+{{ money(result.bonus_awarded) }} <span class="text-lg">{{ t('bonus.som') }}</span></p>
+            <p class="font-display text-4xl font-black tabular-nums text-highlighted" data-testid="survey-bonus">+{{ money(result.bonus_awarded) }} <span class="text-lg"><AppText :text="t('bonus.som')" /></span></p>
             <p class="mt-1 text-sm text-muted">{{ t('survey.success.balance', { n: money(result.balance) }) }}</p>
           </div>
           <p v-else class="mx-auto mt-6 max-w-md rounded-xl bg-honey-50 px-4 py-3 text-sm text-honey-800 dark:bg-honey-950 dark:text-honey-200">{{ t('survey.success.flagged') }}</p>
@@ -225,7 +225,7 @@ const rangeScale = computed(() => {
         <!-- Kirish va rozilik -->
         <template v-if="step === -1">
           <p class="eyebrow text-apricot-700 dark:text-apricot-300">{{ t('survey.bonus', { n: money(survey.bonus) }) }}</p>
-          <h1 class="h2-title mt-2 text-highlighted">{{ survey.title }}</h1>
+          <h1 class="h2-title mt-2 text-highlighted"><AppText :text="survey.title" /></h1>
           <p class="mt-3 text-sm text-muted">{{ t('survey.intro.time') }} · {{ t('survey.intro.draft') }}</p>
           <p v-if="survey.intro" class="mt-4 rounded-xl bg-elevated px-4 py-3 text-sm text-default">{{ survey.intro }}</p>
           <UCheckbox v-model="consent" class="mt-5" :label="t('survey.intro.consent')" @update:model-value="delete errors._consent" />
@@ -245,7 +245,7 @@ const rangeScale = computed(() => {
 
           <fieldset :key="current.id" class="min-w-0">
             <legend class="font-display text-xl font-extrabold leading-snug text-highlighted">
-              {{ current.text }}
+              <AppText :text="current.text" />
               <span v-if="!current.required" class="ml-1 text-sm font-medium text-muted">({{ t('survey.optional') }})</span>
             </legend>
             <p v-if="current.type === 'multi' && current.max_select" class="mt-1 text-sm text-muted">{{ t('survey.maxHint', { n: current.max_select }) }}</p>

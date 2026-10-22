@@ -71,33 +71,33 @@ async function copy() {
       <section class="surface mb-6 flex flex-col gap-2 bg-apricot-50! p-6 dark:bg-apricot-950/40! sm:p-8" :aria-label="t('bonus.balance')">
         <p class="eyebrow text-apricot-700 dark:text-apricot-300">{{ t('bonus.balance') }}</p>
         <p class="font-display text-4xl font-black tabular-nums text-highlighted sm:text-5xl" data-testid="bonus-balance">
-          {{ money(wallet.balance) }} <span class="text-xl font-extrabold text-muted">{{ t('bonus.som') }}</span>
+          {{ money(wallet.balance) }} <span class="text-xl font-extrabold text-muted"><AppText :text="t('bonus.som')" /></span>
         </p>
         <p class="text-sm text-muted">{{ t('bonus.note') }} {{ t('bonus.expiryNote') }}</p>
       </section>
 
       <!-- Qanday olish -->
-      <h2 class="mb-3 font-display text-lg font-extrabold text-highlighted">{{ t('bonus.earnTitle') }}</h2>
+      <h2 class="mb-3 font-display text-lg font-extrabold text-highlighted"><AppText :text="t('bonus.earnTitle')" /></h2>
       <section class="mb-8 grid gap-4 lg:grid-cols-3">
         <article class="surface flex flex-col gap-3 p-5">
           <span class="grid size-11 place-items-center rounded-2xl bg-brand-100 text-brand-700 dark:bg-brand-900 dark:text-brand-200"><UIcon name="i-lucide-clipboard-list" class="size-5" aria-hidden="true" /></span>
-          <h3 class="font-display text-base font-extrabold text-highlighted">{{ t('bonus.earn.survey.title') }}</h3>
+          <h3 class="font-display text-base font-extrabold text-highlighted"><AppText :text="t('bonus.earn.survey.title')" /></h3>
           <p class="text-sm text-muted">{{ t('bonus.earn.survey.text') }}</p>
-          <p v-if="mySurvey" class="text-sm font-bold text-apricot-700 dark:text-apricot-300">{{ t('survey.bonus', { n: money(mySurvey.bonus) }) }}</p>
+          <p v-if="mySurvey && !mySurvey.completed" class="text-sm font-bold text-apricot-700 dark:text-apricot-300">{{ t('survey.bonus', { n: money(mySurvey.bonus) }) }}</p>
           <UButton v-if="mySurvey && !mySurvey.completed" class="mt-auto justify-center" icon="i-lucide-arrow-right" :label="t('bonus.earn.survey.cta')" :to="localePath(`/sorovnoma/${mySurvey.slug}`)" />
           <UBadge v-else-if="mySurvey" class="mt-auto w-fit" color="success" variant="subtle" icon="i-lucide-check" :label="t('bonus.earn.survey.done')" />
         </article>
 
         <article class="surface flex flex-col gap-3 p-5">
           <span class="grid size-11 place-items-center rounded-2xl bg-apricot-100 text-apricot-700 dark:bg-apricot-900 dark:text-apricot-200"><UIcon name="i-lucide-megaphone" class="size-5" aria-hidden="true" /></span>
-          <h3 class="font-display text-base font-extrabold text-highlighted">{{ isNanny || !isParent ? t('bonus.earn.listing.titleNanny') : t('bonus.earn.listing.titleParent') }}</h3>
+          <h3 class="font-display text-base font-extrabold text-highlighted"><AppText :text="isNanny || !isParent ? t('bonus.earn.listing.titleNanny') : t('bonus.earn.listing.titleParent')" /></h3>
           <p class="text-sm text-muted">{{ t('bonus.earn.listing.text') }}</p>
           <UButton class="mt-auto justify-center" color="neutral" variant="outline" icon="i-lucide-arrow-right" :label="isNanny || !isParent ? t('bonus.earn.listing.ctaNanny') : t('bonus.earn.listing.ctaParent')" :to="listingTo" />
         </article>
 
         <article class="surface flex flex-col gap-3 p-5">
           <span class="grid size-11 place-items-center rounded-2xl bg-leaf-100 text-leaf-700 dark:bg-leaf-900 dark:text-leaf-200"><UIcon name="i-lucide-users" class="size-5" aria-hidden="true" /></span>
-          <h3 class="font-display text-base font-extrabold text-highlighted">{{ t('bonus.earn.referral.title') }}</h3>
+          <h3 class="font-display text-base font-extrabold text-highlighted"><AppText :text="t('bonus.earn.referral.title')" /></h3>
           <p class="text-sm text-muted">{{ t('bonus.earn.referral.text') }}</p>
           <div class="mt-auto">
             <label for="ref-link" class="eyebrow text-muted">{{ t('bonus.share.link') }}</label>

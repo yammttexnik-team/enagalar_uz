@@ -111,7 +111,7 @@ async function addMissing() {
     <section class="surface mb-6 flex flex-col gap-4 bg-apricot-50! p-5 dark:bg-apricot-950/40! sm:flex-row sm:items-center sm:p-6" :aria-label="t('bonus.overview.title')">
       <span class="grid size-14 shrink-0 place-items-center rounded-2xl bg-white/70 text-apricot-700 dark:bg-white/10 dark:text-apricot-200"><UIcon name="i-lucide-gift" class="size-7" aria-hidden="true" /></span>
       <div class="min-w-0 flex-1">
-        <h2 class="font-display text-lg font-extrabold text-highlighted">{{ t('bonus.overview.title') }}: <span class="tabular-nums">{{ money(balance ?? 0) }} {{ t('bonus.som') }}</span></h2>
+        <h2 class="font-display text-lg font-extrabold text-highlighted"><AppText :text="t('bonus.overview.title')" />: <span class="tabular-nums">{{ money(balance ?? 0) }} <AppText :text="t('bonus.som')" /></span></h2>
         <p v-if="todoSurvey" class="mt-1 text-muted">{{ t('bonus.overview.survey', { n: money(todoSurvey.bonus) }) }}</p>
         <p v-else class="mt-1 text-muted">{{ t('bonus.note') }}</p>
       </div>
