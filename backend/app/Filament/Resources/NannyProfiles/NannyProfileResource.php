@@ -24,6 +24,8 @@ class NannyProfileResource extends Resource
 
     protected static ?string $modelLabel = 'enaga anketasi';
 
+    protected static bool $hasTitleCaseModelLabel = false;
+
     protected static ?string $pluralModelLabel = 'Enaga anketalari';
 
     protected static ?int $navigationSort = 2;

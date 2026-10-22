@@ -28,6 +28,8 @@ class UserResource extends Resource
 
     protected static ?string $modelLabel = 'foydalanuvchi';
 
+    protected static bool $hasTitleCaseModelLabel = false;
+
     protected static ?string $pluralModelLabel = 'Foydalanuvchilar';
 
     protected static ?int $navigationSort = 1;

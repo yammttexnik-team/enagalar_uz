@@ -25,6 +25,8 @@ class IdentityVerificationResource extends Resource
 
     protected static ?string $modelLabel = 'pasport tekshiruvi';
 
+    protected static bool $hasTitleCaseModelLabel = false;
+
     protected static ?string $pluralModelLabel = 'Pasport tekshiruvi';
 
     protected static ?int $navigationSort = 1;

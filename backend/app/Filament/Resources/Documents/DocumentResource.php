@@ -25,6 +25,8 @@ class DocumentResource extends Resource
 
     protected static ?string $modelLabel = 'hujjat';
 
+    protected static bool $hasTitleCaseModelLabel = false;
+
     protected static ?string $pluralModelLabel = 'Hujjatlar (nishon uchun)';
 
     protected static ?int $navigationSort = 2;

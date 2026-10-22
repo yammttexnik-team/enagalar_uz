@@ -27,6 +27,8 @@ class BadgeResource extends Resource
 
     protected static ?string $modelLabel = 'nishon';
 
+    protected static bool $hasTitleCaseModelLabel = false;
+
     protected static ?string $pluralModelLabel = 'Nishonlar';
 
     public static function form(Schema $schema): Schema

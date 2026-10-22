@@ -26,6 +26,8 @@ class VacancyResource extends Resource
 
     protected static ?string $modelLabel = 'vakansiya';
 
+    protected static bool $hasTitleCaseModelLabel = false;
+
     protected static ?string $pluralModelLabel = 'Vakansiyalar';
 
     protected static ?int $navigationSort = 3;
