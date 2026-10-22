@@ -44,7 +44,7 @@ function search() {
 
         <h1 class="display-title mt-5 text-highlighted">
           {{ t('home.hero.title1') }}
-          <span class="text-primary">{{ t('home.hero.title2') }}</span>
+          <span class="block text-primary">{{ t('home.hero.title2') }}</span>
         </h1>
         <p class="mt-5 max-w-xl text-lg leading-relaxed text-muted sm:text-xl">
           {{ t('home.hero.subtitle') }}
@@ -62,7 +62,7 @@ function search() {
               @click="mode = tab.value"
             >
               <UIcon :name="tab.icon" class="size-4.5 shrink-0" aria-hidden="true" />
-              <span>{{ tab.label }}</span>
+              <span class="whitespace-nowrap">{{ tab.label }}</span>
             </button>
           </div>
 
