@@ -15,6 +15,8 @@ if [ "${RUN_BOOTSTRAP:-false}" = "true" ]; then
 
   echo "[entrypoint] migratsiya"
   php artisan migrate --force --no-interaction
+  # Seeder'lar idempotent (updateOrCreate/firstOrCreate): ma'lumotnomalar, kampaniyalar, so'rovnomalar
+  php artisan db:seed --force --no-interaction
 
   echo "[entrypoint] keshlar"
   php artisan config:cache
