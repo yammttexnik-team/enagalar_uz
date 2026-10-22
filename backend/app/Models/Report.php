@@ -25,8 +25,25 @@ class Report extends Model
         return $this->belongsTo(User::class, 'reporter_id');
     }
 
+    public function handler(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'handled_by');
+    }
+
     public function reportable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /** Shikoyat qilingan suhbat (agar shikoyat suhbat haqida bo'lsa). */
+    public function conversation(): ?Conversation
+    {
+        return $this->reportable instanceof Conversation ? $this->reportable : null;
+    }
+
+    /** Shikoyat qilingan foydalanuvchi: suhbatdagi shikoyatchidan boshqa ishtirokchi. */
+    public function reportedUser(): ?User
+    {
+        return $this->conversation()?->participants()->where('users.id', '!=', $this->reporter_id)->first();
     }
 }

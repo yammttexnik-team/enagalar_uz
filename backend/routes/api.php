@@ -3,9 +3,12 @@
 use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\Auth\TelegramAuthController;
 use App\Http\Controllers\Api\BadgeController;
+use App\Http\Controllers\Api\ChatFileController;
+use App\Http\Controllers\Api\ConversationController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\MatchController;
 use App\Http\Controllers\Api\MeController;
+use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\MyNannyProfileController;
 use App\Http\Controllers\Api\MyVacancyController;
 use App\Http\Controllers\Api\MyVerificationController;
@@ -26,6 +29,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/nannies/{id}', [NannyController::class, 'show'])->whereNumber('id');
     Route::get('/vacancies', [VacancyController::class, 'index']);
     Route::get('/vacancies/{id}', [VacancyController::class, 'show'])->whereNumber('id');
+
+    // Chat fayli: faqat imzolangan havola (<img>/<audio> uchun sarlavhasiz)
+    Route::get('/chat-files/{message}', ChatFileController::class)->middleware('signed')->name('chat-files')->whereNumber('message');
 
     Route::post('/telegram/webhook', TelegramWebhookController::class);
 
@@ -67,6 +73,23 @@ Route::prefix('v1')->group(function () {
             Route::post('/vacancies/{id}/apply', [ApplicationController::class, 'apply'])->whereNumber('id');
             Route::get('/my/applications', [ApplicationController::class, 'mine']);
         });
+
+        // Chat
+        Route::get('/chat/unread', [ConversationController::class, 'unread']);
+        Route::get('/conversations', [ConversationController::class, 'index']);
+        Route::post('/conversations', [ConversationController::class, 'store']);
+        Route::prefix('/conversations/{conversation}')->whereNumber('conversation')->group(function () {
+            Route::get('/', [ConversationController::class, 'show']);
+            Route::get('/messages', [MessageController::class, 'index']);
+            Route::post('/messages', [MessageController::class, 'store'])->middleware('throttle:30,1');
+            Route::post('/read', [ConversationController::class, 'read']);
+            Route::post('/mute', [ConversationController::class, 'mute']);
+            Route::post('/block', [ConversationController::class, 'block']);
+            Route::delete('/block', [ConversationController::class, 'unblock']);
+            Route::post('/report', [ConversationController::class, 'report']);
+        });
+        Route::patch('/messages/{message}', [MessageController::class, 'update'])->whereNumber('message');
+        Route::delete('/messages/{message}', [MessageController::class, 'destroy'])->whereNumber('message');
 
         Route::get('/favorites', [FavoriteController::class, 'index']);
         Route::post('/favorites', [FavoriteController::class, 'store']);
