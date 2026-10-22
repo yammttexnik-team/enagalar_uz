@@ -1,18 +1,52 @@
 # enagalar.uz — loyiha holati va keyingi ishlar
 
 > Oxirgi yangilanish: 2026-10-22, kechqurun.
-> Branch: `ccr-93c85ef7-iqkyo9` (GitHub'dagi yagona branch, `main` hali yo'q).
+> Branch: `main` (push → CI → avtomatik deploy).
 > Yangi sessiyada avval shu faylni va `CLAUDE.md` ni o'qing.
 
 ---
 
+## 0. 2026-10-22 kechki yangilanish
+
+- **Sayt ochildi:** `https://161-97-88-95.sslip.io` (Nginx sayt fayli `enagalar-161-97-88-95.sslip.io`, certbot SSL). Admin: `admin@enagalar.uz`, parol serverda `/root/enagalar-admin.txt`.
+- **Xavfsizlik tuzatishlari:**
+  - Telegram login endi bot yuborgan 6 xonali kod bilan tasdiqlanadi.
+  - Bloklangan foydalanuvchi API'ga kira olmaydi, uning tokenlari o'chiriladi.
+  - Moderator rollar, nishonlar va bonuslarni o'zgartira olmaydi.
+- **Bonus:**
+  - So'rovnoma faqat o'z auditoriyasi uchun.
+  - Referal bonusi e'lon bonusi bilan birga bekor qilinadi.
+  - Limitlar qator qulfi (row lock) bilan himoyalangan.
+  - Pasport tasdig'i uchun 15 000, hujjat uchun 5 000 bonus beriladi.
+- **API:**
+  - Rate limitlar qo'yildi.
+  - Ko'rishlar soni bir foydalanuvchidan 6 soatda 1 marta sanaladi.
+  - Ikki foydalanuvchi o'rtasida takroriy suhbat ochilmaydi (`pair_key`).
+  - Yangi endpoint: `GET /my/vacancies/{id}`.
+  - Enaga anketasi tahrirlangach qayta moderatsiyaga tushadi.
+  - Otklik holatlari qat'iy tartibda o'zgaradi.
+  - `verification:prune` 30 kundan keyin pasport raqami va PINFL'ni o'chiradi.
+- **AI:** "Matnni joylash" funksiyasi (`POST /ai/parse-listing`) anketa va vakansiya formalarida ishlaydi.
+- **Frontend:**
+  - Logout'da oldingi foydalanuvchi ma'lumotlari tozalanadi.
+  - `lang` va hreflang to'g'ri qo'yiladi.
+  - Mavjud bo'lmagan profil va e'lon 404 qaytaradi, 500 emas.
+- **Deploy/CI:**
+  - Fork PR'lardan deploy bo'lmaydi.
+  - Workflow'larda `permissions` cheklangan, tashqi action'lar SHA bilan qotirilgan.
+  - Ixtiyoriy `SERVER_HOST_KEY` secret'i qo'shildi.
+  - Oldingi image `:prev` sifatida saqlanadi (rollback uchun).
+  - Seeder'lar admin o'zgarishlarini qayta yozib yubormaydi.
+- **Qolgan ishlar:**
+  - `enagalar.uz` domeni hali NXDOMAIN. Faollashgach **Set domain** va **Nginx site** workflow'larini ishga tushirish kerak.
+  - Presence kanali hali umumiy.
+  - Sharh/reyting API'si yo'q.
+
 ## 1. Qisqa xulosa
 
-- **Kod deyarli tayyor, server ishlamoqda, lekin sayt hali tashqariga ochilmagan.**
+- **Server ishlamoqda va sayt ochiq** (0-bo'limga qarang).
 - Barcha Docker konteynerlari serverda sog'lom: app, queue, scheduler, reverb, nuxt, postgres, redis va caddy.
-- Ochish uchun 2 qadam qoldi:
-  1. Nginx'ga sayt faylini qo'shish (**Nginx site** workflow).
-  2. Domen (`enagalar.uz`) faollashishi kerak, bu 2026-10-23 da kutilmoqda. Ungacha vaqtinchalik `161-97-88-95.sslip.io` ishlatiladi.
+- Domen (`enagalar.uz`) faollashishi 2026-10-23 da kutilmoqda. Ungacha vaqtinchalik `161-97-88-95.sslip.io` ishlatiladi.
 - Ertaga (2026-10-23) marketing kampaniyasi boshlanishi rejalashtirilgan: `docs/MARKETING_REJA.md` A qismi.
 
 ---

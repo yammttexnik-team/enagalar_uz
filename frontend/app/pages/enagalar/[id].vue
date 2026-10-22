@@ -21,6 +21,7 @@ const config = useRuntimeConfig()
 const { price, plural, enumLabel, relativeTime } = useFormat()
 
 const loadFailed = ref(false)
+const notFound = ref(false)
 const { data: nanny, refresh } = await useAsyncData(`nanny-${route.params.id}`, async () => {
   try {
     loadFailed.value = false
@@ -29,11 +30,13 @@ const { data: nanny, refresh } = await useAsyncData(`nanny-${route.params.id}`, 
   catch (e: unknown) {
     const status = (e as { statusCode?: number }).statusCode
     // Faqat 404 — xato sahifa; boshqa xatolar (tarmoq, 5xx) qayta urinish bilan koʻrsatiladi
-    if (status === 404) throw createError({ statusCode: 404, statusMessage: t('nanny.detail.notFound'), fatal: true })
-    loadFailed.value = true
+    if (status === 404) notFound.value = true
+    else loadFailed.value = true
     return null
   }
 })
+// useAsyncData ichidagi xato sahifaga chiqmaydi, shuning uchun 404 ni shu yerda tashlaymiz
+if (notFound.value) throw createError({ statusCode: 404, statusMessage: t('nanny.detail.notFound'), fatal: true })
 
 const retry = () => refresh()
 const n = computed(() => nanny.value!)

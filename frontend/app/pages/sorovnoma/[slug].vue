@@ -155,6 +155,8 @@ async function submit() {
       if (isEmpty(v)) continue
       body[q.id] = q.type === 'number' ? Number(v) : q.type === 'text' ? String(v).trim() : v!
     }
+    // So'rovnoma faqat o'z auditoriyasi uchun: roli yo'q foydalanuvchiga mos rolni beramiz
+    if (survey.value && auth.user && auth.user.roles.length === 0) await auth.addRole(survey.value.audience)
     const res = await api<{ data: { status: string, bonus_awarded: number, balance: number } }>(`/surveys/${slug}/responses`, { method: 'POST', body: { answers: body } })
     result.value = res.data
     balance.value = res.data.balance
@@ -176,7 +178,7 @@ async function submit() {
         step.value = idx
       }
     }
-    toast.add({ title: p.status === 422 && p.message && !firstField ? p.message : p.status === undefined ? t('dashboard.common.offline') : t('survey.error'), color: 'error', icon: 'i-lucide-circle-alert' })
+    toast.add({ title: ((p.status === 422 && !firstField) || p.status === 403) && p.message ? p.message : p.status === undefined ? t('dashboard.common.offline') : t('survey.error'), color: 'error', icon: 'i-lucide-circle-alert' })
   }
   finally {
     submitting.value = false

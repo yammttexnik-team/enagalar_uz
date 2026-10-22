@@ -28,7 +28,7 @@ Serverni qo'lda sozlash shart emas: GitHub serverga SSH orqali o'zi ulanadi.
 
 **4. Nginx site:** **Actions → Nginx site → Run workflow** (`domain` kiriting). Mavjud Nginx'ga faqat `/etc/nginx/sites-available/enagalar-<domen>` faylini qo'shadi, `nginx -t` o'tsa reload qiladi, so'ng `certbot --nginx` bilan HTTPS oladi. `nginx -t` xato bersa, faqat o'zimizning fayl olib tashlanadi. Root paroli (`SERVER_ROOT_PASSWORD`) **har ishga tushganda** ishlatiladi.
 
-**5. Keyingi yangilanishlar:** **Actions → Deploy → Run workflow**. Avtomatik deploy `main` branch'dagi push'dan keyingi CI muvaffaqiyatidan so'ng ishlaydi, lekin faqat shu repo'dagi `push` hodisasi uchun (fork va pull request'dan emas). **Hozircha `main` branch yo'q** (yagona branch: `ccr-93c85ef7-iqkyo9`), shuning uchun avtomatik deploy ishlamaydi, faqat qo'lda. `main` yaratilgach o'zi yoqiladi.
+**5. Keyingi yangilanishlar:** **Actions → Deploy → Run workflow**. Avtomatik deploy `main` branch'dagi push'dan keyingi CI muvaffaqiyatidan so'ng ishlaydi, lekin faqat shu repo'dagi `push` hodisasi uchun (fork va pull request'dan emas). `main` branch 2026-10-22 dan beri bor, avtomatik deploy yoqilgan.
 
 ### Boshqa workflow'lar
 
