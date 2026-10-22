@@ -27,10 +27,12 @@ Route::prefix('v1')->group(function () {
     Route::get('/skills', [SkillController::class, 'index']);
 
     // Ochiq qidiruv (ikki tomonlama): enagalar va e'lonlar
-    Route::get('/nannies', [NannyController::class, 'index']);
-    Route::get('/nannies/{id}', [NannyController::class, 'show'])->whereNumber('id');
-    Route::get('/vacancies', [VacancyController::class, 'index']);
-    Route::get('/vacancies/{id}', [VacancyController::class, 'show'])->whereNumber('id');
+    Route::middleware('throttle:public-read')->group(function () {
+        Route::get('/nannies', [NannyController::class, 'index']);
+        Route::get('/nannies/{id}', [NannyController::class, 'show'])->whereNumber('id');
+        Route::get('/vacancies', [VacancyController::class, 'index']);
+        Route::get('/vacancies/{id}', [VacancyController::class, 'show'])->whereNumber('id');
+    });
 
     // Chat fayli: faqat imzolangan havola (<img>/<audio> uchun sarlavhasiz)
     Route::get('/chat-files/{message}', ChatFileController::class)->middleware('signed')->name('chat-files')->whereNumber('message');
@@ -61,13 +63,14 @@ Route::prefix('v1')->group(function () {
         // Ota-ona: e'lonlar va kelgan arizalar
         Route::middleware('has_role:parent')->group(function () {
             Route::get('/my/vacancies', [MyVacancyController::class, 'index']);
+            Route::get('/my/vacancies/{vacancy}', [MyVacancyController::class, 'show'])->whereNumber('vacancy');
             Route::post('/my/vacancies', [MyVacancyController::class, 'store']);
             Route::put('/my/vacancies/{vacancy}', [MyVacancyController::class, 'update']);
             Route::delete('/my/vacancies/{vacancy}', [MyVacancyController::class, 'destroy']);
             Route::post('/my/vacancies/{vacancy}/close', [MyVacancyController::class, 'close']);
             Route::get('/my/vacancies/{vacancy}/applications', [ApplicationController::class, 'forVacancy']);
             Route::get('/my/vacancies/{vacancy}/matches', [MatchController::class, 'forVacancy']);
-            Route::patch('/applications/{application}', [ApplicationController::class, 'updateStatus']);
+            Route::patch('/applications/{application}', [ApplicationController::class, 'updateStatus'])->middleware('throttle:applications');
         });
 
         // Enaga: anketa va arizalar
@@ -77,29 +80,29 @@ Route::prefix('v1')->group(function () {
             Route::post('/my/nanny-profile/submit', [MyNannyProfileController::class, 'submit']);
             Route::patch('/my/nanny-profile/availability', [MyNannyProfileController::class, 'availability']);
             Route::get('/my/nanny-profile/matches', [MatchController::class, 'forNanny']);
-            Route::post('/vacancies/{id}/apply', [ApplicationController::class, 'apply'])->whereNumber('id');
+            Route::post('/vacancies/{id}/apply', [ApplicationController::class, 'apply'])->whereNumber('id')->middleware('throttle:applications');
             Route::get('/my/applications', [ApplicationController::class, 'mine']);
         });
 
         // Chat
         Route::get('/chat/unread', [ConversationController::class, 'unread']);
         Route::get('/conversations', [ConversationController::class, 'index']);
-        Route::post('/conversations', [ConversationController::class, 'store']);
+        Route::post('/conversations', [ConversationController::class, 'store'])->middleware('throttle:conversation-start');
         Route::prefix('/conversations/{conversation}')->whereNumber('conversation')->group(function () {
             Route::get('/', [ConversationController::class, 'show']);
             Route::get('/messages', [MessageController::class, 'index']);
             Route::post('/messages', [MessageController::class, 'store'])->middleware('throttle:30,1');
             Route::post('/read', [ConversationController::class, 'read']);
             Route::post('/mute', [ConversationController::class, 'mute']);
-            Route::post('/block', [ConversationController::class, 'block']);
-            Route::delete('/block', [ConversationController::class, 'unblock']);
-            Route::post('/report', [ConversationController::class, 'report']);
+            Route::post('/block', [ConversationController::class, 'block'])->middleware('throttle:conversation-block');
+            Route::delete('/block', [ConversationController::class, 'unblock'])->middleware('throttle:conversation-block');
+            Route::post('/report', [ConversationController::class, 'report'])->middleware('throttle:conversation-report');
         });
         Route::patch('/messages/{message}', [MessageController::class, 'update'])->whereNumber('message');
         Route::delete('/messages/{message}', [MessageController::class, 'destroy'])->whereNumber('message');
 
         Route::get('/favorites', [FavoriteController::class, 'index']);
-        Route::post('/favorites', [FavoriteController::class, 'store']);
-        Route::delete('/favorites', [FavoriteController::class, 'destroy']);
+        Route::post('/favorites', [FavoriteController::class, 'store'])->middleware('throttle:favorites');
+        Route::delete('/favorites', [FavoriteController::class, 'destroy'])->middleware('throttle:favorites');
     });
 });

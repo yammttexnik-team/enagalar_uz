@@ -32,6 +32,14 @@ class MyVacancyController extends Controller
         return OwnVacancyResource::collection($vacancies);
     }
 
+    /** Bitta o'z e'lonim (ro'yxatdagi bilan bir xil shakl). */
+    public function show(Vacancy $vacancy): OwnVacancyResource
+    {
+        $this->authorize('update', $vacancy);
+
+        return new OwnVacancyResource($vacancy->load(['region', 'district'])->loadCount('applications'));
+    }
+
     public function store(VacancyRequest $request): JsonResponse
     {
         $profile = $this->profile($request);

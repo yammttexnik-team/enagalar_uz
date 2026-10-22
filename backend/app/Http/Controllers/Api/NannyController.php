@@ -3,15 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enums\PriceUnit;
+use App\Http\Controllers\Concerns\CountsViews;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\SearchNanniesRequest;
 use App\Http\Resources\NannyProfileResource;
 use App\Models\NannyProfile;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class NannyController extends Controller
 {
+    use CountsViews;
+
     /** Faol anketalar bo'yicha qidiruv. Viloyat/tuman — slug orqali. */
     public function index(SearchNanniesRequest $request): AnonymousResourceCollection
     {
@@ -44,10 +48,10 @@ class NannyController extends Controller
         return NannyProfileResource::collection($query->orderByDesc('id')->paginate(20)->withQueryString());
     }
 
-    public function show(int $id): NannyProfileResource
+    public function show(Request $request, int $id): NannyProfileResource
     {
         $profile = NannyProfile::active()->withPublic()->findOrFail($id);
-        $profile->increment('views_count');
+        $this->countView($request, $profile, $profile->user_id);
 
         return new NannyProfileResource($profile);
     }
