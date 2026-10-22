@@ -134,6 +134,64 @@ class ListingReferralBonusTest extends TestCase
         $this->assertSame(30000 + 15000 + 30000, $nanny->bonusBalance());
     }
 
+    public function test_quick_vacancy_delete_also_revokes_referral_bonuses_on_both_sides(): void
+    {
+        $referrer = User::factory()->create();
+        $parent = $this->parentUser();
+        $parent->update(['referred_by_id' => $referrer->id]);
+
+        $vacancy = Vacancy::factory()->create(['parent_profile_id' => $parent->parentProfile->id]);
+        $vacancy->publish();
+        $this->assertSame(15000, $referrer->bonusBalance());
+        $this->assertSame(30000 + 15000, $parent->bonusBalance());
+
+        $vacancy->delete();
+
+        $this->assertSame(0, $referrer->bonusBalance());
+        $this->assertSame(0, $parent->bonusBalance());
+        $this->assertSame(3, BonusTransaction::where('type', BonusType::Revoke)->count());
+
+        // Qayta e'lon joylasa ham bonus qaytadan berilmaydi (reference band).
+        Vacancy::factory()->create(['parent_profile_id' => $parent->parentProfile->id])->publish();
+        $this->assertSame(0, $referrer->bonusBalance());
+        $this->assertSame(0, $parent->bonusBalance());
+    }
+
+    public function test_referral_kept_when_user_still_has_active_nanny_profile(): void
+    {
+        $referrer = User::factory()->create();
+        $nanny = $this->nannyUser();
+        $nanny->update(['referred_by_id' => $referrer->id]);
+        $this->activate($nanny);
+
+        $nanny->parentProfile()->create();
+        $vacancy = Vacancy::factory()->create(['parent_profile_id' => $nanny->parentProfile->id]);
+        $vacancy->publish();
+        $vacancy->delete();
+
+        // Faqat vakansiya listing bonusi bekor; anketa va referal qoladi.
+        $this->assertSame(15000, $referrer->bonusBalance());
+        $this->assertSame(30000 + 15000, $nanny->bonusBalance());
+    }
+
+    public function test_revoked_referrals_do_not_use_up_referrer_max(): void
+    {
+        config(['bonus.referral_max_rewards' => 1]);
+        $referrer = User::factory()->create();
+
+        $parent = $this->parentUser();
+        $parent->update(['referred_by_id' => $referrer->id]);
+        $vacancy = Vacancy::factory()->create(['parent_profile_id' => $parent->parentProfile->id]);
+        $vacancy->publish();
+        $vacancy->delete();
+
+        $nanny = $this->nannyUser();
+        $nanny->update(['referred_by_id' => $referrer->id]);
+        $this->activate($nanny);
+
+        $this->assertSame(15000, $referrer->bonusBalance());
+    }
+
     public function test_referral_amount_comes_from_referrer_campaign_and_is_capped(): void
     {
         $campaign = Campaign::create(['code' => 'REF', 'name' => 'Ref', 'referral_bonus' => 25000]);

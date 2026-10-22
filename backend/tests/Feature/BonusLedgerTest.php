@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\Bonus\BonusService;
 use App\Services\Bonus\InsufficientBonus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class BonusLedgerTest extends TestCase
@@ -120,6 +121,58 @@ class BonusLedgerTest extends TestCase
         $this->assertSame(0, $user->bonusBalance());
         $this->assertSame(-50000, BonusTransaction::where('type', 'revoke')->sum('amount'));
         $this->assertSame(2, BonusTransaction::count());
+    }
+
+    public function test_revoke_is_applied_to_its_own_earning_not_earliest_expiring(): void
+    {
+        $user = User::factory()->create();
+        $this->bonuses->award($user, BonusType::Survey, 50000, 'survey:1');
+        $this->travel(1)->months();
+        $listing = $this->bonuses->award($user, BonusType::Listing, 30000, 'listing:1');
+
+        // Kechroq tugaydigan listing bekor qilinadi; so'rovnoma bonusi to'liq qolishi kerak.
+        $this->bonuses->revoke($listing);
+        $this->assertSame(50000, $user->bonusBalance());
+
+        $remainders = $this->bonuses->remainders($user);
+        $this->assertSame(0, $remainders[$listing->id]);
+
+        // So'rovnoma bonusi muddati o'tdi: to'liq 50 000 kuyadi, balans 0 (avval 30 000 noto'g'ri qolardi).
+        $this->travel(9)->months();
+        $this->assertSame(0, $user->bonusBalance());
+        $this->bonuses->expireFor($user);
+        $this->assertSame(-50000, (int) BonusTransaction::where('type', 'expire')->sum('amount'));
+        $this->assertSame(0, $user->bonusBalance());
+    }
+
+    public function test_revoked_earning_does_not_count_toward_lifetime_cap(): void
+    {
+        config(['bonus.lifetime_cap' => 80000]);
+        $user = User::factory()->create();
+
+        $this->bonuses->award($user, BonusType::Survey, 50000, 'survey:1');
+        $listing = $this->bonuses->award($user, BonusType::Listing, 30000, 'listing:1');
+        $this->assertNull($this->bonuses->award($user, BonusType::Referral, 15000, 'referral:1'));
+
+        $this->bonuses->revoke($listing);
+
+        $this->assertSame(15000, $this->bonuses->award($user, BonusType::Referral, 15000, 'referral:1')->amount);
+        $this->assertSame(65000, $user->bonusBalance());
+    }
+
+    public function test_spend_and_award_run_under_user_row_lock(): void
+    {
+        $user = User::factory()->create();
+        DB::enableQueryLog();
+
+        $this->bonuses->award($user, BonusType::Survey, 30000, 'survey:1');
+        $this->bonuses->spend($user, 10000, 'top:1', 'TOP');
+
+        // Har ikki amal users qatorini qulflashdan boshlanadi (sqlite'da "for update" tushirib qoldiriladi,
+        // shuning uchun bu yerda faqat so'rov borligini tekshiramiz).
+        $locks = collect(DB::getQueryLog())->filter(fn ($q) => str_contains($q['query'], 'from "users"') && $q['bindings'] === [$user->id]);
+        $this->assertGreaterThanOrEqual(2, $locks->count());
+        $this->assertSame(20000, $user->bonusBalance());
     }
 
     public function test_manual_adjustment_and_lifetime_cap(): void

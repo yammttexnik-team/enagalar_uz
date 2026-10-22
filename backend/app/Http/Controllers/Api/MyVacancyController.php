@@ -12,6 +12,7 @@ use App\Models\Vacancy;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 /** Ota-onaning o'z e'lonlari (routes: has_role:parent). */
@@ -35,9 +36,12 @@ class MyVacancyController extends Controller
     public function store(VacancyRequest $request): JsonResponse
     {
         $profile = $this->profile($request);
-        $this->ensureLimit($profile);
 
-        $vacancy = $profile->vacancies()->create($request->validated() + ['status' => VacancyStatus::Pending]);
+        $vacancy = DB::transaction(function () use ($profile, $request) {
+            $this->ensureLimit($profile);
+
+            return $profile->vacancies()->create($request->validated() + ['status' => VacancyStatus::Pending]);
+        });
 
         return (new OwnVacancyResource($vacancy->load(['region', 'district'])))->response()->setStatusCode(201);
     }
@@ -48,15 +52,17 @@ class MyVacancyController extends Controller
 
         $data = $request->validated();
 
-        if ($vacancy->status === VacancyStatus::Active && $vacancy->fill($data)->isDirty(self::MODERATED_FIELDS)) {
-            $vacancy->status = VacancyStatus::Pending;
-        } elseif (in_array($vacancy->status, [VacancyStatus::Draft, VacancyStatus::Rejected], true)) {
-            // Rad etilgan e'lonni tahrirlab qayta yuborish — yana moderatsiyaga.
-            $this->ensureLimit($vacancy->parentProfile);
-            $vacancy->status = VacancyStatus::Pending;
-        }
+        DB::transaction(function () use ($vacancy, $data) {
+            if ($vacancy->status === VacancyStatus::Active && $vacancy->fill($data)->isDirty(self::MODERATED_FIELDS)) {
+                $vacancy->status = VacancyStatus::Pending;
+            } elseif (in_array($vacancy->status, [VacancyStatus::Draft, VacancyStatus::Rejected], true)) {
+                // Rad etilgan e'lonni tahrirlab qayta yuborish — yana moderatsiyaga.
+                $this->ensureLimit($vacancy->parentProfile);
+                $vacancy->status = VacancyStatus::Pending;
+            }
 
-        $vacancy->fill($data)->save();
+            $vacancy->fill($data)->save();
+        });
 
         return new OwnVacancyResource($vacancy->load(['region', 'district']));
     }
@@ -83,8 +89,11 @@ class MyVacancyController extends Controller
         return $request->user()->parentProfile()->firstOrCreate();
     }
 
+    /** Tranzaksiya ichida chaqiriladi: profil qatori qulflanadi, parallel so'rovlar limitdan oshmaydi. */
     private function ensureLimit(ParentProfile $profile): void
     {
+        ParentProfile::whereKey($profile->id)->lockForUpdate()->value('id');
+
         $open = $profile->vacancies()->whereIn('status', [VacancyStatus::Active, VacancyStatus::Pending])->count();
 
         if ($open >= self::MAX_OPEN) {

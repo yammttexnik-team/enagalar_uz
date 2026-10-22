@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Marketing kampaniyasi. Bonus miqdorlari: null = standart (config/bonus.php), 0 = bonus yo'q.
@@ -60,10 +61,22 @@ class Campaign extends Model
             && (! $this->ends_at || $this->ends_at->isFuture());
     }
 
-    /** Yangi ishtirokchi qo'shish mumkinmi (max_participants). */
+    /**
+     * Yangi ishtirokchi qo'shish mumkinmi (max_participants).
+     * Tranzaksiya ichida chaqirilsa kampaniya qatori FOR UPDATE bilan qulflanadi: foydalanuvchini
+     * saqlash shu tranzaksiyada bo'lsa, parallel kirishlar limitdan oshirib yubormaydi.
+     */
     public function hasRoom(): bool
     {
-        return $this->max_participants === null || $this->users()->count() < $this->max_participants;
+        if ($this->max_participants === null) {
+            return true;
+        }
+
+        if (DB::transactionLevel() > 0) {
+            static::query()->whereKey($this->id)->lockForUpdate()->value('id');
+        }
+
+        return $this->users()->count() < $this->max_participants;
     }
 
     public function scopeRunning(Builder $query): void

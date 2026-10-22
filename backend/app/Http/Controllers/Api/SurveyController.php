@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Models\Survey;
 use App\Services\Survey\SurveyService;
@@ -69,6 +70,13 @@ class SurveyController extends Controller
     {
         $survey = Survey::where('slug', $slug)->where('is_active', true)->firstOrFail();
         $user = $request->user();
+
+        // So'rovnoma faqat o'z auditoriyasi uchun (enaga / ota-ona roli kerak).
+        if (! $user->hasRole($survey->audience)) {
+            return response()->json(['message' => $survey->audience === Role::Nanny->value
+                ? "Bu so'rovnoma faqat enagalar uchun."
+                : "Bu so'rovnoma faqat ota-onalar uchun."], 403);
+        }
 
         if ($survey->responses()->where('user_id', $user->id)->exists()) {
             return response()->json(['message' => "Siz bu so'rovnomani allaqachon to'ldirgansiz."], 409);
