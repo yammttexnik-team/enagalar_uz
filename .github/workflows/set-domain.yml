@@ -1,0 +1,66 @@
+name: Set domain
+
+# Sayt domenini almashtiradi (masalan, asosiy domen faollashguncha vaqtinchalik
+# 161-97-88-95.sslip.io, keyin enagalar.uz). .env.production dagi eski domen
+# hamma joyda yangisiga almashtiriladi, so'ng qayta deploy qilinadi.
+on:
+  workflow_dispatch:
+    inputs:
+      domain:
+        description: "Yangi domen (masalan: enagalar.uz yoki 161-97-88-95.sslip.io)"
+        required: true
+        type: string
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  set-domain:
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 30
+    env:
+      HOST: ${{ secrets.SERVER_HOST }}
+      NEW_DOMAIN: ${{ inputs.domain }}
+    steps:
+      - name: Domenni tekshirish
+        run: |
+          echo "$NEW_DOMAIN" | grep -Eq '^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$' \
+            || { echo "Noto'g'ri domen: $NEW_DOMAIN"; exit 1; }
+
+      - name: SSH sozlash
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "$HOST" > ~/.ssh/known_hosts
+
+      - name: .env.production'da domenni almashtirish va deploy
+        run: |
+          ssh -i ~/.ssh/deploy_key -o ServerAliveInterval=30 "deploy@$HOST" "NEW_DOMAIN='$NEW_DOMAIN' bash -s" <<'SH'
+          set -euo pipefail
+          cd ~/enagalar_uz/deploy
+          OLD=$(grep -E '^APP_DOMAIN=' .env.production | cut -d= -f2)
+          if [ "$OLD" = "$NEW_DOMAIN" ]; then echo "Domen allaqachon $NEW_DOMAIN"; else
+            cp .env.production ".env.production.bak.$(date +%s)"
+            OLD_RE=$(printf '%s' "$OLD" | sed 's/[.]/\\./g')
+            sed -i "s/${OLD_RE}/${NEW_DOMAIN}/g" .env.production
+            echo "Domen: $OLD -> $NEW_DOMAIN"
+          fi
+          cd ~/enagalar_uz && ./deploy/scripts/deploy.sh --no-pull
+          SH
+
+      - name: Tekshirish
+        run: |
+          for i in $(seq 1 18); do
+            if curl -fsS -o /dev/null "https://$NEW_DOMAIN/up"; then echo "OK: https://$NEW_DOMAIN"; exit 0; fi
+            sleep 10
+          done
+          echo "https://$NEW_DOMAIN javob bermadi (DNS yoki sertifikat)"; exit 1
+
+      - name: Kalitni o'chirish
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
