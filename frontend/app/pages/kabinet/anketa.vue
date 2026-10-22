@@ -136,6 +136,27 @@ async function goto(n: number) {
   if (n === step.value + 1) return next()
 }
 
+// "Matnni joylash (AI)": kelgan maydonlar formaga qo'shiladi, saqlash — foydalanuvchida (har qadamda).
+async function applyAi(f: Record<string, any>) {
+  if (typeof f.region_id === 'number') form.region_id = f.region_id
+  // Viloyat o'zgarganda tuman tozalanadi (watch) — tumanni undan keyin qo'yamiz.
+  await nextTick()
+  if (typeof f.district_id === 'number') form.district_id = f.district_id
+  if (typeof f.birth_year === 'number') form.birth_year = String(f.birth_year)
+  if (typeof f.experience_years === 'number') form.experience_years = f.experience_years
+  for (const k of ['work_formats', 'age_groups', 'languages', 'skills'] as const) {
+    if (Array.isArray(f[k]) && f[k].length) form[k] = [...f[k]]
+  }
+  if (typeof f.live_in === 'boolean') form.live_in = f.live_in
+  if (typeof f.free_trial_day === 'boolean') form.free_trial_day = f.free_trial_day
+  if (typeof f.price_amount === 'number') form.price_amount = String(f.price_amount)
+  if (typeof f.price_unit === 'string') form.price_unit = f.price_unit
+  if (typeof f.bio === 'string') form.bio = f.bio
+  step.value = 1
+  errors.value = {}
+  top()
+}
+
 // --- Ko'rib chiqish ---
 const REQUIRED = [
   { key: 'region_id', step: 1, ok: () => !!form.region_id },
@@ -245,6 +266,10 @@ const summaryPlace = computed(() => {
             </button>
           </li>
         </ol>
+
+        <div class="mb-4 flex justify-end">
+          <DashboardAiPaste type="nanny" @parsed="applyAi" />
+        </div>
 
         <form class="surface space-y-6 p-5 sm:p-8" novalidate @submit.prevent="next">
           <!-- 1 -->

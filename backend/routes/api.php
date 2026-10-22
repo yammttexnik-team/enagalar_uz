@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AiListingController;
 use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\Auth\TelegramAuthController;
 use App\Http\Controllers\Api\BadgeController;
@@ -84,6 +85,9 @@ Route::prefix('v1')->group(function () {
             Route::post('/vacancies/{id}/apply', [ApplicationController::class, 'apply'])->whereNumber('id')->middleware('throttle:applications');
             Route::get('/my/applications', [ApplicationController::class, 'mine']);
         });
+
+        // AI: e'lon matnidan anketa/vakansiya maydonlarini to'ldirish (saqlamaydi; rol controllerda tekshiriladi)
+        Route::post('/ai/parse-listing', [AiListingController::class, 'parse'])->middleware('throttle:10,1');
 
         // Chat
         Route::get('/chat/unread', [ConversationController::class, 'unread']);

@@ -42,6 +42,8 @@ return [
         'enabled' => (bool) env('AI_MATCHING_ENABLED', true),
         // Bitta foydalanuvchi uchun kuniga AI so'rovlar soni (undan keyin qoidalar bilan hisoblanadi).
         'daily_limit' => (int) env('AI_DAILY_LIMIT', 30),
+        // "Matnni joylash": e'lon matnidan forma to'ldirish, kuniga bitta foydalanuvchi uchun.
+        'parse_daily_limit' => (int) env('AI_PARSE_DAILY_LIMIT', 10),
     ],
 
     'slack' => [
