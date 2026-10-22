@@ -11,6 +11,8 @@
 - `backend/`: Laravel 13 API (`/api/v1`). Admin panel keyinchalik Filament bilan qilinadi.
 - `frontend/`: Nuxt 4, Nuxt UI, @nuxtjs/i18n (uz — asosiy, ru).
 - Jamoa: 1 dasturchi va Claude. Oddiy, tayyor yechimlarni afzal ko'r.
+- **Tokenlarni tejash:** oddiy va o'rtacha ishlarni (CRUD, API, testlar, tarjima, qidiruv) subagentlarga `model: sonnet` yoki `haiku` bilan ber, natijani asosiy sessiya tekshiradi (testlar, diff ko'rib chiqish). Qiyin arxitektura va dizayn qarorlarini asosiy model qiladi.
+- **Ikki tomonlama e'lonlar:** ota-ona vakansiya joylaydi ("menga shunday enaga kerak"), enaga anketa joylaydi. Ikkala tomon bir-birini qidiradi, AI matching ikkala yo'nalishda ishlaydi.
 
 ## Qoidalar
 
