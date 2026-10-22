@@ -7,6 +7,7 @@ export function useFavorites() {
   const { t } = useI18n()
   const localePath = useLocalePath()
   const toast = useToast()
+  const route = useRoute()
 
   const keys = useState<string[]>('favorites', () => [])
   const loaded = useState('favorites-loaded', () => false)
@@ -28,7 +29,7 @@ export function useFavorites() {
 
   async function toggle(type: FavType, id: number) {
     if (!auth.isLoggedIn) {
-      await navigateTo(localePath('/kirish'))
+      await navigateTo(localePath({ path: '/kirish', query: { redirect: route.fullPath } }))
       return
     }
     const was = has(type, id)

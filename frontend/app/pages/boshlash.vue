@@ -19,7 +19,7 @@ async function choose(role: 'parent' | 'nanny') {
   failed.value = false
   try {
     await auth.addRole(role)
-    await navigateTo(localePath('/'))
+    await navigateTo(safeRedirect(useRoute().query.redirect) ?? localePath('/kabinet'))
   }
   catch {
     failed.value = true

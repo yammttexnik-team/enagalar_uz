@@ -71,6 +71,7 @@ function changePage(p: number) {
       :text="t('vacancy.empty.text')"
       :clear="t('vacancy.empty.clear')"
       :post="t('vacancy.empty.post')"
+      post-to="/kabinet/anketa"
       @clear="reset"
     />
     <template v-else>

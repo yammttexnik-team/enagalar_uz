@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { t, tm, rt } = useI18n()
 const localePath = useLocalePath()
+const authLink = useAuthLink()
 
 const cards = computed(() => [
   {
@@ -8,7 +9,7 @@ const cards = computed(() => [
     key: 'parents',
     icon: 'i-lucide-house-heart',
     tone: 'brand',
-    cta: { color: 'primary' as const, icon: 'i-lucide-megaphone', to: '/kirish' },
+    cta: { color: 'primary' as const, icon: 'i-lucide-megaphone', to: '/kabinet/vakansiyalar/yangi' },
     secondary: '/enagalar',
   },
   {
@@ -16,7 +17,7 @@ const cards = computed(() => [
     key: 'nannies',
     icon: 'i-lucide-heart-handshake',
     tone: 'apricot',
-    cta: { color: 'secondary' as const, icon: 'i-lucide-file-pen-line', to: '/kirish' },
+    cta: { color: 'secondary' as const, icon: 'i-lucide-file-pen-line', to: '/kabinet/anketa' },
     secondary: '/vakansiyalar',
   },
 ])
@@ -63,7 +64,7 @@ const points = (key: string) => (tm(`home.audiences.${key}.points`) as unknown[]
           </ul>
 
           <div class="mt-8 flex flex-col gap-3 pt-2 sm:flex-row sm:flex-wrap">
-            <UButton size="xl" :color="c.cta.color" :icon="c.cta.icon" :to="localePath(c.cta.to)" :label="t(`home.audiences.${c.key}.cta`)" class="justify-center" />
+            <UButton size="xl" :color="c.cta.color" :icon="c.cta.icon" :to="authLink(c.cta.to)" :label="t(`home.audiences.${c.key}.cta`)" class="justify-center" />
             <UButton size="xl" color="neutral" variant="outline" :to="localePath(c.secondary)" :label="t(`home.audiences.${c.key}.ctaSecondary`)" class="justify-center" />
           </div>
         </article>

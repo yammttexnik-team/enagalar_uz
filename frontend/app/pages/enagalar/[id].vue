@@ -45,7 +45,7 @@ const badgeText = (b: NannyDetail['badges'][number]) =>
   (b.description ? localizedName(b.description as never) : '') || (te(`home.trust.badgeText.${b.slug}`) ? t(`home.trust.badgeText.${b.slug}`) : '')
 
 function write() {
-  if (!auth.isLoggedIn) return navigateTo(localePath('/kirish'))
+  if (!auth.isLoggedIn) return navigateTo(localePath({ path: '/kirish', query: { redirect: route.fullPath } }))
   toast.add({ title: t('nanny.detail.chatSoon'), icon: 'i-lucide-message-circle', color: 'info' })
 }
 function report() {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-defineProps<{ title: string, text: string, clear: string, post: string, icon?: string }>()
+defineProps<{ title: string, text: string, clear: string, post: string, postTo: string, icon?: string }>()
 defineEmits<{ clear: [] }>()
-const localePath = useLocalePath()
+const authLink = useAuthLink()
 </script>
 
 <template>
@@ -13,7 +13,7 @@ const localePath = useLocalePath()
     <p class="mt-2 max-w-md text-muted">{{ text }}</p>
     <div class="mt-7 flex flex-col gap-3 sm:flex-row">
       <UButton size="lg" color="neutral" variant="outline" icon="i-lucide-rotate-ccw" class="justify-center" :label="clear" @click="$emit('clear')" />
-      <UButton size="lg" icon="i-lucide-megaphone" class="justify-center" :to="localePath('/kirish')" :label="post" />
+      <UButton size="lg" icon="i-lucide-megaphone" class="justify-center" :to="authLink(postTo)" :label="post" />
     </div>
   </div>
 </template>

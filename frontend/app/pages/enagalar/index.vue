@@ -72,6 +72,7 @@ function changePage(p: number) {
       :text="t('nanny.empty.text')"
       :clear="t('nanny.empty.clear')"
       :post="t('nanny.empty.post')"
+      post-to="/kabinet/vakansiyalar/yangi"
       @clear="reset"
     />
     <template v-else>

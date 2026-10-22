@@ -6,6 +6,7 @@ type Status = 'idle' | 'starting' | 'waiting' | 'expired' | 'error'
 export function useTelegramLogin() {
   const auth = useAuthStore()
   const localePath = useLocalePath()
+  const route = useRoute()
   const status = ref<Status>('idle')
   const botUrl = ref('')
   let timer: ReturnType<typeof setInterval> | undefined
@@ -24,7 +25,9 @@ export function useTelegramLogin() {
       if (res.status === 'approved' && res.access_token && res.user) {
         stop()
         auth.setSession(res.access_token, res.user)
-        await navigateTo(localePath(res.user.roles.length ? '/' : '/boshlash'))
+        const redirect = safeRedirect(route.query.redirect)
+        if (!res.user.roles.length) await navigateTo(localePath({ path: '/boshlash', query: redirect ? { redirect } : {} }))
+        else await navigateTo(redirect ?? localePath('/kabinet'))
       }
     }
     catch (e: unknown) {

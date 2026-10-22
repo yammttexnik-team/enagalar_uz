@@ -465,5 +465,371 @@
     "genericText": "Bir daqiqadan keyin qayta urinib koʻring.",
     "home": "Bosh sahifaga",
     "nannies": "Enaga topish"
+  },
+  "dashboard": {
+    "common": {
+      "error": "Nimadir xato ketdi. Bir daqiqadan keyin qayta urinib koʻring.",
+      "offline": "Internet bilan aloqa yoʻq. Ulanib, qayta urinib koʻring.",
+      "cancel": "Bekor qilish",
+      "edit": "Tahrirlash",
+      "delete": "Oʻchirish",
+      "save": "Saqlash",
+      "back": "Orqaga",
+      "choose": "Tanlang"
+    },
+    "nav": {
+      "label": "Kabinet menyusi",
+      "overview": "Umumiy",
+      "vacancies": "E’lonlarim",
+      "profile": "Anketam",
+      "matches": "Mos e’lonlar",
+      "applications": "Javoblarim",
+      "verification": "Tasdiqlash",
+      "favorites": "Sevimlilar",
+      "settings": "Sozlamalar"
+    },
+    "gate": {
+      "parent": {
+        "title": "Bu boʻlim ota-onalar uchun",
+        "text": "E’lon joylash uchun ota-ona rolini qoʻshing. Enaga rolingiz saqlanib qoladi.",
+        "cta": "Men ota-ona ham boʻlmoqchiman"
+      },
+      "nanny": {
+        "title": "Bu boʻlim enagalar uchun",
+        "text": "Anketa yaratish va e’lonlarga javob berish uchun enaga rolini qoʻshing. Ota-ona rolingiz saqlanib qoladi.",
+        "cta": "Men enaga ham boʻlmoqchiman"
+      }
+    },
+    "status": {
+      "vacancy": {
+        "draft": "Qoralama",
+        "pending": "Moderatsiyada",
+        "active": "Faol",
+        "rejected": "Rad etilgan",
+        "closed": "Yopilgan",
+        "found": "Enaga topilgan",
+        "expired": "Muddati tugagan"
+      },
+      "nanny": {
+        "draft": "Qoralama",
+        "pending": "Moderatsiyada",
+        "active": "Faol",
+        "rejected": "Rad etilgan",
+        "hidden": "Yashirin"
+      },
+      "application": {
+        "sent": "Yuborilgan",
+        "viewed": "Koʻrilgan",
+        "shortlisted": "Tanlangan",
+        "rejected": "Rad etilgan"
+      },
+      "verification": {
+        "none": "Yuborilmagan",
+        "pending": "Koʻrib chiqilmoqda",
+        "approved": "Tasdiqlangan",
+        "rejected": "Rad etilgan"
+      }
+    },
+    "validation": {
+      "required": "Bu maydonni toʻldiring",
+      "min": "Kamida {n} belgi",
+      "max": "Koʻpi bilan {n} belgi",
+      "pickOne": "Kamida bittasini tanlang"
+    },
+    "overview": {
+      "subtitle": "Bu yerda e’lonlar, anketa va tasdiqlash holatini koʻrasiz.",
+      "stats": "Qisqa statistika",
+      "activeVacancies": "Faol e’lon",
+      "pendingHint": "Yana {n} ta moderatsiyada",
+      "applications": "Kelgan javoblar",
+      "profileStatus": "Anketa holati",
+      "matches": "Mos e’lonlar",
+      "myApplications": "Yuborgan javoblarim",
+      "parentHas": "Sizda {n} ta e’lon bor. Javoblarni koʻring yoki AI tanlovini oching.",
+      "parentNone": "Hali e’lon yoʻq. “Menga shunday enaga kerak” deb yozing — mos enagalar oʻzi yozadi.",
+      "fillProfile": "Anketani toʻldirish",
+      "editProfile": "Anketani tahrirlash",
+      "nannyText": {
+        "draft": "Anketani toʻldiring va moderatsiyaga yuboring. Odatda 24 soat ichida javob beramiz.",
+        "pending": "Anketangiz tekshiruvda. Odatda 24 soat ichida javob beramiz.",
+        "active": "Anketangiz saytda koʻrinadi. E’lonlarga javob bering va mos e’lonlarni koʻring.",
+        "rejected": "Anketa rad etildi. Tuzatib, qayta yuboring.",
+        "hidden": "Anketangiz yashirilgan. Tayyor boʻlsangiz, qayta yuboring."
+      },
+      "add": {
+        "parent": {
+          "title": "Farzandingiz uchun ham enaga kerakmi?",
+          "text": "Ota-ona rolini qoʻshing — e’lon joylab, enagalardan javob oling."
+        },
+        "nanny": {
+          "title": "Siz enaga ham boʻlsangiz",
+          "text": "Enaga rolini qoʻshing — anketa yarating va oilalarning e’lonlariga javob bering."
+        }
+      },
+      "verif": {
+        "none": {
+          "title": "Hali tasdiqlanmagansiz",
+          "text": "Pasportni tekshirtiring — profilingizda “Tasdiqlangan” nishoni chiqadi va ishonch oshadi."
+        },
+        "pending": {
+          "title": "Tekshiruv davom etmoqda",
+          "text": "Moderator maʼlumotlaringizni koʻrib chiqmoqda. Odatda 24 soat ichida javob beramiz."
+        },
+        "approved": {
+          "title": "Siz tasdiqlangansiz",
+          "text": "Pasportingiz tekshirilgan. Qoʻshimcha nishonlar uchun hujjat yuklashingiz mumkin."
+        },
+        "rejected": {
+          "title": "Tekshiruvdan oʻtmadi",
+          "text": "Sababini koʻring, maʼlumotlarni tuzatib, qayta yuboring."
+        },
+        "cta": "Tasdiqlanish",
+        "view": "Holatni koʻrish",
+        "docs": "Hujjat qoʻshish"
+      }
+    },
+    "vacancies": {
+      "seo": "E’lonlarim — enagalar.uz",
+      "detailSeo": "E’lon — enagalar.uz",
+      "title": "E’lonlarim",
+      "subtitle": "Menga shunday enaga kerak — e’lonlaringiz, javoblar va AI tanlovi shu yerda.",
+      "new": "E’lon joylash",
+      "emptyTitle": "Hali e’lon joylamagansiz",
+      "emptyText": "Bolangiz yoshi, jadval va maoshni yozing. Moderatordan keyin mos enagalar sizga yozadi.",
+      "pendingNote": "Moderatsiyadan keyin e’lon qilinadi. Odatda 24 soat ichida.",
+      "rejectedNote": "E’lon rad etildi. Tahrirlab, qayta yuboring.",
+      "applicationsCount": "{n} ta javob",
+      "views": "{n} marta koʻrilgan",
+      "open": "Javoblar",
+      "close": "Yopish",
+      "closeTitle": "E’lonni yopamizmi?",
+      "closeText": "Yopilgan e’lon saytda koʻrinmaydi va qayta ochilmaydi.",
+      "closeFound": "Enaga topdim",
+      "closeOther": "Boshqa sabab (kerak boʻlmay qoldi)",
+      "closedToast": "E’lon yopildi.",
+      "deleteTitle": "E’lonni oʻchiramizmi?",
+      "deleteText": "“{title}” va unga kelgan javoblar oʻchiriladi. Buni qaytarib boʻlmaydi.",
+      "deletedToast": "E’lon oʻchirildi.",
+      "tabApplications": "Javoblar",
+      "tabMatches": "AI tanlovi",
+      "publicView": "Saytda koʻrish"
+    },
+    "vacancyForm": {
+      "newSeo": "Yangi e’lon — enagalar.uz",
+      "editSeo": "E’lonni tahrirlash — enagalar.uz",
+      "edit": "E’lonni tahrirlash",
+      "newSubtitle": "Qisqa va aniq yozing: bola yoshi, jadval, maosh. Telefon raqam yozmang — chat platforma ichida.",
+      "note": "Moderatsiyadan keyin e’lon qilinadi. Odatda 24 soat ichida, 30 kun amal qiladi.",
+      "noteEdit": "Sarlavha, matn yoki jadval oʻzgarsa, e’lon qayta moderatsiyaga tushadi.",
+      "about": "E’lon matni",
+      "title": "Sarlavha",
+      "titlePlaceholder": "Masalan: 2 yoshli qizimga enaga kerak",
+      "description": "Tavsif",
+      "descriptionPlaceholder": "Qanday enaga kerak, nimalar qilish kerak, oila haqida qisqacha.",
+      "where": "Joy",
+      "schedulePlaceholder": "Du–Ju, 9:00–18:00",
+      "salaryMin": "Maosh (dan)",
+      "salaryMax": "Maosh (gacha)",
+      "salaryHint": "Maosh kiritilmasa, “Kelishiladi” deb koʻrsatiladi.",
+      "salaryOrder": "“Gacha” summasi “dan” summasidan kam boʻlmasin",
+      "childrenCount": "Bolalar soni",
+      "childrenRange": "1 dan 10 gacha",
+      "childrenAges": "Bolalar yoshi",
+      "childN": "{n}-bola yoshi",
+      "ageUnknown": "Yoshi koʻrsatilmagan",
+      "languagesHint": "Enaga qaysi tillarni bilishi kerak (ixtiyoriy).",
+      "submit": "Moderatsiyaga yuborish",
+      "created": "E’lon moderatsiyaga yuborildi. Odatda 24 soat ichida javob beramiz.",
+      "updated": "E’lon saqlandi.",
+      "notEditable": "Bu e’lonni tahrirlab boʻlmaydi: u yopilgan yoki muddati tugagan."
+    },
+    "applications": {
+      "empty": "Hali javoblar yoʻq. Odatda birinchi javob 1 kun ichida keladi.",
+      "newCount": "{n} ta yangi javob",
+      "action": {
+        "viewed": "Koʻrdim",
+        "shortlisted": "Tanlash",
+        "rejected": "Rad etish"
+      },
+      "marked": {
+        "viewed": "“Koʻrilgan” deb belgilandi.",
+        "shortlisted": "Nomzod tanlandi.",
+        "rejected": "Javob rad etildi."
+      },
+      "seo": "Javoblarim — enagalar.uz",
+      "mineTitle": "Javoblarim",
+      "mineSubtitle": "Yuborgan javoblaringiz va ota-onalarning munosabati.",
+      "mineEmpty": "Hali hech qaysi e’longa javob bermagansiz. Vakansiyalarni koʻrib chiqing.",
+      "sentAgo": "Yuborilgan: {when}"
+    },
+    "match": {
+      "score": "Moslik: {n}%",
+      "ai": "AI tanlovi",
+      "rules": "Qoidalar boʻyicha",
+      "why": "Nega mos",
+      "hintVacancy": "AI e’loningizga tajriba, hudud, til va jadval boʻyicha eng mos enagalarni tanlaydi.",
+      "refresh": "Yangilash",
+      "inactiveTitle": "Tanlov hali ishlamaydi",
+      "inactiveVacancy": "AI tanlovi faqat faol e’lon uchun ishlaydi. E’lon moderatsiyadan oʻtgach, mos enagalar shu yerda chiqadi.",
+      "inactiveNanny": "AI tanlovi faqat faol anketa uchun ishlaydi. Anketani moderatsiyaga yuboring — tasdiqlangach, mos e’lonlar shu yerda chiqadi.",
+      "loading": "AI mos nomzodlarni tanlamoqda…",
+      "emptyVacancy": "Hozircha mos enaga topilmadi. Keyinroq yangilab koʻring.",
+      "emptyNanny": "Hozircha mos e’lon topilmadi. Yangi e’lonlar har kuni qoʻshiladi."
+    },
+    "matches": {
+      "seo": "Mos e’lonlar — enagalar.uz",
+      "title": "Mos e’lonlar",
+      "subtitle": "AI anketangizga qarab eng mos e’lonlarni tanlaydi va nega mosligini yozadi."
+    },
+    "profile": {
+      "seo": "Anketam — enagalar.uz",
+      "title": "Anketam",
+      "subtitle": "Toʻliq anketaga ota-onalar koʻproq ishonadi. 4 qadamda toʻldiring.",
+      "saved": "Saqlandi.",
+      "submitted": "Anketangiz tekshiruvga yuborildi. Odatda 24 soat ichida javob beramiz.",
+      "incomplete": "Anketa toʻliq emas. Quyidagilarni tuzating.",
+      "availableOn": "Siz “Hozir boʻsh” deb koʻrinasiz.",
+      "availableOff": "Siz “Band” deb koʻrinasiz.",
+      "availableLabel": "Hozir boʻshman",
+      "preview": "Saytda koʻrish",
+      "steps": "Qadamlar",
+      "banner": {
+        "draft": {
+          "title": "Anketa hali yuborilmagan",
+          "text": "Barcha qadamlarni toʻldiring va “Moderatsiyaga yuborish” ni bosing."
+        },
+        "pending": {
+          "title": "Anketa tekshiruvda",
+          "text": "Odatda 24 soat ichida javob beramiz. Shu orada anketani tahrirlashingiz mumkin."
+        },
+        "active": {
+          "title": "Anketangiz saytda koʻrinadi",
+          "text": "Ota-onalar sizni qidiruvda topadi. Band boʻlsangiz, “Hozir boʻshman” ni oʻchiring."
+        },
+        "rejected": {
+          "title": "Anketa rad etildi",
+          "text": "Maʼlumotlarni tuzatib, qayta yuboring."
+        },
+        "hidden": {
+          "title": "Anketa yashirilgan",
+          "text": "Saytda koʻrinmaydi. Tayyor boʻlsangiz, qayta yuboring."
+        }
+      },
+      "step": {
+        "basic": "Asosiy",
+        "work": "Ish",
+        "about": "Oʻzingiz haqingizda",
+        "review": "Koʻrib chiqish"
+      },
+      "birthYear": "Tugʻilgan yil",
+      "birthYearHint": "Saytda faqat yoshingiz koʻrinadi.",
+      "birthYearRange": "{from} dan {to} gacha yilni kiriting",
+      "experience": "Tajriba (yil)",
+      "experienceHint": "Tajriba yoʻq boʻlsa, 0.",
+      "experienceRange": "0 dan 60 gacha",
+      "bioPlaceholder": "Qancha vaqtdan beri ishlaysiz, qanday yoshdagi bolalar bilan, nimalarni yaxshi bilasiz, oilalar sizdan nimani kutishi mumkin.",
+      "bioHint": "Kamida 50 belgi. Telefon raqam va pasport maʼlumotini yozmang.",
+      "checklist": "Yuborishdan oldin tekshiring",
+      "req": {
+        "region_id": "Viloyat tanlangan",
+        "experience_years": "Tajriba koʻrsatilgan",
+        "work_formats": "Kamida bitta ish formati",
+        "languages": "Kamida bitta til",
+        "price_amount": "Narx koʻrsatilgan",
+        "bio": "“Oʻzingiz haqingizda” kamida 50 belgi"
+      },
+      "fix": "Tuzatish",
+      "alreadySubmitted": "Anketa allaqachon yuborilgan. Oʻzgarishlar saqlanadi.",
+      "saveNext": "Saqlash va davom etish",
+      "submit": "Moderatsiyaga yuborish"
+    },
+    "favorites": {
+      "seo": "Sevimlilar — enagalar.uz",
+      "title": "Sevimlilar",
+      "subtitle": "♡ bilan saqlagan anketa va e’lonlaringiz.",
+      "nannies": "Enagalar",
+      "vacancies": "E’lonlar",
+      "emptyNannies": "Yoqqan anketalarni ♡ bilan saqlang — keyin shu yerdan topasiz.",
+      "emptyVacancies": "Yoqqan e’lonlarni ♡ bilan saqlang — keyin shu yerdan topasiz."
+    },
+    "settings": {
+      "seo": "Sozlamalar — enagalar.uz",
+      "title": "Sozlamalar",
+      "account": "Hisob",
+      "preferences": "Til va koʻrinish"
+    },
+    "file": {
+      "badType": "Fayl turi mos emas. Ruxsat etilgan: JPG, PNG, WebP.",
+      "tooBig": "Fayl juda katta: {n} MB dan oshmasin.",
+      "previewAlt": "Tanlangan fayl koʻrinishi",
+      "change": "Almashtirish",
+      "remove": "Olib tashlash"
+    },
+    "verification": {
+      "seo": "Tasdiqlash — enagalar.uz",
+      "title": "Tasdiqlash markazi",
+      "subtitle": "Nishon — haqiqiy tekshiruv natijasi. Tasdiqlangan profillarga ota-onalar koʻproq ishonadi.",
+      "identityTitle": "Shaxsni tasdiqlash",
+      "state": {
+        "none": "Pasport maʼlumotlarini yuboring — moderator tekshirib, “Tasdiqlangan” nishonini beradi.",
+        "pending": "Moderator maʼlumotlaringizni koʻrib chiqmoqda. Odatda 24 soat ichida javob beramiz.",
+        "approved": "Pasport maʼlumotlaringiz tekshirilgan. Profilingizda “Tasdiqlangan” nishoni bor.",
+        "rejected": "Tekshiruvdan oʻtmadi. Maʼlumotlarni tuzatib, qayta yuboring."
+      },
+      "submittedAt": "Yuborilgan: {date}",
+      "rejectionReason": "Sabab",
+      "privacyTitle": "Maxfiylik.",
+      "privacy": "Pasport rasmi faqat moderatorga koʻrinadi va tekshiruvdan keyin oʻchiriladi. Pasport maʼlumotlari shifrlangan holda saqlanadi, saytda hech kimga koʻrsatilmaydi — faqat nishon.",
+      "fullName": "Ism va familiya (pasportdagidek)",
+      "fullNameHint": "Saytda faqat ismingiz va familiyangizning bosh harfi koʻrinadi.",
+      "series": "Seriya",
+      "number": "Raqam",
+      "pinfl": "JShShIR (PINFL)",
+      "pinflHint": "14 ta raqam",
+      "birthDate": "Tugʻilgan sana",
+      "photo": "Pasport rasmi",
+      "pickPhoto": "Rasm tanlash",
+      "photoHint": "JPG, PNG yoki WebP, 8 MB gacha. Ism va raqam oʻqiladigan boʻlsin.",
+      "consentLabel": "Shaxsiy maʼlumotlarni qayta ishlashga roziman",
+      "consentText": "Pasport maʼlumotlarim (ism, seriya va raqam, JShShIR, tugʻilgan sana va rasm) faqat shaxsimni tasdiqlash uchun qayta ishlanishiga, shifrlangan holda saqlanishiga va faqat moderatorga koʻrinishiga roziman. Pasport rasmi tekshiruvdan keyin oʻchiriladi. Rozilikni istalgan payt qaytarib olish mumkin.",
+      "submit": "Tekshiruvga yuborish",
+      "sent": "Maʼlumotlar yuborildi. Odatda 24 soat ichida javob beramiz.",
+      "err": {
+        "fullName": "Ism va familiyani toʻliq yozing (kamida 5 belgi)",
+        "series": "Seriya 2 ta lotin harfi: masalan, AD",
+        "number": "Raqam 7 ta raqamdan iborat boʻlsin",
+        "pinfl": "JShShIR 14 ta raqamdan iborat boʻlsin",
+        "age18": "Yoshingiz kamida 18 da boʻlishi kerak",
+        "age80": "Tugʻilgan sanani tekshirib koʻring",
+        "photo": "Pasport rasmini tanlang",
+        "consent": "Davom etish uchun rozilik kerak",
+        "file": "Faylni tanlang",
+        "issuedFuture": "Sana kelajakda boʻlishi mumkin emas",
+        "issuedOld": "Hujjat oxirgi {n} kun ichida berilgan boʻlishi kerak"
+      },
+      "docsTitle": "Qoʻshimcha nishonlar",
+      "docsText": "Hujjat rasmini yuklang — moderator tekshirib, nishon beradi. Nishon va uning amal qilish muddati profilingizda koʻrinadi.",
+      "validity": "Amal qilish muddati: {n} kun",
+      "held": "Nishon bor",
+      "expires": "Nishon {date} gacha amal qiladi.",
+      "docPending": "Hujjat koʻrib chiqilmoqda.",
+      "docRejected": "Oldingi hujjat rad etilgan",
+      "docDelete": "Yuborilganini bekor qilish",
+      "docDeleteTitle": "Hujjatni oʻchiramizmi?",
+      "docDeleteText": "Fayl serverdan oʻchiriladi. Keyin yangisini yuborishingiz mumkin.",
+      "docDeleted": "Hujjat oʻchirildi.",
+      "docSent": "Hujjat yuborildi. Odatda 24 soat ichida javob beramiz.",
+      "upload": "Hujjat yuklash",
+      "renew": "Yangilash",
+      "docFile": "Hujjat rasmi yoki PDF",
+      "pickFile": "Fayl tanlash",
+      "fileHint": "JPG, PNG, WebP yoki PDF, 10 MB gacha.",
+      "issuedAt": "Hujjat berilgan sana",
+      "docConsentText": "Hujjat faqat nishon berish uchun moderator tomonidan koʻriladi. Saytda hujjat rasmi hech kimga koʻrsatilmaydi.",
+      "healthNote": "Bu sogʻliq haqidagi maʼlumot. U faqat moderatorga koʻrinadi, saytda koʻrsatilmaydi — profilda faqat nishon chiqadi.",
+      "healthConsentLabel": "Sogʻliq haqidagi maʼlumotni qayta ishlashga roziman",
+      "healthConsentText": "Tibbiy hujjatdagi sogʻliq maʼlumotlarim nishon berish maqsadida moderator tomonidan koʻrib chiqilishiga va ularni qayta ishlashga roziman. Maʼlumot boshqalarga koʻrsatilmaydi. Rozilikni istalgan payt qaytarib olish mumkin.",
+      "docSubmit": "Hujjatni yuborish"
+    }
   }
 }

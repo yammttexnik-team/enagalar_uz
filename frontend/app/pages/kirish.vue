@@ -6,8 +6,9 @@ const { status, botUrl, start } = useTelegramLogin()
 
 useSeoMeta({ title: () => t('auth.loginSeo'), robots: 'noindex' })
 
+const redirect = safeRedirect(useRoute().query.redirect)
 if (auth.isLoggedIn && auth.user) {
-  await navigateTo(localePath(auth.needsRole ? '/boshlash' : '/kabinet'))
+  await navigateTo(auth.needsRole ? localePath({ path: '/boshlash', query: redirect ? { redirect } : {} }) : (redirect ?? localePath('/kabinet')))
 }
 
 const points = computed(() => (tm('auth.points') as unknown[]).map(p => rt(p as never)))

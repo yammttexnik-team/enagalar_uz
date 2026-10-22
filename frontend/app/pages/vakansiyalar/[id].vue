@@ -3,6 +3,7 @@ import type { VacancyItem } from '~/components/vacancy/Card.vue'
 
 const { t } = useI18n()
 const route = useRoute()
+const loginTo = computed(() => localePath({ path: '/kirish', query: { redirect: route.fullPath } }))
 const api = useApi()
 const auth = useAuthStore()
 const toast = useToast()
@@ -51,10 +52,10 @@ const notice = ref<{ text: string, action?: { label: string, to: string } } | nu
 
 function startApply() {
   notice.value = null
-  if (!auth.isLoggedIn) return navigateTo(localePath('/kirish'))
+  if (!auth.isLoggedIn) return navigateTo(loginTo.value)
   // Rol aniq maʼlum boʻlsa va "nanny" boʻlmasa, modalni ochmaymiz.
   if (auth.user && !auth.user.roles.includes('nanny')) {
-    notice.value = { text: t('vacancy.detail.needNanny'), action: { label: t('vacancy.detail.createProfile'), to: localePath('/boshlash') } }
+    notice.value = { text: t('vacancy.detail.needNanny'), action: { label: t('vacancy.detail.createProfile'), to: localePath('/kabinet/anketa') } }
     return
   }
   open.value = true
@@ -76,7 +77,7 @@ async function send() {
     if (err.statusCode === 401) {
       auth.clear()
       open.value = false
-      await navigateTo(localePath('/kirish'))
+      await navigateTo(loginTo.value)
       return
     }
     if (err.statusCode === 409) {
@@ -87,7 +88,7 @@ async function send() {
     }
     open.value = false
     if (err.statusCode === 403) {
-      notice.value = { text: t('vacancy.detail.needNanny'), action: { label: t('vacancy.detail.createProfile'), to: localePath('/boshlash') } }
+      notice.value = { text: t('vacancy.detail.needNanny'), action: { label: t('vacancy.detail.createProfile'), to: localePath('/kabinet/anketa') } }
     }
     else if (err.statusCode === 422 && keys.includes('nanny_profile')) {
       notice.value = { text: t('vacancy.detail.inactiveProfile') }
