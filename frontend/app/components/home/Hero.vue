@@ -5,15 +5,14 @@ const props = defineProps<{ regions: Region[] }>()
 const { t } = useI18n()
 const localePath = useLocalePath()
 const localizedName = useLocalizedName()
-const auth = useAuthStore()
 
 type Mode = 'nanny' | 'job'
 const mode = ref<Mode>('nanny')
-const regionId = ref<number | 'all'>('all')
+const regionSlug = ref<string>('all')
 
 const items = computed(() => [
   { label: t('home.hero.allRegions'), value: 'all' as const },
-  ...props.regions.map(r => ({ label: localizedName(r.name), value: r.id })),
+  ...props.regions.map(r => ({ label: localizedName(r.name), value: r.slug })),
 ])
 
 const tabs = computed(() => [
@@ -27,9 +26,12 @@ const chips = computed(() => [
   { icon: 'i-lucide-map-pin', label: t('home.hero.chips.regions') },
 ])
 
-// Qidiruv sahifalari keyingi bosqichda; hozircha kirish yoki kabinetga yoʻnaltiramiz.
+// Tanlangan rejimga qarab enagalar yoki vakansiyalar qidiruviga oʻtadi (region = URL query).
 function search() {
-  navigateTo(localePath(auth.isLoggedIn ? '/kabinet' : '/kirish'))
+  navigateTo(localePath({
+    path: mode.value === 'nanny' ? '/enagalar' : '/vakansiyalar',
+    query: regionSlug.value === 'all' ? {} : { region: regionSlug.value },
+  }))
 }
 </script>
 
@@ -68,7 +70,7 @@ function search() {
 
           <div class="mt-3 flex flex-col gap-3 sm:flex-row">
             <USelect
-              v-model="regionId"
+              v-model="regionSlug"
               :items="items"
               icon="i-lucide-map-pin"
               size="xl"

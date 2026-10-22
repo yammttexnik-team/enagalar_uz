@@ -36,21 +36,32 @@ export function useFormat() {
     return `${money((s.max || s.min)!)} ${unit}`
   }
 
+  /** Brauzer Intl'i oʻzbekcha uchun ishonchsiz (SSR bilan farq qiladi), shuning uchun oʻz matnlarimiz. */
   function relativeTime(iso: string | null | undefined) {
     if (!iso) return ''
-    const diff = (new Date(iso).getTime() - Date.now()) / 1000
-    const rtf = new Intl.RelativeTimeFormat(locale.value === 'ru' ? 'ru' : 'uz', { numeric: 'auto' })
-    const abs = Math.abs(diff)
-    if (abs < 3600) return rtf.format(Math.round(diff / 60) || 0, 'minute')
-    if (abs < 86400) return rtf.format(Math.round(diff / 3600), 'hour')
-    if (abs < 86400 * 7) return rtf.format(Math.round(diff / 86400), 'day')
-    if (abs < 86400 * 30) return rtf.format(Math.round(diff / (86400 * 7)), 'week')
-    return rtf.format(Math.round(diff / (86400 * 30)), 'month')
+    const sec = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000)
+    const min = Math.floor(sec / 60)
+    if (min < 1) return t('format.ago.now')
+    if (min < 60) return plural('format.ago.minutes', min)
+    const h = Math.floor(min / 60)
+    if (h < 24) return plural('format.ago.hours', h)
+    const d = Math.floor(h / 24)
+    if (d === 1) return t('format.ago.yesterday')
+    if (d < 7) return plural('format.ago.days', d)
+    if (d < 30) return plural('format.ago.weeks', Math.floor(d / 7))
+    return plural('format.ago.months', Math.floor(d / 30))
+  }
+
+  const MONTHS = {
+    uz: ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avgust', 'sentabr', 'oktabr', 'noyabr', 'dekabr'],
+    ru: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
   }
 
   function date(iso: string | null | undefined) {
     if (!iso) return ''
-    return new Intl.DateTimeFormat(locale.value === 'ru' ? 'ru-RU' : 'uz-Latn', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso))
+    const d = new Date(iso)
+    const months = locale.value === 'ru' ? MONTHS.ru : MONTHS.uz
+    return `${d.getUTCDate()} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`
   }
 
   /** enums.<group>.<value> — notanish qiymat boʻlsa, qiymatning oʻzi. */

@@ -9,7 +9,7 @@ const cards = computed(() => [
     icon: 'i-lucide-house-heart',
     tone: 'brand',
     cta: { color: 'primary' as const, icon: 'i-lucide-megaphone', to: '/kirish' },
-    secondary: '/kirish',
+    secondary: '/enagalar',
   },
   {
     id: 'nannies',
@@ -17,7 +17,7 @@ const cards = computed(() => [
     icon: 'i-lucide-heart-handshake',
     tone: 'apricot',
     cta: { color: 'secondary' as const, icon: 'i-lucide-file-pen-line', to: '/kirish' },
-    secondary: '/kirish',
+    secondary: '/vakansiyalar',
   },
 ])
 const points = (key: string) => (tm(`home.audiences.${key}.points`) as unknown[]).map(p => rt(p as never))

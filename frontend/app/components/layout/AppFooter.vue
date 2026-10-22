@@ -4,8 +4,8 @@ const localePath = useLocalePath()
 const year = new Date().getFullYear()
 
 const platform = computed(() => [
-  { label: t('nav.nannies'), to: localePath({ path: '/', hash: '#parents' }) },
-  { label: t('nav.vacancies'), to: localePath({ path: '/', hash: '#nannies' }) },
+  { label: t('nav.nannies'), to: localePath('/enagalar') },
+  { label: t('nav.vacancies'), to: localePath('/vakansiyalar') },
   { label: t('nav.how'), to: localePath({ path: '/', hash: '#how' }) },
 ])
 const safety = computed(() => [

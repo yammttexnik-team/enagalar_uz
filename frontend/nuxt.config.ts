@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     public: {
       apiBase: 'http://localhost:8000/api/v1',
       siteName: 'enagalar.uz',
+      siteUrl: 'https://enagalar.uz',
     },
   },
 

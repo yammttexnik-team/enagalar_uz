@@ -7,8 +7,8 @@ const route = useRoute()
 watch(() => route.fullPath, () => { open.value = false })
 
 const links = computed(() => [
-  { label: t('nav.nannies'), to: localePath({ path: '/', hash: '#parents' }) },
-  { label: t('nav.vacancies'), to: localePath({ path: '/', hash: '#nannies' }) },
+  { label: t('nav.nannies'), to: localePath('/enagalar') },
+  { label: t('nav.vacancies'), to: localePath('/vakansiyalar') },
   { label: t('nav.how'), to: localePath({ path: '/', hash: '#how' }) },
 ])
 
@@ -31,6 +31,7 @@ async function logout() {
           v-for="l in links"
           :key="l.label"
           :to="l.to"
+          active-class="!text-highlighted bg-elevated"
           class="rounded-lg px-3 py-2 text-sm font-medium text-muted hover:text-highlighted hover:bg-elevated transition-colors focus-visible:outline-2 focus-visible:outline-primary"
         >
           {{ l.label }}
@@ -67,6 +68,7 @@ async function logout() {
             v-for="l in links"
             :key="l.label"
             :to="l.to"
+            active-class="bg-elevated"
             class="rounded-xl px-3 py-3 text-lg font-semibold text-highlighted hover:bg-elevated"
             @click="open = false"
           >

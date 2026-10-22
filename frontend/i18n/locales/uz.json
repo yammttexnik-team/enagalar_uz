@@ -265,7 +265,16 @@
     "years": "{n} yil",
     "ageYears": "{n} yosh",
     "childAge": "{n} yosh",
-    "childAgeMonths": "1 yoshgacha"
+    "childAgeMonths": "1 yoshgacha",
+    "ago": {
+      "now": "hozirgina",
+      "minutes": "{n} daqiqa oldin",
+      "hours": "{n} soat oldin",
+      "yesterday": "kecha",
+      "days": "{n} kun oldin",
+      "weeks": "{n} hafta oldin",
+      "months": "{n} oy oldin"
+    }
   },
   "enums": {
     "workFormat": {
@@ -311,7 +320,7 @@
     "skills": "Koʻnikmalar",
     "maxPrice": "Narx (eng koʻpi bilan)",
     "minSalary": "Maosh (kamida)",
-    "pricePlaceholder": "Masalan, 4 000 000",
+    "pricePlaceholder": "4 000 000",
     "unit": "Birlik",
     "experience": "Tajriba",
     "experienceAny": "Farqi yoʻq",
