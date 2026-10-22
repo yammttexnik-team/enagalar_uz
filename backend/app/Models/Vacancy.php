@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use App\Enums\PriceUnit;
-use App\Jobs\ComputeMatches;
 use App\Enums\UserStatus;
 use App\Enums\VacancyStatus;
 use App\Enums\WorkFormat;
+use App\Jobs\ComputeMatches;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

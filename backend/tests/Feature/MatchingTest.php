@@ -7,6 +7,7 @@ use App\Enums\UserStatus;
 use App\Enums\VacancyStatus;
 use App\Jobs\ComputeMatches;
 use App\Models\AiRequest;
+use App\Models\District;
 use App\Models\MatchResult;
 use App\Models\NannyProfile;
 use App\Models\Region;
@@ -15,6 +16,7 @@ use App\Models\Vacancy;
 use App\Services\Matching\ClaudeMatchRanker;
 use App\Services\Matching\MatchingService;
 use App\Services\Matching\MatchRanker;
+use App\Services\Matching\RuleBasedMatchRanker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use Laravel\Sanctum\Sanctum;
@@ -42,7 +44,7 @@ class MatchingTest extends TestCase
 
     private function activeNanny(array $profile = [], string $name = 'Dilnoza Karimova'): NannyProfile
     {
-        return $this->nannyUser($profile + ['status' => NannyProfileStatus::Active, 'published_at' => now()], $name)->nannyProfile;
+        return $this->nannyUser($profile + ['price_amount' => 3_500_000, 'status' => NannyProfileStatus::Active, 'published_at' => now()], $name)->nannyProfile;
     }
 
     private function activeVacancy(?User $parent = null, array $attrs = []): Vacancy
@@ -146,7 +148,6 @@ class MatchingTest extends TestCase
         $parent = $this->parentUser();
         $vacancy = $this->activeVacancy($parent);
 
-        AiRequest::factory()->count(0)->make();
         for ($i = 0; $i < config('services.anthropic.daily_limit'); $i++) {
             AiRequest::create(['user_id' => $parent->id, 'feature' => 'matching', 'model' => 'm', 'status' => 'ok']);
         }
@@ -219,7 +220,7 @@ class MatchingTest extends TestCase
     public function test_nanny_matches_endpoint(): void
     {
         $this->fake();
-        $user = $this->nannyUser(['status' => NannyProfileStatus::Active, 'published_at' => now()]);
+        $user = $this->nannyUser(['status' => NannyProfileStatus::Active, 'published_at' => now(), 'price_amount' => 3_500_000]);
         $vacancy = $this->activeVacancy();
 
         Sanctum::actingAs($user);
@@ -238,19 +239,19 @@ class MatchingTest extends TestCase
     public function test_rules_ranker_is_used_without_api_key(): void
     {
         config(['services.anthropic.key' => null]);
-        $this->assertInstanceOf(\App\Services\Matching\RuleBasedMatchRanker::class, app(MatchRanker::class));
+        $this->assertInstanceOf(RuleBasedMatchRanker::class, app(MatchRanker::class));
 
         config(['services.anthropic.key' => 'sk-test', 'services.anthropic.enabled' => true]);
         $this->assertInstanceOf(ClaudeMatchRanker::class, app(MatchRanker::class));
 
         config(['services.anthropic.enabled' => false]);
-        $this->assertInstanceOf(\App\Services\Matching\RuleBasedMatchRanker::class, app(MatchRanker::class));
+        $this->assertInstanceOf(RuleBasedMatchRanker::class, app(MatchRanker::class));
     }
 
     public function test_rules_prefer_same_district_and_price_fit(): void
     {
         config(['services.anthropic.key' => null]);
-        $district = \App\Models\District::where('region_id', Region::value('id'))->first();
+        $district = District::where('region_id', Region::value('id'))->first();
         $good = $this->activeNanny(['district_id' => $district->id, 'price_amount' => 3_500_000, 'experience_years' => 5]);
         $weak = $this->activeNanny(['district_id' => null, 'price_amount' => 4_700_000, 'experience_years' => 0, 'languages' => ['uz']]);
         $vacancy = $this->activeVacancy(null, ['district_id' => $district->id]);

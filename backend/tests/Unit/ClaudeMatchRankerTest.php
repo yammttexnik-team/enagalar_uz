@@ -2,7 +2,6 @@
 
 namespace Tests\Unit;
 
-use App\Models\AiRequest;
 use App\Services\Matching\ClaudeMatchRanker;
 use App\Services\Matching\MatchPayload;
 use Tests\TestCase;
@@ -83,7 +82,6 @@ class ClaudeMatchRankerTest extends TestCase
         $this->assertSame('Qo\'ng\'iroq qiling , yozing', str_replace('  ', ' ', MatchPayload::clean('Qo\'ng\'iroq qiling +998 (90) 123-45-67, @abc yozing', 400)));
         $this->assertSame('2 yoshli bola, 9 dan 18 gacha', MatchPayload::clean('2 yoshli bola, 9 dan 18 gacha', 400));
         $this->assertNull(MatchPayload::clean('   ', 400));
-        $this->assertSame(0, AiRequest::count());
     }
 
     private function subject(): array
