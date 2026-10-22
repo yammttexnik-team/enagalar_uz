@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\Auth\TelegramAuthController;
 use App\Http\Controllers\Api\BadgeController;
+use App\Http\Controllers\Api\BonusController;
 use App\Http\Controllers\Api\ChatFileController;
 use App\Http\Controllers\Api\ConversationController;
 use App\Http\Controllers\Api\FavoriteController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Api\MyVerificationController;
 use App\Http\Controllers\Api\NannyController;
 use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\SkillController;
+use App\Http\Controllers\Api\SurveyController;
 use App\Http\Controllers\Api\TelegramWebhookController;
 use App\Http\Controllers\Api\VacancyController;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +46,11 @@ Route::prefix('v1')->group(function () {
         Route::post('/auth/logout', [TelegramAuthController::class, 'logout']);
         Route::get('/me', [MeController::class, 'show']);
         Route::post('/me/roles', [MeController::class, 'addRole']);
+        Route::get('/me/bonus', [BonusController::class, 'show']);
+
+        Route::get('/surveys', [SurveyController::class, 'index']);
+        Route::get('/surveys/{slug}', [SurveyController::class, 'show']);
+        Route::post('/surveys/{slug}/responses', [SurveyController::class, 'store'])->middleware('throttle:10,1');
 
         // Tasdiqlash: pasport va hujjatlar (yopiq diskka)
         Route::get('/my/verification', [MyVerificationController::class, 'show']);

@@ -5,7 +5,9 @@ namespace App\Models;
 use App\Enums\NannyProfileStatus;
 use App\Enums\PriceUnit;
 use App\Enums\UserStatus;
+use App\Observers\NannyProfileObserver;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'price_amount', 'price_unit', 'work_formats', 'languages', 'age_groups',
     'live_in', 'free_trial_day', 'is_available', 'status', 'published_at',
 ])]
+#[ObservedBy(NannyProfileObserver::class)]
 class NannyProfile extends Model
 {
     use HasFactory;

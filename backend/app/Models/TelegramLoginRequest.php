@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
  * Sayt token yaratadi → foydalanuvchi botga /start login_<token> bilan o'tadi →
  * bot kontakt so'raydi → tasdiqlangach sayt token orqali Sanctum tokenini oladi.
  */
-#[Fillable(['token', 'telegram_id', 'user_id', 'status', 'expires_at'])]
+#[Fillable(['token', 'telegram_id', 'user_id', 'status', 'expires_at', 'campaign_code', 'referral_code'])]
 class TelegramLoginRequest extends Model
 {
     public const START_PREFIX = 'login_';
@@ -27,9 +27,11 @@ class TelegramLoginRequest extends Model
         ];
     }
 
-    public static function issue(): self
+    public static function issue(?string $campaignCode = null, ?string $referralCode = null): self
     {
         return self::create([
+            'campaign_code' => Campaign::normalizeCode($campaignCode),
+            'referral_code' => User::normalizeReferralCode($referralCode),
             'token' => Str::random(40),
             'expires_at' => now()->addMinutes(config('services.telegram.login_ttl_minutes')),
         ]);

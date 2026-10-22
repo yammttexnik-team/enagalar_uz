@@ -1,0 +1,993 @@
+{
+    "nanny": [
+        {
+            "id": "n_region",
+            "type": "single",
+            "text_uz": "Qaysi viloyat va tumanda ishlaysiz?",
+            "text_ru": "В каком регионе и районе вы работаете?",
+            "required": true,
+            "source": "regions"
+        },
+        {
+            "id": "n_age",
+            "type": "single",
+            "text_uz": "Yoshingiz?",
+            "text_ru": "Ваш возраст?",
+            "required": true,
+            "options": [
+                {
+                    "value": "a1",
+                    "uz": "18–24",
+                    "ru": "18–24"
+                },
+                {
+                    "value": "a2",
+                    "uz": "25–34",
+                    "ru": "25–34"
+                },
+                {
+                    "value": "a3",
+                    "uz": "35–44",
+                    "ru": "35–44"
+                },
+                {
+                    "value": "a4",
+                    "uz": "45–54",
+                    "ru": "45–54"
+                },
+                {
+                    "value": "a5",
+                    "uz": "55+",
+                    "ru": "55+"
+                }
+            ]
+        },
+        {
+            "id": "n_exp",
+            "type": "single",
+            "text_uz": "Enagalik tajribangiz qancha?",
+            "text_ru": "Ваш опыт работы няней?",
+            "required": true,
+            "options": [
+                {
+                    "value": "e0",
+                    "uz": "1 yildan kam",
+                    "ru": "менее 1 года"
+                },
+                {
+                    "value": "e1",
+                    "uz": "1–3 yil",
+                    "ru": "1–3 года"
+                },
+                {
+                    "value": "e2",
+                    "uz": "3–5 yil",
+                    "ru": "3–5 лет"
+                },
+                {
+                    "value": "e3",
+                    "uz": "5–10 yil",
+                    "ru": "5–10 лет"
+                },
+                {
+                    "value": "e4",
+                    "uz": "10+ yil",
+                    "ru": "10+ лет"
+                }
+            ]
+        },
+        {
+            "id": "n_formats",
+            "type": "multi",
+            "text_uz": "Qaysi formatda ishlaysiz?",
+            "text_ru": "В каком формате работаете?",
+            "required": true,
+            "options": [
+                {
+                    "value": "hour",
+                    "uz": "soatbay",
+                    "ru": "почасово"
+                },
+                {
+                    "value": "day",
+                    "uz": "kunlik",
+                    "ru": "посуточно"
+                },
+                {
+                    "value": "month",
+                    "uz": "oylik",
+                    "ru": "помесячно"
+                },
+                {
+                    "value": "live",
+                    "uz": "yashab turish",
+                    "ru": "с проживанием"
+                },
+                {
+                    "value": "weekend",
+                    "uz": "hafta oxiri",
+                    "ru": "выходные"
+                }
+            ]
+        },
+        {
+            "id": "n_price_hour",
+            "type": "number",
+            "text_uz": "Hozir yoki oxirgi ishda soatiga qancha olasiz? (soʻm)",
+            "text_ru": "Сколько получаете в час? (сум)",
+            "required": false,
+            "min": 0
+        },
+        {
+            "id": "n_price_day",
+            "type": "number",
+            "text_uz": "Kuniga qancha? (soʻm)",
+            "text_ru": "В день? (сум)",
+            "required": false,
+            "min": 0
+        },
+        {
+            "id": "n_price_month",
+            "type": "number",
+            "text_uz": "Oyiga qancha? (soʻm)",
+            "text_ru": "В месяц? (сум)",
+            "required": false,
+            "min": 0
+        },
+        {
+            "id": "n_price_want",
+            "type": "number",
+            "text_uz": "Oyiga qancha olishni xohlaysiz? (soʻm)",
+            "text_ru": "Сколько хотели бы получать в месяц? (сум)",
+            "required": true,
+            "min": 0
+        },
+        {
+            "id": "n_find_job",
+            "type": "multi",
+            "text_uz": "Soʻnggi ishingizni qanday topdingiz?",
+            "text_ru": "Как нашли последнюю работу?",
+            "required": true,
+            "options": [
+                {
+                    "value": "tg",
+                    "uz": "Telegram kanal",
+                    "ru": "Telegram-канал"
+                },
+                {
+                    "value": "friend",
+                    "uz": "tanish-urugʻ",
+                    "ru": "знакомые"
+                },
+                {
+                    "value": "agency",
+                    "uz": "agentlik",
+                    "ru": "агентство"
+                },
+                {
+                    "value": "olx",
+                    "uz": "OLX",
+                    "ru": "OLX"
+                },
+                {
+                    "value": "bolambilan",
+                    "uz": "bolambilan.uz",
+                    "ru": "bolambilan.uz"
+                },
+                {
+                    "value": "other",
+                    "uz": "boshqa",
+                    "ru": "другое"
+                }
+            ]
+        },
+        {
+            "id": "n_contacts_3m",
+            "type": "number",
+            "text_uz": "Oxirgi 3 oyda nechta oilaga yozdingiz?",
+            "text_ru": "Скольким семьям вы писали за 3 месяца?",
+            "required": true,
+            "min": 0
+        },
+        {
+            "id": "n_replies_3m",
+            "type": "number",
+            "text_uz": "Shulardan nechtasi javob berdi?",
+            "text_ru": "Сколько из них ответили?",
+            "required": true,
+            "min": 0
+        },
+        {
+            "id": "n_problems",
+            "type": "multi",
+            "text_uz": "Ish qidirishdagi eng katta 3 muammo?",
+            "text_ru": "Топ-3 проблемы поиска работы?",
+            "required": true,
+            "max_select": 3,
+            "options": [
+                {
+                    "value": "few",
+                    "uz": "ish kam",
+                    "ru": "мало работы"
+                },
+                {
+                    "value": "old",
+                    "uz": "eski yoki soxta eʼlonlar",
+                    "ru": "старые или фейковые объявления"
+                },
+                {
+                    "value": "noreply",
+                    "uz": "javob bermaydilar",
+                    "ru": "не отвечают"
+                },
+                {
+                    "value": "lowpay",
+                    "uz": "maosh kam",
+                    "ru": "низкая оплата"
+                },
+                {
+                    "value": "delay",
+                    "uz": "pulni kechiktirish",
+                    "ru": "задержка оплаты"
+                },
+                {
+                    "value": "safety",
+                    "uz": "xavfsizlik",
+                    "ru": "безопасность"
+                },
+                {
+                    "value": "where",
+                    "uz": "qayerda qidirishni bilmayman",
+                    "ru": "не знаю, где искать"
+                }
+            ]
+        },
+        {
+            "id": "n_paid_ad",
+            "type": "single",
+            "text_uz": "Telegram kanalga eʼlon berish uchun pul toʻladingizmi?",
+            "text_ru": "Платили ли вы за размещение в Telegram-канале?",
+            "required": true,
+            "options": [
+                {
+                    "value": "no",
+                    "uz": "Yoʻq",
+                    "ru": "Нет"
+                },
+                {
+                    "value": "free",
+                    "uz": "Bepul berdim",
+                    "ru": "Размещала бесплатно"
+                },
+                {
+                    "value": "paid",
+                    "uz": "Ha, toʻladim",
+                    "ru": "Да, платила"
+                }
+            ]
+        },
+        {
+            "id": "n_danger",
+            "type": "text",
+            "text_uz": "Ishda xavfli, nohush yoki adolatsiz holat boʻlganmi? Qisqacha yozing (\"yoʻq\" ham mumkin).",
+            "text_ru": "Были ли на работе небезопасные или неприятные ситуации? Кратко (можно «нет»).",
+            "required": true,
+            "min_words": 1
+        },
+        {
+            "id": "n_family_info",
+            "type": "multi",
+            "text_uz": "Oila haqida oldindan nimani bilishni xohlaysiz?",
+            "text_ru": "Что хотели бы знать о семье заранее?",
+            "required": true,
+            "options": [
+                {
+                    "value": "kids",
+                    "uz": "bolalar yoshi",
+                    "ru": "возраст детей"
+                },
+                {
+                    "value": "district",
+                    "uz": "tuman",
+                    "ru": "район"
+                },
+                {
+                    "value": "pay",
+                    "uz": "maosh",
+                    "ru": "оплата"
+                },
+                {
+                    "value": "schedule",
+                    "uz": "jadval",
+                    "ru": "график"
+                },
+                {
+                    "value": "prev",
+                    "uz": "oldingi enaga nega ketgan",
+                    "ru": "почему ушла прошлая няня"
+                },
+                {
+                    "value": "cam",
+                    "uz": "uyda kamera bormi",
+                    "ru": "есть ли камеры"
+                },
+                {
+                    "value": "reviews",
+                    "uz": "oila haqida sharhlar",
+                    "ru": "отзывы о семье"
+                }
+            ]
+        },
+        {
+            "id": "n_verify_ready",
+            "type": "scale",
+            "text_uz": "Pasport bilan \"Tasdiqlangan\" nishonini olishga tayyormisiz? (1 = yoʻq, 5 = tayyorman)",
+            "text_ru": "Готовы ли пройти проверку паспорта? (1 = нет, 5 = готова)",
+            "required": true,
+            "min": 1,
+            "max": 5
+        },
+        {
+            "id": "n_verify_fear",
+            "type": "text",
+            "text_uz": "Tekshiruvdan xavotir bor boʻlsa, nimadan?",
+            "text_ru": "Чего опасаетесь при проверке?",
+            "required": false
+        },
+        {
+            "id": "n_docs",
+            "type": "multi",
+            "text_uz": "Qaysi hujjatlarni bera olasiz?",
+            "text_ru": "Какие документы можете предоставить?",
+            "required": true,
+            "options": [
+                {
+                    "value": "passport",
+                    "uz": "pasport",
+                    "ru": "паспорт"
+                },
+                {
+                    "value": "med",
+                    "uz": "tibbiy maʼlumotnoma",
+                    "ru": "медсправка"
+                },
+                {
+                    "value": "dispensary",
+                    "uz": "dispanser maʼlumotnomasi",
+                    "ru": "справка из диспансера"
+                },
+                {
+                    "value": "cert",
+                    "uz": "sertifikat",
+                    "ru": "сертификат"
+                },
+                {
+                    "value": "refs",
+                    "uz": "tavsiyanoma",
+                    "ru": "рекомендации"
+                }
+            ]
+        },
+        {
+            "id": "n_features",
+            "type": "multi",
+            "text_uz": "Platformada eng muhim 3 narsa?",
+            "text_ru": "Что важнее всего на платформе?",
+            "required": true,
+            "max_select": 3,
+            "options": [
+                {
+                    "value": "chat",
+                    "uz": "ichki chat",
+                    "ru": "чат внутри"
+                },
+                {
+                    "value": "ai",
+                    "uz": "AI anketa yozuvchi",
+                    "ru": "AI-помощник для анкеты"
+                },
+                {
+                    "value": "badges",
+                    "uz": "tasdiqlangan nishonlar",
+                    "ru": "значки проверки"
+                },
+                {
+                    "value": "fast",
+                    "uz": "tez javob",
+                    "ru": "быстрые ответы"
+                },
+                {
+                    "value": "translate",
+                    "uz": "tarjima",
+                    "ru": "перевод"
+                },
+                {
+                    "value": "guarantee",
+                    "uz": "toʻlov kafolati",
+                    "ru": "гарантия оплаты"
+                }
+            ]
+        },
+        {
+            "id": "n_pay_top10",
+            "type": "single",
+            "text_uz": "TOP eʼlon (7 kun) 10 000 soʻm boʻlsa, sinab koʻrasizmi?",
+            "text_ru": "Попробуете ТОП-объявление (7 дней) за 10 000 сум?",
+            "required": true,
+            "options": [
+                {
+                    "value": "yes",
+                    "uz": "Ha",
+                    "ru": "Да"
+                },
+                {
+                    "value": "no",
+                    "uz": "Yoʻq",
+                    "ru": "Нет"
+                }
+            ]
+        },
+        {
+            "id": "n_pay_top25",
+            "type": "single",
+            "text_uz": "25 000 soʻm boʻlsa-chi?",
+            "text_ru": "А за 25 000 сум?",
+            "required": true,
+            "options": [
+                {
+                    "value": "yes",
+                    "uz": "Ha",
+                    "ru": "Да"
+                },
+                {
+                    "value": "no",
+                    "uz": "Yoʻq",
+                    "ru": "Нет"
+                }
+            ]
+        },
+        {
+            "id": "n_pay_top40",
+            "type": "single",
+            "text_uz": "40 000 soʻm boʻlsa-chi?",
+            "text_ru": "А за 40 000 сум?",
+            "required": true,
+            "options": [
+                {
+                    "value": "yes",
+                    "uz": "Ha",
+                    "ru": "Да"
+                },
+                {
+                    "value": "no",
+                    "uz": "Yoʻq",
+                    "ru": "Нет"
+                }
+            ]
+        },
+        {
+            "id": "n_pay_pro_max",
+            "type": "number",
+            "text_uz": "PRO anketa uchun oyiga maksimal qancha toʻlay olasiz? (soʻm, 0 = toʻlamayman)",
+            "text_ru": "Сколько максимум готовы платить за PRO-анкету в месяц? (сум, 0 = не буду)",
+            "required": true,
+            "min": 0
+        },
+        {
+            "id": "n_check",
+            "type": "single",
+            "text_uz": "(Diqqat savoli) Shu savolda \"Ikkinchi variant\"ni tanlang.",
+            "text_ru": "(Проверка внимания) Выберите «второй вариант».",
+            "required": true,
+            "must_be": "b",
+            "options": [
+                {
+                    "value": "a",
+                    "uz": "Birinchi",
+                    "ru": "Первый"
+                },
+                {
+                    "value": "b",
+                    "uz": "Ikkinchi",
+                    "ru": "Второй"
+                },
+                {
+                    "value": "c",
+                    "uz": "Uchinchi",
+                    "ru": "Третий"
+                }
+            ]
+        },
+        {
+            "id": "n_ideal",
+            "type": "text",
+            "text_uz": "Ideal ish qidirish jarayoni uchun bitta narsa nima boʻlardi?",
+            "text_ru": "Что одно сделало бы поиск работы идеальным?",
+            "required": true,
+            "min_words": 5
+        }
+    ],
+    "parent": [
+        {
+            "id": "p_region",
+            "type": "single",
+            "text_uz": "Qaysi viloyat va tumandasiz?",
+            "text_ru": "В каком регионе и районе вы?",
+            "required": true,
+            "source": "regions"
+        },
+        {
+            "id": "p_kids",
+            "type": "number",
+            "text_uz": "Nechta bolangiz bor (enaga kerak boʻladigan)?",
+            "text_ru": "Сколько у вас детей (для которых нужна няня)?",
+            "required": true,
+            "min": 1
+        },
+        {
+            "id": "p_kid_age",
+            "type": "multi",
+            "text_uz": "Bolalar yoshi?",
+            "text_ru": "Возраст детей?",
+            "required": true,
+            "options": [
+                {
+                    "value": "b0",
+                    "uz": "0–1",
+                    "ru": "0–1"
+                },
+                {
+                    "value": "b1",
+                    "uz": "1–3",
+                    "ru": "1–3"
+                },
+                {
+                    "value": "b2",
+                    "uz": "3–6",
+                    "ru": "3–6"
+                },
+                {
+                    "value": "b3",
+                    "uz": "6+",
+                    "ru": "6+"
+                }
+            ]
+        },
+        {
+            "id": "p_status",
+            "type": "single",
+            "text_uz": "Hozir enaga bormi?",
+            "text_ru": "Есть ли сейчас няня?",
+            "required": true,
+            "options": [
+                {
+                    "value": "have",
+                    "uz": "Bor",
+                    "ru": "Есть"
+                },
+                {
+                    "value": "seeking",
+                    "uz": "Qidiryapman",
+                    "ru": "Ищу"
+                },
+                {
+                    "value": "soon",
+                    "uz": "Yaqinda kerak boʻladi",
+                    "ru": "Скоро понадобится"
+                }
+            ]
+        },
+        {
+            "id": "p_formats",
+            "type": "multi",
+            "text_uz": "Qanday format kerak?",
+            "text_ru": "Какой формат нужен?",
+            "required": true,
+            "options": [
+                {
+                    "value": "hour",
+                    "uz": "soatbay",
+                    "ru": "почасово"
+                },
+                {
+                    "value": "day",
+                    "uz": "kunlik",
+                    "ru": "посуточно"
+                },
+                {
+                    "value": "month",
+                    "uz": "oylik",
+                    "ru": "помесячно"
+                },
+                {
+                    "value": "live",
+                    "uz": "yashab turish",
+                    "ru": "с проживанием"
+                },
+                {
+                    "value": "half",
+                    "uz": "yarim kun",
+                    "ru": "полдня"
+                }
+            ]
+        },
+        {
+            "id": "p_budget_hour",
+            "type": "number",
+            "text_uz": "Byudjet: soatiga (soʻm)",
+            "text_ru": "Бюджет: в час (сум)",
+            "required": false,
+            "min": 0
+        },
+        {
+            "id": "p_budget_day",
+            "type": "number",
+            "text_uz": "Byudjet: kuniga (soʻm)",
+            "text_ru": "Бюджет: в день (сум)",
+            "required": false,
+            "min": 0
+        },
+        {
+            "id": "p_budget_month",
+            "type": "number",
+            "text_uz": "Byudjet: oyiga (soʻm)",
+            "text_ru": "Бюджет: в месяц (сум)",
+            "required": false,
+            "min": 0
+        },
+        {
+            "id": "p_find",
+            "type": "multi",
+            "text_uz": "Enagani qanday qidirdingiz?",
+            "text_ru": "Как искали няню?",
+            "required": true,
+            "options": [
+                {
+                    "value": "tg",
+                    "uz": "Telegram kanal",
+                    "ru": "Telegram-канал"
+                },
+                {
+                    "value": "friend",
+                    "uz": "tanish",
+                    "ru": "знакомые"
+                },
+                {
+                    "value": "agency",
+                    "uz": "agentlik",
+                    "ru": "агентство"
+                },
+                {
+                    "value": "olx",
+                    "uz": "OLX",
+                    "ru": "OLX"
+                },
+                {
+                    "value": "bolambilan",
+                    "uz": "bolambilan.uz",
+                    "ru": "bolambilan.uz"
+                },
+                {
+                    "value": "insta",
+                    "uz": "Instagram",
+                    "ru": "Instagram"
+                },
+                {
+                    "value": "other",
+                    "uz": "boshqa",
+                    "ru": "другое"
+                }
+            ]
+        },
+        {
+            "id": "p_days",
+            "type": "number",
+            "text_uz": "Oxirgi safar necha kun qidirdingiz?",
+            "text_ru": "Сколько дней искали в последний раз?",
+            "required": true,
+            "min": 0
+        },
+        {
+            "id": "p_cands",
+            "type": "number",
+            "text_uz": "Nechta nomzod koʻrdingiz?",
+            "text_ru": "Сколько кандидатов рассмотрели?",
+            "required": true,
+            "min": 0
+        },
+        {
+            "id": "p_met",
+            "type": "number",
+            "text_uz": "Nechtasi bilan uchrashdingiz?",
+            "text_ru": "С сколькими встретились?",
+            "required": true,
+            "min": 0
+        },
+        {
+            "id": "p_ad_result",
+            "type": "text",
+            "text_uz": "Telegram kanalga eʼlon bergan boʻlsangiz: nechta javob keldi, nechtasi yaroqli edi?",
+            "text_ru": "Если давали объявление: сколько откликов, сколько подходящих?",
+            "required": false
+        },
+        {
+            "id": "p_problems",
+            "type": "multi",
+            "text_uz": "Eng katta 3 muammo?",
+            "text_ru": "Топ-3 проблемы?",
+            "required": true,
+            "max_select": 3,
+            "options": [
+                {
+                    "value": "distrust",
+                    "uz": "ishonchsizlik",
+                    "ru": "недоверие"
+                },
+                {
+                    "value": "unknown",
+                    "uz": "tajribasi nomaʼlum",
+                    "ru": "опыт неизвестен"
+                },
+                {
+                    "value": "time",
+                    "uz": "vaqt koʻp ketadi",
+                    "ru": "уходит много времени"
+                },
+                {
+                    "value": "price",
+                    "uz": "narx",
+                    "ru": "цена"
+                },
+                {
+                    "value": "old",
+                    "uz": "eski eʼlonlar",
+                    "ru": "старые объявления"
+                },
+                {
+                    "value": "noreply",
+                    "uz": "javob bermaydilar",
+                    "ru": "не отвечают"
+                },
+                {
+                    "value": "fake",
+                    "uz": "yolgʻon maʼlumot",
+                    "ru": "ложные данные"
+                },
+                {
+                    "value": "agency",
+                    "uz": "agentlik qimmat",
+                    "ru": "агентство дорого"
+                }
+            ]
+        },
+        {
+            "id": "p_fear",
+            "type": "text",
+            "text_uz": "Bolangizni begona kishiga topshirishda sizni eng koʻp nima qoʻrqitadi?",
+            "text_ru": "Чего вы больше всего боитесь, доверяя ребёнка няне?",
+            "required": true,
+            "min_words": 3
+        },
+        {
+            "id": "p_checks",
+            "type": "multi",
+            "text_uz": "Qaysi tekshiruvlar siz uchun muhim?",
+            "text_ru": "Какие проверки важны?",
+            "required": true,
+            "options": [
+                {
+                    "value": "passport",
+                    "uz": "pasport",
+                    "ru": "паспорт"
+                },
+                {
+                    "value": "med",
+                    "uz": "tibbiy",
+                    "ru": "медицинская"
+                },
+                {
+                    "value": "dispensary",
+                    "uz": "dispanser",
+                    "ru": "диспансер"
+                },
+                {
+                    "value": "record",
+                    "uz": "sudlanmaganlik",
+                    "ru": "несудимость"
+                },
+                {
+                    "value": "refs",
+                    "uz": "tavsiyanoma",
+                    "ru": "рекомендации"
+                },
+                {
+                    "value": "video",
+                    "uz": "video tanishuv",
+                    "ru": "видеознакомство"
+                },
+                {
+                    "value": "cert",
+                    "uz": "sertifikat",
+                    "ru": "сертификат"
+                }
+            ]
+        },
+        {
+            "id": "p_bad",
+            "type": "text",
+            "text_uz": "Yomon yoki yoqimsiz tajriba boʻlganmi? Qisqacha (\"yoʻq\" ham mumkin).",
+            "text_ru": "Был ли плохой опыт? Кратко (можно «нет»).",
+            "required": false
+        },
+        {
+            "id": "p_agency",
+            "type": "single",
+            "text_uz": "Agentlikka murojaat qilganmisiz?",
+            "text_ru": "Обращались ли в агентство?",
+            "required": true,
+            "options": [
+                {
+                    "value": "no",
+                    "uz": "Yoʻq",
+                    "ru": "Нет"
+                },
+                {
+                    "value": "yes",
+                    "uz": "Ha",
+                    "ru": "Да"
+                }
+            ]
+        },
+        {
+            "id": "p_agency_pay",
+            "type": "number",
+            "text_uz": "Agentlikka qancha toʻlagansiz yoki toʻlashga tayyormisiz? (soʻm)",
+            "text_ru": "Сколько заплатили или готовы заплатить агентству? (сум)",
+            "required": false,
+            "min": 0
+        },
+        {
+            "id": "p_features",
+            "type": "multi",
+            "text_uz": "Platformada eng muhim 3 narsa?",
+            "text_ru": "Что важнее всего на платформе?",
+            "required": true,
+            "max_select": 3,
+            "options": [
+                {
+                    "value": "badges",
+                    "uz": "nishonlar",
+                    "ru": "значки проверки"
+                },
+                {
+                    "value": "chat",
+                    "uz": "ichki chat",
+                    "ru": "чат внутри"
+                },
+                {
+                    "value": "ai",
+                    "uz": "AI mos nomzod",
+                    "ru": "AI-подбор"
+                },
+                {
+                    "value": "fast",
+                    "uz": "tez javob",
+                    "ru": "быстрые ответы"
+                },
+                {
+                    "value": "reviews",
+                    "uz": "sharhlar",
+                    "ru": "отзывы"
+                },
+                {
+                    "value": "guarantee",
+                    "uz": "toʻlov kafolati",
+                    "ru": "гарантия оплаты"
+                },
+                {
+                    "value": "video",
+                    "uz": "video",
+                    "ru": "видео"
+                }
+            ]
+        },
+        {
+            "id": "p_sub15",
+            "type": "single",
+            "text_uz": "Obuna (oyiga, cheksiz chat + AI) 15 000 soʻm boʻlsa, olasizmi?",
+            "text_ru": "Купили бы подписку (в месяц, безлимитный чат + AI) за 15 000 сум?",
+            "required": true,
+            "options": [
+                {
+                    "value": "yes",
+                    "uz": "Ha",
+                    "ru": "Да"
+                },
+                {
+                    "value": "no",
+                    "uz": "Yoʻq",
+                    "ru": "Нет"
+                }
+            ]
+        },
+        {
+            "id": "p_sub35",
+            "type": "single",
+            "text_uz": "35 000 soʻm boʻlsa-chi?",
+            "text_ru": "А за 35 000 сум?",
+            "required": true,
+            "options": [
+                {
+                    "value": "yes",
+                    "uz": "Ha",
+                    "ru": "Да"
+                },
+                {
+                    "value": "no",
+                    "uz": "Yoʻq",
+                    "ru": "Нет"
+                }
+            ]
+        },
+        {
+            "id": "p_sub60",
+            "type": "single",
+            "text_uz": "60 000 soʻm boʻlsa-chi?",
+            "text_ru": "А за 60 000 сум?",
+            "required": true,
+            "options": [
+                {
+                    "value": "yes",
+                    "uz": "Ha",
+                    "ru": "Да"
+                },
+                {
+                    "value": "no",
+                    "uz": "Yoʻq",
+                    "ru": "Нет"
+                }
+            ]
+        },
+        {
+            "id": "p_pay_max",
+            "type": "number",
+            "text_uz": "Oyiga maksimal qancha toʻlaysiz? (soʻm, 0 = toʻlamayman)",
+            "text_ru": "Сколько максимум заплатите в месяц? (сум, 0 = не буду)",
+            "required": true,
+            "min": 0
+        },
+        {
+            "id": "p_check",
+            "type": "single",
+            "text_uz": "(Diqqat savoli) Shu savolda \"Uchinchi variant\"ni tanlang.",
+            "text_ru": "(Проверка внимания) Выберите «третий вариант».",
+            "required": true,
+            "must_be": "c",
+            "options": [
+                {
+                    "value": "a",
+                    "uz": "Birinchi",
+                    "ru": "Первый"
+                },
+                {
+                    "value": "b",
+                    "uz": "Ikkinchi",
+                    "ru": "Второй"
+                },
+                {
+                    "value": "c",
+                    "uz": "Uchinchi",
+                    "ru": "Третий"
+                }
+            ]
+        },
+        {
+            "id": "p_ideal",
+            "type": "text",
+            "text_uz": "Ideal enaga qidirish tajribasi qanday boʻlardi?",
+            "text_ru": "Каким был бы идеальный поиск няни?",
+            "required": true,
+            "min_words": 5
+        }
+    ]
+}

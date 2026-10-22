@@ -7,7 +7,9 @@ use App\Enums\UserStatus;
 use App\Enums\VacancyStatus;
 use App\Enums\WorkFormat;
 use App\Jobs\ComputeMatches;
+use App\Observers\VacancyObserver;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
     'schedule', 'salary_min', 'salary_max', 'salary_unit', 'children_count', 'children_ages',
     'languages', 'live_in', 'is_urgent', 'starts_at', 'status', 'published_at', 'expires_at',
 ])]
+#[ObservedBy(VacancyObserver::class)]
 class Vacancy extends Model
 {
     use HasFactory, SoftDeletes;

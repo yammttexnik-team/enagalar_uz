@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             RegionSeeder::class,
             SkillSeeder::class,
             BadgeSeeder::class,
+            CampaignSeeder::class,
+            SurveySeeder::class,
         ]);
     }
 }

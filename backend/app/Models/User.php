@@ -4,22 +4,25 @@ namespace App\Models;
 
 use App\Enums\Role;
 use App\Enums\UserStatus;
+use App\Services\Bonus\BonusService;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'phone', 'telegram_id', 'telegram_username', 'email', 'password', 'avatar_path', 'locale', 'status', 'last_seen_at'])]
+#[Fillable(['name', 'phone', 'telegram_id', 'telegram_username', 'email', 'password', 'avatar_path', 'locale', 'status', 'last_seen_at', 'campaign_id', 'referred_by_id'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser
 {
@@ -104,6 +107,58 @@ class User extends Authenticatable implements FilamentUser
     public function favorites(): HasMany
     {
         return $this->hasMany(Favorite::class);
+    }
+
+    public function campaign(): BelongsTo
+    {
+        return $this->belongsTo(Campaign::class);
+    }
+
+    public function referredBy(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'referred_by_id');
+    }
+
+    public function bonusTransactions(): HasMany
+    {
+        return $this->hasMany(BonusTransaction::class);
+    }
+
+    public function surveyResponses(): HasMany
+    {
+        return $this->hasMany(SurveyResponse::class);
+    }
+
+    /** Joriy bonus balansi (muddati o'tmagan, so'm). */
+    public function bonusBalance(): int
+    {
+        return app(BonusService::class)->balance($this);
+    }
+
+    /** Taklif kodi (8 belgi). Birinchi so'rovda yaratiladi. */
+    public function referralCode(): string
+    {
+        if (! $this->referral_code) {
+            do {
+                $code = strtoupper(Str::random(8));
+            } while (self::where('referral_code', $code)->exists());
+
+            $this->forceFill(['referral_code' => $code])->saveQuietly();
+        }
+
+        return $this->referral_code;
+    }
+
+    public function referralLink(): string
+    {
+        return rtrim(config('app.frontend_url'), '/').'/kirish?r='.$this->referralCode();
+    }
+
+    public static function normalizeReferralCode(?string $code): ?string
+    {
+        $code = strtoupper(trim((string) $code));
+
+        return preg_match('/^[A-Z0-9]{8}$/', $code) ? $code : null;
     }
 
     public function canAccessPanel(Panel $panel): bool

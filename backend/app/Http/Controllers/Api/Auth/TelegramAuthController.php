@@ -12,9 +12,13 @@ use Illuminate\Http\Request;
 class TelegramAuthController extends Controller
 {
     /** Kirish so'rovini yaratadi va botga havola qaytaradi. */
-    public function start(): JsonResponse
+    public function start(Request $request): JsonResponse
     {
-        $login = TelegramLoginRequest::issue();
+        // Kampaniya / taklif kodi ixtiyoriy; yaroqsiz bo'lsa jimgina e'tiborsiz qoldiriladi.
+        $login = TelegramLoginRequest::issue(
+            is_string($request->input('campaign')) ? $request->input('campaign') : null,
+            is_string($request->input('referral')) ? $request->input('referral') : null,
+        );
 
         return response()->json([
             'token' => $login->token,

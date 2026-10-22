@@ -3,6 +3,7 @@
 namespace App\Services\Telegram;
 
 use App\Models\Badge;
+use App\Models\Campaign;
 use App\Models\TelegramLoginRequest;
 use App\Models\User;
 use Illuminate\Support\Arr;
@@ -41,6 +42,12 @@ class TelegramLoginHandler
 
     private function handleStart(array $from, string $payload, string $lang): void
     {
+        if (preg_match('/^(c|r)_([A-Za-z0-9_]+)$/', $payload, $m)) {
+            $this->handleCampaignStart($from, $m[1], $m[2], $lang);
+
+            return;
+        }
+
         if (! Str::startsWith($payload, TelegramLoginRequest::START_PREFIX)) {
             $this->bot->sendMessage($from['id'], $this->t('welcome', $lang));
 
@@ -75,6 +82,25 @@ class TelegramLoginHandler
         ]);
     }
 
+    /** /start c_<KOD> (kampaniya) yoki r_<KOD> (taklif): salom + saytga kirish tugmasi. */
+    private function handleCampaignStart(array $from, string $kind, string $code, string $lang): void
+    {
+        $param = $kind === 'c' ? 'c' : 'r';
+        $code = $kind === 'c' ? Campaign::normalizeCode($code) : User::normalizeReferralCode($code);
+
+        if (! $code) {
+            $this->bot->sendMessage($from['id'], $this->t('welcome', $lang));
+
+            return;
+        }
+
+        $url = rtrim(config('app.frontend_url'), '/').($lang === 'ru' ? '/ru' : '').'/kirish?'.$param.'='.$code;
+
+        $this->bot->sendMessage($from['id'], $this->t('campaign_welcome', $lang), [
+            'inline_keyboard' => [[['text' => $this->t('campaign_button', $lang), 'url' => $url]]],
+        ]);
+    }
+
     private function handleContact(array $message, array $from, string $lang): void
     {
         $contact = $message['contact'];
@@ -101,6 +127,8 @@ class TelegramLoginHandler
                 ?? User::where('phone', $phone)->first()
                 ?? new User(['locale' => $lang]);
 
+            $isNew = ! $user->exists;
+
             $user->fill([
                 'name' => $user->name ?? trim(($from['first_name'] ?? '').' '.($from['last_name'] ?? '')),
                 'telegram_id' => $from['id'],
@@ -108,6 +136,9 @@ class TelegramLoginHandler
                 'phone' => $phone,
             ]);
             $user->phone_verified_at = now();
+            if ($isNew) {
+                $this->attribute($user, $request);
+            }
             $user->save();
 
             Badge::where('slug', Badge::PHONE_VERIFIED)->first()?->grantTo($user);
@@ -119,6 +150,25 @@ class TelegramLoginHandler
         $this->bot->sendMessage($from['id'], $this->t('approved', $user->locale), ['remove_keyboard' => true]);
     }
 
+    /** Yangi foydalanuvchini kampaniyaga va taklif qilgan odamga bog'laydi (faqat birinchi kirishda). */
+    private function attribute(User $user, TelegramLoginRequest $request): void
+    {
+        if ($request->campaign_code) {
+            $campaign = Campaign::where('code', $request->campaign_code)->first();
+            if ($campaign && $campaign->isRunning() && $campaign->hasRoom()) {
+                $user->campaign_id = $campaign->id;
+            }
+        }
+
+        if ($request->referral_code) {
+            $referrer = User::where('referral_code', $request->referral_code)->first();
+            if ($referrer) {
+                $user->referred_by_id = $referrer->id;
+                // Kampaniya kodi bo'lmasa, taklif qilganning kampaniyasi meros bo'lmaydi (alohida hisob).
+            }
+        }
+    }
+
     private function t(string $key, string $lang): string
     {
         $messages = [
@@ -126,6 +176,11 @@ class TelegramLoginHandler
                 'uz' => "Assalomu alaykum! 👋\n<b>enagalar.uz</b> — ishonchli enagalar platformasi.\nSaytga kirish uchun enagalar.uz da «Telegram orqali kirish» tugmasini bosing.",
                 'ru' => "Здравствуйте! 👋\n<b>enagalar.uz</b> — платформа проверенных нянь.\nЧтобы войти, нажмите «Войти через Telegram» на сайте enagalar.uz.",
             ],
+            'campaign_welcome' => [
+                'uz' => "Assalomu alaykum! 👋\n<b>enagalar.uz</b> — ishonchli enagalar platformasi. Bonusingizni olish uchun saytga kiring.",
+                'ru' => "Здравствуйте! 👋\n<b>enagalar.uz</b> — платформа проверенных нянь. Войдите на сайт, чтобы получить бонус.",
+            ],
+            'campaign_button' => ['uz' => 'Saytga kirish', 'ru' => 'Войти на сайт'],
             'share_contact' => [
                 'uz' => 'Kirishni yakunlash uchun pastdagi tugma orqali telefon raqamingizni yuboring.',
                 'ru' => 'Чтобы завершить вход, отправьте номер телефона кнопкой ниже.',
