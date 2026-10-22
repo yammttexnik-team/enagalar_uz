@@ -67,6 +67,12 @@ class Vacancy extends Model
             ->where(fn ($q) => $q->whereNull('expires_at')->orWhere('expires_at', '>', now()));
     }
 
+    /** Ochiq ko'rinish uchun kerakli bog'lamalar (N+1 bo'lmasligi uchun). */
+    public function scopeWithPublic(Builder $query): void
+    {
+        $query->with(['region', 'district', 'parentProfile.user.activeBadges']);
+    }
+
     public function publish(): void
     {
         $this->update([

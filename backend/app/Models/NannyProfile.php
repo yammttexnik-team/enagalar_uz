@@ -66,4 +66,10 @@ class NannyProfile extends Model
     {
         $query->where('status', NannyProfileStatus::Active);
     }
+
+    /** Ochiq ko'rinish uchun kerakli bog'lamalar (N+1 bo'lmasligi uchun). */
+    public function scopeWithPublic(Builder $query): void
+    {
+        $query->with(['user.activeBadges', 'region', 'district', 'skills']);
+    }
 }

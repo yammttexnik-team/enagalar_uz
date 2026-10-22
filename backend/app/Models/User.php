@@ -112,6 +112,15 @@ class User extends Authenticatable implements FilamentUser
             && $this->hasAnyRole([Role::Admin->value, Role::Moderator->value]);
     }
 
+    /** Ochiq API uchun ism: "Dilnoza K." (familiya faqat bosh harfi). */
+    public function publicName(): string
+    {
+        $parts = preg_split('/\s+/u', trim((string) $this->name), -1, PREG_SPLIT_NO_EMPTY);
+        $first = $parts[0] ?? '';
+
+        return count($parts) > 1 ? $first.' '.mb_strtoupper(mb_substr(end($parts), 0, 1)).'.' : $first;
+    }
+
     public function isVerified(): bool
     {
         return $this->activeBadges()->where('slug', Badge::VERIFIED)->exists();

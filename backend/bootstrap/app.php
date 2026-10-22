@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureRole;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -14,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         // Saytda sessiya yo'q (API token), sessiya faqat admin panel uchun.
+        $middleware->alias(['has_role' => EnsureRole::class]);
         $middleware->redirectGuestsTo(fn (Request $request) => $request->is('api/*') ? null : route('filament.admin.auth.login'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
