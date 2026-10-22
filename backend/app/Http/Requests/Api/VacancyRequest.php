@@ -26,7 +26,7 @@ class VacancyRequest extends FormRequest
             'work_format' => ['required', Rule::enum(WorkFormat::class)],
             'schedule' => ['nullable', 'string', 'max:255'],
             'salary_min' => ['nullable', 'integer', 'min:0'],
-            'salary_max' => ['nullable', 'integer', 'min:0', 'gte:salary_min'],
+            'salary_max' => ['nullable', 'integer', 'min:0', Rule::when($this->filled('salary_min'), ['gte:salary_min'])],
             'salary_unit' => ['nullable', Rule::enum(PriceUnit::class)],
             'children_count' => ['required', 'integer', 'between:1,10'],
             'children_ages' => ['nullable', 'array', 'max:10'],
