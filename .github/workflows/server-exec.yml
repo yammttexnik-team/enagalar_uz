@@ -1,0 +1,42 @@
+name: Server exec
+
+# Diagnostika va xizmat buyruqlari (deploy foydalanuvchisi nomidan, ~/enagalar_uz/deploy ichida).
+# DC o'zgaruvchisi: "docker compose --env-file .env.production -f docker-compose.prod.yml".
+# Misol: $DC ps ; $DC logs --tail 100 app ; $DC exec -T app php artisan migrate:status
+# Diqqat: .env.production qiymatlarini chiqaradigan buyruqlar ishlatmang (loglar repo a'zolariga ko'rinadi).
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "Bajariladigan buyruq"
+        required: true
+        type: string
+        default: "$DC ps; $DC logs --tail 80 app"
+
+jobs:
+  exec:
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 20
+    env:
+      HOST: ${{ secrets.SERVER_HOST }}
+    steps:
+      - name: SSH sozlash
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "$HOST" > ~/.ssh/known_hosts
+
+      - name: Buyruq
+        env:
+          CMD: ${{ inputs.command }}
+        run: |
+          printf '%s\n' "$CMD" | ssh -i ~/.ssh/deploy_key "deploy@$HOST" \
+            'cd ~/enagalar_uz/deploy && DC="docker compose --env-file .env.production -f docker-compose.prod.yml" && export DC && bash -s' 2>&1
+
+      - name: Kalitni o'chirish
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
