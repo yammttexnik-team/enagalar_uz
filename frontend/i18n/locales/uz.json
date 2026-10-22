@@ -1,18 +1,200 @@
 {
-  "nav": { "login": "Kirish" },
-  "footer": { "tagline": "ishonchli enagalar platformasi" },
+  "brand": { "name": "enagalar.uz" },
+  "nav": {
+    "nannies": "Enagalar",
+    "vacancies": "Vakansiyalar",
+    "how": "Qanday ishlaydi",
+    "login": "Kirish",
+    "logout": "Chiqish",
+    "cabinet": "Kabinet",
+    "menu": "Menyu",
+    "closeMenu": "Menyuni yopish",
+    "language": "Tilni tanlash",
+    "theme": "Mavzuni almashtirish",
+    "toHome": "Bosh sahifa",
+    "skip": "Asosiy qismga oʻtish",
+    "main": "Asosiy",
+    "mobile": "Mobil menyu"
+  },
+  "footer": {
+    "tagline": "Oʻzbekistondagi ota-onalar uchun tekshirilgan enagani topish va u bilan xavfsiz gaplashishning eng sodda yoʻli.",
+    "everywhere": "Barcha viloyatlarda",
+    "platform": "Platforma",
+    "parents": "Ota-onalarga",
+    "forNannies": "Enagalarga",
+    "telegram": "Telegram",
+    "channel": "Telegram kanal",
+    "bot": "Telegram bot",
+    "safety": "Xavfsizlik",
+    "trust": "Nishonlar va tekshiruv",
+    "faq": "Savollar",
+    "rights": "Barcha huquqlar himoyalangan."
+  },
   "home": {
-    "seoTitle": "Enaga topish — ishonchli enagalar | enagalar.uz",
-    "title": "Farzandingiz uchun ishonchli enaga",
-    "subtitle": "Tasdiqlangan enagalar, qulay chat va AI yordamchi. Bepul.",
-    "chooseRegion": "Hududni tanlang",
-    "findNanny": "Enaga topish",
-    "iAmNanny": "Men enagaman — ish topmoqchiman",
-    "features": {
-      "verified": { "title": "Tasdiqlangan enagalar", "text": "Pasport va hujjatlari tekshirilgan enagalar maxsus nishonga ega." },
-      "chat": { "title": "Qulay chat", "text": "Telefon raqam bermasdan, platformaning o'zida yozishasiz." },
-      "ai": { "title": "AI yordamchi", "text": "Anketa yozish, mos enagani topish va savollarga javob." },
-      "free": { "title": "Bepul", "text": "Obuna yo'q: e'lon joylash va aloqa qilish bepul." }
+    "seoTitle": "Enaga topish — tekshirilgan enagalar — enagalar.uz",
+    "seoDescription": "Tasdiqlangan enagalar, xavfsiz chat va AI yordamchi — butun Oʻzbekiston boʻylab. Bepul.",
+    "hero": {
+      "overline": "Xotirjam ota-onalar uchun",
+      "title1": "Farzandingiz uchun",
+      "title2": "ishonchli enaga",
+      "subtitle": "Tasdiqlangan enagalar, xavfsiz chat va AI yordamchi — butun Oʻzbekiston boʻylab. Bepul.",
+      "tabsLabel": "Qidiruv turi",
+      "tabNanny": "Enaga qidiryapman",
+      "tabJob": "Ish qidiryapman",
+      "region": "Hudud",
+      "regionPlaceholder": "Viloyatni tanlang",
+      "allRegions": "Barcha viloyatlar",
+      "ctaNanny": "Enaga topish",
+      "ctaJob": "Vakansiyalarni koʻrish",
+      "chips": {
+        "verified": "Tasdiqlangan enagalar",
+        "free": "Bepul",
+        "regions": "Barcha viloyatlar"
+      },
+      "visual": {
+        "alt": "Enaga anketasi, nishonlar va chat namunasi",
+        "name": "Dilnoza, 34 yosh",
+        "meta": "Chilonzor · 6 yil tajriba",
+        "verified": "Tasdiqlangan",
+        "dispensary": "Dispanser hisobida turmaydi",
+        "quick": "Tez javob beradi",
+        "msgIn": "Assalomu alaykum! Ertaga soat 9 da kela olasizmi?",
+        "msgOut": "Ha, albatta. Mayli, tanishib chiqamiz.",
+        "second": "Malika, 41 yosh",
+        "secondMeta": "Yunusobod · 11 yil"
+      }
+    },
+    "audiences": {
+      "overline": "Ikki tomonlama platforma",
+      "title": "Ota-ona ham, enaga ham teng huquqli",
+      "subtitle": "Har ikki tomon ham oʻz e’loni va anketasini joylaydi, bir-birini topadi va platforma ichida yozishadi.",
+      "parents": {
+        "label": "Ota-onalarga",
+        "title": "Menga shunday enaga kerak",
+        "text": "E’lon joylang — mos enagalar oʻzi yozadi. Yoki tayyor anketalar orasidan qidiring.",
+        "points": [
+          "Pasporti tekshirilgan enagalar nishon bilan koʻrsatiladi",
+          "Telefon raqamsiz, platforma ichidagi chatda yozishasiz",
+          "E’lon 30 kun amal qiladi — eskirgan e’lon qolmaydi"
+        ],
+        "cta": "E’lon joylash",
+        "ctaSecondary": "Enaga topish"
+      },
+      "nannies": {
+        "label": "Enagalarga",
+        "title": "Ishingizni qadrlaydigan oilalarni toping",
+        "text": "Anketa yarating, hujjatlaringizni tasdiqlating va viloyatingizdagi oilalarning e’lonlariga javob bering.",
+        "points": [
+          "AI yordamchi anketani siz bilan birga yozadi",
+          "Nishonlar sizga ota-onalar ishonchini beradi",
+          "Bitta tugma bilan e’longa javob bering"
+        ],
+        "cta": "Anketa yaratish",
+        "ctaSecondary": "Vakansiyalarni koʻrish"
+      }
+    },
+    "how": {
+      "overline": "Qanday ishlaydi",
+      "title": "Toʻrt qadamda — Telegram orqali",
+      "subtitle": "Parol va uzun anketalar yoʻq. Raqamingizni Telegram bot orqali yuborasiz, xolos.",
+      "steps": [
+        { "title": "Telegram orqali kiring", "text": "Botga oʻting va raqamingizni yuboring. Parol eslab yurish shart emas." },
+        { "title": "E’lon yoki anketa joylang", "text": "Ota-ona nimaga ehtiyoj borligini yozadi, enaga oʻzi haqida gapirib beradi." },
+        { "title": "AI mos nomzodlarni tanlaydi", "text": "Yordamchi tajriba, hudud, til va jadvalga qarab eng mos 5 nomzodni koʻrsatadi." },
+        { "title": "Chatda gaplashing", "text": "Savol bering, sinov kunini kelishing. Tanishuvdan oldin pul oʻtkazmang." }
+      ]
+    },
+    "trust": {
+      "overline": "Ishonch va xavfsizlik",
+      "title": "Nishon — bu haqiqiy tekshiruv, bezak emas",
+      "subtitle": "Har bir nishon hujjat tekshirilgandan keyin beriladi. Ota-ona nimaga ishonishi mumkinligini koʻrib turadi.",
+      "badgesTitle": "Nishonlar",
+      "passport": {
+        "title": "Pasport tekshiruvi",
+        "text": "Moderator pasport maʼlumotlarini tekshiradi va “Tasdiqlangan” nishonini beradi."
+      },
+      "deleted": {
+        "title": "Hujjat rasmi oʻchiriladi",
+        "text": "Pasport rasmi tekshiruvdan keyin oʻchiriladi. Faqat natija qoladi: kim va qachon tekshirgan."
+      },
+      "private": {
+        "title": "Maʼlumotlar yashirin",
+        "text": "Pasport maʼlumotlari shifrlangan holda saqlanadi va profilda hech kimga koʻrinmaydi — faqat nishon."
+      },
+      "tip": "Ehtiyot boʻling: tanishuvdan oldin pul oʻtkazmang va pasport rasmini yubormang."
+    },
+    "ai": {
+      "overline": "AI yordamchi",
+      "title": "Yozish, qidirish va tarjima — yordamchi bajaradi",
+      "subtitle": "Sizdan faqat oddiy gap kerak. Qolganini AI yordamchi qiladi.",
+      "items": [
+        { "title": "Mos nomzodlarni topadi", "text": "“Chilonzorda 3 yoshli bolaga, rus tilida” deb yozing — yordamchi eng mos 5 ta nomzodni “nega mos” izohi bilan koʻrsatadi." },
+        { "title": "Anketa va e’lon yozadi", "text": "Bir necha soʻz aytasiz — tayyor, tartibli matn olasiz. Oʻzbekcha va ruscha." },
+        { "title": "Chatda tarjima qiladi", "text": "Oʻzbekcha va ruscha yozishuv oʻzaro tushunarli boʻladi: lotin, kirill va rus tilida." }
+      ],
+      "cta": "AI bilan yozish",
+      "promptLabel": "Siz yozasiz",
+      "prompt": "Yunusobodda 2 yoshli qizimga rus tilini biladigan enaga kerak, 9:00 dan 18:00 gacha.",
+      "answerLabel": "AI yordamchi",
+      "answer": "Tushundim. 3 ta mos enaga topildi: hammasi Yunusobodda, rus tilini biladi, pasporti tekshirilgan."
+    },
+    "regions": {
+      "overline": "Hududlar",
+      "title": "Butun Oʻzbekiston boʻylab",
+      "subtitle": "Faqat Toshkent emas — barcha 14 ta hududda ota-onalar va enagalar bir joyda."
+    },
+    "faq": {
+      "overline": "Savollar",
+      "title": "Koʻp beriladigan savollar",
+      "items": [
+        { "label": "Xizmat pullikmi?", "content": "Yoʻq. Dastlabki oylarda roʻyxatdan oʻtish, e’lon joylash, anketa yaratish va chat — hammasi bepul. Yashirin toʻlov yoʻq." },
+        { "label": "Roʻyxatdan qanday oʻtaman?", "content": "Telegram bot orqali. “Kirish” tugmasini bosing, botga oʻting va raqamingizni yuboring — parol kerak emas." },
+        { "label": "“Tasdiqlangan” nishoni nima?", "content": "Foydalanuvchi pasport maʼlumotlarini kiritadi, moderator tekshiradi. Pasport rasmi tekshiruvdan keyin oʻchiriladi, profilda faqat nishon koʻrinadi." },
+        { "label": "Enaganing telefon raqamini koʻraman?", "content": "Dastlab yozishuv platformaning ichki chatida boʻladi. Tanishuvdan oldin pul oʻtkazmang va pasport rasmini yubormang." },
+        { "label": "Enaga boʻlsam, nima qilishim kerak?", "content": "Telegram orqali kiring, “Men enagaman” ni tanlang va anketa yarating. AI yordamchi matnni yozishda yordam beradi." },
+        { "label": "Ruscha ishlaydimi?", "content": "Ha. Sayt va chat oʻzbekcha va ruscha ishlaydi, AI yordamchi xabarlarni tarjima qiladi." }
+      ]
+    },
+    "cta": {
+      "title": "Xotirjam boshlang",
+      "text": "Ota-ona ishga xotirjam ketadi, enaga ishini xotirjam qiladi. Bepul boshlash uchun Telegram yetarli.",
+      "primary": "Telegram orqali kirish",
+      "secondary": "Qanday ishlaydi"
     }
+  },
+  "auth": {
+    "loginSeo": "Kirish — enagalar.uz",
+    "loginTitle": "enagalar.uz ga kirish",
+    "loginText": "Kirish Telegram bot orqali. Parol va SMS kod shart emas.",
+    "loginButton": "Telegram orqali kirish",
+    "starting": "Havola tayyorlanmoqda…",
+    "waitingTitle": "Telegram botga oʻting va raqamingizni yuboring",
+    "waitingText": "Bot ochilmadimi? Pastdagi tugmani bosing. Raqamingiz yuborilgach, bu sahifa oʻzi ochiladi.",
+    "openBot": "Telegram botni ochish",
+    "waiting": "Tasdiqlash kutilmoqda…",
+    "expired": "Havola muddati tugadi. Yangisini olish mumkin.",
+    "retry": "Qayta urinish",
+    "error": "Nimadir xato ketdi. Bir daqiqadan keyin qayta urinib koʻring.",
+    "note": "Davom etib, siz foydalanish shartlariga rozilik bildirasiz.",
+    "points": ["Bepul", "Parolsiz", "Xavfsiz"],
+    "startSeo": "Boshlash — enagalar.uz",
+    "startTitle": "Siz kimsiz?",
+    "startText": "Rolni hozir tanlang. Keyinroq ikkinchisini ham qoʻshish mumkin.",
+    "parent": "Men ota-onaman",
+    "parentText": "Farzandim uchun ishonchli enaga qidiryapman.",
+    "nanny": "Men enagaman",
+    "nannyText": "Ish qidiryapman va anketa yaratmoqchiman.",
+    "roleError": "Rolni saqlab boʻlmadi. Qayta urinib koʻring.",
+    "cabinetSeo": "Kabinet — enagalar.uz",
+    "cabinetTitle": "Kabinet",
+    "hello": "Salom",
+    "name": "Ism",
+    "phone": "Telefon",
+    "roles": "Rollar",
+    "badges": "Nishonlar",
+    "noBadges": "Hozircha nishon yoʻq. Tasdiqlanish uchun tez orada hujjat yuklash mumkin boʻladi.",
+    "notSet": "Koʻrsatilmagan",
+    "soon": "Ish stoli tez orada: e’lonlar, anketa, chatlar shu yerda boʻladi.",
+    "role": { "parent": "Ota-ona", "nanny": "Enaga" }
   }
 }

@@ -14,12 +14,28 @@ export default defineNuxtConfig({
     },
   },
 
+  fonts: {
+    families: [
+      { name: 'Mulish', provider: 'google', weights: [800, 900], styles: ['normal'], subsets: ['latin', 'latin-ext', 'cyrillic', 'cyrillic-ext'] },
+      { name: 'Inter', provider: 'google', weights: [400, 500, 600], styles: ['normal'], subsets: ['latin', 'latin-ext', 'cyrillic', 'cyrillic-ext'] },
+    ],
+  },
+
   app: {
     head: {
       htmlAttrs: { lang: 'uz' },
       title: 'enagalar.uz',
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/brand/favicon.svg' },
+        { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
+        { rel: 'apple-touch-icon', href: '/brand/apple-touch-icon.png' },
+      ],
       meta: [
-        { name: 'description', content: "Ishonchli enagalar va ota-onalar uchun platforma" },
+        { name: 'theme-color', content: '#018186' },
+        { property: 'og:image', content: '/brand/og-image.png' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:site_name', content: 'enagalar.uz' },
+        { name: 'twitter:card', content: 'summary_large_image' },
       ],
     },
   },

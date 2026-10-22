@@ -1,17 +1,3 @@
-/** Laravel API'ga so'rov yuborish uchun umumiy $fetch. */
-export function useApi() {
-  const config = useRuntimeConfig()
-  const { locale } = useI18n()
-
-  return $fetch.create({
-    baseURL: config.public.apiBase,
-    headers: { Accept: 'application/json' },
-    onRequest({ options }) {
-      options.headers.set('Accept-Language', locale.value)
-    },
-  })
-}
-
 export interface LocalizedName {
   uz: string
   uz_cyrl?: string
@@ -26,6 +12,29 @@ export interface District {
 
 export interface Region extends District {
   districts: District[]
+}
+
+export interface Badge {
+  slug: string
+  name: LocalizedName
+  description: LocalizedName
+  icon: string
+  color: string
+}
+
+export interface User {
+  id: number
+  name: string | null
+  phone: string | null
+  telegram_username: string | null
+  locale: string | null
+  roles: string[]
+  badges: Badge[]
+}
+
+/** Laravel API'ga so'rov yuborish uchun umumiy $fetch (kirgan bo'lsa Bearer token bilan). */
+export function useApi() {
+  return useAuthStore().api
 }
 
 export function useLocalizedName() {

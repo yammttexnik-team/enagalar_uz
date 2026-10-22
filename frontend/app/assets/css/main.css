@@ -1,2 +1,48 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+@import "./brand.css";
+
+:root {
+  --ui-text-dimmed: var(--ui-color-neutral-500);
+  --ui-warning: var(--ui-color-warning-600);
+  --ui-bg: var(--ui-color-neutral-50);
+  --shadow-soft: 0 1px 2px rgb(39 34 27 / .06), 0 8px 24px rgb(39 34 27 / .06);
+  --shadow-lift: 0 2px 4px rgb(39 34 27 / .06), 0 18px 40px rgb(39 34 27 / .10);
+}
+
+.dark {
+  --ui-text-dimmed: var(--ui-color-neutral-400);
+  --ui-bg: var(--ui-color-neutral-950);
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / .3), 0 8px 24px rgb(0 0 0 / .25);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / .3), 0 18px 40px rgb(0 0 0 / .35);
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+body { font-family: var(--font-sans); background: var(--ui-bg); }
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+  text-wrap: balance;
+}
+
+.display-title { font-weight: 900; letter-spacing: -0.025em; line-height: 1.05; font-size: clamp(2.25rem, 6vw, 3.5rem); }
+.h1-title { font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; font-size: clamp(1.875rem, 4vw, 2.5rem); }
+.h2-title { font-weight: 800; letter-spacing: -0.015em; line-height: 1.2; font-size: clamp(1.5rem, 3vw, 1.875rem); }
+.h3-title { font-weight: 800; line-height: 1.3; font-size: clamp(1.25rem, 2vw, 1.5rem); }
+.overline { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; line-height: 1.4; }
+
+.surface {
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-border);
+  border-radius: 1.5rem;
+  box-shadow: var(--shadow-soft);
+}
+.dark .surface { background: var(--ui-color-neutral-900); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+@keyframes float-y { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
+.float-slow { animation: float-y 7s ease-in-out infinite; }
