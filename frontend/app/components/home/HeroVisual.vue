@@ -4,7 +4,7 @@ const { t } = useI18n()
 
 <template>
   <div
-    class="relative mx-auto aspect-[1/1.02] w-full max-w-[440px] select-none lg:ml-auto"
+    class="relative mx-auto aspect-[1/1.02] w-full max-w-[480px] select-none lg:ml-auto"
     role="img"
     :aria-label="t('home.hero.visual.alt')"
   >

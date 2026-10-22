@@ -30,7 +30,7 @@ const telegram = computed(() => [
         </div>
 
         <div>
-          <h2 class="overline text-brand-300">{{ t('footer.platform') }}</h2>
+          <h2 class="eyebrow text-brand-300">{{ t('footer.platform') }}</h2>
           <ul class="mt-4 space-y-2.5 text-sm">
             <li v-for="l in platform" :key="l.label">
               <NuxtLink :to="l.to" class="text-sand-200 hover:text-white underline-offset-4 hover:underline">{{ l.label }}</NuxtLink>
@@ -39,7 +39,7 @@ const telegram = computed(() => [
         </div>
 
         <div>
-          <h2 class="overline text-brand-300">{{ t('footer.safety') }}</h2>
+          <h2 class="eyebrow text-brand-300">{{ t('footer.safety') }}</h2>
           <ul class="mt-4 space-y-2.5 text-sm">
             <li v-for="l in safety" :key="l.label">
               <NuxtLink :to="l.to" class="text-sand-200 hover:text-white underline-offset-4 hover:underline">{{ l.label }}</NuxtLink>
@@ -48,7 +48,7 @@ const telegram = computed(() => [
         </div>
 
         <div>
-          <h2 class="overline text-brand-300">{{ t('footer.telegram') }}</h2>
+          <h2 class="eyebrow text-brand-300">{{ t('footer.telegram') }}</h2>
           <ul class="mt-4 space-y-2.5 text-sm">
             <li v-for="l in telegram" :key="l.label">
               <a :href="l.to" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sand-200 hover:text-white underline-offset-4 hover:underline">

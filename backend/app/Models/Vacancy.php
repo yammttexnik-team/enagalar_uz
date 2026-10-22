@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PriceUnit;
+use App\Jobs\ComputeMatches;
 use App\Enums\UserStatus;
 use App\Enums\VacancyStatus;
 use App\Enums\WorkFormat;
@@ -82,5 +83,7 @@ class Vacancy extends Model
             'published_at' => now(),
             'expires_at' => now()->addDays(self::LIFETIME_DAYS),
         ]);
+
+        ComputeMatches::dispatch(ComputeMatches::VACANCY, $this->id);
     }
 }

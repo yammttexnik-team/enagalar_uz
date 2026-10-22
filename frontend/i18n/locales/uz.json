@@ -34,7 +34,7 @@
     "seoTitle": "Enaga topish — tekshirilgan enagalar — enagalar.uz",
     "seoDescription": "Tasdiqlangan enagalar, xavfsiz chat va AI yordamchi — butun Oʻzbekiston boʻylab. Bepul.",
     "hero": {
-      "overline": "Xotirjam ota-onalar uchun",
+      "eyebrow": "Xotirjam ota-onalar uchun",
       "title1": "Farzandingiz uchun",
       "title2": "ishonchli enaga",
       "subtitle": "Tasdiqlangan enagalar, xavfsiz chat va AI yordamchi — butun Oʻzbekiston boʻylab. Bepul.",
@@ -65,7 +65,7 @@
       }
     },
     "audiences": {
-      "overline": "Ikki tomonlama platforma",
+      "eyebrow": "Ikki tomonlama platforma",
       "title": "Ota-ona ham, enaga ham teng huquqli",
       "subtitle": "Har ikki tomon ham oʻz e’loni va anketasini joylaydi, bir-birini topadi va platforma ichida yozishadi.",
       "parents": {
@@ -94,7 +94,7 @@
       }
     },
     "how": {
-      "overline": "Qanday ishlaydi",
+      "eyebrow": "Qanday ishlaydi",
       "title": "Toʻrt qadamda — Telegram orqali",
       "subtitle": "Parol va uzun anketalar yoʻq. Raqamingizni Telegram bot orqali yuborasiz, xolos.",
       "steps": [
@@ -105,7 +105,7 @@
       ]
     },
     "trust": {
-      "overline": "Ishonch va xavfsizlik",
+      "eyebrow": "Ishonch va xavfsizlik",
       "title": "Nishon — bu haqiqiy tekshiruv, bezak emas",
       "subtitle": "Har bir nishon hujjat tekshirilgandan keyin beriladi. Ota-ona nimaga ishonishi mumkinligini koʻrib turadi.",
       "badgesTitle": "Nishonlar",
@@ -124,7 +124,7 @@
       "tip": "Ehtiyot boʻling: tanishuvdan oldin pul oʻtkazmang va pasport rasmini yubormang."
     },
     "ai": {
-      "overline": "AI yordamchi",
+      "eyebrow": "AI yordamchi",
       "title": "Yozish, qidirish va tarjima — yordamchi bajaradi",
       "subtitle": "Sizdan faqat oddiy gap kerak. Qolganini AI yordamchi qiladi.",
       "items": [
@@ -139,12 +139,12 @@
       "answer": "Tushundim. 3 ta mos enaga topildi: hammasi Yunusobodda, rus tilini biladi, pasporti tekshirilgan."
     },
     "regions": {
-      "overline": "Hududlar",
+      "eyebrow": "Hududlar",
       "title": "Butun Oʻzbekiston boʻylab",
       "subtitle": "Faqat Toshkent emas — barcha 14 ta hududda ota-onalar va enagalar bir joyda."
     },
     "faq": {
-      "overline": "Savollar",
+      "eyebrow": "Savollar",
       "title": "Koʻp beriladigan savollar",
       "items": [
         { "label": "Xizmat pullikmi?", "content": "Yoʻq. Dastlabki oylarda roʻyxatdan oʻtish, e’lon joylash, anketa yaratish va chat — hammasi bepul. Yashirin toʻlov yoʻq." },

@@ -4,6 +4,7 @@ namespace App\Filament\Support;
 
 use App\Enums\NannyProfileStatus;
 use App\Enums\VacancyStatus;
+use App\Jobs\ComputeMatches;
 use App\Models\NannyProfile;
 use App\Models\Vacancy;
 use Filament\Actions\Action;
@@ -20,10 +21,13 @@ class ModerationActions
                 ->icon('heroicon-o-check')
                 ->color('success')
                 ->visible(fn (NannyProfile $record) => $record->status !== NannyProfileStatus::Active)
-                ->action(fn (NannyProfile $record) => $record->update([
-                    'status' => NannyProfileStatus::Active,
-                    'published_at' => $record->published_at ?? now(),
-                ])),
+                ->action(function (NannyProfile $record) {
+                    $record->update([
+                        'status' => NannyProfileStatus::Active,
+                        'published_at' => $record->published_at ?? now(),
+                    ]);
+                    ComputeMatches::dispatch(ComputeMatches::NANNY, $record->id);
+                }),
             Action::make('reject')
                 ->label('Rad etish')
                 ->icon('heroicon-o-x-circle')

@@ -36,4 +36,9 @@ class VacancyPolicy
     {
         return $this->manage($user, $vacancy);
     }
+
+    public function viewMatches(User $user, Vacancy $vacancy): bool
+    {
+        return $this->manage($user, $vacancy);
+    }
 }

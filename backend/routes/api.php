@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\Auth\TelegramAuthController;
 use App\Http\Controllers\Api\BadgeController;
 use App\Http\Controllers\Api\FavoriteController;
+use App\Http\Controllers\Api\MatchController;
 use App\Http\Controllers\Api\MeController;
 use App\Http\Controllers\Api\MyNannyProfileController;
 use App\Http\Controllers\Api\MyVacancyController;
@@ -45,6 +46,7 @@ Route::prefix('v1')->group(function () {
             Route::delete('/my/vacancies/{vacancy}', [MyVacancyController::class, 'destroy']);
             Route::post('/my/vacancies/{vacancy}/close', [MyVacancyController::class, 'close']);
             Route::get('/my/vacancies/{vacancy}/applications', [ApplicationController::class, 'forVacancy']);
+            Route::get('/my/vacancies/{vacancy}/matches', [MatchController::class, 'forVacancy']);
             Route::patch('/applications/{application}', [ApplicationController::class, 'updateStatus']);
         });
 
@@ -54,6 +56,7 @@ Route::prefix('v1')->group(function () {
             Route::put('/my/nanny-profile', [MyNannyProfileController::class, 'update']);
             Route::post('/my/nanny-profile/submit', [MyNannyProfileController::class, 'submit']);
             Route::patch('/my/nanny-profile/availability', [MyNannyProfileController::class, 'availability']);
+            Route::get('/my/nanny-profile/matches', [MatchController::class, 'forNanny']);
             Route::post('/vacancies/{id}/apply', [ApplicationController::class, 'apply'])->whereNumber('id');
             Route::get('/my/applications', [ApplicationController::class, 'mine']);
         });

@@ -36,6 +36,14 @@ return [
         'login_ttl_minutes' => 10,
     ],
 
+    'anthropic' => [
+        'key' => env('ANTHROPIC_API_KEY'),
+        'matching_model' => env('ANTHROPIC_MATCHING_MODEL', 'claude-haiku-5-5'),
+        'enabled' => (bool) env('AI_MATCHING_ENABLED', true),
+        // Bitta foydalanuvchi uchun kuniga AI so'rovlar soni (undan keyin qoidalar bilan hisoblanadi).
+        'daily_limit' => (int) env('AI_DAILY_LIMIT', 30),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),

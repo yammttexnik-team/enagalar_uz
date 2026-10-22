@@ -37,9 +37,9 @@ function search() {
   <section class="relative overflow-hidden bg-linear-to-b from-brand-50 to-default dark:from-brand-950 dark:to-default">
     <UContainer class="grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8 lg:py-24">
       <div>
-        <p class="overline inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white/70 px-3 py-1.5 text-brand-700 dark:border-brand-800 dark:bg-brand-900/60 dark:text-brand-300">
+        <p class="eyebrow inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white/70 px-3 py-1.5 text-brand-700 dark:border-brand-800 dark:bg-brand-900/60 dark:text-brand-300">
           <span class="size-1.5 rounded-full bg-apricot-500 dark:bg-apricot-300" aria-hidden="true" />
-          {{ t('home.hero.overline') }}
+          {{ t('home.hero.eyebrow') }}
         </p>
 
         <h1 class="display-title mt-5 text-highlighted">
