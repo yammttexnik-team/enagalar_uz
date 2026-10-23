@@ -180,7 +180,7 @@ class ListingImportTest extends TestCase
 
     public function test_auto_publish_makes_listing_active(): void
     {
-        config(['imports.auto_publish' => true]);
+        config(['imports.ai_review' => false, 'imports.auto_publish' => true]);
         $this->fakeClaude($this->aiResult(['kind' => 'nanny', 'title' => '', 'description' => '']));
 
         app(ListingImporter::class)->importPost($this->tgPost(5, 'Tajribali enagaman, ish qidiryapman. Bolalarni yaxshi ko\'raman.'));

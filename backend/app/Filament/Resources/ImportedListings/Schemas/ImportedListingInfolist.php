@@ -21,6 +21,8 @@ class ImportedListingInfolist
                 TextEntry::make('type')->label('Turi')->badge()
                     ->formatStateUsing(fn (string $state) => ImportedListingResource::TYPES[$state] ?? $state),
                 TextEntry::make('status')->label('Holat')->badge(),
+                TextEntry::make('ai_decision')->label('AI qarori')->badge()->placeholder('—'),
+                TextEntry::make('ai_reason')->label('AI izohi')->placeholder('—')->columnSpan(2),
                 TextEntry::make('archive_reason')->label('Arxiv sababi')->placeholder('—'),
                 TextEntry::make('title')->label('Sarlavha')->columnSpanFull(),
                 TextEntry::make('description')->label('Tavsif')->columnSpanFull(),

@@ -8,6 +8,10 @@ return [
     // false bo'lsa, yangi import qilingan e'lon avval admin tasdig'iga tushadi (birinchi hafta shunday).
     'auto_publish' => (bool) env('IMPORTS_AUTO_PUBLISH', false),
 
+    // true bo'lsa, AI (extraction bilan bir chaqiruvda) e'lonni ko'rib chiqadi: approve — saytga, reject — rad, manual — admin.
+    // false bo'lsa, eski auto_publish ishlaydi.
+    'ai_review' => (bool) env('IMPORTS_AI_REVIEW', true),
+
     // Bitta kanal uchun bir ishga tushishda ko'rib chiqiladigan postlar soni (t.me/s sahifalari).
     'max_posts_per_run' => (int) env('IMPORTS_MAX_POSTS', 60),
 

@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'price_min', 'price_max', 'price_unit', 'children_count', 'children_ages', 'age_groups', 'languages',
     'experience_years', 'person_age', 'live_in', 'is_urgent', 'contact_hashes', 'published_at', 'expires_at',
     'last_checked_at', 'archived_at', 'archive_reason', 'removal_requested_at', 'removal_reason',
-    'claimed_by_user_id', 'claimed_at', 'claim_dismissed_at',
+    'claimed_by_user_id', 'claimed_at', 'claim_dismissed_at', 'ai_decision', 'ai_reason', 'ai_reviewed_at',
 ])]
 #[Hidden(['raw_text', 'contact_hashes', 'content_hash'])]
 class ImportedListing extends Model
@@ -54,6 +54,7 @@ class ImportedListing extends Model
             'removal_requested_at' => 'datetime',
             'claimed_at' => 'datetime',
             'claim_dismissed_at' => 'datetime',
+            'ai_reviewed_at' => 'datetime',
         ];
     }
 
