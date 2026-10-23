@@ -9,13 +9,15 @@ use Illuminate\Support\Facades\Http;
 /** Telegram Bot API uchun yupqa mijoz. */
 class TelegramBot
 {
-    public function sendMessage(int $chatId, string $text, ?array $replyMarkup = null): Response
+    public function sendMessage(int|string $chatId, string $text, ?array $replyMarkup = null, bool $disablePreview = false): Response
     {
         return $this->call('sendMessage', array_filter([
             'chat_id' => $chatId,
             'text' => $text,
             'parse_mode' => 'HTML',
             'reply_markup' => $replyMarkup,
+            // Kanal digestida havola ko'rinishi (preview) o'chiriladi
+            'disable_web_page_preview' => $disablePreview ?: null,
         ]));
     }
 
