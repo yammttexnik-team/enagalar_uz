@@ -15,3 +15,4 @@ Schedule::command('connections:ask')->hourlyAt(15);
 // Ochiq Telegram kanallardan e'lonlar: 08:00–22:00 har 2 soatda, manbadagi holat kuniga ikki marta
 Schedule::command('imports:fetch')->cron('0 8-22/2 * * *')->timezone('Asia/Tashkent')->withoutOverlapping(120);
 Schedule::command('imports:check')->cron('30 9,18 * * *')->timezone('Asia/Tashkent')->withoutOverlapping(120);
+Schedule::command('channel:digest')->dailyAt('19:00')->timezone('Asia/Tashkent')->withoutOverlapping();
