@@ -48,11 +48,16 @@ class ConversationResource extends JsonResource
         $words = preg_split('/\s+/u', trim((string) $other->name), -1, PREG_SPLIT_NO_EMPTY);
         $initials = mb_strtoupper(mb_substr($words[0] ?? '', 0, 1).(count($words) > 1 ? mb_substr(end($words), 0, 1) : ''));
 
+        // Tomonga qarab reyting: enaga anketasidan yoki ota-ona profilidan
+        $profile = $isNanny ? $other->nannyProfile : ($other->relationLoaded('parentProfile') ? $other->parentProfile : null);
+
         return [
             'id' => $other->id,
             'name' => $other->publicName(),
             'initials' => $initials,
             'role' => $isNanny ? 'nanny' : 'parent',
+            'rating' => $profile ? (float) $profile->rating_avg : null,
+            'reviews_count' => $profile ? (int) $profile->reviews_count : 0,
             'nanny_profile_id' => $isNanny ? $other->nannyProfile->id : null,
             'verified' => $other->activeBadges->contains('slug', Badge::VERIFIED),
             'last_seen_at' => $other->last_seen_at?->toISOString(),

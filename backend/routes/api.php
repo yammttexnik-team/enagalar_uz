@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Auth\TelegramAuthController;
 use App\Http\Controllers\Api\BadgeController;
 use App\Http\Controllers\Api\BonusController;
 use App\Http\Controllers\Api\ChatFileController;
+use App\Http\Controllers\Api\ConnectionController;
 use App\Http\Controllers\Api\ConversationController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\MatchController;
@@ -31,6 +32,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('throttle:public-read')->group(function () {
         Route::get('/nannies', [NannyController::class, 'index']);
         Route::get('/nannies/{id}', [NannyController::class, 'show'])->whereNumber('id');
+        Route::get('/nannies/{id}/reviews', [NannyController::class, 'reviews'])->whereNumber('id');
         Route::get('/vacancies', [VacancyController::class, 'index']);
         Route::get('/vacancies/{id}', [VacancyController::class, 'show'])->whereNumber('id');
     });
@@ -105,6 +107,11 @@ Route::prefix('v1')->group(function () {
         });
         Route::patch('/messages/{message}', [MessageController::class, 'update'])->whereNumber('message');
         Route::delete('/messages/{message}', [MessageController::class, 'destroy'])->whereNumber('message');
+
+        // Bog'lanish va reyting: "Birga ishladingizmi?" va baholash
+        Route::get('/my/connections', [ConnectionController::class, 'index']);
+        Route::post('/connections/{connection}/answer', [ConnectionController::class, 'answer'])->whereNumber('connection')->middleware('throttle:20,1');
+        Route::post('/connections/{connection}/review', [ConnectionController::class, 'review'])->whereNumber('connection')->middleware('throttle:10,1');
 
         Route::get('/favorites', [FavoriteController::class, 'index']);
         Route::post('/favorites', [FavoriteController::class, 'store'])->middleware('throttle:favorites');

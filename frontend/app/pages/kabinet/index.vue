@@ -57,7 +57,13 @@ onMounted(async () => {
   catch { /* bonus kartasi soʻrovnomasiz ham ishlaydi */ }
 })
 
-const awaitingBadges = computed(() => verification.value?.badges?.filter(b => b.is_public === null).length ?? 0)
+// "Birga ishladingizmi?" savollari va qo'yilmagan baholar soni
+const ratingPending = ref(0)
+onMounted(() => {
+  useConnections().list().then(r => (ratingPending.value = r.meta.pending_count)).catch(() => {})
+})
+
+const awaitingBadges =computed(() => verification.value?.badges?.filter(b => b.is_public === null).length ?? 0)
 const verifState = computed(() => verification.value?.identity.status ?? 'none')
 const verifTone = computed(() => ({
   approved: 'bg-leaf-50! border-leaf-200! dark:bg-leaf-950/50! dark:border-leaf-800!',
@@ -112,6 +118,15 @@ async function addMissing() {
       <UIcon name="i-lucide-badge-check" class="size-6 shrink-0 text-brand-700 dark:text-brand-200" aria-hidden="true" />
       <span class="min-w-0 flex-1 font-semibold text-highlighted">{{ t('dashboard.verification.noticeText', { n: awaitingBadges }) }}</span>
       <span class="shrink-0 text-sm font-bold text-brand-700 dark:text-brand-200">{{ t('dashboard.verification.noticeCta') }} →</span>
+    </NuxtLink>
+
+    <NuxtLink v-if="ratingPending" :to="localePath('/kabinet/baholash')" class="surface mb-6 flex items-center gap-3 border border-honey-200! bg-honey-50! p-4 dark:border-honey-800! dark:bg-honey-950/50!" data-testid="rating-card">
+      <UIcon name="i-lucide-star" class="size-6 shrink-0 fill-honey-400 text-honey-500" aria-hidden="true" />
+      <span class="min-w-0 flex-1">
+        <span class="block font-semibold text-highlighted">{{ t('rating.overview.title') }}</span>
+        <span class="block text-sm text-muted">{{ t('rating.overview.text', { n: ratingPending }) }}</span>
+      </span>
+      <span class="shrink-0 text-sm font-bold text-honey-800 dark:text-honey-200">{{ t('rating.overview.cta') }} →</span>
     </NuxtLink>
 
     <!-- Bonus -->

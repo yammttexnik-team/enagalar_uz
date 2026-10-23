@@ -1075,5 +1075,45 @@
     },
     "loadError": "Soʻrovnomani yuklab boʻlmadi.",
     "retry": "Qayta urinish"
+  },
+  "rating": {
+    "nav": "Baholash",
+    "seo": "Baholash",
+    "title": "Birga ishladingizmi?",
+    "subtitle": "Yozishgan odamlaringiz haqida soʻraymiz. Ikkalangiz «Ha» desangiz, bir-biringizga baho qoʻya olasiz.",
+    "empty": "Hozircha savol yoʻq. Kimdir bilan yozishganingizdan 3 kun oʻtgach, shu yerda soʻraymiz.",
+    "question": "Bu odam bilan birga ishladingizmi?",
+    "questionHint": "Javobingizni ikkinchi tomon koʻrmaydi. Ikkalangiz «Ha» desangizgina baholash ochiladi.",
+    "yes": "Ha, ishladik",
+    "no": "Yoʻq",
+    "waiting": "Ikkinchi tomon javobini kutyapmiz.",
+    "notWorked": "Birga ishlamagansiz — baholash yoʻq.",
+    "rateTitle": "Baho qoʻying: {name}",
+    "chooseStars": "Baho tanlang",
+    "starN": "{n} yulduz",
+    "starsAria": "5 dan {n}",
+    "comment": "Izoh",
+    "optional": "ixtiyoriy",
+    "commentPlaceholder": "Nima yoqdi, nimaga eʼtibor berish kerak?",
+    "commentHelp": "{n}/{max}. Telefon va havolalar olib tashlanadi.",
+    "submit": "Baholash",
+    "yourReview": "Sizning bahoyingiz:",
+    "hidden": "Moderator yashirgan",
+    "answerSaved": "Javobingiz saqlandi",
+    "reviewSaved": "Rahmat! Bahoingiz saqlandi",
+    "openChat": "Suhbat",
+    "connected": "yozishgan: {when}",
+    "role": {
+      "nanny": "Enaga",
+      "parent": "Ota-ona"
+    },
+    "reviewsTitle": "Sharhlar",
+    "reviewsHint": "Faqat birga ishlaganini ikkala tomon tasdiqlagan ota-onalar sharh qoldira oladi.",
+    "more": "Yana koʻrsatish",
+    "overview": {
+      "title": "Birga ishladingizmi?",
+      "text": "Javob yoki baho kutilmoqda: {n} ta",
+      "cta": "Javob berish"
+    }
   }
 }

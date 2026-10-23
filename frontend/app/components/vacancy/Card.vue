@@ -18,7 +18,7 @@ export interface VacancyItem {
   starts_at: string | null
   published_at: string | null
   expires_at: string | null
-  parent: { name: string, badges: Badge[] } | null
+  parent: { name: string, badges: Badge[], rating?: number, reviews_count?: number } | null
 }
 
 const props = defineProps<{ vacancy: VacancyItem }>()

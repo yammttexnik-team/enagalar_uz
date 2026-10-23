@@ -148,6 +148,10 @@ async function send() {
             <div v-if="v.parent" class="mt-5 flex flex-wrap items-center gap-2.5 border-t border-default pt-4 text-sm">
               <span class="text-muted">{{ t('vacancy.detail.from') }}:</span>
               <span class="font-semibold text-highlighted">{{ v.parent.name }}</span>
+              <span v-if="v.parent.reviews_count && v.parent.rating" class="inline-flex items-center gap-1 font-semibold text-highlighted">
+                <RatingStars :value="v.parent.rating" />{{ v.parent.rating.toFixed(1) }}
+                <span class="font-normal text-muted">({{ v.parent.reviews_count }})</span>
+              </span>
               <SearchBadgeChip v-for="b in v.parent.badges" :key="b.slug" :badge="b" />
             </div>
           </section>

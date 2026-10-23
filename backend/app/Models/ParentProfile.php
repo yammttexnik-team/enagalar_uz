@@ -13,6 +13,13 @@ class ParentProfile extends Model
 {
     use HasFactory;
 
+    protected function casts(): array
+    {
+        return [
+            'rating_avg' => 'decimal:2',
+        ];
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -31,6 +31,9 @@ class VacancyResource extends JsonResource
             'expires_at' => $this->expires_at,
             'parent' => $user ? [
                 'name' => $user->publicName(),
+                // Enagalar qo'ygan baho
+                'rating' => (float) $this->parentProfile->rating_avg,
+                'reviews_count' => (int) $this->parentProfile->reviews_count,
                 'badges' => BadgeResource::collection($user->relationLoaded('activeBadges') ? $user->activeBadges : []),
             ] : null,
         ];

@@ -13,6 +13,7 @@ use App\Models\Message;
 use App\Models\NannyProfile;
 use App\Models\User;
 use App\Models\Vacancy;
+use App\Services\Rating\ConnectionService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -118,6 +119,13 @@ class ChatService
 
         $conversation->unsetRelation('messages');
         $this->afterSend($conversation, $message, $sender);
+
+        // Ikkala tomon ham yozgan bo'lsa — bog'lanish (reyting oqimi uchun).
+        try {
+            app(ConnectionService::class)->detect($conversation);
+        } catch (Throwable $e) {
+            report($e);
+        }
 
         return $message;
     }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { NannyItem } from '~/components/nanny/Card.vue'
 import type { Skill } from '~/composables/useCatalog'
+import type { ReviewItem } from '~/composables/useRating'
 
 interface NannyDetail extends NannyItem {
   bio: string | null
@@ -52,6 +53,26 @@ useHead({ link: [{ rel: 'canonical', href: canonical }] })
 
 const badgeText = (b: NannyDetail['badges'][number]) =>
   (b.description ? localizedName(b.description as never) : '') || (te(`home.trust.badgeText.${b.slug}`) ? t(`home.trust.badgeText.${b.slug}`) : '')
+
+// Sharhlar (ochiq, sahifalab)
+const reviews = ref<ReviewItem[]>([])
+const reviewsPage = ref(1)
+const reviewsLast = ref(1)
+const reviewsLoading = ref(false)
+async function loadReviews(page = 1) {
+  reviewsLoading.value = true
+  try {
+    const r = await api<{ data: ReviewItem[], meta: { current_page: number, last_page: number } }>(`/nannies/${route.params.id}/reviews`, { query: { page } })
+    reviews.value = page === 1 ? r.data : [...reviews.value, ...r.data]
+    reviewsPage.value = r.meta.current_page
+    reviewsLast.value = r.meta.last_page
+  }
+  catch { /* sharhlarsiz ham sahifa ishlaydi */ }
+  finally { reviewsLoading.value = false }
+}
+onMounted(() => {
+  if (nanny.value?.reviews_count) loadReviews()
+})
 
 const { start, loading: starting } = useStartChat()
 const roleBusy = ref(false)
@@ -107,10 +128,10 @@ function report() {
                   <span class="inline-flex items-center gap-1.5 font-medium text-default">
                     <UIcon name="i-lucide-briefcase" class="size-4 text-primary" aria-hidden="true" />{{ expText }}
                   </span>
-                  <span v-if="n.rating > 0" class="inline-flex items-center gap-1 font-semibold text-highlighted">
-                    <UIcon name="i-lucide-star" class="size-4 fill-honey-400 text-honey-500" aria-hidden="true" />
+                  <a v-if="n.reviews_count > 0" href="#reviews" class="inline-flex items-center gap-1.5 font-semibold text-highlighted hover:underline">
+                    <RatingStars :value="n.rating" />
                     {{ n.rating.toFixed(1) }} <span class="font-normal text-muted">· {{ t('nanny.detail.reviews', { n: n.reviews_count }) }}</span>
-                  </span>
+                  </a>
                   <span v-else class="text-muted">{{ t('nanny.detail.noReviews') }}</span>
                 </p>
               </div>
@@ -184,6 +205,39 @@ function report() {
               </li>
             </ul>
             <p v-else class="mt-4 text-muted">{{ t('nanny.detail.noBadges') }}</p>
+          </section>
+
+          <!-- Sharhlar: faqat birga ishlaganini ikkala tomon tasdiqlagan ota-onalardan -->
+          <section id="reviews" class="surface scroll-mt-24 p-6 sm:p-8">
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+              <h2 class="h3-title text-highlighted">{{ t('rating.reviewsTitle') }}</h2>
+              <span v-if="n.reviews_count > 0" class="inline-flex items-center gap-1.5 font-semibold text-highlighted">
+                <RatingStars :value="n.rating" size="md" />{{ n.rating.toFixed(1) }}
+                <span class="font-normal text-muted">· {{ t('nanny.detail.reviews', { n: n.reviews_count }) }}</span>
+              </span>
+            </div>
+            <p class="mt-1 text-sm text-muted">{{ t('rating.reviewsHint') }}</p>
+            <ul v-if="reviews.length" class="mt-5 divide-y divide-default">
+              <li v-for="r in reviews" :key="r.id" class="py-4 first:pt-0 last:pb-0">
+                <p class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+                  <span class="font-semibold text-highlighted">{{ r.author }}</span>
+                  <RatingStars :value="r.rating" />
+                  <span v-if="r.created_at" class="text-muted">· {{ relativeTime(r.created_at) }}</span>
+                </p>
+                <p v-if="r.comment" class="mt-1.5 whitespace-pre-line text-default">{{ r.comment }}</p>
+              </li>
+            </ul>
+            <p v-else-if="!n.reviews_count" class="mt-4 text-muted">{{ t('nanny.detail.noReviews') }}</p>
+            <UButton
+              v-if="reviewsPage < reviewsLast || (n.reviews_count && !reviews.length)"
+              class="mt-5"
+              color="neutral"
+              variant="outline"
+              icon="i-lucide-chevrons-down"
+              :label="t('rating.more')"
+              :loading="reviewsLoading"
+              @click="loadReviews(reviews.length ? reviewsPage + 1 : 1)"
+            />
           </section>
         </div>
 
