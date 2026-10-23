@@ -8,7 +8,7 @@
 
 ## 0. 2026-10-22 kechki yangilanish
 
-- **Sayt ochildi:** `https://161-97-88-95.sslip.io` (Nginx sayt fayli `enagalar-161-97-88-95.sslip.io`, certbot SSL). Admin: `admin@enagalar.uz`, parol serverda `/root/enagalar-admin.txt`.
+- **Sayt ochildi:** `https://enagalar.uz` (23-oktabr; eski sslip manzil yangisiga yo'naltiriladi). Admin: `admin@enagalar.uz`, parol serverda `/root/enagalar-admin.txt`.
 - **Xavfsizlik tuzatishlari:**
   - Telegram login endi bot yuborgan 6 xonali kod bilan tasdiqlanadi.
   - Bloklangan foydalanuvchi API'ga kira olmaydi, uning tokenlari o'chiriladi.
@@ -46,7 +46,7 @@
 
 - **Server ishlamoqda va sayt ochiq** (0-bo'limga qarang).
 - Barcha Docker konteynerlari serverda sog'lom: app, queue, scheduler, reverb, nuxt, postgres, redis va caddy.
-- Domen (`enagalar.uz`) faollashishi 2026-10-23 da kutilmoqda. Ungacha vaqtinchalik `161-97-88-95.sslip.io` ishlatiladi.
+- Domen `enagalar.uz` 2026-10-23 dan ishlaydi.
 - Ertaga (2026-10-23) marketing kampaniyasi boshlanishi rejalashtirilgan: `docs/MARKETING_REJA.md` A qismi.
 
 ---
@@ -136,27 +136,11 @@ Server (Contabo) **umumiy**: unda 40 dan ortiq boshqa sayt ishlaydi (Nginx, PHP-
 
 ## 4. Qilinishi kerak bo'lgan ishlar (navbat bo'yicha)
 
-### A. Saytni ochish (birinchi navbatda)
-1. **Set domain** natijasini tekshirish. U `161-97-88-95.sslip.io` bilan ishga tushirilgan edi.
-   - Agar Telegram webhook qadamida yiqilgan bo'lsa: `deploy.sh` tuzatildi (webhook xatosi endi deploy'ni to'xtatmaydi). **Deploy** ni qayta ishga tushiring, u yangi `entrypoint.sh` ni ham olib keladi (`db:seed` har ishga tushishda).
-   - Set domain kodni rsync qilmaydi, shuning uchun kod o'zgarishlari uchun avval **Deploy** ishga tushiriladi.
-2. **Nginx site** workflow'ini `domain = 161-97-88-95.sslip.io` bilan ishga tushirish.
-   - U `/etc/nginx/sites-available/enagalar-<domen>` faylini yaratadi. `nginx -t` o'tmasa, faylni o'chiradi va Nginx qayta yuklanmaydi. Keyin certbot ishlaydi.
-   - Shablon lokal `nginx -t` dan o'tgan.
-   - sslip.io uchun Let's Encrypt limiti tugagan bo'lishi mumkin. U holda sayt HTTP orqali ishlaydi.
-3. Tekshirish: `https://161-97-88-95.sslip.io/`, `/admin`, `/up`, Telegram orqali kirish (webhook endi ochiq domenga ulanadi).
-4. **Admin yaratish.** `server-setup` ning admin qadami hali bajarilmagan. Ikki yo'l bor:
-   - **Server setup** ni `run_server_setup = false` bilan qayta ishga tushirish (kodni yuboradi, deploy qiladi va admin yaratadi);
-   - yoki Server exec: `printf '%s' 'PAROL' | $DC exec -T app php artisan admin:create admin@enagalar.uz Admin --password-stdin` (parolni `ADMIN_PASSWORD` secret'idan oling).
-5. **Domen faollashganda** (`enagalar.uz` hozir NXDOMAIN, 2026-10-23 da kutilmoqda; whois.uz da tekshiring): **Set domain** `enagalar.uz` bilan, keyin **Nginx site** `enagalar.uz` bilan. DNS yozuvlari tayyor: `@ A 161.97.88.95`, `www CNAME enagalar.uz`.
-   - Eslatma: `mail` va MX yozuvlari ham yangi serverga yo'naltirilgan. Pochta eski hostingda bo'lsa, `mail` ni 185.196.212.52 ga qaytarish kerak.
-
-### B. Ertangi marketing uchun (`docs/MARKETING_REJA.md`)
-1. **"Telegram e'lonini tashlang, AI e'lon tayyorlaydi"** funksiyasi yo'q, lekin shablonlarda va'da qilingan (2-variant).
-   - Kerak: enaga anketasi va vakansiya formasida "Matnni joylash" tugmasi bo'lsin. Claude Haiku orqali matndan maydonlar to'ldirilsin, foydalanuvchi tasdiqlaydi.
-2. Shablonlardagi havolalar `enagalar.uz` ga yozilgan. Domen ishlamasa, `161-97-88-95.sslip.io` ga almashtirish kerak.
-3. Admin panelda kampaniyalarni tekshirish (14 ta kod seed qilinadi) va so'rovnomani bir marta to'liq o'tib ko'rish.
-4. Kampaniya uchun alohida Telegram akkaunt (rejadagi A1). Ommaviy yoki avtomatik DM yuborilmaydi.
+### A. Sayt va marketing
+- **Bajarildi (23-oktabr):** sayt `https://enagalar.uz` da ishlaydi (Nginx sayt fayli `enagalar-enagalar.uz`, certbot SSL, www ham). Eski `161-97-88-95.sslip.io` → 301 `enagalar.uz`. Telegram webhook yangi domenda. `.env.production` zaxirasi: `/root/enagalar.env.production.bak.*`.
+- Admin yaratilgan (`admin@enagalar.uz`, parol `/root/enagalar-admin.txt`). "Matnni joylash (AI)" ishlaydi.
+- Pochta: `mail` va MX yozuvlari yangi serverga yo'naltirilgan. Pochta eski hostingda bo'lsa, `mail` ni 185.196.212.52 ga qaytarish kerak.
+- Marketing: `docs/MARKETING_REJA.md` (0.3, qisqa). Kampaniya uchun alohida Telegram akkaunt; ommaviy yoki avtomatik DM yuborilmaydi.
 
 ### C. Keyingi funksiyalar
 - Pasport tasdig'i uchun bonus (15 000) va hujjat uchun bonus (+5 000), sharh uchun bonus. Bular A0 jadvalida bor, lekin kodlanmagan.

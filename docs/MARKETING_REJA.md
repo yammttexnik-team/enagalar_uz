@@ -29,7 +29,7 @@ Soxta javob yoki e'lon aniqlansa, admin bonusni bekor qiladi.
 
 ## 3. Havolalar
 
-`enagalar.uz` domeni ishga tushguncha **bot havolasini** ishlating: u domenga bog'liq emas.
+Sayt `https://enagalar.uz` da ishlaydi. Xabarlarda **bot havolasi** qulay: odam bir bosishda Telegram'da kiradi. Sayt havolasi ham ishlaydi: `https://enagalar.uz/sorovnoma?c=KOD`, `https://enagalar.uz/kirish?c=KOD`.
 
 | Kod | Qayerda | Havola |
 |---|---|---|
