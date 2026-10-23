@@ -46,10 +46,21 @@ export interface MatchItem<T> {
   vacancy?: T
 }
 
+/** Administrator bergan nishon; is_public === null — foydalanuvchi hali javob bermagan. */
+export interface MyBadge {
+  slug: string
+  name: LocalizedName
+  description: { uz: string | null, ru: string | null }
+  icon: string | null
+  color: string | null
+  is_public: boolean | null
+  granted_at: string | null
+  expires_at: string | null
+}
+
 export interface VerificationState {
   identity: { status: 'none' | 'pending' | 'approved' | 'rejected', rejection_reason: string | null, submitted_at: string | null, verified: boolean }
-  documents: { id: number, badge: { slug: string, name: LocalizedName | string }, status: string, rejection_reason: string | null, issued_at: string | null, submitted_at: string | null }[]
-  available_badges: { slug: string, name: LocalizedName, description: { uz: string | null, ru: string | null }, validity_days: number | null, held: boolean, expires_at: string | null, has_pending: boolean }[]
+  badges: MyBadge[]
 }
 
 export type { Badge }
