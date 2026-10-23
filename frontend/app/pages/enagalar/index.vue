@@ -20,6 +20,14 @@ const { data, status, error, refresh } = await useAsyncData(
   { watch: [filters] },
 )
 
+// Telegram kanallardan olingan e'lonlar soni (shu filtrlar bilan): bo'sh holat ixcham ko'rinadi, sanoqda ham chiqadi
+const importedQuery = computed(() => ({ type: 'nanny', region: filters.value.region || undefined, district: filters.value.district || undefined, work_format: filters.value.work_format || undefined }))
+const { data: importedTotal } = await useAsyncData(
+  'imported-count-nanny',
+  () => api<{ meta: { total: number } }>('/imported', { query: importedQuery.value }).then(r => r.meta.total).catch(() => 0),
+  { watch: [importedQuery] },
+)
+
 const pending = computed(() => status.value === 'pending')
 const total = computed(() => data.value?.meta.total ?? 0)
 const nannies = computed(() => data.value?.data ?? [])
@@ -46,7 +54,7 @@ function changePage(p: number) {
   <SearchShell
     :title="t('nanny.title')"
     :subtitle="t('nanny.subtitle')"
-    :count-label="t('nanny.count', { n: total })"
+    :count-label="importedTotal ? t('nanny.count', { n: total }) + ' · ' + t('imported.section.count', { n: importedTotal }) : t('nanny.count', { n: total })"
     :pending="pending"
     :sort-items="sortItems"
     :sort="filters.sort || 'newest'"
@@ -68,6 +76,7 @@ function changePage(p: number) {
     </div>
     <SearchEmpty
       v-else-if="!nannies.length"
+      :compact="!!importedTotal"
       :title="t('nanny.empty.title')"
       :text="t('nanny.empty.text')"
       :clear="t('nanny.empty.clear')"
