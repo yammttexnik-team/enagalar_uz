@@ -231,6 +231,16 @@ class AiListingParseTest extends TestCase
         $this->assertStringNotContainsString('site.uz', $out);
     }
 
+    public function test_strip_contacts_keeps_salary_ranges_but_not_grouped_phones(): void
+    {
+        $out = ListingParser::stripContacts('Oylik 5 000 000 - 6 000 000 so\'m yoki 100 000 000. Tel 998 901 112 233, 901112233');
+
+        $this->assertStringContainsString('5 000 000 - 6 000 000', $out);
+        $this->assertStringContainsString('100 000 000', $out);
+        $this->assertStringNotContainsString('112 233', $out);
+        $this->assertStringNotContainsString('901112233', $out);
+    }
+
     public function test_district_matches_russian_name(): void
     {
         $region = Region::where('slug', 'tashkent-city')->first();

@@ -132,11 +132,19 @@ TXT;
         $text = preg_replace('~[\w.+-]+@[\w-]+\.[\w.-]+~u', '[email]', $text) ?? '';
         $text = preg_replace('~@[A-Za-z0-9_]{3,}~', '[username]', $text) ?? '';
 
-        // 9 va undan ko'p raqamli ketma-ketlik (yoki + bilan boshlangan) — telefon. Narxlar (3 000 000) qoladi.
+        // 9 va undan ko'p raqamli ketma-ketlik (yoki + bilan boshlangan) — telefon.
+        // Narxlar qoladi: "3 000 000", "5 000 000 - 6 000 000" (minglik guruhlar, oxiri 00).
         return preg_replace_callback('~\+?\d[\d\s\-().]{5,}\d~u', function (array $m) {
+            if (str_starts_with($m[0], '+')) {
+                return '[telefon]';
+            }
+            $parts = preg_split('~\s*[-–—]\s*~u', trim($m[0])) ?: [];
+            $isMoney = $parts !== [] && collect($parts)->every(
+                fn (string $p) => preg_match('~^\d{1,3}(?:[ .,]\d{3})+$~', $p) && str_ends_with($p, '00'),
+            );
             $digits = preg_replace('~\D~', '', $m[0]) ?? '';
 
-            return str_starts_with($m[0], '+') || strlen($digits) >= 9 ? '[telefon]' : $m[0];
+            return ! $isMoney && strlen($digits) >= 9 ? '[telefon]' : $m[0];
         }, $text) ?? '';
     }
 
