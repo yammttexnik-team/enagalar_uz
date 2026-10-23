@@ -137,9 +137,12 @@ async function send() {
       <div class="mt-5 grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
         <div class="space-y-6">
           <section class="surface p-6 sm:p-8">
-            <p v-if="v.is_urgent" class="mb-3 inline-flex items-center gap-1 rounded-full bg-apricot-100 px-2.5 py-1 text-xs font-bold text-apricot-700 dark:bg-apricot-900 dark:text-apricot-200">
-              <UIcon name="i-lucide-zap" class="size-3.5" aria-hidden="true" />{{ t('vacancy.urgent') }}
-            </p>
+            <div v-if="v.is_urgent || v.is_top" class="mb-3 flex flex-wrap gap-1.5">
+              <PromoTopChip v-if="v.is_top" />
+              <p v-if="v.is_urgent" class="inline-flex items-center gap-1 rounded-full bg-apricot-100 px-2.5 py-1 text-xs font-bold text-apricot-700 dark:bg-apricot-900 dark:text-apricot-200">
+                <UIcon name="i-lucide-zap" class="size-3.5" aria-hidden="true" />{{ t('vacancy.urgent') }}
+              </p>
+            </div>
             <h1 class="h1-title text-highlighted">{{ v.title }}</h1>
             <p class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-muted">
               <span class="inline-flex items-center gap-1.5"><UIcon name="i-lucide-map-pin" class="size-4" aria-hidden="true" />{{ place }}</span>

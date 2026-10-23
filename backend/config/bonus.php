@@ -32,4 +32,15 @@ return [
     // Shundan tez (lekin rad etilmagan) to'ldirilsa — tekshiruvga (flagged), bonus ushlab turiladi.
     'survey_flag_seconds' => (int) env('BONUS_SURVEY_FLAG_SECONDS', 240),
     'survey_min_text_chars' => 3,
+
+    // Pullik xizmatlar narxi, so'm (hozircha faqat bonus bilan to'lanadi).
+    'prices' => [
+        'top' => (int) env('BONUS_PRICE_TOP', 25000),
+        'urgent' => (int) env('BONUS_PRICE_URGENT', 10000),
+    ],
+    // Xizmat necha kun amal qiladi.
+    'durations' => [
+        'top' => (int) env('BONUS_TOP_DAYS', 7),
+        'urgent' => (int) env('BONUS_URGENT_DAYS', 3),
+    ],
 ];

@@ -27,6 +27,8 @@ class NannyProfileResource extends JsonResource
             'live_in' => $this->live_in,
             'free_trial_day' => $this->free_trial_day,
             'is_available' => $this->is_available,
+            'is_top' => $this->isTop(),
+            'is_urgent' => $this->hasPaidUrgent(),
             'rating' => (float) $this->rating_avg,
             'reviews_count' => $this->reviews_count,
             'skills' => SkillResource::collection($this->whenLoaded('skills')),

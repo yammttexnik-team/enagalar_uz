@@ -96,6 +96,7 @@ async function afterDelete() {
           <div class="flex flex-wrap items-center gap-2">
             <DashboardStatusBadge kind="vacancy" :status="vacancy.status" />
             <UBadge v-if="vacancy.is_urgent" color="secondary" variant="subtle" icon="i-lucide-zap" :label="t('vacancy.urgent')" />
+            <PromoTopChip v-if="vacancy.top_until && new Date(vacancy.top_until).getTime() > Date.now()" />
             <span class="text-sm text-muted">{{ t('dashboard.vacancies.views', { n: vacancy.views_count }) }}</span>
           </div>
           <p v-if="vacancy.status === 'pending'" class="mt-3 flex items-start gap-2 rounded-xl bg-honey-50 px-3 py-2 text-sm text-honey-800 dark:bg-honey-950 dark:text-honey-200"><UIcon name="i-lucide-hourglass" class="mt-0.5 size-4 shrink-0" aria-hidden="true" />{{ t('dashboard.vacancies.pendingNote') }}</p>
@@ -107,6 +108,18 @@ async function afterDelete() {
             <div><dt class="eyebrow text-muted">{{ vacancy.expires_at ? t('vacancy.detail.expires') : t('vacancy.detail.published') }}</dt><dd class="mt-0.5 font-semibold text-highlighted">{{ vacancy.expires_at ? date(vacancy.expires_at) : relativeTime(vacancy.published_at) || '—' }}</dd></div>
           </dl>
         </section>
+
+        <!-- Ko'proq ko'rinish: TOP / Shoshilinch (bonus bilan) -->
+        <PromoCard
+          v-if="['active', 'pending'].includes(vacancy.status)"
+          class="mb-6"
+          target="vacancy"
+          :id="vacancy.id"
+          :top-until="vacancy.top_until"
+          :urgent-until="vacancy.urgent_until"
+          :active="vacancy.status === 'active'"
+          @updated="u => vacancy && Object.assign(vacancy, u)"
+        />
 
         <div role="tablist" :aria-label="vacancy.title" class="mb-5 inline-flex rounded-2xl bg-elevated p-1">
           <button

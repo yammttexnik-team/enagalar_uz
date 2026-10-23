@@ -13,6 +13,8 @@ export interface NannyItem {
   languages: string[]
   live_in: boolean
   is_available: boolean
+  is_top?: boolean
+  is_urgent?: boolean
   rating: number
   reviews_count: number
   badges: Badge[]
@@ -31,6 +33,12 @@ const shownBadges = computed(() => props.nanny.badges.slice(0, 4))
 
 <template>
   <article class="surface group relative flex flex-col gap-4 p-5 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
+    <div v-if="nanny.is_top || nanny.is_urgent" class="-mb-2 flex flex-wrap gap-1.5 pr-10">
+      <PromoTopChip v-if="nanny.is_top" />
+      <span v-if="nanny.is_urgent" class="inline-flex items-center gap-1 rounded-full bg-apricot-100 px-2.5 py-1 text-xs font-bold text-apricot-700 dark:bg-apricot-900 dark:text-apricot-200">
+        <UIcon name="i-lucide-zap" class="size-3.5" aria-hidden="true" />{{ t('promo.urgentNanny') }}
+      </span>
+    </div>
     <div class="flex items-start gap-3.5">
       <NannyAvatar :name="nanny.name" :id="nanny.id" />
       <div class="min-w-0 flex-1 pr-8">

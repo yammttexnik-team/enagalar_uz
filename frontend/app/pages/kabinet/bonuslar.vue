@@ -15,6 +15,10 @@ useSeoMeta({ title: () => t('bonus.seo'), robots: 'noindex' })
 const { data: wallet, status, error, refresh } = await useAsyncData('bonus-wallet', () => api<BonusWallet>('/me/bonus'))
 const { data: surveys } = await useAsyncData('bonus-surveys', () => api<{ data: SurveyListItem[] }>('/surveys').then(r => r.data).catch(() => [] as SurveyListItem[]), { default: () => [] as SurveyListItem[] })
 
+// Pullik xizmatlar narxi (server javob bermasa — standart narxlar).
+const { data: promoPrices } = await useAsyncData('bonus-promo-prices', () => api<{ data: { top: { price: number, days: number }, urgent: { price: number, days: number } } }>('/promotions/prices').then(r => r.data).catch(() => null))
+const promo = computed(() => promoPrices.value ?? { top: { price: 25000, days: 7 }, urgent: { price: 10000, days: 3 } })
+
 const items = ref<BonusWallet['transactions']['data']>([])
 const page = ref(1)
 const lastPage = ref(1)
@@ -114,6 +118,29 @@ async function copy() {
         </article>
       </section>
 
+      <!-- Qayerga ishlatish -->
+      <h2 class="mb-3 font-display text-lg font-extrabold text-highlighted">{{ t('promo.spendTitle') }}</h2>
+      <section class="surface mb-8 p-5 sm:p-6" :aria-label="t('promo.spendTitle')">
+        <ul class="grid gap-4 sm:grid-cols-2">
+          <li class="flex items-start gap-3">
+            <span class="grid size-10 shrink-0 place-items-center rounded-2xl bg-brand-100 text-brand-700 dark:bg-brand-900 dark:text-brand-200"><UIcon name="i-lucide-trending-up" class="size-5" aria-hidden="true" /></span>
+            <div>
+              <p class="font-semibold text-highlighted">{{ t('promo.topButton', { days: promo.top.days, price: money(promo.top.price) }) }}</p>
+              <p class="text-sm text-muted">{{ t('promo.topText') }}</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="grid size-10 shrink-0 place-items-center rounded-2xl bg-apricot-100 text-apricot-700 dark:bg-apricot-900 dark:text-apricot-200"><UIcon name="i-lucide-zap" class="size-5" aria-hidden="true" /></span>
+            <div>
+              <p class="font-semibold text-highlighted">{{ t('promo.urgentButton', { days: promo.urgent.days, price: money(promo.urgent.price) }) }}</p>
+              <p class="text-sm text-muted">{{ t('promo.urgentText') }}</p>
+            </div>
+          </li>
+        </ul>
+        <p class="mt-4 text-sm text-muted">{{ t('promo.spendHint') }}</p>
+        <UButton class="mt-3" color="neutral" variant="outline" icon="i-lucide-arrow-right" :label="isNanny || !isParent ? t('promo.spendCtaNanny') : t('promo.spendCtaParent')" :to="localePath(isNanny || !isParent ? '/kabinet/anketa' : '/kabinet/vakansiyalar')" />
+      </section>
+
       <!-- Tarix -->
       <h2 class="mb-3 font-display text-lg font-extrabold text-highlighted">{{ t('bonus.history.title') }}</h2>
       <section class="surface divide-y divide-default overflow-hidden" :aria-label="t('bonus.history.title')">
@@ -126,7 +153,7 @@ async function copy() {
             <div class="min-w-0 flex-1">
               <p class="font-semibold text-highlighted">{{ t(`bonus.type.${tx.type}`) }}</p>
               <p class="truncate text-sm text-muted">
-                {{ fmtDate(tx.created_at) }}<template v-if="tx.type === 'manual' && tx.description"> · {{ tx.description }}</template>
+                {{ fmtDate(tx.created_at) }}<template v-if="(tx.type === 'manual' || tx.type === 'spend') && tx.description"> · {{ tx.description }}</template>
                 <template v-if="tx.amount > 0 && tx.expires_at"> · {{ t('bonus.history.expires', { date: fmtDate(tx.expires_at) }) }}</template>
               </p>
             </div>

@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\MyNannyProfileController;
 use App\Http\Controllers\Api\MyVacancyController;
 use App\Http\Controllers\Api\MyVerificationController;
 use App\Http\Controllers\Api\NannyController;
+use App\Http\Controllers\Api\PromotionController;
 use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\SkillController;
 use App\Http\Controllers\Api\SurveyController;
@@ -26,6 +27,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/regions', [RegionController::class, 'index']);
     Route::get('/badges', [BadgeController::class, 'index']);
     Route::get('/skills', [SkillController::class, 'index']);
+    Route::get('/promotions/prices', [PromotionController::class, 'prices']);
 
     // Ochiq qidiruv (ikki tomonlama): enagalar va e'lonlar
     Route::middleware('throttle:public-read')->group(function () {
@@ -51,6 +53,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/me', [MeController::class, 'show']);
         Route::post('/me/roles', [MeController::class, 'addRole']);
         Route::get('/me/bonus', [BonusController::class, 'show']);
+        // Pullik xizmatlar (TOP, "Shoshilinch") — bonus bilan
+        Route::post('/my/promotions', [PromotionController::class, 'store'])->middleware('throttle:20,1');
 
         Route::get('/surveys', [SurveyController::class, 'index']);
         Route::get('/surveys/{slug}', [SurveyController::class, 'show']);

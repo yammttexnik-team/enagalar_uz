@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\NannyProfileStatus;
 use App\Enums\PriceUnit;
 use App\Enums\UserStatus;
+use App\Models\Concerns\Promotable;
 use App\Observers\NannyProfileObserver;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -23,7 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[ObservedBy(NannyProfileObserver::class)]
 class NannyProfile extends Model
 {
-    use HasFactory;
+    use HasFactory, Promotable;
 
     protected function casts(): array
     {

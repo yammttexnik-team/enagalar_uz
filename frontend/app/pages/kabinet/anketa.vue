@@ -249,6 +249,18 @@ const summaryPlace = computed(() => {
           </div>
         </section>
 
+        <!-- Ko'proq ko'rinish: TOP / Shoshilinch (bonus bilan) -->
+        <PromoCard
+          v-if="profile.status === 'active'"
+          class="mb-6"
+          target="nanny"
+          :id="profile.id"
+          :top-until="profile.top_until"
+          :urgent-until="profile.urgent_until"
+          active
+          @updated="u => profile && Object.assign(profile, u)"
+        />
+
         <!-- Qadamlar -->
         <ol class="mb-6 grid grid-cols-4 gap-2" :aria-label="t('dashboard.profile.steps')">
           <li v-for="(s, i) in STEPS" :key="s">

@@ -15,6 +15,7 @@ export interface VacancyItem {
   languages: string[]
   live_in: boolean
   is_urgent: boolean
+  is_top?: boolean
   starts_at: string | null
   published_at: string | null
   expires_at: string | null
@@ -35,9 +36,12 @@ const ages = computed(() => props.vacancy.children_ages.map(a => childAge(a)).jo
   <article class="surface group relative flex flex-col gap-4 p-5 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
     <div class="flex items-start gap-3 pr-10">
       <div class="min-w-0 flex-1">
-        <p v-if="vacancy.is_urgent" class="mb-2 inline-flex items-center gap-1 rounded-full bg-apricot-100 px-2.5 py-1 text-xs font-bold text-apricot-700 dark:bg-apricot-900 dark:text-apricot-200">
-          <UIcon name="i-lucide-zap" class="size-3.5" aria-hidden="true" />{{ t('vacancy.urgent') }}
-        </p>
+        <div v-if="vacancy.is_urgent || vacancy.is_top" class="mb-2 flex flex-wrap gap-1.5">
+          <PromoTopChip v-if="vacancy.is_top" />
+          <p v-if="vacancy.is_urgent" class="inline-flex items-center gap-1 rounded-full bg-apricot-100 px-2.5 py-1 text-xs font-bold text-apricot-700 dark:bg-apricot-900 dark:text-apricot-200">
+            <UIcon name="i-lucide-zap" class="size-3.5" aria-hidden="true" />{{ t('vacancy.urgent') }}
+          </p>
+        </div>
         <h3 class="font-display text-lg font-extrabold leading-snug text-highlighted">
           <NuxtLink :to="localePath(`/vakansiyalar/${vacancy.id}`)" class="after:absolute after:inset-0 after:rounded-3xl focus-visible:outline-2 focus-visible:outline-primary">
             {{ vacancy.title }}

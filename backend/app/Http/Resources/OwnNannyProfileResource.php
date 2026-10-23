@@ -15,6 +15,8 @@ class OwnNannyProfileResource extends NannyProfileResource
             'district_id' => $this->district_id,
             'birth_year' => $this->birth_year,
             'views_count' => $this->views_count,
+            'top_until' => $this->top_until,
+            'urgent_until' => $this->urgent_until,
         ];
     }
 }
