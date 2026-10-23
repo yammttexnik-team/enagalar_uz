@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             BadgeSeeder::class,
             CampaignSeeder::class,
             SurveySeeder::class,
+            ImportSourceSeeder::class,
         ]);
     }
 }

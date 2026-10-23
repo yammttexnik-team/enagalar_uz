@@ -2,15 +2,18 @@
 
 namespace App\Filament\Widgets;
 
+use App\Enums\ImportedListingStatus;
 use App\Enums\NannyProfileStatus;
 use App\Enums\ReportStatus;
 use App\Enums\VacancyStatus;
 use App\Enums\VerificationStatus;
 use App\Filament\Resources\IdentityVerifications\IdentityVerificationResource;
+use App\Filament\Resources\ImportedListings\ImportedListingResource;
 use App\Filament\Resources\NannyProfiles\NannyProfileResource;
 use App\Filament\Resources\Reports\ReportResource;
 use App\Filament\Resources\Vacancies\VacancyResource;
 use App\Models\IdentityVerification;
+use App\Models\ImportedListing;
 use App\Models\NannyProfile;
 use App\Models\Report;
 use App\Models\Vacancy;
@@ -28,7 +31,7 @@ class ModerationQueue extends StatsOverviewWidget
 
     protected function getColumns(): int
     {
-        return 4;
+        return 5;
     }
 
     protected function getStats(): array
@@ -42,6 +45,8 @@ class ModerationQueue extends StatsOverviewWidget
                 'heroicon-o-megaphone', VacancyResource::getUrl()),
             $this->queue('Shikoyatlar', Report::where('status', ReportStatus::Open)->count(),
                 'heroicon-o-flag', ReportResource::getUrl()),
+            $this->queue('Import navbati', ImportedListing::where('status', ImportedListingStatus::Pending)->count(),
+                'heroicon-o-arrow-down-tray', ImportedListingResource::getUrl()),
         ];
     }
 
