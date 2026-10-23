@@ -37,7 +37,23 @@ class TelegramLoginHandler
         if (Str::startsWith($text, '/start')) {
             $payload = trim(Str::after($text, '/start'));
             $this->handleStart($from, $payload, $lang);
+
+            return;
         }
+
+        // Kirish kutilayotganda raqam o'rniga matn/ovoz yuborilsa — tugmani qayta ko'rsatamiz (iPhone'da klaviatura yashirinib qoladi).
+        if (TelegramLoginRequest::usable()->where('telegram_id', $from['id'])->exists()) {
+            $this->askContact($from['id'], $lang);
+        }
+    }
+
+    private function askContact(int $chatId, string $lang): void
+    {
+        $this->bot->sendMessage($chatId, $this->t('share_contact', $lang), [
+            'keyboard' => [[['text' => $this->t('share_button', $lang), 'request_contact' => true]]],
+            'resize_keyboard' => true,
+            'one_time_keyboard' => true,
+        ]);
     }
 
     private function handleStart(array $from, string $payload, string $lang): void
@@ -75,16 +91,12 @@ class TelegramLoginHandler
         }
 
         if ($user) {
-            $this->sendCode($from['id'], $request->approve($user), $lang);
+            $this->sendCode($from['id'], $request->approve($user), $lang, $request);
 
             return;
         }
 
-        $this->bot->sendMessage($from['id'], $this->t('share_contact', $lang), [
-            'keyboard' => [[['text' => $this->t('share_button', $lang), 'request_contact' => true]]],
-            'resize_keyboard' => true,
-            'one_time_keyboard' => true,
-        ]);
+        $this->askContact($from['id'], $lang);
     }
 
     /** /start c_<KOD> (kampaniya) yoki r_<KOD> (taklif): salom + saytga kirish tugmasi. */
@@ -158,13 +170,21 @@ class TelegramLoginHandler
             return [$user, $request->approve($user)];
         });
 
-        $this->sendCode($from['id'], $code, $user->locale);
+        $this->sendCode($from['id'], $code, $user->locale, $request);
     }
 
-    /** Kirish kodini yuboradi: foydalanuvchi uni saytga o'zi kiritadi, shuning uchun begona havola orqali kirib bo'lmaydi. */
-    private function sendCode(int $chatId, string $code, string $lang): void
+    /**
+     * Kirish kodini yuboradi: foydalanuvchi uni saytga o'zi kiritadi, shuning uchun begona havola orqali kirib bo'lmaydi.
+     * Tugma kod oynasini ochadi (token o'zi kirishga yetmaydi — kod baribir kerak).
+     */
+    private function sendCode(int $chatId, string $code, string $lang, TelegramLoginRequest $request): void
     {
-        $this->bot->sendMessage($chatId, sprintf($this->t('code', $lang), $code), ['remove_keyboard' => true]);
+        // Avval reply-klaviaturani yopamiz, keyin inline tugmali kod (bitta xabarda ikkalasi bo'lmaydi).
+        $this->bot->sendMessage($chatId, $this->t('contact_received', $lang), ['remove_keyboard' => true]);
+        $url = rtrim(config('app.frontend_url'), '/').($lang === 'ru' ? '/ru' : '').'/kirish?t='.$request->token;
+        $this->bot->sendMessage($chatId, sprintf($this->t('code', $lang), $code), [
+            'inline_keyboard' => [[['text' => $this->t('code_button', $lang), 'url' => $url]]],
+        ]);
     }
 
     /** Yangi foydalanuvchini kampaniyaga va taklif qilgan odamga bog'laydi (faqat birinchi kirishda). */
@@ -199,9 +219,11 @@ class TelegramLoginHandler
             ],
             'campaign_button' => ['uz' => 'Saytga kirish', 'ru' => 'Войти на сайт'],
             'share_contact' => [
-                'uz' => 'Kirishni yakunlash uchun pastdagi tugma orqali telefon raqamingizni yuboring.',
-                'ru' => 'Чтобы завершить вход, отправьте номер телефона кнопкой ниже.',
+                'uz' => "Kirishni yakunlash uchun pastdagi <b>📱 Raqamni yuborish</b> tugmasini bosing.\nTugma ko'rinmasa, yozish maydoni yonidagi tugmalar belgisini (⌘ / ▦) bosing. Raqamni qo'lda yozish shart emas.",
+                'ru' => "Чтобы завершить вход, нажмите кнопку <b>📱 Отправить номер</b> внизу.\nЕсли кнопки не видно, нажмите значок клавиатуры (⌘ / ▦) рядом с полем ввода. Номер вручную вводить не нужно.",
             ],
+            'contact_received' => ['uz' => '✅ Raqam qabul qilindi.', 'ru' => '✅ Номер получен.'],
+            'code_button' => ['uz' => 'Saytga qaytib kodni kiritish', 'ru' => 'Вернуться на сайт и ввести код'],
             'share_button' => ['uz' => '📱 Raqamni yuborish', 'ru' => '📱 Отправить номер'],
             'own_contact_only' => [
                 'uz' => 'Iltimos, faqat o\'zingizning raqamingizni tugma orqali yuboring.',

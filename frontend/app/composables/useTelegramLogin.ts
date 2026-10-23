@@ -149,6 +149,15 @@ export function useTelegramLogin() {
   onMounted(() => {
     document.addEventListener('visibilitychange', onVisible)
     window.addEventListener('focus', onVisible)
+    // Botdagi "Saytga qaytib kodni kiritish" tugmasi: ?t=<token> — yangi oynada ham kod oynasini ochadi.
+    const fromBot = typeof route.query.t === 'string' && /^[A-Za-z0-9]{20,80}$/.test(route.query.t) ? route.query.t : ''
+    if (fromBot) {
+      loginToken = fromBot
+      status.value = 'waiting'
+      poll()
+      startPolling()
+      return
+    }
     try {
       const saved = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || 'null') as { token: string, botUrl: string, status: Status } | null
       if (saved?.token) {
