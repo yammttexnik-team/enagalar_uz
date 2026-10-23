@@ -28,6 +28,9 @@ export interface ChatOther {
   role: 'nanny' | 'parent'
   nanny_profile_id: number | null
   verified: boolean
+  /** Ikkinchi tomon olgan o'rtacha baho (enaga yoki ota-ona sifatida) */
+  rating?: number | null
+  reviews_count?: number
   last_seen_at: string | null
 }
 

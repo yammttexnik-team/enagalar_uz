@@ -7,7 +7,9 @@ use App\Http\Controllers\Concerns\CountsViews;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\SearchNanniesRequest;
 use App\Http\Resources\NannyProfileResource;
+use App\Http\Resources\ReviewResource;
 use App\Models\NannyProfile;
+use App\Models\Review;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -56,6 +58,21 @@ class NannyController extends Controller
         $this->countView($request, $profile, $profile->user_id);
 
         return new NannyProfileResource($profile);
+    }
+
+    /** Enaga haqidagi ko'rinadigan sharhlar (yangilari birinchi). */
+    public function reviews(int $id): AnonymousResourceCollection
+    {
+        $profile = NannyProfile::active()->findOrFail($id);
+
+        $reviews = Review::query()->published()
+            ->where('target_user_id', $profile->user_id)
+            ->where('target_role', 'nanny')
+            ->with('author')
+            ->latest('id')
+            ->paginate(10);
+
+        return ReviewResource::collection($reviews);
     }
 
     /** Foydalanuvchida muddati o'tmagan faol nishon borligini tekshiradi. */

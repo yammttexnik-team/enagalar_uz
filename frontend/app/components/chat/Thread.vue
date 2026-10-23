@@ -261,6 +261,9 @@ function dismissWarn() {
             <h1 class="flex items-center gap-1 truncate font-display text-base font-extrabold text-highlighted">
               <span class="truncate">{{ conv.other.name }}</span>
               <UIcon v-if="conv.other.verified" name="i-lucide-badge-check" class="size-4 shrink-0 text-brand-500" role="img" :aria-label="t('chat.verified')" />
+              <span v-if="conv.other.reviews_count && conv.other.rating" class="inline-flex shrink-0 items-center gap-0.5 text-xs font-semibold text-muted" :title="t('rating.starsAria', { n: conv.other.rating.toFixed(1) })">
+                <UIcon name="i-lucide-star" class="size-3.5 fill-honey-400 text-honey-500" aria-hidden="true" />{{ conv.other.rating.toFixed(1) }}
+              </span>
             </h1>
             <p class="truncate text-xs" :class="typing ? 'font-semibold text-brand-600 dark:text-brand-300' : chat.isOnline(conv.other.id) ? 'text-leaf-600 dark:text-leaf-400' : 'text-muted'" aria-live="off">{{ status }}</p>
           </div>

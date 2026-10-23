@@ -10,3 +10,5 @@ Artisan::command('inspire', function () {
 
 Schedule::command('bonus:expire')->dailyAt('03:00');
 Schedule::command('verification:prune')->dailyAt('03:30');
+// Bog'langaniga 3 kun bo'lganlardan "Birga ishladingizmi?" (har biri bir marta)
+Schedule::command('connections:ask')->hourlyAt(15);

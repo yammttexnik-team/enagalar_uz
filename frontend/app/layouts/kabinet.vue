@@ -26,6 +26,7 @@ const items = computed(() => {
     )
   }
   list.push(
+    { to: '/kabinet/baholash', icon: 'i-lucide-star', label: t('rating.nav') },
     { to: '/kabinet/tasdiqlash', icon: 'i-lucide-shield-check', label: t('dashboard.nav.verification') },
     { to: '/kabinet/bonuslar', icon: 'i-lucide-gift', label: t('dashboard.nav.bonus') },
     { to: '/kabinet/sevimlilar', icon: 'i-lucide-heart', label: t('dashboard.nav.favorites') },

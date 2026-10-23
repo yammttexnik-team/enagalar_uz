@@ -17,7 +17,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ConversationController extends Controller
 {
-    private const WITH = ['participants.activeBadges', 'participants.nannyProfile', 'vacancy.parentProfile', 'latestMessage'];
+    private const WITH = ['participants.activeBadges', 'participants.nannyProfile', 'participants.parentProfile', 'vacancy.parentProfile', 'latestMessage'];
 
     public function __construct(private ChatService $chat) {}
 
