@@ -50,10 +50,11 @@ Route::prefix('v1')->group(function () {
 
     Route::post('/telegram/webhook', TelegramWebhookController::class);
 
-    Route::prefix('auth/telegram')->middleware('throttle:30,1')->group(function () {
-        Route::post('/start', [TelegramAuthController::class, 'start']);
-        Route::get('/status/{token}', [TelegramAuthController::class, 'status']);
-        Route::post('/status/{token}/confirm', [TelegramAuthController::class, 'confirm']);
+    // Polling 3 soniyada bir (daqiqasiga ~20) — boshlash va kod kiritishdan alohida limit, aks holda bir daqiqada 429 bo'ladi.
+    Route::prefix('auth/telegram')->group(function () {
+        Route::post('/start', [TelegramAuthController::class, 'start'])->middleware('throttle:10,1');
+        Route::get('/status/{token}', [TelegramAuthController::class, 'status'])->middleware('throttle:90,1');
+        Route::post('/status/{token}/confirm', [TelegramAuthController::class, 'confirm'])->middleware('throttle:20,1');
     });
 
     Route::middleware(['auth:sanctum', 'not_blocked', 'last_seen'])->group(function () {
