@@ -27,7 +27,7 @@ class UserResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Foydalanuvchilar';
 
-    protected static ?string $modelLabel = 'foydalanuvchi';
+    protected static ?string $modelLabel = 'Foydalanuvchi';
 
     protected static bool $hasTitleCaseModelLabel = false;
 

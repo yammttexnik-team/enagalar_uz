@@ -26,7 +26,7 @@ class CampaignResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Marketing';
 
-    protected static ?string $modelLabel = 'kampaniya';
+    protected static ?string $modelLabel = 'Kampaniya';
 
     protected static bool $hasTitleCaseModelLabel = false;
 

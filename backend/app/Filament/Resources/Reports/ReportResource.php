@@ -23,7 +23,7 @@ class ReportResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Moderatsiya';
 
-    protected static ?string $modelLabel = 'shikoyat';
+    protected static ?string $modelLabel = 'Shikoyat';
 
     protected static bool $hasTitleCaseModelLabel = false;
 

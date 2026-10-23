@@ -23,11 +23,11 @@ class IdentityVerificationResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Moderatsiya';
 
-    protected static ?string $modelLabel = 'pasport tekshiruvi';
+    protected static ?string $modelLabel = 'Pasport tekshiruvi';
 
     protected static bool $hasTitleCaseModelLabel = false;
 
-    protected static ?string $pluralModelLabel = 'Pasport tekshiruvi';
+    protected static ?string $pluralModelLabel = 'Pasport tekshiruvlari';
 
     protected static ?int $navigationSort = 1;
 

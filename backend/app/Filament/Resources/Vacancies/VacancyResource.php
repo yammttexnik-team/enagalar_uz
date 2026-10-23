@@ -24,7 +24,7 @@ class VacancyResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Moderatsiya';
 
-    protected static ?string $modelLabel = 'vakansiya';
+    protected static ?string $modelLabel = 'Vakansiya';
 
     protected static bool $hasTitleCaseModelLabel = false;
 

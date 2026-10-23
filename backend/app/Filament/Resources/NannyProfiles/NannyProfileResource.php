@@ -22,7 +22,7 @@ class NannyProfileResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Foydalanuvchilar';
 
-    protected static ?string $modelLabel = 'enaga anketasi';
+    protected static ?string $modelLabel = 'Enaga anketasi';
 
     protected static bool $hasTitleCaseModelLabel = false;
 

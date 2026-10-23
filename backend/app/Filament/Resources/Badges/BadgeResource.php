@@ -28,7 +28,7 @@ class BadgeResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Sozlamalar';
 
-    protected static ?string $modelLabel = 'nishon';
+    protected static ?string $modelLabel = 'Nishon';
 
     protected static bool $hasTitleCaseModelLabel = false;
 

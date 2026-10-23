@@ -77,7 +77,9 @@ async function copy() {
         <p class="font-display text-4xl font-black tabular-nums text-highlighted sm:text-5xl" data-testid="bonus-balance">
           {{ money(wallet.balance) }} <span class="text-xl font-extrabold text-muted"><AppText :text="t('bonus.som')" /></span>
         </p>
-        <p class="text-sm text-muted">{{ t('bonus.note') }} {{ t('bonus.expiryNote') }}</p>
+        <p class="text-sm text-muted">{{ t('bonus.note') }} {{ t('bonus.expiryNote') }}
+          <NuxtLink :to="localePath('/bonus-shartlari')" class="font-semibold text-primary underline underline-offset-4">{{ t('terms.link') }}</NuxtLink>
+        </p>
       </section>
 
       <!-- Qanday olish -->

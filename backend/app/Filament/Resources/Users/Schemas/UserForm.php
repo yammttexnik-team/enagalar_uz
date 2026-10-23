@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
+use App\Enums\Role;
 use App\Enums\UserStatus;
+use App\Filament\Support\EnumLabel;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -19,6 +21,7 @@ class UserForm
                 Select::make('roles')
                     ->label('Rollar')
                     ->relationship('roles', 'name')
+                    ->getOptionLabelFromRecordUsing(fn ($record) => EnumLabel::of(Role::class, $record->name))
                     ->multiple()
                     ->preload(),
                 Select::make('badges')
