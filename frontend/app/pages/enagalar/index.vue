@@ -54,7 +54,7 @@ function changePage(p: number) {
   <SearchShell
     :title="t('nanny.title')"
     :subtitle="t('nanny.subtitle')"
-    :count-label="importedTotal ? t('nanny.count', { n: total }) + ' · ' + t('imported.section.count', { n: importedTotal }) : t('nanny.count', { n: total })"
+    :count-label="importedTotal ? (total ? t('nanny.count', { n: total }) + ' · ' + t('imported.section.countPlus', { n: importedTotal }) : t('imported.section.countOnly', { n: importedTotal })) : t('nanny.count', { n: total })"
     :pending="pending"
     :sort-items="sortItems"
     :sort="filters.sort || 'newest'"

@@ -53,7 +53,7 @@ function changePage(p: number) {
   <SearchShell
     :title="t('vacancy.title')"
     :subtitle="t('vacancy.subtitle')"
-    :count-label="importedTotal ? t('vacancy.count', { n: total }) + ' · ' + t('imported.section.count', { n: importedTotal }) : t('vacancy.count', { n: total })"
+    :count-label="importedTotal ? (total ? t('vacancy.count', { n: total }) + ' · ' + t('imported.section.countPlus', { n: importedTotal }) : t('imported.section.countOnly', { n: importedTotal })) : t('vacancy.count', { n: total })"
     :pending="pending"
     :sort-items="sortItems"
     :sort="filters.sort || 'newest'"

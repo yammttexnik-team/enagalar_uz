@@ -1223,7 +1223,9 @@
         "nanny": "Ochiq Telegram kanallardagi enagalar eʼlonlari. Kontakt saytda koʻrsatilmaydi — bogʻlanish uchun asl eʼlonga oʻting."
       },
       "count": "{n} ta eʼlon",
-      "more": "Yana koʻrsatish"
+      "more": "Yana koʻrsatish",
+      "countPlus": "Telegramdan yana {n} ta",
+      "countOnly": "Telegramdan {n} ta eʼlon"
     },
     "detail": {
       "back": "Qidiruvga qaytish",
