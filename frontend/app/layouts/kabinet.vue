@@ -26,6 +26,7 @@ const items = computed(() => {
     )
   }
   list.push(
+    { to: '/kabinet/topilgan-elonlar', icon: 'i-lucide-send', label: t('imported.claims.nav'), badge: auth.user?.imported_claims_count || undefined },
     { to: '/kabinet/baholash', icon: 'i-lucide-star', label: t('rating.nav') },
     { to: '/kabinet/tasdiqlash', icon: 'i-lucide-shield-check', label: t('dashboard.nav.verification') },
     { to: '/kabinet/bonuslar', icon: 'i-lucide-gift', label: t('dashboard.nav.bonus') },

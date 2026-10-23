@@ -9,9 +9,11 @@ use App\Http\Controllers\Api\ChatFileController;
 use App\Http\Controllers\Api\ConnectionController;
 use App\Http\Controllers\Api\ConversationController;
 use App\Http\Controllers\Api\FavoriteController;
+use App\Http\Controllers\Api\ImportedListingController;
 use App\Http\Controllers\Api\MatchController;
 use App\Http\Controllers\Api\MeController;
 use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\MyImportedClaimController;
 use App\Http\Controllers\Api\MyNannyProfileController;
 use App\Http\Controllers\Api\MyVacancyController;
 use App\Http\Controllers\Api\MyVerificationController;
@@ -37,7 +39,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/nannies/{id}/reviews', [NannyController::class, 'reviews'])->whereNumber('id');
         Route::get('/vacancies', [VacancyController::class, 'index']);
         Route::get('/vacancies/{id}', [VacancyController::class, 'show'])->whereNumber('id');
+        // Telegram kanallardan olingan e'lonlar (kontaktsiz, manbaga havola bilan)
+        Route::get('/imported', [ImportedListingController::class, 'index']);
+        Route::get('/imported/{id}', [ImportedListingController::class, 'show'])->whereNumber('id');
     });
+    Route::post('/imported/{id}/removal-request', [ImportedListingController::class, 'removalRequest'])->whereNumber('id')->middleware('throttle:5,1');
 
     // Chat fayli: faqat imzolangan havola (<img>/<audio> uchun sarlavhasiz)
     Route::get('/chat-files/{message}', ChatFileController::class)->middleware('signed')->name('chat-files')->whereNumber('message');
@@ -55,6 +61,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/me', [MeController::class, 'show']);
         Route::post('/me/roles', [MeController::class, 'addRole']);
         Route::get('/me/bonus', [BonusController::class, 'show']);
+
+        // Kanallardan topilgan, kontakti foydalanuvchiga mos e'lonlar
+        Route::get('/my/imported-claims', [MyImportedClaimController::class, 'index']);
+        Route::post('/my/imported-claims/{id}/accept', [MyImportedClaimController::class, 'accept'])->whereNumber('id')->middleware('throttle:20,1');
+        Route::post('/my/imported-claims/{id}/dismiss', [MyImportedClaimController::class, 'dismiss'])->whereNumber('id')->middleware('throttle:20,1');
         // Pullik xizmatlar (TOP, "Shoshilinch") — bonus bilan
         Route::post('/my/promotions', [PromotionController::class, 'store'])->middleware('throttle:20,1');
 
