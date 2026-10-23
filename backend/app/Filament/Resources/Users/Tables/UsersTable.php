@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use App\Enums\Role;
 use App\Enums\UserStatus;
+use App\Filament\Support\EnumLabel;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
@@ -19,7 +21,7 @@ class UsersTable
                 TextColumn::make('name')->label('Ism')->searchable(),
                 TextColumn::make('phone')->label('Telefon')->searchable(),
                 TextColumn::make('telegram_username')->label('Telegram')->prefix('@')->placeholder('—'),
-                TextColumn::make('roles.name')->label('Rollar')->badge(),
+                TextColumn::make('roles.name')->label('Rollar')->badge()->formatStateUsing(EnumLabel::using(Role::class)),
                 TextColumn::make('badges.name_uz')->label('Nishonlar')->badge()->color('success')->limitList(2),
                 TextColumn::make('campaign.code')->label('Kampaniya')->badge()->color('gray')->placeholder('—')->toggleable(),
                 TextColumn::make('status')->label('Holat')->badge(),
@@ -27,7 +29,7 @@ class UsersTable
                 TextColumn::make('last_seen_at')->label('Oxirgi faollik')->since()->placeholder('—')->toggleable(),
             ])
             ->filters([
-                SelectFilter::make('roles')->label('Rol')->relationship('roles', 'name'),
+                SelectFilter::make('roles')->label('Rol')->relationship('roles', 'name')->getOptionLabelFromRecordUsing(fn ($record) => EnumLabel::of(Role::class, $record->name)),
                 SelectFilter::make('status')->label('Holat')->options(UserStatus::class),
             ])
             ->recordActions([

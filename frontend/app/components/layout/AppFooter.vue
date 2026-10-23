@@ -11,6 +11,7 @@ const platform = computed(() => [
 const safety = computed(() => [
   { label: t('footer.trust'), to: localePath({ path: '/', hash: '#trust' }) },
   { label: t('footer.faq'), to: localePath({ path: '/', hash: '#faq' }) },
+  { label: t('terms.link'), to: localePath('/bonus-shartlari') },
 ])
 const telegram = computed(() => [
   { label: t('footer.channel'), to: 'https://t.me/enagalar_rasmiy', icon: 'i-lucide-send' },

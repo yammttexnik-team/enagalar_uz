@@ -29,7 +29,7 @@ class BonusTransactionResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Marketing';
 
-    protected static ?string $modelLabel = 'bonus yozuvi';
+    protected static ?string $modelLabel = 'Bonus yozuvi';
 
     protected static bool $hasTitleCaseModelLabel = false;
 

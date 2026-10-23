@@ -38,7 +38,7 @@ class SurveyResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Marketing';
 
-    protected static ?string $modelLabel = "so'rovnoma";
+    protected static ?string $modelLabel = "So'rovnoma";
 
     protected static bool $hasTitleCaseModelLabel = false;
 

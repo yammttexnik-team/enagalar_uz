@@ -1144,5 +1144,67 @@
       "text": "Javob yoki baho kutilmoqda: {n} ta",
       "cta": "Javob berish"
     }
+  },
+  "terms": {
+    "seo": {
+      "title": "Bonus shartlari",
+      "description": "enagalar.uz bonuslari qanday ishlaydi: qanday olinadi, nimaga ishlatiladi, qancha amal qiladi va qachon bekor qilinadi."
+    },
+    "title": "Bonus shartlari",
+    "lead": "Bonus — platformadagi pullik xizmatlar uchun beriladigan hisob. Bu sahifada uning qoidalari qisqa yozilgan.",
+    "link": "Bonus shartlari",
+    "linkHint": "Bonus qoidalari va muddati",
+    "whatTitle": "Bonus nima",
+    "what": {
+      "rate": "1 bonus soʻm = 1 soʻm. Bonus faqat enagalar.uz ichidagi xizmatlar uchun ishlatiladi.",
+      "noCash": "Bonus naqd pulga aylantirilmaydi va boshqa odamga oʻtkazilmaydi.",
+      "validity": "Har bir bonus berilgan kundan boshlab 9 oy amal qiladi. Muddati oʻtgan bonus yoʻqoladi.",
+      "cap": "Bitta odamga jami 200 000 soʻmgacha bonus beriladi."
+    },
+    "earnTitle": "Bonusni qanday olish mumkin",
+    "earn": {
+      "survey": {
+        "title": "Soʻrovnoma",
+        "amount": "50 000",
+        "text": "Soʻrovnomani toʻliq toʻldirsangiz. Bitta akkauntga bir marta."
+      },
+      "listing": {
+        "title": "Birinchi eʼlon yoki anketa",
+        "amount": "30 000",
+        "text": "Moderatsiyadan oʻtganda. Bir odamga bir marta."
+      },
+      "referral": {
+        "title": "Doʻstni taklif qilish",
+        "amount": "15 000 + 15 000",
+        "text": "Doʻstingiz eʼlon yoki anketa joylasa, ikkalangizga 15 000 dan. Koʻpi bilan 5 ta doʻst uchun."
+      },
+      "verification": {
+        "title": "Pasport tasdigʻi",
+        "amount": "15 000",
+        "text": "Administrator pasport maʼlumotini tasdiqlaganda."
+      },
+      "som": "soʻm"
+    },
+    "spendTitle": "Bonus nimaga ishlatiladi",
+    "spend": {
+      "top": {
+        "title": "TOP eʼlon, 7 kun",
+        "amount": "25 000"
+      },
+      "urgent": {
+        "title": "“Shoshilinch” belgisi, 3 kun",
+        "amount": "10 000"
+      },
+      "more": "Boshqa pullik xizmatlar keyinroq qoʻshiladi.",
+      "som": "soʻm"
+    },
+    "revokeTitle": "Bonus qachon bekor qilinadi",
+    "revoke": {
+      "fake": "Soxta javob yoki soxta eʼlon aniqlansa, shu uchun berilgan bonus bekor qilinadi.",
+      "deleted": "Eʼlon yoki anketa 14 kun ichida oʻchirilsa, shu uchun berilgan bonus bekor qilinadi."
+    },
+    "changeTitle": "Shartlar oʻzgarishi",
+    "change": "Shartlar oʻzgarishi mumkin. Oʻzgarishdan oldin berilgan bonuslar oʻz qiymatini saqlab qoladi.",
+    "cta": "Bonuslarim"
   }
 }
