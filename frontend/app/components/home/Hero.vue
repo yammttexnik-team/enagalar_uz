@@ -22,7 +22,7 @@ const tabs = computed(() => [
 
 const chips = computed(() => [
   { icon: 'i-lucide-badge-check', label: t('home.hero.chips.verified') },
-  { icon: 'i-lucide-gift', label: t('home.hero.chips.free') },
+  { icon: 'i-lucide-gift', label: t('home.hero.chips.bonus') },
   { icon: 'i-lucide-map-pin', label: t('home.hero.chips.regions') },
 ])
 

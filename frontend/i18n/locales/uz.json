@@ -34,12 +34,12 @@
   },
   "home": {
     "seoTitle": "Enaga topish — tekshirilgan enagalar — enagalar.uz",
-    "seoDescription": "Tasdiqlangan enagalar, xavfsiz chat va AI yordamchi — butun Oʻzbekiston boʻylab. Bepul.",
+    "seoDescription": "Tasdiqlangan enagalar, xavfsiz chat va AI yordamchi — butun Oʻzbekiston boʻylab.",
     "hero": {
       "eyebrow": "Xotirjam ota-onalar uchun",
       "title1": "Farzandingiz uchun",
       "title2": "ishonchli enaga",
-      "subtitle": "Tasdiqlangan enagalar, xavfsiz chat va AI yordamchi — butun Oʻzbekiston boʻylab. Bepul.",
+      "subtitle": "Tasdiqlangan enagalar, xavfsiz chat va AI yordamchi — butun Oʻzbekiston boʻylab.",
       "tabsLabel": "Qidiruv turi",
       "tabNanny": "Enaga kerak",
       "tabJob": "Ish kerak",
@@ -50,7 +50,7 @@
       "ctaJob": "Vakansiyalarni koʻrish",
       "chips": {
         "verified": "Tasdiqlangan enagalar",
-        "free": "Bepul",
+        "bonus": "Bonus bilan toʻlash",
         "regions": "Barcha viloyatlar"
       },
       "visual": {
@@ -85,7 +85,7 @@
       "nannies": {
         "label": "Enagalarga",
         "title": "Ishingizni qadrlaydigan oilalarni toping",
-        "text": "Anketa yarating, hujjatlaringizni tasdiqlating va viloyatingizdagi oilalarning e’lonlariga javob bering.",
+        "text": "Anketa yarating, shaxsingizni tasdiqlang va viloyatingizdagi oilalarning e’lonlariga javob bering.",
         "points": [
           "AI yordamchi anketani siz bilan birga yozadi",
           "Nishonlar sizga ota-onalar ishonchini beradi",
@@ -121,7 +121,7 @@
     "trust": {
       "eyebrow": "Ishonch va xavfsizlik",
       "title": "Nishon — bu haqiqiy tekshiruv, bezak emas",
-      "subtitle": "Har bir nishon hujjat tekshirilgandan keyin beriladi. Ota-ona nimaga ishonishi mumkinligini koʻrib turadi.",
+      "subtitle": "Har bir nishon administrator tekshiruvidan keyin beriladi. Ota-ona nimaga ishonishi mumkinligini koʻrib turadi.",
       "badgesTitle": "Nishonlar",
       "passport": {
         "title": "Pasport tekshiruvi",
@@ -139,7 +139,7 @@
       "badgeText": {
         "phone-verified": "Raqam Telegram bot orqali tasdiqlangan.",
         "verified": "Pasport maʼlumotlari moderator tomonidan tekshirilgan.",
-        "medical-certificate": "Tibbiy maʼlumotnoma yuklangan va tekshirilgan.",
+        "medical-certificate": "Tibbiy maʼlumotnoma administrator tomonidan tekshirilgan.",
         "dispensary-clear": "Narkologik va psixonevrologik dispanserda hisobda turmaydi.",
         "certificate": "Pedagog, hamshira yoki birinchi yordam sertifikati bor."
       }
@@ -179,7 +179,7 @@
       "items": [
         {
           "label": "Xizmat pullikmi?",
-          "content": "Yoʻq. Dastlabki oylarda roʻyxatdan oʻtish, e’lon joylash, anketa yaratish va chat — hammasi bepul. Yashirin toʻlov yoʻq."
+          "content": "Ha, platforma pullik. Narx xizmat tanlanganda aniq koʻrsatiladi, yashirin toʻlov yoʻq. E’lon, anketa va soʻrovnomalar uchun bonus beriladi — bonuslar bilan xizmat uchun toʻlash mumkin."
         },
         {
           "label": "Roʻyxatdan qanday oʻtaman?",
@@ -205,7 +205,7 @@
     },
     "cta": {
       "title": "Xotirjam boshlang",
-      "text": "Ota-ona ishga xotirjam ketadi, enaga ishini xotirjam qiladi. Bepul boshlash uchun Telegram yetarli.",
+      "text": "Ota-ona ishga xotirjam ketadi, enaga ishini xotirjam qiladi. Boshlash uchun Telegram yetarli.",
       "primary": "Telegram orqali kirish",
       "secondary": "Qanday ishlaydi"
     }
@@ -232,7 +232,6 @@
     "blocked": "Akkauntingiz bloklangan. Savollar boʻlsa, qoʻllab-quvvatlash xizmatiga yozing.",
     "note": "Davom etib, siz foydalanish shartlariga rozilik bildirasiz.",
     "points": [
-      "Bepul",
       "Parolsiz",
       "Xavfsiz"
     ],
@@ -251,7 +250,7 @@
     "phone": "Telefon",
     "roles": "Rollar",
     "badges": "Nishonlar",
-    "noBadges": "Hozircha nishon yoʻq. Tasdiqlanish uchun tez orada hujjat yuklash mumkin boʻladi.",
+    "noBadges": "Hozircha nishon yoʻq.",
     "notSet": "Koʻrsatilmagan",
     "soon": "Ish stoli tez orada: e’lonlar, anketa, chatlar shu yerda boʻladi.",
     "role": {
@@ -347,10 +346,10 @@
   "nanny": {
     "seoTitle": "Enaga topish — tekshirilgan enagalar — enagalar.uz",
     "seoTitleRegion": "Enaga topish: {region} — enagalar.uz",
-    "seoDescription": "Nishonli va tasdiqlangan enagalar anketalari: tajriba, narx va boʻsh vaqtni koʻring, chatda yozing. Butun Oʻzbekiston boʻylab, bepul.",
-    "seoDescriptionRegion": "{region}: tekshirilgan enagalar anketalari — tajriba, narx, nishonlar. Chatda yozing, bepul.",
+    "seoDescription": "Nishonli va tasdiqlangan enagalar anketalari: tajriba, narx va boʻsh vaqtni koʻring, chatda yozing. Butun Oʻzbekiston boʻylab.",
+    "seoDescriptionRegion": "{region}: tekshirilgan enagalar anketalari — tajriba, narx, nishonlar. Chatda yozing.",
     "title": "Tekshirilgan enagalar",
-    "subtitle": "Anketalarni koʻring, nishonlarga qarang va xabar yozing. Hammasi bepul.",
+    "subtitle": "Anketalarni koʻring, nishonlarga qarang va xabar yozing.",
     "count": "{n} ta enaga",
     "sort": {
       "newest": "Yangilari",
@@ -403,7 +402,7 @@
     "seoTitle": "Enaga ishi — ota-onalar e’lonlari — enagalar.uz",
     "seoTitleRegion": "Enaga ishi: {region} — enagalar.uz",
     "seoDescription": "Oilalarning haqiqiy e’lonlari: maosh, jadval va bola yoshi oldindan koʻrinadi. Bitta tugma bilan javob bering. Butun Oʻzbekiston boʻylab.",
-    "seoDescriptionRegion": "{region}: oilalarning enaga izlayotgan e’lonlari — maosh, jadval, bola yoshi. Bepul javob bering.",
+    "seoDescriptionRegion": "{region}: oilalarning enaga izlayotgan e’lonlari — maosh, jadval, bola yoshi. Javob bering.",
     "title": "Ota-onalarning e’lonlari",
     "subtitle": "Maosh va jadval oldindan koʻrinadi. Yoqqan e’longa bitta tugma bilan javob bering.",
     "count": "{n} ta e’lon",
@@ -601,7 +600,7 @@
         },
         "approved": {
           "title": "Siz tasdiqlangansiz",
-          "text": "Pasportingiz tekshirilgan. Qoʻshimcha nishonlar uchun hujjat yuklashingiz mumkin."
+          "text": "Pasportingiz tekshirilgan. Administrator tasdiqlagan maʼlumotlar nishon sifatida shu yerda chiqadi."
         },
         "rejected": {
           "title": "Tekshiruvdan oʻtmadi",
@@ -609,7 +608,7 @@
         },
         "cta": "Tasdiqlanish",
         "view": "Holatni koʻrish",
-        "docs": "Hujjat qoʻshish"
+        "docs": "Tasdiqlangan maʼlumotlar"
       }
     },
     "vacancies": {
@@ -826,34 +825,22 @@
         "age18": "Yoshingiz kamida 18 da boʻlishi kerak",
         "age80": "Tugʻilgan sanani tekshirib koʻring",
         "photo": "Pasport rasmini tanlang",
-        "consent": "Davom etish uchun rozilik kerak",
-        "file": "Faylni tanlang",
-        "issuedFuture": "Sana kelajakda boʻlishi mumkin emas",
-        "issuedOld": "Hujjat oxirgi {n} kun ichida berilgan boʻlishi kerak"
+        "consent": "Davom etish uchun rozilik kerak"
       },
-      "docsTitle": "Qoʻshimcha nishonlar",
-      "docsText": "Hujjat rasmini yuklang — moderator tekshirib, nishon beradi. Nishon va uning amal qilish muddati profilingizda koʻrinadi.",
-      "validity": "Amal qilish muddati: {n} kun",
-      "held": "Nishon bor",
-      "expires": "Nishon {date} gacha amal qiladi.",
-      "docPending": "Hujjat koʻrib chiqilmoqda.",
-      "docRejected": "Oldingi hujjat rad etilgan",
-      "docDelete": "Yuborilganini bekor qilish",
-      "docDeleteTitle": "Hujjatni oʻchiramizmi?",
-      "docDeleteText": "Fayl serverdan oʻchiriladi. Keyin yangisini yuborishingiz mumkin.",
-      "docDeleted": "Hujjat oʻchirildi.",
-      "docSent": "Hujjat yuborildi. Odatda 24 soat ichida javob beramiz.",
-      "upload": "Hujjat yuklash",
-      "renew": "Yangilash",
-      "docFile": "Hujjat rasmi yoki PDF",
-      "pickFile": "Fayl tanlash",
-      "fileHint": "JPG, PNG, WebP yoki PDF, 10 MB gacha.",
-      "issuedAt": "Hujjat berilgan sana",
-      "docConsentText": "Hujjat faqat nishon berish uchun moderator tomonidan koʻriladi. Saytda hujjat rasmi hech kimga koʻrsatilmaydi.",
-      "healthNote": "Bu sogʻliq haqidagi maʼlumot. U faqat moderatorga koʻrinadi, saytda koʻrsatilmaydi — profilda faqat nishon chiqadi.",
-      "healthConsentLabel": "Sogʻliq haqidagi maʼlumotni qayta ishlashga roziman",
-      "healthConsentText": "Tibbiy hujjatdagi sogʻliq maʼlumotlarim nishon berish maqsadida moderator tomonidan koʻrib chiqilishiga va ularni qayta ishlashga roziman. Maʼlumot boshqalarga koʻrsatilmaydi. Rozilikni istalgan payt qaytarib olish mumkin.",
-      "docSubmit": "Hujjatni yuborish"
+      "certsTitle": "Tasdiqlangan maʼlumotlar",
+      "certsText": "Administrator tekshirib tasdiqlagan maʼlumotlar nishon boʻlib shu yerda chiqadi. Nishon profilingizda faqat sizning roziligingiz bilan koʻrsatiladi.",
+      "certsEmpty": "Hozircha tasdiqlangan maʼlumot yoʻq. Administrator biror maʼlumotingizni tasdiqlasa, shu yerda koʻrasiz.",
+      "askText": "{name} tasdiqlandi. Profilingizda koʻrsatilsinmi?",
+      "askYes": "Ha, koʻrsatilsin",
+      "askNo": "Yoʻq",
+      "statusPublic": "Profilda koʻrinadi",
+      "statusHidden": "Yashirilgan",
+      "makeHidden": "Yashirish",
+      "makePublic": "Koʻrsatish",
+      "savedPublic": "Nishon profilingizda koʻrinadi.",
+      "savedHidden": "Nishon yashirildi.",
+      "noticeText": "{n} ta tasdiqlangan maʼlumot javobingizni kutmoqda: profilda koʻrsatilsinmi?",
+      "noticeCta": "Javob berish"
     }
   },
   "chat": {

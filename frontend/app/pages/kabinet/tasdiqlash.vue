@@ -2,6 +2,8 @@
 const { t } = useI18n()
 const api = useApi()
 const { date } = useFormat()
+const localizedName = useLocalizedName()
+const { toastError, ok } = useApiError()
 
 definePageMeta({ middleware: 'auth', layout: 'kabinet' })
 useSeoMeta({ title: () => t('dashboard.verification.seo'), robots: 'noindex' })
@@ -12,14 +14,25 @@ const state = computed(() => identity.value?.status ?? 'none')
 const showForm = computed(() => state.value === 'none' || state.value === 'rejected')
 const auth = useAuthStore()
 
-async function reload() {
-  await refresh()
-  await auth.fetchMe()
-}
 async function onSubmitted() {
   await refresh()
   await auth.fetchMe()
   if (import.meta.client) window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+const badges = computed(() => data.value?.badges ?? [])
+const pendingBadges = computed(() => badges.value.filter(b => b.is_public === null))
+const answeredBadges = computed(() => badges.value.filter(b => b.is_public !== null))
+const saving = ref<string | null>(null)
+async function setPublic(slug: string, isPublic: boolean) {
+  saving.value = slug
+  try {
+    const res = await api<{ data: MyBadge }>(`/my/badges/${slug}`, { method: 'PATCH', body: { is_public: isPublic } })
+    if (data.value) data.value = { ...data.value, badges: data.value.badges.map(b => (b.slug === slug ? { ...b, ...res.data } : b)) }
+    ok(t(isPublic ? 'dashboard.verification.savedPublic' : 'dashboard.verification.savedHidden'))
+    await auth.fetchMe()
+  }
+  catch (e) { toastError(e) }
+  finally { saving.value = null }
 }
 const stateTone = computed(() => ({
   approved: 'border-leaf-200! bg-leaf-50! dark:border-leaf-800! dark:bg-leaf-950/50!',
@@ -64,12 +77,26 @@ const stateIcon = computed(() => ({ approved: 'i-lucide-shield-check', pending: 
         </div>
       </section>
 
-      <!-- Hujjatlar -->
-      <section aria-labelledby="docs-h">
-        <h2 id="docs-h" class="font-display text-xl font-extrabold text-highlighted">{{ t('dashboard.verification.docsTitle') }}</h2>
-        <p class="mb-4 mt-1 text-muted">{{ t('dashboard.verification.docsText') }}</p>
-        <div class="grid gap-4 xl:grid-cols-2">
-          <DashboardDocumentCard v-for="b in data.available_badges" :key="b.slug" :badge="b" :docs="data.documents.filter(d => d.badge?.slug === b.slug)" @changed="reload" />
+      <!-- Tasdiqlangan maʼlumotlar -->
+      <section aria-labelledby="certs-h">
+        <h2 id="certs-h" class="font-display text-xl font-extrabold text-highlighted">{{ t('dashboard.verification.certsTitle') }}</h2>
+        <p class="mb-4 mt-1 text-muted">{{ t('dashboard.verification.certsText') }}</p>
+        <div v-if="!badges.length" class="surface px-6 py-8 text-center text-muted">{{ t('dashboard.verification.certsEmpty') }}</div>
+        <div v-else class="space-y-3">
+          <article v-for="b in pendingBadges" :key="b.slug" class="surface border border-brand-200! bg-brand-50! p-5 dark:border-brand-800! dark:bg-brand-950/50!">
+            <p class="font-display text-lg font-extrabold text-highlighted">✅ {{ t('dashboard.verification.askText', { name: localizedName(b.name) }) }}</p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <UButton icon="i-lucide-eye" :loading="saving === b.slug" :disabled="saving !== null" :label="t('dashboard.verification.askYes')" @click="setPublic(b.slug, true)" />
+              <UButton color="neutral" variant="outline" icon="i-lucide-eye-off" :disabled="saving !== null" :label="t('dashboard.verification.askNo')" @click="setPublic(b.slug, false)" />
+            </div>
+          </article>
+          <article v-for="b in answeredBadges" :key="b.slug" class="surface flex flex-wrap items-center gap-3 p-4">
+            <div class="min-w-0 flex-1">
+              <h3 class="font-bold text-highlighted">{{ localizedName(b.name) }}</h3>
+            </div>
+            <UBadge :color="b.is_public ? 'success' : 'neutral'" variant="subtle" :icon="b.is_public ? 'i-lucide-eye' : 'i-lucide-eye-off'" :label="b.is_public ? t('dashboard.verification.statusPublic') : t('dashboard.verification.statusHidden')" />
+            <UButton size="sm" color="neutral" variant="outline" :loading="saving === b.slug" :disabled="saving !== null" :label="b.is_public ? t('dashboard.verification.makeHidden') : t('dashboard.verification.makePublic')" @click="setPublic(b.slug, !b.is_public)" />
+          </article>
         </div>
       </section>
     </div>

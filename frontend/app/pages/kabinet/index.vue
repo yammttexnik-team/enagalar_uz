@@ -57,6 +57,7 @@ onMounted(async () => {
   catch { /* bonus kartasi soʻrovnomasiz ham ishlaydi */ }
 })
 
+const awaitingBadges = computed(() => verification.value?.badges?.filter(b => b.is_public === null).length ?? 0)
 const verifState = computed(() => verification.value?.identity.status ?? 'none')
 const verifTone = computed(() => ({
   approved: 'bg-leaf-50! border-leaf-200! dark:bg-leaf-950/50! dark:border-leaf-800!',
@@ -104,8 +105,14 @@ async function addMissing() {
         :label="verifState === 'pending' ? t('dashboard.overview.verif.view') : t('dashboard.overview.verif.cta')"
         :to="localePath('/kabinet/tasdiqlash')"
       />
-      <UButton v-else size="lg" color="neutral" variant="outline" class="justify-center" icon="i-lucide-file-plus-2" :label="t('dashboard.overview.verif.docs')" :to="localePath('/kabinet/tasdiqlash')" />
+      <UButton v-else size="lg" color="neutral" variant="outline" class="justify-center" icon="i-lucide-badge-check" :label="t('dashboard.overview.verif.docs')" :to="localePath('/kabinet/tasdiqlash')" />
     </section>
+
+    <NuxtLink v-if="awaitingBadges" :to="localePath('/kabinet/tasdiqlash')" class="surface mb-6 flex items-center gap-3 border border-brand-200! bg-brand-50! p-4 dark:border-brand-800! dark:bg-brand-950/50!">
+      <UIcon name="i-lucide-badge-check" class="size-6 shrink-0 text-brand-700 dark:text-brand-200" aria-hidden="true" />
+      <span class="min-w-0 flex-1 font-semibold text-highlighted">{{ t('dashboard.verification.noticeText', { n: awaitingBadges }) }}</span>
+      <span class="shrink-0 text-sm font-bold text-brand-700 dark:text-brand-200">{{ t('dashboard.verification.noticeCta') }} →</span>
+    </NuxtLink>
 
     <!-- Bonus -->
     <section class="surface mb-6 flex flex-col gap-4 bg-apricot-50! p-5 dark:bg-apricot-950/40! sm:flex-row sm:items-center sm:p-6" :aria-label="t('bonus.overview.title')">
