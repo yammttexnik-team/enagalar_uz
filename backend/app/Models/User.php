@@ -65,16 +65,22 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->belongsToMany(Badge::class, 'user_badges')
             ->using(UserBadge::class)
-            ->withPivot(['granted_by', 'granted_at', 'expires_at'])
+            ->withPivot(['granted_by', 'granted_at', 'expires_at', 'is_public', 'answered_at'])
             ->withTimestamps();
     }
 
-    /** Muddati o'tmagan nishonlar. */
-    public function activeBadges(): BelongsToMany
+    /** Muddati o'tmagan nishonlar (ko'rsatilishidan qat'i nazar). */
+    public function validBadges(): BelongsToMany
     {
         return $this->badges()
             ->where('badges.is_active', true)
             ->where(fn ($q) => $q->whereNull('user_badges.expires_at')->orWhere('user_badges.expires_at', '>', now()));
+    }
+
+    /** Profilda ko'rinadigan nishonlar: amal qiladi va foydalanuvchi ko'rsatishga rozi bo'lgan. */
+    public function activeBadges(): BelongsToMany
+    {
+        return $this->validBadges()->where('user_badges.is_public', true);
     }
 
     public function identityVerifications(): HasMany
@@ -198,6 +204,6 @@ class User extends Authenticatable implements FilamentUser
 
     public function isVerified(): bool
     {
-        return $this->activeBadges()->where('slug', Badge::VERIFIED)->exists();
+        return $this->validBadges()->where('slug', Badge::VERIFIED)->exists();
     }
 }

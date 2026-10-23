@@ -6,12 +6,10 @@ use App\Enums\NannyProfileStatus;
 use App\Enums\ReportStatus;
 use App\Enums\VacancyStatus;
 use App\Enums\VerificationStatus;
-use App\Filament\Resources\Documents\DocumentResource;
 use App\Filament\Resources\IdentityVerifications\IdentityVerificationResource;
 use App\Filament\Resources\NannyProfiles\NannyProfileResource;
 use App\Filament\Resources\Reports\ReportResource;
 use App\Filament\Resources\Vacancies\VacancyResource;
-use App\Models\Document;
 use App\Models\IdentityVerification;
 use App\Models\NannyProfile;
 use App\Models\Report;
@@ -30,7 +28,7 @@ class ModerationQueue extends StatsOverviewWidget
 
     protected function getColumns(): int
     {
-        return 5;
+        return 4;
     }
 
     protected function getStats(): array
@@ -38,8 +36,6 @@ class ModerationQueue extends StatsOverviewWidget
         return [
             $this->queue('Pasportlar', IdentityVerification::where('status', VerificationStatus::Pending)->count(),
                 'heroicon-o-identification', IdentityVerificationResource::getUrl()),
-            $this->queue('Hujjatlar', Document::where('status', VerificationStatus::Pending)->count(),
-                'heroicon-o-document-check', DocumentResource::getUrl()),
             $this->queue('Enaga anketalari', NannyProfile::where('status', NannyProfileStatus::Pending)->count(),
                 'heroicon-o-heart', NannyProfileResource::getUrl()),
             $this->queue('Vakansiyalar', Vacancy::where('status', VacancyStatus::Pending)->count(),

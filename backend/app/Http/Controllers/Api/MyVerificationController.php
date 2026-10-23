@@ -4,12 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\VerificationStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\DocumentUploadRequest;
 use App\Http\Requests\Api\IdentityVerificationRequest;
-use App\Http\Resources\VerificationDocumentResource;
 use App\Models\Badge;
 use App\Models\Consent;
-use App\Models\Document;
 use App\Models\IdentityVerification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -28,27 +25,6 @@ class MyVerificationController extends Controller
         $user = $request->user();
 
         $identity = $user->identityVerifications()->latest('id')->first();
-        $documents = $user->documents()->with('badge')->latest('id')->get();
-        $held = $user->badges()->get()->keyBy('id');
-
-        $applicable = Badge::where('is_active', true)
-            ->where('grant_type', 'manual')
-            ->where('slug', '!=', Badge::VERIFIED)
-            ->orderBy('sort')->get()
-            ->map(function (Badge $badge) use ($held, $documents) {
-                $expires = $held->get($badge->id)?->pivot->expires_at;
-                $isHeld = $held->has($badge->id) && (! $expires || $expires->isFuture());
-
-                return [
-                    'slug' => $badge->slug,
-                    'name' => ['uz' => $badge->name_uz, 'ru' => $badge->name_ru],
-                    'description' => ['uz' => $badge->description_uz, 'ru' => $badge->description_ru],
-                    'validity_days' => $badge->validity_days,
-                    'held' => $isHeld,
-                    'expires_at' => $held->has($badge->id) ? $expires?->toIso8601String() : null,
-                    'has_pending' => $documents->contains(fn (Document $d) => $d->badge_id === $badge->id && $d->isPending()),
-                ];
-            })->values();
 
         return response()->json(['data' => [
             'identity' => [
@@ -57,9 +33,40 @@ class MyVerificationController extends Controller
                 'submitted_at' => $identity?->created_at?->toIso8601String(),
                 'verified' => $user->isVerified(),
             ],
-            'documents' => VerificationDocumentResource::collection($documents)->resolve(),
-            'available_badges' => $applicable,
+            // Admin tasdiqlagan ma'lumotlar: is_public null — "profilda ko'rsatilsinmi?" javobi kutilmoqda.
+            'badges' => $user->validBadges()->orderBy('sort')->get()->map(fn (Badge $badge) => $this->badge($badge))->values(),
         ]]);
+    }
+
+    /** Tasdiqlangan ma'lumotni profilda ko'rsatish yoki yashirish. */
+    public function updateBadge(Request $request, string $slug): JsonResponse
+    {
+        $data = $request->validate(['is_public' => ['required', 'boolean']]);
+        $user = $request->user();
+
+        $badge = $user->validBadges()->where('slug', $slug)->first();
+        abort_unless($badge, 404);
+
+        $user->badges()->updateExistingPivot($badge->id, [
+            'is_public' => $data['is_public'],
+            'answered_at' => now(),
+        ]);
+
+        return response()->json(['data' => $this->badge($user->validBadges()->where('slug', $slug)->first())]);
+    }
+
+    private function badge(Badge $badge): array
+    {
+        return [
+            'slug' => $badge->slug,
+            'name' => ['uz' => $badge->name_uz, 'ru' => $badge->name_ru],
+            'description' => ['uz' => $badge->description_uz, 'ru' => $badge->description_ru],
+            'icon' => $badge->icon,
+            'color' => $badge->color,
+            'is_public' => $badge->pivot->is_public,
+            'granted_at' => $badge->pivot->granted_at?->toIso8601String(),
+            'expires_at' => $badge->pivot->expires_at?->toIso8601String(),
+        ];
     }
 
     public function storeIdentity(IdentityVerificationRequest $request): JsonResponse
@@ -96,52 +103,6 @@ class MyVerificationController extends Controller
             'status' => VerificationStatus::Pending->value,
             'submitted_at' => now()->toIso8601String(),
         ]], 201);
-    }
-
-    public function storeDocument(DocumentUploadRequest $request): JsonResponse
-    {
-        $user = $request->user();
-        $badge = Badge::where('slug', $request->validated('badge'))->firstOrFail();
-
-        if ($user->documents()->where('badge_id', $badge->id)->where('status', VerificationStatus::Pending)->exists()) {
-            return $this->error('Bu nishon uchun hujjat allaqachon ko\'rib chiqilmoqda.', 409);
-        }
-
-        $path = $this->storeFile($request->file('file'), "documents/{$user->id}");
-
-        $document = DB::transaction(function () use ($request, $user, $badge, $path) {
-            $document = $user->documents()->create([
-                'badge_id' => $badge->id,
-                'type' => $badge->slug,
-                'path' => $path,
-                'issued_at' => $request->validated('issued_at'),
-                'status' => VerificationStatus::Pending,
-            ]);
-            if (in_array($badge->slug, [Badge::MEDICAL, Badge::DISPENSARY_CLEAR], true)) {
-                $this->recordConsent($request, Consent::HEALTH);
-            }
-
-            return $document;
-        });
-
-        return (new VerificationDocumentResource($document->load('badge')))
-            ->response()->setStatusCode(201);
-    }
-
-    public function destroyDocument(Request $request, Document $document): JsonResponse
-    {
-        abort_unless($document->user_id === $request->user()->id, 404);
-
-        if (! $document->isPending()) {
-            return $this->error('Faqat ko\'rib chiqilayotgan hujjatni o\'chirish mumkin.', 409);
-        }
-
-        if ($document->path) {
-            Storage::disk(Document::DISK)->delete($document->path);
-        }
-        $document->delete();
-
-        return response()->json(null, 204);
     }
 
     private function storeFile($file, string $dir): string

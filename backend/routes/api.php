@@ -59,8 +59,8 @@ Route::prefix('v1')->group(function () {
         // Tasdiqlash: pasport va hujjatlar (yopiq diskka)
         Route::get('/my/verification', [MyVerificationController::class, 'show']);
         Route::post('/my/verification/identity', [MyVerificationController::class, 'storeIdentity'])->middleware('throttle:20,1');
-        Route::post('/my/verification/documents', [MyVerificationController::class, 'storeDocument'])->middleware('throttle:20,1');
-        Route::delete('/my/verification/documents/{document}', [MyVerificationController::class, 'destroyDocument'])->whereNumber('document');
+        // Admin tasdiqlagan ma'lumotni profilda ko'rsatish / yashirish
+        Route::patch('/my/badges/{slug}', [MyVerificationController::class, 'updateBadge'])->middleware('throttle:30,1');
 
         // Ota-ona: e'lonlar va kelgan arizalar
         Route::middleware('has_role:parent')->group(function () {

@@ -34,18 +34,25 @@ class Badge extends Model
     {
         return $this->belongsToMany(User::class, 'user_badges')
             ->using(UserBadge::class)
-            ->withPivot(['granted_by', 'granted_at', 'expires_at'])
+            ->withPivot(['granted_by', 'granted_at', 'expires_at', 'is_public', 'answered_at'])
             ->withTimestamps();
     }
 
-    /** Foydalanuvchiga nishon berish (bor bo'lsa, muddati yangilanadi). */
+    /**
+     * Foydalanuvchiga nishon berish (bor bo'lsa, muddati yangilanadi).
+     * Tizim bergani (masalan, telefon) darhol ko'rinadi; admin/moderator bergani — foydalanuvchi roziligidan keyin.
+     * Qayta berilganda avvalgi javob (ko'rsatish/yashirish) saqlanadi.
+     */
     public function grantTo(User $user, ?User $grantedBy = null): void
     {
+        $existing = $user->badges()->where('badges.id', $this->id)->first()?->pivot;
+
         $user->badges()->syncWithoutDetaching([
             $this->id => [
                 'granted_by' => $grantedBy?->id,
                 'granted_at' => now(),
                 'expires_at' => $this->validity_days ? now()->addDays($this->validity_days) : null,
+                'is_public' => $existing ? $existing->is_public : ($grantedBy ? null : true),
             ],
         ]);
     }

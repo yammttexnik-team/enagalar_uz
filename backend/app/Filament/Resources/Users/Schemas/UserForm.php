@@ -27,7 +27,7 @@ class UserForm
                     ->multiple()
                     ->preload()
                     ->pivotData(fn () => ['granted_at' => now(), 'granted_by' => auth()->id()])
-                    ->helperText('Odatda nishonlar hujjat tekshiruvi orqali beriladi.'),
+                    ->helperText('Faqat o\'zingiz tekshirgan ma\'lumot uchun bering. Foydalanuvchiga "profilda ko\'rsatilsinmi?" so\'rovi boradi, rozi bo\'lsa nishon profilda chiqadi.'),
             ]);
     }
 }
