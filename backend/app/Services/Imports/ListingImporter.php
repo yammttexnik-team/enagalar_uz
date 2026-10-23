@@ -42,6 +42,13 @@ class ListingImporter
 
     public const LIMIT = 'limit';         // AI chegarasi tugadi
 
+    // AI moderatsiya qarorlari
+    public const APPROVE = 'approve';
+
+    public const REJECT = 'reject';
+
+    public const MANUAL = 'manual';
+
     private const SYSTEM_PROMPT = <<<'TXT'
 You classify and extract fields from a public Telegram post for a childcare marketplace in Uzbekistan (enagalar.uz).
 The post is written in Uzbek (Latin or Cyrillic) or Russian. Contacts were already removed from it.
@@ -67,6 +74,12 @@ Rules:
 - "person_age": the nanny's own age (kind nanny) or the required nanny age (kind vacancy), only if stated.
 - "experience_years": nanny's experience (or required experience) in years.
 - "is_urgent": true only if the post says urgent (srochno, shoshilinch, tezda).
+
+Moderation: also fill "review_decision" and "review_reason".
+- "approve": a real childcare ad (a parent seeking a nanny, or a nanny offering services) with enough concrete info (place, schedule or price).
+- "reject": not childcare (cleaning-only, tutoring-only, driver, cook, ...), an agency or mass ad, spam, scam signs (prepayment, "send money"), offensive content, or a "found/closed" post (the nanny/vacancy is already found).
+- "manual": you are unsure, or the ad is too vague.
+- "review_reason": one short sentence in Uzbek (Latin), at most 200 characters, explaining the decision. For kind "other" use "reject".
 TXT;
 
     /** Kanal belgisi, reklama va h.k.: matnda bo'lsa ham kontakt emas. */
@@ -176,16 +189,67 @@ TXT;
             }
         }
 
-        $autoPublish = (bool) config('imports.auto_publish');
-        ImportedListing::create($sourceFields + $fields + [
+        if (config('imports.ai_review')) {
+            $decision = $this->reviewDecision($data, $fields, $type);
+            $review = [
+                'ai_decision' => $decision,
+                'ai_reason' => $this->reviewReason($data),
+                'ai_reviewed_at' => now(),
+            ];
+            $publish = $decision === self::APPROVE;
+            $status = match ($decision) {
+                self::APPROVE => ImportedListingStatus::Active,
+                self::REJECT => ImportedListingStatus::Rejected,
+                default => ImportedListingStatus::Pending,
+            };
+        } else {
+            $review = [];
+            $publish = (bool) config('imports.auto_publish');
+            $status = $publish ? ImportedListingStatus::Active : ImportedListingStatus::Pending;
+        }
+
+        ImportedListing::create($sourceFields + $fields + $review + [
             'type' => $type,
-            'status' => $autoPublish ? ImportedListingStatus::Active : ImportedListingStatus::Pending,
-            'published_at' => $autoPublish ? now() : null,
+            'status' => $status,
+            'published_at' => $publish ? now() : null,
             'content_hash' => $contentHash,
             'contact_hashes' => $contactHashes ?: null,
         ]);
 
         return self::CREATED;
+    }
+
+    /**
+     * AI qarori + deterministik xavfsizlik to'siq: shubhali holatda hech qachon avtomatik tasdiqlanmaydi.
+     *
+     * @param  array<string, mixed>  $data  AI javobi
+     * @param  array<string, mixed>  $fields  sanitize() natijasi
+     */
+    private function reviewDecision(array $data, array $fields, string $type): string
+    {
+        $decision = $data['review_decision'] ?? null;
+        if (! in_array($decision, [self::APPROVE, self::REJECT, self::MANUAL], true)) {
+            return self::MANUAL;
+        }
+        if ($decision !== self::APPROVE) {
+            return $decision;
+        }
+
+        // AI'ning xom javobi tekshiriladi: sanitize() kontaktni olib tashlaydi, lekin u qolgan bo'lsa — qo'lda ko'rish.
+        $public = (is_string($data['title'] ?? null) ? $data['title'] : '')."\n".(is_string($data['description'] ?? null) ? $data['description'] : '');
+        $hasContact = self::extractPhones($public) !== [] || self::extractUsernames($public) !== []
+            || preg_match('~(?:t|telegram)\.me/|@[A-Za-z]\w{3,}~i', $public) === 1;
+        $unknownType = ! in_array($type, [ImportedListing::TYPE_VACANCY, ImportedListing::TYPE_NANNY], true);
+        $empty = empty($fields['region_id']) && trim((string) ($fields['description'] ?? '')) === '';
+
+        return ($hasContact || $unknownType || $empty) ? self::MANUAL : self::APPROVE;
+    }
+
+    private function reviewReason(array $data): ?string
+    {
+        $reason = $data['review_reason'] ?? null;
+
+        return is_string($reason) && trim($reason) !== '' ? mb_substr(trim($reason), 0, 255) : null;
     }
 
     /** Takrorlarni qidirish doirasi: kuzatuvdagi va LIFETIME_DAYS ichidagi e'lonlar. */
@@ -412,6 +476,8 @@ TXT;
             'person_age' => $int,
             'live_in' => $bool,
             'is_urgent' => $bool,
+            'review_decision' => $enum([self::APPROVE, self::REJECT, self::MANUAL]),
+            'review_reason' => $str,
         ];
 
         // Hammasi majburiy: ixtiyoriy maydonlar bilan API "Schema is too complex" beradi.

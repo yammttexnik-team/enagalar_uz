@@ -15,6 +15,8 @@ use Filament\Tables\Table;
 
 class ImportedListingsTable
 {
+    private const AI_LABELS = ['approve' => 'Tasdiqlagan', 'reject' => 'Rad etgan', 'manual' => "Qo'lda ko'rish"];
+
     public static function configure(Table $table): Table
     {
         return $table
@@ -28,6 +30,15 @@ class ImportedListingsTable
                 TextColumn::make('region.name_uz')->label('Hudud')->placeholder('—'),
                 TextColumn::make('district.name_uz')->label('Tuman')->placeholder('—')->toggleable(),
                 TextColumn::make('status')->label('Holat')->badge(),
+                TextColumn::make('ai_decision')->label('AI')->badge()->placeholder('—')
+                    ->formatStateUsing(fn (?string $state) => self::AI_LABELS[$state] ?? $state)
+                    ->color(fn (?string $state) => match ($state) {
+                        'approve' => 'success',
+                        'reject' => 'danger',
+                        'manual' => 'warning',
+                        default => 'gray',
+                    })
+                    ->tooltip(fn (ImportedListing $record) => $record->ai_reason),
                 TextColumn::make('source_channel')->label('Manba')
                     ->formatStateUsing(fn (string $state, ImportedListing $record) => "@$state/{$record->source_post_id}")
                     ->url(fn (ImportedListing $record) => $record->source_url, shouldOpenInNewTab: true)
@@ -38,6 +49,7 @@ class ImportedListingsTable
             ->filters([
                 SelectFilter::make('status')->label('Holat')->options(ImportedListingStatus::class)
                     ->default(ImportedListingStatus::Pending->value),
+                SelectFilter::make('ai_decision')->label('AI qarori')->options(self::AI_LABELS),
                 SelectFilter::make('type')->label('Turi')->options(ImportedListingResource::TYPES),
                 SelectFilter::make('source_channel')->label('Kanal')
                     ->options(fn () => ImportSource::orderBy('channel')->pluck('channel', 'channel')->map(fn ($c) => "@$c")->all()),
