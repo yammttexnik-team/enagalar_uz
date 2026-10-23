@@ -3,9 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\VerificationStatus;
-use App\Http\Controllers\Admin\ReviewFileController;
 use App\Models\Badge;
-use App\Models\Document;
 use App\Models\IdentityVerification;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -46,16 +44,6 @@ class MyVerificationTest extends TestCase
         ];
     }
 
-    private function docPayload(array $over = []): array
-    {
-        return $over + [
-            'badge' => Badge::MEDICAL,
-            'file' => UploadedFile::fake()->create('m.pdf', 100, 'application/pdf'),
-            'issued_at' => now()->subDays(10)->toDateString(),
-            'consent' => '1',
-        ];
-    }
-
     public function test_requires_auth(): void
     {
         $this->getJson('/api/v1/my/verification')->assertUnauthorized();
@@ -67,8 +55,9 @@ class MyVerificationTest extends TestCase
 
         $res = $this->getJson('/api/v1/my/verification')->assertOk();
         $res->assertJsonPath('data.identity.status', 'none');
-        $slugs = collect($res->json('data.available_badges'))->pluck('slug')->all();
-        $this->assertEqualsCanonicalizing([Badge::MEDICAL, Badge::DISPENSARY_CLEAR, Badge::CERTIFICATE], $slugs);
+        $res->assertJsonPath('data.badges', []);
+        $res->assertJsonMissingPath('data.documents');
+        $res->assertJsonMissingPath('data.available_badges');
     }
 
     public function test_identity_submission_success_and_privacy(): void
@@ -145,98 +134,5 @@ class MyVerificationTest extends TestCase
 
         IdentityVerification::query()->update(['created_at' => now()->subDays(2)]);
         $this->postJson('/api/v1/my/verification/identity', $this->identityPayload())->assertCreated();
-    }
-
-    public function test_document_upload_records_health_consent(): void
-    {
-        $user = $this->login();
-
-        $res = $this->postJson('/api/v1/my/verification/documents', $this->docPayload())
-            ->assertCreated()
-            ->assertJsonPath('data.badge.slug', Badge::MEDICAL)
-            ->assertJsonPath('data.status', 'pending');
-        $this->assertStringNotContainsString('documents/', $res->getContent());
-
-        $doc = Document::firstOrFail();
-        $this->assertStringStartsWith("documents/{$user->id}/", $doc->path);
-        Storage::disk('private')->assertExists($doc->path);
-        $this->assertDatabaseHas('consents', ['user_id' => $user->id, 'type' => 'health']);
-
-        $list = $this->getJson('/api/v1/my/verification')->assertOk();
-        $list->assertJsonPath('data.documents.0.id', $doc->id);
-        $this->assertStringNotContainsString($doc->path, $list->getContent());
-        $this->assertTrue(collect($list->json('data.available_badges'))->firstWhere('slug', Badge::MEDICAL)['has_pending']);
-    }
-
-    public function test_certificate_does_not_record_health_consent(): void
-    {
-        $this->login();
-        $this->postJson('/api/v1/my/verification/documents', $this->docPayload(['badge' => Badge::CERTIFICATE, 'issued_at' => now()->subYears(3)->toDateString()]))
-            ->assertCreated();
-        $this->assertDatabaseMissing('consents', ['type' => 'health']);
-    }
-
-    public function test_document_validation(): void
-    {
-        $this->login();
-
-        $this->postJson('/api/v1/my/verification/documents', $this->docPayload(['badge' => Badge::VERIFIED]))->assertJsonValidationErrors('badge');
-        $this->postJson('/api/v1/my/verification/documents', $this->docPayload(['badge' => Badge::PHONE_VERIFIED]))->assertJsonValidationErrors('badge');
-        $this->postJson('/api/v1/my/verification/documents', $this->docPayload(['badge' => 'nope']))->assertJsonValidationErrors('badge');
-        $this->postJson('/api/v1/my/verification/documents', $this->docPayload(['issued_at' => now()->addDay()->toDateString()]))->assertJsonValidationErrors('issued_at');
-        $this->postJson('/api/v1/my/verification/documents', $this->docPayload(['issued_at' => now()->subDays(400)->toDateString()]))->assertJsonValidationErrors('issued_at');
-        $this->postJson('/api/v1/my/verification/documents', $this->docPayload(['file' => UploadedFile::fake()->create('x.exe', 10)]))->assertJsonValidationErrors('file');
-        $this->postJson('/api/v1/my/verification/documents', $this->docPayload(['file' => UploadedFile::fake()->create('x.pdf', 11000, 'application/pdf')]))->assertJsonValidationErrors('file');
-        $this->postJson('/api/v1/my/verification/documents', $this->docPayload(['consent' => '']))->assertJsonValidationErrors('consent');
-        $this->assertDatabaseCount('documents', 0);
-    }
-
-    public function test_one_pending_document_per_badge(): void
-    {
-        $this->login();
-        $this->postJson('/api/v1/my/verification/documents', $this->docPayload())->assertCreated();
-        $this->postJson('/api/v1/my/verification/documents', $this->docPayload())->assertStatus(409);
-        $this->postJson('/api/v1/my/verification/documents', $this->docPayload(['badge' => Badge::DISPENSARY_CLEAR]))->assertCreated();
-    }
-
-    public function test_delete_own_pending_document_removes_file(): void
-    {
-        $this->login();
-        $this->postJson('/api/v1/my/verification/documents', $this->docPayload())->assertCreated();
-        $doc = Document::firstOrFail();
-
-        $this->deleteJson("/api/v1/my/verification/documents/{$doc->id}")->assertNoContent();
-        $this->assertDatabaseCount('documents', 0);
-        Storage::disk('private')->assertMissing($doc->path);
-    }
-
-    public function test_cannot_delete_foreign_or_reviewed_document(): void
-    {
-        $owner = User::factory()->create();
-        $badge = Badge::where('slug', Badge::MEDICAL)->first();
-        $path = UploadedFile::fake()->image('a.jpg')->store('documents/'.$owner->id, 'private');
-        $doc = Document::create(['user_id' => $owner->id, 'badge_id' => $badge->id, 'type' => $badge->slug, 'path' => $path, 'issued_at' => now(), 'status' => VerificationStatus::Pending]);
-
-        $this->login();
-        $this->deleteJson("/api/v1/my/verification/documents/{$doc->id}")->assertNotFound();
-        Storage::disk('private')->assertExists($path);
-
-        Sanctum::actingAs($owner);
-        $doc->update(['status' => VerificationStatus::Approved]);
-        $this->deleteJson("/api/v1/my/verification/documents/{$doc->id}")->assertStatus(409);
-        $this->assertDatabaseHas('documents', ['id' => $doc->id]);
-    }
-
-    public function test_moderator_can_stream_pdf(): void
-    {
-        $admin = User::factory()->create();
-        $admin->assignRole('admin');
-        $this->login();
-        $this->postJson('/api/v1/my/verification/documents', $this->docPayload())->assertCreated();
-        $doc = Document::firstOrFail();
-
-        $res = $this->actingAs($admin)->get(ReviewFileController::url('document', $doc->id));
-        $res->assertOk();
-        $this->assertStringContainsString('application/pdf', $res->headers->get('Content-Type'));
     }
 }
