@@ -89,6 +89,19 @@ class ListingReferralBonusTest extends TestCase
         $this->assertDatabaseHas('bonus_transactions', ['reference' => 'listing:vacancy:'.$parent->parentProfile->id]);
     }
 
+    public function test_listing_bonus_is_once_per_person_across_roles(): void
+    {
+        $nanny = $this->nannyUser();
+        $this->activate($nanny);
+
+        // Xuddi shu odam ota-ona sifatida e'lon joylasa — ikkinchi listing bonusi yo'q.
+        $profile = $nanny->parentProfile()->create();
+        Vacancy::factory()->create(['parent_profile_id' => $profile->id])->publish();
+
+        $this->assertSame(30000, $nanny->fresh()->bonusBalance());
+        $this->assertSame(1, BonusTransaction::where('user_id', $nanny->id)->where('type', 'listing')->count());
+    }
+
     public function test_quick_vacancy_delete_revokes_listing_bonus(): void
     {
         $parent = $this->parentUser();
@@ -125,13 +138,13 @@ class ListingReferralBonusTest extends TestCase
         $this->assertSame(30000 + 15000, $nanny->bonusBalance());
         $this->assertSame(2, BonusTransaction::where('type', BonusType::Referral)->where('reference', 'referral:'.$nanny->id)->count());
 
-        // Ota-ona roli ham bo'lsa va e'lon joylasa — referal qayta berilmaydi.
+        // Ota-ona roli ham bo'lsa va e'lon joylasa — na referal, na listing bonusi qayta berilmaydi.
         $parent = $nanny;
         $parent->parentProfile()->create();
         Vacancy::factory()->create(['parent_profile_id' => $parent->parentProfile->id])->publish();
 
         $this->assertSame(15000, $referrer->bonusBalance());
-        $this->assertSame(30000 + 15000 + 30000, $nanny->bonusBalance());
+        $this->assertSame(30000 + 15000, $nanny->bonusBalance());
     }
 
     public function test_quick_vacancy_delete_also_revokes_referral_bonuses_on_both_sides(): void

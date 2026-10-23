@@ -73,7 +73,17 @@ class ListingRewards
         $campaign = $this->bonuses->campaignFor($user);
         $amount = $campaign?->listing_bonus ?? config('bonus.listing');
 
-        $this->bonuses->award($user, BonusType::Listing, $amount, $reference, $campaign, $description);
+        // Bonus bir odamga bir marta (birinchi faol e'lon YOKI anketa): ikkala rol bilan ikki marta olinmaydi.
+        $this->bonuses->forUser($user, function () use ($user, $amount, $reference, $campaign, $description) {
+            $hasOther = BonusTransaction::where('user_id', $user->id)->where('type', BonusType::Listing)
+                ->where('amount', '>', 0)->where('reference', '!=', $reference)
+                ->whereNotIn('id', $this->bonuses->revokedIds($user))
+                ->exists();
+
+            if (! $hasOther) {
+                $this->bonuses->award($user, BonusType::Listing, $amount, $reference, $campaign, $description);
+            }
+        });
         $this->referral($user);
     }
 
