@@ -45,6 +45,11 @@ class SignupsChart extends ChartWidget
         ];
     }
 
+    protected function getOptions(): array
+    {
+        return ['scales' => ['y' => ['beginAtZero' => true, 'ticks' => ['precision' => 0]]]];
+    }
+
     /** @param  array<string, int>  $series */
     private function dataset(string $label, array $series, string $color): array
     {
