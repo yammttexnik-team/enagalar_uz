@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\NannyProfiles\Pages;
 
 use App\Filament\Resources\NannyProfiles\NannyProfileResource;
+use App\Filament\Support\AiModeration;
 use App\Filament\Support\ModerationActions;
 use Filament\Resources\Pages\ViewRecord;
 
@@ -12,6 +13,6 @@ class ViewNannyProfile extends ViewRecord
 
     protected function getHeaderActions(): array
     {
-        return ModerationActions::forNannyProfile();
+        return [...ModerationActions::forNannyProfile(), AiModeration::recheckAction()];
     }
 }

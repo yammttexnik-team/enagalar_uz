@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AiVerdict;
 use App\Enums\NannyProfileStatus;
 use App\Enums\PriceUnit;
 use App\Enums\UserStatus;
@@ -39,6 +40,9 @@ class NannyProfile extends Model
             'is_available' => 'boolean',
             'rating_avg' => 'decimal:2',
             'published_at' => 'datetime',
+            'ai_verdict' => AiVerdict::class,
+            'ai_flags' => 'array',
+            'ai_checked_at' => 'datetime',
         ];
     }
 

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\NannyProfiles\Schemas;
 use App\Enums\AgeGroup;
 use App\Enums\Language;
 use App\Enums\WorkFormat;
+use App\Filament\Support\AiModeration;
 use App\Filament\Support\EnumLabel;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
@@ -16,6 +17,7 @@ class NannyProfileInfolist
     {
         return $schema
             ->components([
+                AiModeration::section(),
                 TextEntry::make('user.name')->label('Enaga'),
                 TextEntry::make('region.name_uz')->label('Viloyat')->placeholder('—'),
                 TextEntry::make('district.name_uz')->label('Tuman')->placeholder('—'),
