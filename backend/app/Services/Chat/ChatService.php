@@ -213,7 +213,8 @@ class ChatService
             return;
         }
 
-        SendChatTelegramNotification::dispatch($message->id, $recipient->id);
+        // 1 daqiqa kutamiz: shu orada saytda o'qilsa, Telegram'ga yuborilmaydi (job ichida tekshiriladi).
+        SendChatTelegramNotification::dispatch($message->id, $recipient->id)->delay(now()->addMinute());
     }
 
     /** Realtime xatosi (Reverb o'chiq va h.k.) so'rovni buzmasligi uchun. */

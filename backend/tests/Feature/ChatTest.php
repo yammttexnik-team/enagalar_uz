@@ -549,6 +549,21 @@ class ChatTest extends TestCase
         Queue::assertNothingPushed();
     }
 
+    public function test_telegram_job_skips_message_already_read_on_site(): void
+    {
+        Http::fake();
+        config(['services.telegram.bot_token' => 'token']);
+        $this->nanny->update(['telegram_id' => 555]);
+        $c = $this->chat();
+        $message = $this->say($c, $this->parent, 'Salom');
+        // Enaga chatni ochib turgan edi: xabar 1 daqiqa ichida o'qildi
+        $c->participants()->updateExistingPivot($this->nanny->id, ['last_read_message_id' => $message->id]);
+
+        (new SendChatTelegramNotification($message->id, $this->nanny->id))->handle(app(TelegramBot::class));
+
+        Http::assertNothingSent();
+    }
+
     public function test_telegram_job_sends_localized_message(): void
     {
         Http::fake();

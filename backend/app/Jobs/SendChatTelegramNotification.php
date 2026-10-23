@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Services\Telegram\TelegramBot;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 /** Yangi xabar haqida Telegram orqali xabar beradi (navbat ishchisi kerak). */
 class SendChatTelegramNotification implements ShouldQueue
@@ -23,6 +25,18 @@ class SendChatTelegramNotification implements ShouldQueue
         $recipient = User::find($this->recipientId);
 
         if (! $message || ! $recipient?->telegram_id || blank(config('services.telegram.bot_token'))) {
+            return;
+        }
+
+        // Qabul qiluvchi xabarni saytda allaqachon o'qigan bo'lsa (chat ochiq edi) — bildirishnoma kerak emas.
+        $lastRead = (int) DB::table('conversation_participants')
+            ->where('conversation_id', $message->conversation_id)
+            ->where('user_id', $recipient->id)
+            ->value('last_read_message_id');
+        if ($lastRead >= $message->id) {
+            // Yuborilmadi — keyingi xabar uchun 10 daqiqalik cheklovni bo'shatamiz.
+            Cache::forget("chat:tg-notified:{$message->conversation_id}:{$recipient->id}");
+
             return;
         }
 

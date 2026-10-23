@@ -14,19 +14,17 @@ Serverni qo'lda sozlash shart emas: GitHub serverga SSH orqali o'zi ulanadi.
 | Nomi | Qiymati |
 |---|---|
 | `SERVER_HOST` | Server IP manzili |
-| `SERVER_ROOT_PASSWORD` | Root paroli. **Server setup** va **Nginx site** workflow'lari uchun; Nginx site har ishga tushganda kerak bo'ladi (o'chirib qo'ymang) |
 | `SERVER_HOST_KEY` | Ixtiyoriy, lekin tavsiya etiladi: serverning `known_hosts` qatori (pastdagi "Xavfsizlik sozlamalari" bo'limi) |
 | `DEPLOY_SSH_KEY` | Deploy uchun SSH maxfiy kaliti (ed25519, to'liq: BEGIN…END qatorlari bilan) |
 | `TELEGRAM_BOT_TOKEN` | @BotFather bergan token |
 | `ANTHROPIC_API_KEY` | Claude API kaliti |
 | `ADMIN_EMAIL` | Admin panelga kirish emaili |
-| `ADMIN_PASSWORD` | Admin paroli (kamida 10 belgi) |
 
 **2. DNS:** `enagalar.uz` va `www.enagalar.uz` uchun A yozuvini server IP'siga yo'naltiring (2-bo'lim).
 
-**3. Server setup:** **Actions → Server setup → Run workflow**. U Docker va `deploy` foydalanuvchisini o'rnatadi, kodni yuboradi, `.env.production` ni tasodifiy parollar bilan yaratadi, ishga tushiradi va admin yaratadi. **ufw, fail2ban, `apt upgrade` va swap faqat `FULL_SETUP=1` bilan** ishlaydi (`server-setup.sh`). Umumiy serverda bu yoqilmaydi, chunki boshqa saytlarga ta'sir qiladi.
+**3. Server sozlash va admin:** root paroli GitHub'da saqlanmaydi (2026-10-23 dan). Server SSH kalit bilan qo'lda sozlanadi: `deploy/scripts/server-setup.sh` (Docker, `deploy` foydalanuvchisi), so'ng `php artisan admin:create ... --password-stdin`.
 
-**4. Nginx site:** **Actions → Nginx site → Run workflow** (`domain` kiriting). Mavjud Nginx'ga faqat `/etc/nginx/sites-available/enagalar-<domen>` faylini qo'shadi, `nginx -t` o'tsa reload qiladi, so'ng `certbot --nginx` bilan HTTPS oladi. `nginx -t` xato bersa, faqat o'zimizning fayl olib tashlanadi. Root paroli (`SERVER_ROOT_PASSWORD`) **har ishga tushganda** ishlatiladi.
+**4. Nginx sayt fayli:** SSH orqali qo'lda: `deploy/nginx/enagalar.conf.template` dan `/etc/nginx/sites-available/enagalar-<domen>` yaratiladi, `nginx -t` o'tsa reload, keyin `certbot --nginx -d <domen> -d www.<domen> --redirect`. Boshqa saytlarga tegilmaydi.
 
 **5. Keyingi yangilanishlar:** **Actions → Deploy → Run workflow**. Avtomatik deploy `main` branch'dagi push'dan keyingi CI muvaffaqiyatidan so'ng ishlaydi, lekin faqat shu repo'dagi `push` hodisasi uchun (fork va pull request'dan emas). `main` branch 2026-10-22 dan beri bor, avtomatik deploy yoqilgan.
 
@@ -35,7 +33,6 @@ Serverni qo'lda sozlash shart emas: GitHub serverga SSH orqali o'zi ulanadi.
 | Workflow | Vazifasi |
 |---|---|
 | **Set domain** | `.env.production` dagi domenni almashtiradi (masalan, vaqtinchalik `161-97-88-95.sslip.io` dan `enagalar.uz` ga) va qayta deploy qiladi. Kodni rsync qilmaydi, kod o'zgarishi uchun avval **Deploy** ishlating. |
-| **Nginx site** | Yuqorida (4-qadam). Domen o'zgarganda qayta ishga tushiring. |
 | **Server exec** | Diagnostika buyruqlari (`$DC ps`, `$DC logs --tail 100 app`). Qarang: pastdagi ogohlantirish. |
 
 ### Xavfsizlik sozlamalari (bir marta qiling)
@@ -60,7 +57,7 @@ Ichki tarmoq: app, queue, scheduler, reverb, nuxt, postgres, redis (portlari tas
 
 Volume'lar: `pgdata`, `redisdata`, `storage` (Laravel storage/, pasport fayllari `storage/app/verification` ham shu yerda, veb orqali berilmaydi), `public`, `caddy_data`, `caddy_config`.
 
-Caddy tashqariga to'g'ridan-to'g'ri chiqmaydi: sertifikatni Caddy emas, host Nginx + certbot (Nginx site workflow) oladi.
+Caddy tashqariga to'g'ridan-to'g'ri chiqmaydi: sertifikatni Caddy emas, host Nginx + certbot (4-qadam) oladi.
 
 ## 1. Server buyurtma qilish
 
@@ -77,7 +74,7 @@ Caddy tashqariga to'g'ridan-to'g'ri chiqmaydi: sertifikatni Caddy emas, host Ngi
 | `enagalar.uz` | A | server IPv4 |
 | `www.enagalar.uz` | A | server IPv4 |
 
-Tarqalishini tekshiring: `dig +short enagalar.uz`. DNS tayyor bo'lmasa certbot (Nginx site workflow) sertifikat ololmaydi.
+Tarqalishini tekshiring: `dig +short enagalar.uz`. DNS tayyor bo'lmasa certbot (4-qadam) sertifikat ololmaydi.
 
 ## 3. Serverni sozlash (qo'lda; odatda kerak emas, workflow bajaradi)
 
@@ -192,7 +189,7 @@ docker stats                   # RAM/CPU
 ```
 
 Tez-tez uchraydigan holatlar:
-- **Sertifikat olinmayapti**: DNS A yozuvi noto'g'ri yoki 80/443 yopiq. Nginx site workflow logini tekshiring (Let's Encrypt limiti, masalan sslip.io uchun, tugagan bo'lishi mumkin: u holda sayt HTTP orqali ishlaydi). Caddy sertifikat olmaydi (`auto_https off`).
+- **Sertifikat olinmayapti**: DNS A yozuvi noto'g'ri yoki 80/443 yopiq. certbot chiqishini tekshiring (Let's Encrypt limiti, masalan sslip.io uchun, tugagan bo'lishi mumkin: u holda sayt HTTP orqali ishlaydi). Caddy sertifikat olmaydi (`auto_https off`).
 - **500 xato**: `dc logs app`, `.env.production` o'zgargan bo'lsa `dc up -d --force-recreate app queue scheduler reverb`.
 - **Websocket ulanmayapti**: `NUXT_PUBLIC_REVERB_*` va `REVERB_APP_KEY` mosligini tekshiring; frontend env o'zgargach `dc up -d --force-recreate nuxt`.
 - **Admin CSS yuklanmayapti**: `dc exec app php artisan filament:assets`, `app` ni qayta ishga tushiring.
