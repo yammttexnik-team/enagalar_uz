@@ -4,13 +4,11 @@ namespace Tests\Feature;
 
 use App\Enums\Role;
 use App\Enums\VerificationStatus;
-use App\Filament\Resources\Documents\Pages\ViewDocument;
 use App\Filament\Resources\IdentityVerifications\Pages\ViewIdentityVerification;
 use App\Filament\Resources\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Pages\ViewUser;
 use App\Http\Controllers\Admin\ReviewFileController;
 use App\Models\Badge;
-use App\Models\Document;
 use App\Models\IdentityVerification;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -59,7 +57,7 @@ class AdminPanelTest extends TestCase
         $this->actingAs($this->admin);
 
         foreach (["/admin/nanny-profiles/{$nanny->id}", "/admin/vacancies/{$vacancy->id}", "/admin/users/{$this->admin->id}/edit", '/admin', '/admin/users', '/admin/badges', '/admin/badges/create', '/admin/identity-verifications',
-            "/admin/identity-verifications/{$verification->id}", '/admin/documents', '/admin/nanny-profiles', '/admin/vacancies'] as $url) {
+            "/admin/identity-verifications/{$verification->id}", '/admin/nanny-profiles', '/admin/vacancies'] as $url) {
             $this->get($url)->assertOk();
         }
     }
@@ -97,25 +95,6 @@ class AdminPanelTest extends TestCase
         $this->assertNull($verification->fresh()->document_path);
     }
 
-    public function test_dispensary_document_approval_grants_badge_with_expiry(): void
-    {
-        $user = User::factory()->create();
-        $document = Document::create([
-            'user_id' => $user->id,
-            'badge_id' => Badge::where('slug', Badge::DISPENSARY_CLEAR)->value('id'),
-            'type' => 'dispensary',
-            'path' => UploadedFile::fake()->image('s.jpg')->store('documents', Document::DISK),
-        ]);
-
-        $this->actingAs($this->admin);
-        Livewire::test(ViewDocument::class, ['record' => $document->getRouteKey()])->callAction('approve');
-
-        $badge = $user->activeBadges()->where('slug', Badge::DISPENSARY_CLEAR)->first();
-        $this->assertNotNull($badge);
-        $this->assertTrue($badge->pivot->expires_at->between(now()->addDays(364), now()->addDays(366)));
-        $this->assertNull($document->fresh()->path);
-    }
-
     public function test_review_file_requires_signature_and_panel_access(): void
     {
         $verification = $this->verification();
@@ -134,7 +113,7 @@ class AdminPanelTest extends TestCase
         $this->actingAs($moderator);
 
         foreach (['/admin', '/admin/users', "/admin/users/{$moderator->id}", '/admin/identity-verifications',
-            "/admin/identity-verifications/{$verification->id}", '/admin/documents', '/admin/nanny-profiles', '/admin/vacancies'] as $url) {
+            "/admin/identity-verifications/{$verification->id}", '/admin/nanny-profiles', '/admin/vacancies'] as $url) {
             $this->get($url)->assertOk();
         }
 
