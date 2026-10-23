@@ -29,10 +29,12 @@ class SendChatTelegramNotification implements ShouldQueue
         $title = $recipient->locale === 'ru' ? '💬 Новое сообщение' : '💬 Yangi xabar';
         $url = rtrim((string) config('app.frontend_url'), '/').'/kabinet/xabarlar/'.$message->conversation_id;
 
+        // Xom havola o'rniga tugma: chiroyliroq va bosish oson
         $bot->sendMessage((int) $recipient->telegram_id, implode("\n", [
             $title.': '.e($message->sender?->publicName() ?? ''),
             e($message->preview()),
-            $url,
-        ]));
+        ]), [
+            'inline_keyboard' => [[['text' => $recipient->locale === 'ru' ? 'Ответить' : 'Javob berish', 'url' => $url]]],
+        ]);
     }
 }

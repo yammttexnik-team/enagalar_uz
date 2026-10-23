@@ -62,20 +62,22 @@ Kanal adminlari bilan hamkorlik — keyin, asoschi qaror qilganda.
 
 ## 5. Tayyor matnlar
 
+Havolani xom ko'rinishda qoldirmang: ko'k matnga biriktiring. Telegram'da matnni (masalan, "So'rovnomani boshlash") belgilang, **Ctrl+K** bosing va havolani qo'ying. Kodni (`c_...`) kanalga qarab almashtiring.
+
 **So'rovnoma (UZ)**
-> Assalomu alaykum! Men enagalar.uz jamoasidanman, @kanal'dagi e'loningiz munosabati bilan yozyapman. Enagalar va ota-onalar uchun tekshirilgan platforma qilyapmiz. 10 daqiqalik so'rovnomani to'ldirsangiz, **50 000 so'm bonus** olasiz. Bonus bilan platformadagi pullik xizmatlardan foydalanasiz, masalan TOP e'lon (naqdga aylanmaydi). Havola: https://t.me/enagalaruz_bot?start=c_SURVEY_ENAGALAR
+> Assalomu alaykum! Men enagalar.uz jamoasidanman, @kanal'dagi e'loningiz munosabati bilan yozyapman. Enagalar va ota-onalar uchun tekshirilgan platforma qilyapmiz. 10 daqiqalik so'rovnomani to'ldirsangiz, **50 000 so'm bonus** olasiz. Bonus bilan platformadagi pullik xizmatlardan foydalanasiz, masalan TOP e'lon (naqdga aylanmaydi). 👉 [So'rovnomani boshlash](https://t.me/enagalaruz_bot?start=c_SURVEY_ENAGALAR)
 > Qiziq bo'lmasa, uzr, boshqa yozmaymiz.
 
 **So'rovnoma (RU)**
-> Здравствуйте! Я из команды enagalar.uz, пишу по поводу вашего объявления в @канал. Мы делаем проверенную платформу для нянь и родителей. Заполните опрос на 10 минут и получите **50 000 сум бонусами**. Бонусами можно оплатить платные услуги платформы, например ТОП-объявление (не обналичиваются). Ссылка: https://t.me/enagalaruz_bot?start=c_SURVEY_ENAGALAR
+> Здравствуйте! Я из команды enagalar.uz, пишу по поводу вашего объявления в @канал. Мы делаем проверенную платформу для нянь и родителей. Заполните опрос на 10 минут и получите **50 000 сум бонусами**. Бонусами можно оплатить платные услуги платформы, например ТОП-объявление (не обналичиваются). 👉 [Пройти опрос](https://t.me/enagalaruz_bot?start=c_SURVEY_ENAGALAR)
 > Если неинтересно, извините, больше не напишем.
 
 **E'lonni ko'chirish (UZ)**
-> Assalomu alaykum! E'loningizni @kanal'da ko'rdim. Uni enagalar.uz ga ko'chiring: Telegram orqali kirasiz, e'lon matnini tashlaysiz, AI formani o'zi to'ldiradi. E'lon tasdiqlansa, **30 000 so'm bonus** olasiz. Havola: https://t.me/enagalaruz_bot?start=c_REPOST_ENAGALAR
+> Assalomu alaykum! E'loningizni @kanal'da ko'rdim. Uni enagalar.uz ga ko'chiring: Telegram orqali kirasiz, e'lon matnini tashlaysiz, AI formani o'zi to'ldiradi. E'lon tasdiqlansa, **30 000 so'm bonus** olasiz. 👉 [E'lonni ko'chirish](https://t.me/enagalaruz_bot?start=c_REPOST_ENAGALAR)
 > Qiziq bo'lmasa, uzr, boshqa yozmaymiz.
 
 **E'lonni ko'chirish (RU)**
-> Здравствуйте! Увидел(а) ваше объявление в @канал. Перенесите его на enagalar.uz: войдите через Telegram, вставьте текст объявления, AI сам заполнит форму. После проверки — **30 000 сум бонусами**. Ссылка: https://t.me/enagalaruz_bot?start=c_REPOST_ENAGALAR
+> Здравствуйте! Увидел(а) ваше объявление в @канал. Перенесите его на enagalar.uz: войдите через Telegram, вставьте текст объявления, AI сам заполнит форму. После проверки — **30 000 сум бонусами**. 👉 [Перенести объявление](https://t.me/enagalaruz_bot?start=c_REPOST_ENAGALAR)
 > Если неинтересно, извините, больше не напишем.
 
 **O'z kanal posti (UZ)**
@@ -84,7 +86,7 @@ Kanal adminlari bilan hamkorlik — keyin, asoschi qaror qilganda.
 > • 10 daqiqalik so'rovnoma — **50 000 so'm bonus**
 > • Birinchi e'lon yoki anketa — **30 000 so'm bonus**
 > Bonus platformadagi pullik xizmatlar uchun ishlatiladi, naqdga aylanmaydi.
-> 👉 https://t.me/enagalaruz_bot?start=c_OWNCH_UZ
+> 👉 [Hoziroq boshlash](https://t.me/enagalaruz_bot?start=c_OWNCH_UZ)
 
 **O'z kanal posti (RU)**
 > **Ищете няню или работу?**
@@ -92,7 +94,7 @@ Kanal adminlari bilan hamkorlik — keyin, asoschi qaror qilganda.
 > • опрос на 10 минут — **50 000 сум бонусами**
 > • первое объявление или анкета — **30 000 сум бонусами**
 > Бонусами оплачиваются платные услуги платформы, не обналичиваются.
-> 👉 https://t.me/enagalaruz_bot?start=c_OWNCH_RU
+> 👉 [Начать сейчас](https://t.me/enagalaruz_bot?start=c_OWNCH_RU)
 
 ## 6. Qoidalar
 

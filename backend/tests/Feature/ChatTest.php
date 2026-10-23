@@ -564,7 +564,9 @@ class ChatTest extends TestCase
                 && $request['chat_id'] === 555
                 && str_contains($request['text'], '💬 Новое сообщение: Aziza R.')
                 && str_contains($request['text'], 'Salom &lt;b&gt;')
-                && str_contains($request['text'], "https://enagalar.uz/kabinet/xabarlar/{$c->id}");
+                && ! str_contains($request['text'], 'https://')
+                && $request['reply_markup']['inline_keyboard'][0][0]['text'] === 'Ответить'
+                && $request['reply_markup']['inline_keyboard'][0][0]['url'] === "https://enagalar.uz/kabinet/xabarlar/{$c->id}";
         });
     }
 }
