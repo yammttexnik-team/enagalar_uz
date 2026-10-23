@@ -7,6 +7,7 @@ use App\Enums\UserStatus;
 use App\Enums\VacancyStatus;
 use App\Enums\WorkFormat;
 use App\Jobs\ComputeMatches;
+use App\Models\Concerns\Promotable;
 use App\Observers\VacancyObserver;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -25,7 +26,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 #[ObservedBy(VacancyObserver::class)]
 class Vacancy extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, Promotable, SoftDeletes;
 
     /** E'lon necha kundan keyin avtomatik tugaydi. */
     public const LIFETIME_DAYS = 30;
@@ -77,6 +78,12 @@ class Vacancy extends Model
     public function scopeWithPublic(Builder $query): void
     {
         $query->with(['region', 'district', 'parentProfile.user.activeBadges']);
+    }
+
+    /** "Shoshilinch" lentasi: ota-onaning bepul belgisi yoki sotib olingan, muddati o'tmagan belgi. */
+    public function isUrgentNow(): bool
+    {
+        return $this->is_urgent || $this->hasPaidUrgent();
     }
 
     public function publish(): void

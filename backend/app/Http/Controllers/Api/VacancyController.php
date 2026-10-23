@@ -31,8 +31,11 @@ class VacancyController extends Controller
                 ->where('salary_unit', $f['salary_unit'] ?? PriceUnit::Month->value)
                 ->whereRaw('coalesce(salary_max, salary_min) >= ?', [(int) $v]))
             ->when($request->boolean('live_in'), fn (Builder $q) => $q->where('live_in', true))
-            ->when($request->boolean('is_urgent'), fn (Builder $q) => $q->where('is_urgent', true))
-            ->when(isset($f['children_age']), fn (Builder $q) => $q->whereJsonContains('children_ages', (int) $f['children_age']));
+            // Shoshilinch: ota-onaning bepul belgisi yoki sotib olingan, muddati o'tmagan belgi.
+            ->when($request->boolean('is_urgent'), fn (Builder $q) => $q->where(fn ($u) => $u->where('is_urgent', true)->orWhere('urgent_until', '>', now())))
+            ->when(isset($f['children_age']), fn (Builder $q) => $q->whereJsonContains('children_ages', (int) $f['children_age']))
+            // Sotib olingan TOP e'lonlar har qanday saralashda birinchi.
+            ->topFirst();
 
         match ($f['sort'] ?? 'newest') {
             'salary_desc' => $query->orderByRaw('coalesce(salary_max, salary_min) desc'),

@@ -36,7 +36,9 @@ class NannyController extends Controller
             ->when($request->boolean('live_in'), fn (Builder $q) => $q->where('live_in', true))
             ->when($request->boolean('available_only'), fn (Builder $q) => $q->where('is_available', true))
             ->when($request->boolean('verified_only'), fn (Builder $q) => $this->hasBadge($q, 'verified'))
-            ->when($f['badge'] ?? null, fn (Builder $q, $v) => $this->hasBadge($q, $v));
+            ->when($f['badge'] ?? null, fn (Builder $q, $v) => $this->hasBadge($q, $v))
+            // Sotib olingan TOP anketalar har qanday saralashda birinchi.
+            ->topFirst();
 
         match ($f['sort'] ?? 'newest') {
             'rating' => $query->orderByDesc('rating_avg')->orderByDesc('reviews_count'),

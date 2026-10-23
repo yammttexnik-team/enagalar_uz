@@ -14,6 +14,8 @@ export interface OwnVacancy extends VacancyItem {
   district_id: number | null
   views_count: number
   applications_count?: number
+  top_until?: string | null
+  urgent_until?: string | null
 }
 
 export interface OwnNanny extends NannyItem {
@@ -26,6 +28,8 @@ export interface OwnNanny extends NannyItem {
   free_trial_day: boolean
   skills: { id: number, slug: string, name: LocalizedName }[]
   views_count: number
+  top_until?: string | null
+  urgent_until?: string | null
 }
 
 export interface Application {

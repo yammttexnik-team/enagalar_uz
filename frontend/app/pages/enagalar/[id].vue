@@ -98,6 +98,12 @@ function report() {
             <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
               <NannyAvatar :name="n.name" :id="n.id" size="xl" />
               <div class="min-w-0 flex-1">
+                <div v-if="n.is_top || n.is_urgent" class="mb-2 flex flex-wrap gap-1.5">
+                  <PromoTopChip v-if="n.is_top" />
+                  <span v-if="n.is_urgent" class="inline-flex items-center gap-1 rounded-full bg-apricot-100 px-2.5 py-1 text-xs font-bold text-apricot-700 dark:bg-apricot-900 dark:text-apricot-200">
+                    <UIcon name="i-lucide-zap" class="size-3.5" aria-hidden="true" />{{ t('promo.urgentNanny') }}
+                  </span>
+                </div>
                 <p v-if="n.is_available" class="mb-2 inline-flex items-center gap-1.5 rounded-full bg-leaf-50 px-2.5 py-1 text-sm font-semibold text-leaf-700 dark:bg-leaf-950 dark:text-leaf-300">
                   <span class="size-2 rounded-full bg-leaf-500 dark:bg-leaf-400" aria-hidden="true" />{{ t('nanny.available') }}
                 </p>

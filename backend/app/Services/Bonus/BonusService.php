@@ -128,7 +128,7 @@ class BonusService
         ]);
     }
 
-    /** Pullik xizmatlar uchun (hozircha ishlatilmaydi). Balans yetmasa InsufficientBonus. */
+    /** Pullik xizmatlar uchun (PromotionService). Balans yetmasa InsufficientBonus. */
     public function spend(User $user, int $amount, string $reference, string $description): BonusTransaction
     {
         return $this->forUser($user, function () use ($user, $amount, $reference, $description) {
