@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Enums\VacancyStatus;
+use App\Jobs\ReviewListingWithAi;
 use App\Models\Vacancy;
 use App\Services\Bonus\ListingRewards;
 
@@ -13,6 +14,12 @@ class VacancyObserver
     {
         if ($vacancy->status === VacancyStatus::Active && ($vacancy->wasRecentlyCreated || $vacancy->wasChanged('status'))) {
             $this->safely(fn () => app(ListingRewards::class)->vacancyPublished($vacancy));
+        }
+
+        // Moderatsiyaga tushganda (yoki shu holatda matni o'zgarganda) AI oldindan baholaydi.
+        if ($vacancy->status === VacancyStatus::Pending
+            && ($vacancy->wasRecentlyCreated || $vacancy->wasChanged(['status', 'title', 'description', 'schedule', 'salary_min', 'salary_max']))) {
+            $this->safely(fn () => ReviewListingWithAi::dispatchFor($vacancy));
         }
     }
 

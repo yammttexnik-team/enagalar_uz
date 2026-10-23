@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Vacancies\Schemas;
 
 use App\Enums\Language;
+use App\Filament\Support\AiModeration;
 use App\Filament\Support\EnumLabel;
 use App\Models\Vacancy;
 use Filament\Infolists\Components\IconEntry;
@@ -15,6 +16,7 @@ class VacancyInfolist
     {
         return $schema
             ->components([
+                AiModeration::section(),
                 TextEntry::make('title')->label('Sarlavha'),
                 TextEntry::make('parentProfile.user.name')->label('Ota-ona'),
                 TextEntry::make('region.name_uz')->label('Viloyat'),

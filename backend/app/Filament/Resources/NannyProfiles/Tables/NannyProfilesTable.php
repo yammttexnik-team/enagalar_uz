@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\NannyProfiles\Tables;
 
 use App\Enums\NannyProfileStatus;
+use App\Filament\Support\AiModeration;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -25,14 +26,17 @@ class NannyProfilesTable
                 IconColumn::make('is_available')->label('Bo\'sh')->boolean(),
                 TextColumn::make('rating_avg')->label('Reyting')->sortable(),
                 TextColumn::make('status')->label('Holat')->badge(),
+                AiModeration::column(),
                 TextColumn::make('created_at')->label('Yaratilgan')->dateTime('d.m.Y')->sortable(),
             ])
             ->filters([
                 SelectFilter::make('status')->label('Holat')->options(NannyProfileStatus::class),
                 SelectFilter::make('region')->label('Hudud')->relationship('region', 'name_uz'),
+                AiModeration::filter(),
             ])
             ->recordActions([
                 ViewAction::make(),
+                AiModeration::recheckAction(),
             ]);
     }
 }

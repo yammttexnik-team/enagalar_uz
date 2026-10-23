@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AiVerdict;
 use App\Enums\PriceUnit;
 use App\Enums\UserStatus;
 use App\Enums\VacancyStatus;
@@ -44,6 +45,9 @@ class Vacancy extends Model
             'starts_at' => 'date',
             'published_at' => 'datetime',
             'expires_at' => 'datetime',
+            'ai_verdict' => AiVerdict::class,
+            'ai_flags' => 'array',
+            'ai_checked_at' => 'datetime',
         ];
     }
 

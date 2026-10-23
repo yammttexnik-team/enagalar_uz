@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Vacancies\Tables;
 
 use App\Enums\VacancyStatus;
+use App\Filament\Support\AiModeration;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -24,16 +25,19 @@ class VacanciesTable
                 TextColumn::make('work_format')->label('Format')->badge()->color('gray'),
                 IconColumn::make('is_urgent')->label('Shoshilinch')->boolean(),
                 TextColumn::make('status')->label('Holat')->badge(),
+                AiModeration::column(),
                 TextColumn::make('expires_at')->label('Tugaydi')->date('d.m.Y')->placeholder('—'),
                 TextColumn::make('created_at')->label('Yaratilgan')->dateTime('d.m.Y H:i')->sortable(),
             ])
             ->filters([
                 SelectFilter::make('status')->label('Holat')->options(VacancyStatus::class),
                 SelectFilter::make('region')->label('Hudud')->relationship('region', 'name_uz'),
+                AiModeration::filter(),
                 TrashedFilter::make(),
             ])
             ->recordActions([
                 ViewAction::make(),
+                AiModeration::recheckAction(),
             ]);
     }
 }
