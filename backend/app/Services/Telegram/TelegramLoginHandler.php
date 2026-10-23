@@ -99,7 +99,9 @@ class TelegramLoginHandler
             return;
         }
 
-        $url = rtrim(config('app.frontend_url'), '/').($lang === 'ru' ? '/ru' : '').'/kirish?'.$param.'='.$code;
+        // So'rovnoma kampaniyasi to'g'ri so'rovnomaga olib boradi (kirish u yerda so'raladi), qolganlari — kirishga.
+        $path = $kind === 'c' && str_starts_with($code, 'SURVEY_') ? '/sorovnoma' : '/kirish';
+        $url = rtrim(config('app.frontend_url'), '/').($lang === 'ru' ? '/ru' : '').$path.'?'.$param.'='.$code;
 
         $this->bot->sendMessage($from['id'], $this->t('campaign_welcome', $lang), [
             'inline_keyboard' => [[['text' => $this->t('campaign_button', $lang), 'url' => $url]]],

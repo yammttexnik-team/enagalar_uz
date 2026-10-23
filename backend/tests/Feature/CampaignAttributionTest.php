@@ -114,7 +114,7 @@ class CampaignAttributionTest extends TestCase
         Http::assertSent(fn ($r) => str_contains($r->url(), 'sendMessage')
             && str_contains($r['text'], 'enagalar.uz')
             && str_contains(json_encode($r['reply_markup']), 'Saytga kirish')
-            && str_contains(json_encode($r['reply_markup']), 'https:\/\/enagalar.test\/kirish?c=SURVEY_NANNY'));
+            && str_contains(json_encode($r['reply_markup']), 'https:\/\/enagalar.test\/sorovnoma?c=SURVEY_NANNY'));
     }
 
     public function test_bot_campaign_start_in_russian(): void
