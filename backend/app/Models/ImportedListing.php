@@ -90,6 +90,35 @@ class ImportedListing extends Model
         $query->whereIn('status', [ImportedListingStatus::Active, ImportedListingStatus::Pending]);
     }
 
+    /**
+     * Foydalanuvchi egasi bo'lishi mumkin bo'lgan e'lonlar: kontakt xeshi mos, hali tasdiqlanmagan,
+     * egasi "meniki emas" demagan. Xesh bo'lmasa — hech narsa.
+     */
+    public function scopeClaimableBy(Builder $query, User $user): void
+    {
+        $hashes = self::hashesForUser($user);
+
+        $query->whereIn('status', [ImportedListingStatus::Active, ImportedListingStatus::Pending])
+            ->whereNull('claimed_by_user_id')
+            ->whereNull('claim_dismissed_at')
+            ->where(function (Builder $q) use ($hashes) {
+                if ($hashes === []) {
+                    $q->whereRaw('1 = 0');
+
+                    return;
+                }
+                foreach ($hashes as $hash) {
+                    $q->orWhereJsonContains('contact_hashes', $hash);
+                }
+            });
+    }
+
+    /** Kontakt xeshlaridan biri foydalanuvchiniki bilan mos keladimi. */
+    public function matchesUser(User $user): bool
+    {
+        return array_intersect(self::hashesForUser($user), $this->contact_hashes ?? []) !== [];
+    }
+
     public function archive(string $reason): void
     {
         $this->update([

@@ -18,6 +18,7 @@ class UserResource extends JsonResource
             'locale' => $this->locale,
             'roles' => $this->whenLoaded('roles', fn () => $this->roles->pluck('name')),
             'badges' => BadgeResource::collection($this->whenLoaded('activeBadges')),
+            'imported_claims_count' => $this->when($this->resource->getAttribute('imported_claims_count') !== null, fn () => (int) $this->resource->imported_claims_count),
         ];
     }
 }

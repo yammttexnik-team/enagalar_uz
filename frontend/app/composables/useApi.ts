@@ -30,6 +30,8 @@ export interface User {
   locale: string | null
   roles: string[]
   badges: Badge[]
+  /** Kanallardan topilgan, kontakti mos, hali tasdiqlanmagan e'lonlar (faqat /me) */
+  imported_claims_count?: number
 }
 
 /** Laravel API'ga so'rov yuborish uchun umumiy $fetch (kirgan bo'lsa Bearer token bilan). */

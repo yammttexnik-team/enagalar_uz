@@ -90,5 +90,8 @@ function changePage(p: number) {
         />
       </div>
     </template>
+
+    <!-- Telegram kanallardan olingan e'lonlar: mahalliy natija bo'lmasa ham ko'rinadi -->
+    <ImportedSection type="nanny" :filters="filters" />
   </SearchShell>
 </template>

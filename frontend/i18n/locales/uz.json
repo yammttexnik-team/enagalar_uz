@@ -1206,5 +1206,71 @@
     "changeTitle": "Shartlar oʻzgarishi",
     "change": "Shartlar oʻzgarishi mumkin. Oʻzgarishdan oldin berilgan bonuslar oʻz qiymatini saqlab qoladi.",
     "cta": "Bonuslarim"
+  },
+  "imported": {
+    "fallbackTitle": {
+      "vacancy": "Enaga kerak",
+      "nanny": "Enaga ish qidirmoqda"
+    },
+    "badge": {
+      "source": "Telegram kanaldan",
+      "unverified": "egasi tasdiqlamagan"
+    },
+    "section": {
+      "title": "Telegram kanallardan",
+      "text": {
+        "vacancy": "Ochiq Telegram kanallardagi eʼlonlar. Kontakt saytda koʻrsatilmaydi — bogʻlanish uchun asl eʼlonga oʻting.",
+        "nanny": "Ochiq Telegram kanallardagi enagalar eʼlonlari. Kontakt saytda koʻrsatilmaydi — bogʻlanish uchun asl eʼlonga oʻting."
+      },
+      "count": "{n} ta eʼlon",
+      "more": "Yana koʻrsatish"
+    },
+    "detail": {
+      "back": "Qidiruvga qaytish",
+      "notFound": "Eʼlon topilmadi yoki olib tashlangan",
+      "seoTitle": "{title} — {place} | Telegram kanaldan",
+      "source": "Manba: {'@'}{channel}, {date}",
+      "open": "Asl eʼlonga oʻtish",
+      "openHint": "Kontakt asl eʼlonda — Telegramda ochiladi",
+      "mine": "Bu mening eʼlonim",
+      "removeLink": "Oʻchirishni soʻrash",
+      "price": "Narx",
+      "ageGroups": "Bolalar yoshi",
+      "experience": "Tajriba",
+      "age": "Yoshi",
+      "years": "{n} yil",
+      "noticeTitle": "Egasi hali tasdiqlamagan",
+      "notice": "Bu eʼlon ochiq Telegram kanaldan olingan. Maʼlumotni asl eʼlonda tekshiring va oldindan pul toʻlamang."
+    },
+    "remove": {
+      "title": "Eʼlonni oʻchirishni soʻrash",
+      "text": "Eʼlon sizniki boʻlsa yoki endi dolzarb boʻlmasa, saytdan olib tashlaymiz.",
+      "reason": "Sabab (ixtiyoriy)",
+      "placeholder": "Masalan: enaga topildi",
+      "send": "Oʻchirishni soʻrash",
+      "thanks": "Rahmat! Soʼrovingiz qabul qilindi",
+      "thanksText": "Eʼlon saytdan olib tashlandi.",
+      "back": "Qidiruvga qaytish"
+    },
+    "claims": {
+      "nav": "Topilgan eʼlonlar",
+      "seo": "Topilgan eʼlonlar",
+      "title": "Topilgan eʼlonlar",
+      "subtitle": "Telefon raqamingiz yoki Telegram usernameʼingiz koʻrsatilgan eʼlonlar.",
+      "explain": "Bu eʼlonni {'@'}{channel}ʼda topdik va saytga joyladik. Tasdiqlasangiz, u sizning eʼloningizga aylanadi va 7 kun TOPʼda turadi. Yoki oʻchiring.",
+      "accept": "Tasdiqlash",
+      "notMine": "Bu meniki emas",
+      "remove": "Oʻchirish",
+      "accepted": "Eʼlon sizniki boʻldi",
+      "dismissed": "Boshqa koʻrsatilmaydi",
+      "removed": "Eʼlon saytdan olib tashlandi",
+      "emptyTitle": "Hozircha topilgan eʼlon yoʻq",
+      "emptyText": "Telegram kanallarda sizning raqamingiz yoki usernameʼingiz bilan eʼlon chiqsa, shu yerda koʻrasiz."
+    },
+    "overview": {
+      "title": "Telegram kanallardan eʼloningizni topdik",
+      "text": "Tasdiqlashni kutmoqda: {n} ta. Tasdiqlasangiz — 7 kun TOP sovgʻa",
+      "cta": "Koʻrish"
+    }
   }
 }

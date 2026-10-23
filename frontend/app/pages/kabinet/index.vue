@@ -129,6 +129,15 @@ async function addMissing() {
       <span class="shrink-0 text-sm font-bold text-honey-800 dark:text-honey-200">{{ t('rating.overview.cta') }} →</span>
     </NuxtLink>
 
+    <NuxtLink v-if="auth.user?.imported_claims_count" :to="localePath('/kabinet/topilgan-elonlar')" class="surface mb-6 flex items-center gap-3 border border-brand-200! bg-brand-50! p-4 dark:border-brand-800! dark:bg-brand-950/50!" data-testid="imported-claims-card">
+      <UIcon name="i-lucide-send" class="size-6 shrink-0 text-brand-700 dark:text-brand-200" aria-hidden="true" />
+      <span class="min-w-0 flex-1">
+        <span class="block font-semibold text-highlighted">{{ t('imported.overview.title') }}</span>
+        <span class="block text-sm text-muted">{{ t('imported.overview.text', { n: auth.user.imported_claims_count }) }}</span>
+      </span>
+      <span class="shrink-0 text-sm font-bold text-brand-700 dark:text-brand-200">{{ t('imported.overview.cta') }} →</span>
+    </NuxtLink>
+
     <!-- Bonus -->
     <section class="surface mb-6 flex flex-col gap-4 bg-apricot-50! p-5 dark:bg-apricot-950/40! sm:flex-row sm:items-center sm:p-6" :aria-label="t('bonus.overview.title')">
       <span class="grid size-14 shrink-0 place-items-center rounded-2xl bg-white/70 text-apricot-700 dark:bg-white/10 dark:text-apricot-200"><UIcon name="i-lucide-gift" class="size-7" aria-hidden="true" /></span>
