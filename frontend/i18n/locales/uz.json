@@ -19,7 +19,7 @@
     "mobile": "Mobil menyu"
   },
   "footer": {
-    "tagline": "Oʻzbekistondagi ota-onalar uchun tekshirilgan enagani topish va u bilan xavfsiz gaplashishning eng sodda yoʻli.",
+    "tagline": "Oʻzbekistondagi ota-onalar uchun enaga topish va u bilan xavfsiz gaplashishning eng sodda yoʻli.",
     "everywhere": "Barcha viloyatlarda",
     "platform": "Platforma",
     "parents": "Ota-onalarga",
@@ -33,13 +33,13 @@
     "rights": "Barcha huquqlar himoyalangan."
   },
   "home": {
-    "seoTitle": "Enaga topish — tekshirilgan enagalar — enagalar.uz",
-    "seoDescription": "Tasdiqlangan enagalar, xavfsiz chat va AI yordamchi — butun Oʻzbekiston boʻylab.",
+    "seoTitle": "Enaga topish — enagalar.uz",
+    "seoDescription": "Enagalar va oilalar uchun eʼlonlar, pasport bilan tasdiqlash nishoni, xavfsiz chat va AI yordamchi — butun Oʻzbekiston boʻylab.",
     "hero": {
       "eyebrow": "Xotirjam ota-onalar uchun",
       "title1": "Farzandingiz uchun",
       "title2": "ishonchli enaga",
-      "subtitle": "Tasdiqlangan enagalar, xavfsiz chat va AI yordamchi — butun Oʻzbekiston boʻylab.",
+      "subtitle": "Enagalar va oilalar uchun eʼlonlar, pasport bilan tasdiqlash nishoni, xavfsiz chat va AI yordamchi — butun Oʻzbekiston boʻylab.",
       "tabsLabel": "Qidiruv turi",
       "tabNanny": "Enaga kerak",
       "tabJob": "Ish kerak",
@@ -49,7 +49,7 @@
       "ctaNanny": "Enaga topish",
       "ctaJob": "Vakansiyalarni koʻrish",
       "chips": {
-        "verified": "Tasdiqlangan enagalar",
+        "verified": "Tasdiqlash nishonlari",
         "bonus": "Bonus bilan toʻlash",
         "regions": "Barcha viloyatlar"
       },
@@ -344,11 +344,11 @@
     "favoriteFail": "Sevimlilarni saqlab boʻlmadi. Qayta urinib koʻring."
   },
   "nanny": {
-    "seoTitle": "Enaga topish — tekshirilgan enagalar — enagalar.uz",
+    "seoTitle": "Enaga topish — enagalar anketalari — enagalar.uz",
     "seoTitleRegion": "Enaga topish: {region} — enagalar.uz",
-    "seoDescription": "Nishonli va tasdiqlangan enagalar anketalari: tajriba, narx va boʻsh vaqtni koʻring, chatda yozing. Butun Oʻzbekiston boʻylab.",
-    "seoDescriptionRegion": "{region}: tekshirilgan enagalar anketalari — tajriba, narx, nishonlar. Chatda yozing.",
-    "title": "Tekshirilgan enagalar",
+    "seoDescription": "Enagalar anketalari va eʼlonlari, tasdiqlash nishonlari: tajriba, narx va boʻsh vaqtni koʻring, chatda yozing. Butun Oʻzbekiston boʻylab.",
+    "seoDescriptionRegion": "{region}: enagalar anketalari — tajriba, narx, nishonlar. Chatda yozing.",
+    "title": "Enagalar",
     "subtitle": "Anketalarni koʻring, nishonlarga qarang va xabar yozing.",
     "count": "{n} ta enaga",
     "sort": {
@@ -1247,6 +1247,8 @@
     "remove": {
       "title": "Eʼlonni oʻchirishni soʻrash",
       "text": "Eʼlon sizniki boʻlsa yoki endi dolzarb boʻlmasa, saytdan olib tashlaymiz.",
+      "hint": "Agar eʼlon sizniki boʻlsa, Telegram orqali kiring — eʼlon darhol oʻchiriladi. Aks holda soʻrovingizni moderator 24 soat ichida koʻrib chiqadi.",
+      "login": "Telegram orqali kirish",
       "reason": "Sabab (ixtiyoriy)",
       "placeholder": "Masalan: enaga topildi",
       "send": "Oʻchirishni soʻrash",

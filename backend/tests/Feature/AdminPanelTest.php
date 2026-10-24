@@ -82,6 +82,17 @@ class AdminPanelTest extends TestCase
         $this->assertTrue($verification->user->isVerified());
     }
 
+    public function test_moderator_cannot_review_own_passport(): void
+    {
+        $verification = $this->verification();
+        $verification->update(['user_id' => $this->admin->id]);
+
+        $this->actingAs($this->admin);
+        Livewire::test(ViewIdentityVerification::class, ['record' => $verification->getRouteKey()])
+            ->assertActionHidden('approve')
+            ->assertActionHidden('reject');
+    }
+
     public function test_moderator_rejects_with_reason(): void
     {
         $verification = $this->verification();

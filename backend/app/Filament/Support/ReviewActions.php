@@ -20,8 +20,9 @@ class ReviewActions
                 ->color('success')
                 ->requiresConfirmation()
                 ->modalDescription('Foydalanuvchiga nishon beriladi, yuklangan fayl o\'chiriladi.')
-                ->visible(fn (Model $record) => $record->isPending())
+                ->visible(fn (Model $record) => $record->isPending() && ! self::isOwn($record))
                 ->action(function (Model $record) {
+                    abort_if(self::isOwn($record), 403);
                     $record->approve(auth()->user());
                     Notification::make()->title('Tasdiqlandi, nishon berildi')->success()->send();
                 }),
@@ -32,11 +33,18 @@ class ReviewActions
                 ->schema([
                     Textarea::make('reason')->label('Sabab (foydalanuvchiga ko\'rsatiladi)')->required()->maxLength(255),
                 ])
-                ->visible(fn (Model $record) => $record->isPending())
+                ->visible(fn (Model $record) => $record->isPending() && ! self::isOwn($record))
                 ->action(function (Model $record, array $data) {
+                    abort_if(self::isOwn($record), 403);
                     $record->reject(auth()->user(), $data['reason']);
                     Notification::make()->title('Rad etildi')->warning()->send();
                 }),
         ];
+    }
+
+    /** Moderator o'z arizasini o'zi ko'rib chiqa olmaydi (o'ziga nishon bermasligi uchun). */
+    private static function isOwn(Model $record): bool
+    {
+        return (int) $record->user_id === (int) auth()->id();
     }
 }

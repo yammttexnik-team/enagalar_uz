@@ -2,6 +2,7 @@
 
 namespace App\Services\Telegram;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -47,7 +48,19 @@ class TelegramBot
 
     private function call(string $method, array $payload): Response
     {
-        return $this->http()->post($method, $payload);
+        try {
+            return $this->http()->post($method, $payload);
+        } catch (ConnectionException $e) {
+            // Xabarda so'rov URL'i (bot tokeni bilan) bo'ladi: log va admin panelga chiqmasin.
+            throw new ConnectionException(self::redact($e->getMessage()), $e->getCode());
+        }
+    }
+
+    public static function redact(string $text): string
+    {
+        $token = (string) config('services.telegram.bot_token');
+
+        return preg_replace('~bot\d+:[A-Za-z0-9_-]+~', 'bot***', $token !== '' ? str_replace($token, '***', $text) : $text) ?? $text;
     }
 
     private function http(): PendingRequest

@@ -60,13 +60,18 @@ const removeOpen = ref(false)
 const reason = ref('')
 const sending = ref(false)
 const removed = ref(false)
+const submitted = ref(false)
+const resultMessage = ref('')
 const failed = ref(false)
+const loginTo = computed(() => localePath({ path: '/kirish', query: { redirect: route.fullPath } }))
 async function sendRemoval() {
   sending.value = true
   failed.value = false
   try {
-    await api(`/imported/${l.value.id}/removal-request`, { method: 'POST', body: { reason: reason.value.trim() || undefined } })
-    removed.value = true
+    const res = await api<{ removed?: boolean, message?: string }>(`/imported/${l.value.id}/removal-request`, { method: 'POST', body: { reason: reason.value.trim() || undefined } })
+    resultMessage.value = res?.message || ''
+    removed.value = res?.removed === true
+    submitted.value = true
   }
   catch { failed.value = true }
   finally { sending.value = false }
@@ -163,14 +168,16 @@ async function sendRemoval() {
       </div>
     </UContainer>
 
-    <UModal v-model:open="removeOpen" :title="t('imported.remove.title')" :description="removed ? undefined : t('imported.remove.text')">
+    <UModal v-model:open="removeOpen" :title="t('imported.remove.title')" :description="submitted ? undefined : t('imported.remove.text')">
       <template #body>
-        <div v-if="removed" class="py-4 text-center" role="status">
+        <div v-if="submitted" class="py-4 text-center" role="status">
           <UIcon name="i-lucide-circle-check" class="size-10 text-leaf-600" aria-hidden="true" />
           <p class="mt-3 font-semibold text-highlighted">{{ t('imported.remove.thanks') }}</p>
-          <p class="mt-1 text-sm text-muted">{{ t('imported.remove.thanksText') }}</p>
+          <p class="mt-1 text-sm text-muted">{{ resultMessage || (removed ? t('imported.remove.thanksText') : '') }}</p>
         </div>
         <template v-else>
+          <p class="mb-4 text-sm text-muted">{{ t('imported.remove.hint') }}</p>
+          <UButton v-if="!auth.isLoggedIn" class="mb-4" color="neutral" variant="outline" icon="i-lucide-send" :label="t('imported.remove.login')" :to="loginTo" />
           <UFormField :label="t('imported.remove.reason')" :hint="`${reason.length}/500`">
             <UTextarea v-model="reason" :rows="4" :maxlength="500" autoresize class="w-full" :placeholder="t('imported.remove.placeholder')" />
           </UFormField>
@@ -179,7 +186,7 @@ async function sendRemoval() {
       </template>
       <template #footer>
         <div class="flex w-full justify-end gap-2">
-          <UButton v-if="removed" :label="t('imported.remove.back')" :to="backTo" />
+          <UButton v-if="submitted" :label="removed ? t('imported.remove.back') : t('vacancy.detail.cancel')" v-bind="removed ? { to: backTo } : {}" @click="!removed && (removeOpen = false)" />
           <template v-else>
             <UButton color="neutral" variant="outline" :label="t('vacancy.detail.cancel')" @click="removeOpen = false" />
             <UButton color="error" icon="i-lucide-trash-2" :loading="sending" :label="t('imported.remove.send')" @click="sendRemoval" />

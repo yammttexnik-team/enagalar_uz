@@ -47,20 +47,41 @@ class ImportedListingController extends Controller
         return new ImportedListingResource($listing);
     }
 
-    /** E'lon egasi (yoki boshqa odam) saytdan olib tashlashni so'raydi — darhol yashiriladi. */
+    /**
+     * O'chirish so'rovi. Kirgan foydalanuvchining kontakti e'longa mos kelsa — darhol o'chiriladi.
+     * Aks holda (anonim yoki boshqa odam) so'rov moderatorga tushadi, e'lon ko'rinib turadi:
+     * aks holda istalgan odam istalgan e'lonni yashirib qo'ya olardi.
+     */
     public function removalRequest(Request $request, int $id): JsonResponse
     {
         $data = $request->validate(['reason' => ['nullable', 'string', 'max:500']]);
 
         $listing = ImportedListing::visible()->findOrFail($id);
-        $listing->update([
-            'status' => ImportedListingStatus::Removed,
-            'removal_requested_at' => now(),
-            'removal_reason' => $data['reason'] ?? null,
-            'archive_reason' => 'removal_request',
-            'archived_at' => now(),
-        ]);
+        $user = auth('sanctum')->user();
 
-        return response()->json(['message' => "So'rovingiz qabul qilindi. E'lon saytdan olib tashlandi."], 202);
+        if ($user && $listing->matchesUser($user)) {
+            $listing->update([
+                'status' => ImportedListingStatus::Removed,
+                'removal_requested_at' => now(),
+                'removal_reason' => $data['reason'] ?? null,
+                'archive_reason' => 'removal_request',
+                'archived_at' => now(),
+            ]);
+
+            return response()->json(['removed' => true, 'message' => "E'lon saytdan olib tashlandi."]);
+        }
+
+        // Birinchi so'rov saqlanadi (keyingilari moderator navbatini o'zgartirmaydi).
+        if (! $listing->removal_requested_at) {
+            $listing->update([
+                'removal_requested_at' => now(),
+                'removal_reason' => $data['reason'] ?? null,
+            ]);
+        }
+
+        return response()->json([
+            'removed' => false,
+            'message' => "So'rovingiz qabul qilindi. Moderator 24 soat ichida ko'rib chiqadi. E'lon sizniki bo'lsa, Telegram orqali kiring — darhol o'chiriladi.",
+        ], 202);
     }
 }

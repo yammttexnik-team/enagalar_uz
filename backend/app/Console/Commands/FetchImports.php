@@ -45,7 +45,7 @@ class FetchImports extends Command
         $labels = [
             'posts' => 'post', ListingImporter::CREATED => 'yangi', ListingImporter::UPDATED => 'yangilandi',
             ListingImporter::EXISTS => 'avval olingan', ListingImporter::DUPLICATE => 'takror', ListingImporter::FILTERED => 'filtr',
-            ListingImporter::OTHER => 'boshqa', ListingImporter::FAILED => 'xato', ListingImporter::LIMIT => 'AI chegarasi',
+            ListingImporter::OTHER => 'boshqa', ListingImporter::FAILED => 'xato', ListingImporter::LIMIT => 'AI chegarasi', ListingImporter::OPTED_OUT => "egasi o'chirgan",
         ];
 
         return collect($labels)->filter(fn ($l, $key) => isset($stats[$key]))

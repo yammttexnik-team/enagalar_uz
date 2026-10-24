@@ -48,7 +48,7 @@ class ChannelDigest
             $error = $ok ? null : (string) ($response->json('description') ?? 'HTTP '.$response->status());
         } catch (\Throwable $e) {
             $ok = false;
-            $error = $e->getMessage();
+            $error = TelegramBot::redact($e->getMessage());
         }
 
         $post->update($ok ? [

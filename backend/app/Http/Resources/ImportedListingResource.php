@@ -32,7 +32,8 @@ class ImportedListingResource extends JsonResource
             'live_in' => $this->live_in,
             'is_urgent' => $this->is_urgent,
             'source' => [
-                'channel' => $this->source_channel,
+                // Kanal nomi o'zgargan bo'lishi mumkin: havoladagi nom ustun (t.me/<kanal>/<post>)
+                'channel' => preg_match('~t\.me/(?:s/)?([A-Za-z0-9_]+)/\d+~', (string) $this->source_url, $m) ? $m[1] : $this->source_channel,
                 'url' => $this->source_url,
                 'posted_at' => $this->source_posted_at,
             ],

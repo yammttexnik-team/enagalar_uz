@@ -45,6 +45,26 @@ class ImportedListingActions
                 ->requiresConfirmation()
                 ->visible(fn (ImportedListing $record) => $record->status === ImportedListingStatus::Active)
                 ->action(fn (ImportedListing $record) => $record->archive('admin')),
+            Action::make('confirmRemoval')
+                ->label("O'chirish so'rovini qabul qilish")
+                ->icon('heroicon-o-trash')
+                ->color('danger')
+                ->requiresConfirmation()
+                ->modalDescription(fn (ImportedListing $record) => "E'lon saytdan olib tashlanadi, shu kontaktdagi yangi postlar import qilinmaydi. Sabab: ".($record->removal_reason ?: '—'))
+                ->visible(fn (ImportedListing $record) => $record->removal_requested_at !== null && $record->status === ImportedListingStatus::Active)
+                ->action(fn (ImportedListing $record) => $record->update([
+                    'status' => ImportedListingStatus::Removed,
+                    'archived_at' => now(),
+                    'archive_reason' => 'removal_request',
+                ])),
+            Action::make('dismissRemoval')
+                ->label("So'rovni rad etish")
+                ->icon('heroicon-o-x-mark')
+                ->color('gray')
+                ->requiresConfirmation()
+                ->modalDescription("So'rov egasidan emas deb hisoblanadi, e'lon saytda qoladi.")
+                ->visible(fn (ImportedListing $record) => $record->removal_requested_at !== null && $record->status === ImportedListingStatus::Active)
+                ->action(fn (ImportedListing $record) => $record->update(['removal_requested_at' => null, 'removal_reason' => null])),
             Action::make('restore')
                 ->label('Qayta chiqarish')
                 ->icon('heroicon-o-arrow-uturn-left')

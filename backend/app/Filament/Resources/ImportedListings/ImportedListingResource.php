@@ -39,7 +39,10 @@ class ImportedListingResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return (string) ImportedListing::where('status', ImportedListingStatus::Pending)->count() ?: null;
+        // Tekshiruvdagilar + anonim o'chirish so'rovi kelgan faol e'lonlar
+        return (string) ImportedListing::where('status', ImportedListingStatus::Pending)
+            ->orWhere(fn ($q) => $q->where('status', ImportedListingStatus::Active)->whereNotNull('removal_requested_at'))
+            ->count() ?: null;
     }
 
     public static function canCreate(): bool

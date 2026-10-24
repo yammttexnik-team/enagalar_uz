@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\ImportedListingStatus;
+use App\Models\AiRequest;
 use App\Models\ImportedListing;
 use App\Services\Imports\ListingImporter;
 use App\Services\Imports\TelegramChannelReader;
@@ -23,7 +24,7 @@ class ListingAiReviewTest extends TestCase
     }
 
     /** Claude'ning bitta javobini qaytaradigan importer bilan postni import qiladi. */
-    private function importWith(array $response, int $id = 1): string
+    private function importWith(array $response, int $id = 1, ?string $text = null): string
     {
         $this->app->bind(ListingImporter::class, fn ($app) => new class($app->make(TelegramChannelReader::class), $response) extends ListingImporter
         {
@@ -41,7 +42,7 @@ class ListingAiReviewTest extends TestCase
         return app(ListingImporter::class)->importPost([
             'id' => $id, 'channel' => 'enagalar', 'url' => "https://t.me/enagalar/$id",
             'posted_at' => Carbon::parse('2026-10-22 10:00:00'),
-            'text' => "Enaga kerak! Chilonzor, 2 yoshli qizimizga. Oyiga 3 mln. Post raqami $id", 'edited' => false,
+            'text' => $text ?? "Enaga kerak! Chilonzor, 2 yoshli qizimizga. Oyiga 3 mln. Post raqami $id", 'edited' => false,
         ]);
     }
 
@@ -55,6 +56,34 @@ class ListingAiReviewTest extends TestCase
             'age_groups' => [], 'languages' => [], 'experience_years' => 0, 'person_age' => 0, 'live_in' => false, 'is_urgent' => false,
             'review_decision' => 'approve', 'review_reason' => "Haqiqiy e'lon, joy va narx ko'rsatilgan.",
         ];
+    }
+
+    public function test_scam_signs_force_manual_review(): void
+    {
+        $this->importWith($this->ai(), 1, "Enaga kerak! Chilonzor, oyiga 3 mln. Ro'yxatdan o'tish uchun oldindan to'lov 100 ming.");
+
+        $listing = ImportedListing::sole();
+        $this->assertSame(ImportedListingStatus::Pending, $listing->status);
+        $this->assertSame('manual', $listing->ai_decision);
+        $this->assertNull($listing->published_at);
+    }
+
+    public function test_contact_that_asked_removal_is_not_imported_again(): void
+    {
+        ImportedListing::create([
+            'type' => ImportedListing::TYPE_VACANCY, 'status' => ImportedListingStatus::Removed,
+            'source_channel' => 'enagalar', 'source_post_id' => 900, 'source_url' => 'https://t.me/enagalar/900',
+            'source_posted_at' => now()->subDays(30), 'raw_text' => 'x', 'content_hash' => 'x',
+            'title' => 'Enaga kerak', 'description' => 'Enaga kerak',
+            'contact_hashes' => [ImportedListing::contactHash('90 123 45 67')],
+            'archive_reason' => 'removal_request',
+        ]);
+
+        $result = $this->importWith($this->ai(), 2, 'Enaga kerak! Chilonzor, 2 yoshli qizimizga. Tel: 90 123 45 67');
+
+        $this->assertSame(ListingImporter::OPTED_OUT, $result);
+        $this->assertSame(1, ImportedListing::count());
+        $this->assertSame(0, AiRequest::count());
     }
 
     public function test_approve_publishes_listing(): void

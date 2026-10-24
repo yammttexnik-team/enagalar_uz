@@ -87,18 +87,36 @@ class ImportedListingApiTest extends TestCase
         $this->assertSame(1, $listing->fresh()->views_count);
     }
 
-    public function test_removal_request_hides_listing(): void
+    public function test_anonymous_removal_request_goes_to_moderator(): void
     {
         $listing = $this->listing();
 
         $this->postJson('/api/v1/imported/'.$listing->id.'/removal-request', ['reason' => 'Enaga topildi'])
-            ->assertStatus(202)->assertJsonStructure(['message']);
+            ->assertStatus(202)->assertJsonPath('removed', false);
+
+        $listing->refresh();
+        $this->assertSame(ImportedListingStatus::Active, $listing->status);
+        $this->assertSame('Enaga topildi', $listing->removal_reason);
+        $this->assertNotNull($listing->removal_requested_at);
+        $this->getJson('/api/v1/imported')->assertJsonCount(1, 'data');
+
+        // Boshqa foydalanuvchi (kontakti mos emas) ham o'chira olmaydi
+        Sanctum::actingAs(User::factory()->create(['phone' => '+998911112233', 'telegram_username' => null]));
+        $this->postJson('/api/v1/imported/'.$listing->id.'/removal-request')->assertStatus(202);
+        $this->assertSame(ImportedListingStatus::Active, $listing->fresh()->status);
+    }
+
+    public function test_owner_removal_request_hides_listing_at_once(): void
+    {
+        $listing = $this->listing();
+        Sanctum::actingAs(User::factory()->create(['phone' => '+998901234567', 'telegram_username' => null]));
+
+        $this->postJson('/api/v1/imported/'.$listing->id.'/removal-request', ['reason' => 'Enaga topildi'])
+            ->assertOk()->assertJsonPath('removed', true);
 
         $listing->refresh();
         $this->assertSame(ImportedListingStatus::Removed, $listing->status);
         $this->assertSame('removal_request', $listing->archive_reason);
-        $this->assertSame('Enaga topildi', $listing->removal_reason);
-        $this->assertNotNull($listing->removal_requested_at);
         $this->getJson('/api/v1/imported')->assertJsonCount(0, 'data');
     }
 

@@ -42,6 +42,8 @@ class ListingImporter
 
     public const LIMIT = 'limit';         // AI chegarasi tugadi
 
+    public const OPTED_OUT = 'opted_out'; // egasi avval o'chirishni so'ragan kontakt
+
     // AI moderatsiya qarorlari
     public const APPROVE = 'approve';
 
@@ -151,6 +153,11 @@ TXT;
         $contactHashes = $this->contactHashes($raw, $channel);
         $contentHash = self::contentHash($raw);
 
+        // Egasi o'chirishni so'ragan kontaktning yangi postlari qayta olinmaydi.
+        if ($this->optedOut($contactHashes)) {
+            return self::OPTED_OUT;
+        }
+
         // Bir xil matn boshqa postda bor: AI'siz manbani yangilaymiz.
         $same = $this->recent()->where('content_hash', $contentHash)->first();
         if ($same) {
@@ -190,7 +197,7 @@ TXT;
         }
 
         if (config('imports.ai_review')) {
-            $decision = $this->reviewDecision($data, $fields, $type);
+            $decision = $this->reviewDecision($data, $fields, $type, $raw);
             $review = [
                 'ai_decision' => $decision,
                 'ai_reason' => $this->reviewReason($data),
@@ -225,7 +232,7 @@ TXT;
      * @param  array<string, mixed>  $data  AI javobi
      * @param  array<string, mixed>  $fields  sanitize() natijasi
      */
-    private function reviewDecision(array $data, array $fields, string $type): string
+    private function reviewDecision(array $data, array $fields, string $type, string $raw = ''): string
     {
         $decision = $data['review_decision'] ?? null;
         if (! in_array($decision, [self::APPROVE, self::REJECT, self::MANUAL], true)) {
@@ -242,7 +249,31 @@ TXT;
         $unknownType = ! in_array($type, [ImportedListing::TYPE_VACANCY, ImportedListing::TYPE_NANNY], true);
         $empty = empty($fields['region_id']) && trim((string) ($fields['description'] ?? '')) === '';
 
-        return ($hasContact || $unknownType || $empty) ? self::MANUAL : self::APPROVE;
+        return ($hasContact || $unknownType || $empty || self::looksLikeScam($raw)) ? self::MANUAL : self::APPROVE;
+    }
+
+    /** Firibgarlik belgilari (oldindan to'lov, kartaga pul, agentlik haqi): bunday e'lon faqat qo'lda tasdiqlanadi. */
+    public static function looksLikeScam(string $text): bool
+    {
+        $t = mb_strtolower($text);
+
+        return preg_match("~oldindan\\s+to['ʻ’`]?lov|predoplat|предоплат|kartaga\\s+(?:pul|tashla|o['ʻ’`]?tkaz)|на\\s+карту|переведите|xizmat\\s+haqi|registratsiya\\s+(?:puli|uchun)|регистрац\\w*\\s+(?:плат|взнос)|взнос|depozit|депозит~u", $t) === 1;
+    }
+
+    /** Kontakt xeshlaridan biri egasi o'chirishni so'ragan e'londa bormi. */
+    private function optedOut(array $hashes): bool
+    {
+        if ($hashes === []) {
+            return false;
+        }
+
+        return ImportedListing::where('status', ImportedListingStatus::Removed)
+            ->where(function ($q) use ($hashes) {
+                foreach ($hashes as $hash) {
+                    $q->orWhereJsonContains('contact_hashes', $hash);
+                }
+            })
+            ->exists();
     }
 
     private function reviewReason(array $data): ?string

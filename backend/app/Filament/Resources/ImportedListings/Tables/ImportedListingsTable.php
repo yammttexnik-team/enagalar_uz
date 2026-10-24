@@ -10,8 +10,10 @@ use App\Models\ImportSource;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class ImportedListingsTable
 {
@@ -29,7 +31,8 @@ class ImportedListingsTable
                     ->tooltip(fn (ImportedListing $record) => $record->title),
                 TextColumn::make('region.name_uz')->label('Hudud')->placeholder('—'),
                 TextColumn::make('district.name_uz')->label('Tuman')->placeholder('—')->toggleable(),
-                TextColumn::make('status')->label('Holat')->badge(),
+                TextColumn::make('status')->label('Holat')->badge()
+                    ->description(fn (ImportedListing $record) => $record->removal_requested_at && $record->status === ImportedListingStatus::Active ? "O'chirish so'ralgan" : null),
                 TextColumn::make('ai_decision')->label('AI')->badge()->placeholder('—')
                     ->formatStateUsing(fn (?string $state) => self::AI_LABELS[$state] ?? $state)
                     ->color(fn (?string $state) => match ($state) {
@@ -49,6 +52,8 @@ class ImportedListingsTable
             ->filters([
                 SelectFilter::make('status')->label('Holat')->options(ImportedListingStatus::class)
                     ->default(ImportedListingStatus::Pending->value),
+                Filter::make('removal_requested')->label("O'chirish so'rovi bor")
+                    ->query(fn (Builder $q) => $q->whereNotNull('removal_requested_at')->where('status', ImportedListingStatus::Active)),
                 SelectFilter::make('ai_decision')->label('AI qarori')->options(self::AI_LABELS),
                 SelectFilter::make('type')->label('Turi')->options(ImportedListingResource::TYPES),
                 SelectFilter::make('source_channel')->label('Kanal')
