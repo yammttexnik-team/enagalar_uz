@@ -17,6 +17,11 @@ x-backend: &backend
       deploy: .
   image: enagalar/backend:latest
   env_file: .env.production
+  # Loglar docker logs'dan tashqari storage/logs/laravel-YYYY-MM-DD.log ga ham (14 kun) — deploy'da o'chmaydi.
+  environment:
+    LOG_CHANNEL: stack
+    LOG_STACK: stderr,daily
+    LOG_DAILY_DAYS: "14"
   restart: unless-stopped
   init: true
   logging: *logging
@@ -59,6 +64,9 @@ services:
     <<: *backend
     environment:
       RUN_BOOTSTRAP: "true"
+      LOG_CHANNEL: stack
+      LOG_STACK: stderr,daily
+      LOG_DAILY_DAYS: "14"
     volumes:
       - storage:/var/www/html/storage
       - public:/var/www/html/public
