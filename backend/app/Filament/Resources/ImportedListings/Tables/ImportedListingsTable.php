@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ImportedListings\Tables;
 use App\Enums\ImportedListingStatus;
 use App\Filament\Resources\ImportedListings\ImportedListingResource;
 use App\Filament\Support\ImportedListingActions;
+use App\Filament\Support\OwnerOutreach;
 use App\Models\ImportedListing;
 use App\Models\ImportSource;
 use Filament\Actions\BulkActionGroup;
@@ -46,6 +47,7 @@ class ImportedListingsTable
                     ->formatStateUsing(fn (string $state, ImportedListing $record) => "@$state/{$record->source_post_id}")
                     ->url(fn (ImportedListing $record) => $record->source_url, shouldOpenInNewTab: true)
                     ->color('primary'),
+                TextColumn::make('outreach_at')->label('Egasiga yozilgan')->dateTime('d.m H:i')->placeholder('—')->toggleable(),
                 TextColumn::make('source_posted_at')->label('Joylangan')->dateTime('d.m.Y H:i')->sortable(),
                 TextColumn::make('expires_at')->label('Tugaydi')->date('d.m.Y')->placeholder('—')->sortable(),
             ])
@@ -54,6 +56,8 @@ class ImportedListingsTable
                     ->default(ImportedListingStatus::Pending->value),
                 Filter::make('removal_requested')->label("O'chirish so'rovi bor")
                     ->query(fn (Builder $q) => $q->whereNotNull('removal_requested_at')->where('status', ImportedListingStatus::Active)),
+                Filter::make('not_contacted')->label('Egasiga yozilmagan')
+                    ->query(fn (Builder $q) => $q->whereNull('outreach_at')->whereNull('claimed_by_user_id')->whereNotNull('contact_hashes')),
                 SelectFilter::make('ai_decision')->label('AI qarori')->options(self::AI_LABELS),
                 SelectFilter::make('type')->label('Turi')->options(ImportedListingResource::TYPES),
                 SelectFilter::make('source_channel')->label('Kanal')
@@ -61,6 +65,7 @@ class ImportedListingsTable
             ])
             ->recordActions([
                 ViewAction::make()->label('Ko\'rish'),
+                OwnerOutreach::action(),
                 ...ImportedListingActions::make(),
             ])
             ->toolbarActions([

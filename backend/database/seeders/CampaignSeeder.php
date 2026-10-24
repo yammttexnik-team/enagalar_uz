@@ -25,6 +25,7 @@ class CampaignSeeder extends Seeder
             'OWNCH_UZ' => "O'z kanalimiz (o'zbekcha)",
             'OWNCH_RU' => "O'z kanalimiz (ruscha)",
             'FRIENDS' => "Do'stlar / tanishlar",
+            'CLAIM' => "Import e'lon egasiga shaxsiy xabar",
         ];
 
         foreach ($campaigns as $code => $name) {

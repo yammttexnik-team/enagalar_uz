@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ImportedListings\Pages;
 
 use App\Filament\Resources\ImportedListings\ImportedListingResource;
 use App\Filament\Support\ImportedListingActions;
+use App\Filament\Support\OwnerOutreach;
 use App\Models\ImportedListing;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\ViewRecord;
@@ -20,6 +21,7 @@ class ViewImportedListing extends ViewRecord
                 ->icon('heroicon-o-arrow-top-right-on-square')
                 ->color('gray')
                 ->url(fn (ImportedListing $record) => $record->source_url, shouldOpenInNewTab: true),
+            OwnerOutreach::action(),
             ...ImportedListingActions::make(),
         ];
     }

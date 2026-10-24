@@ -60,16 +60,28 @@ Sayt `https://enagalar.uz` da ishlaydi. Xabarlarda **bot havolasi** qulay: odam 
 
 Kanal adminlari bilan hamkorlik — keyin, asoschi qaror qilganda.
 
+## 4a. Eng tez yo'l: import e'lon egalariga yozish
+
+Saytda Telegram kanallardan olingan e'lonlar bor (egasi hali tasdiqlamagan). Ularning egasi — tayyor foydalanuvchi: e'loni allaqachon saytda turibdi, faqat "Bu mening e'lonim" ni bosishi kerak.
+
+1. Admin panel → **Import e'lonlar** → filtrlar: Holat = *Faol*, **Egasiga yozilmagan**.
+2. E'lonni oching → **Egasiga yozish**. Oynada kontakt (username yoki telefon, Telegramda ochish tugmasi) va tayyor xabar (e'lon tiliga qarab o'zbekcha yoki ruscha) chiqadi. Xabardagi havola o'sha e'lon sahifasiga `?c=CLAIM` bilan olib boradi.
+3. Xabarni alohida Telegram akkauntdan yuboring va **Yozildi** ni bosing. Shu kontaktning boshqa e'lonlarida tugma endi chiqmaydi (bir odamga bir xabar).
+4. Egasi kirib tasdiqlasa: e'lon uning nomiga o'tadi, 7 kun TOP bepul, tekshiruvdan o'tgach 30 000 bonus. O'chirmoqchi bo'lsa — o'sha sahifada darhol o'chiradi, uning kontakti qayta import qilinmaydi.
+5. Natija: admin panel → Kampaniyalar → `CLAIM`.
+
+Kuniga ko'pi bilan 15 ta (oynada "Bugun yozilgan: N / 15" ko'rinadi), 6-bo'limdagi qoidalar amal qiladi.
+
 ## 5. Tayyor matnlar
 
 Havolani xom ko'rinishda qoldirmang: ko'k matnga biriktiring. Telegram'da matnni (masalan, "So'rovnomani boshlash") belgilang, **Ctrl+K** bosing va havolani qo'ying. Kodni (`c_...`) kanalga qarab almashtiring.
 
 **So'rovnoma (UZ)**
-> Assalomu alaykum! Men enagalar.uz jamoasidanman, @kanal'dagi e'loningiz munosabati bilan yozyapman. Enagalar va ota-onalar uchun tekshirilgan platforma qilyapmiz. 10 daqiqalik so'rovnomani to'ldirsangiz, **50 000 so'm bonus** olasiz. Bonus bilan platformadagi pullik xizmatlardan foydalanasiz, masalan TOP e'lon (naqdga aylanmaydi). 👉 [So'rovnomani boshlash](https://t.me/enagalaruz_bot?start=c_SURVEY_ENAGALAR)
+> Assalomu alaykum! Men enagalar.uz jamoasidanman, @kanal'dagi e'loningiz munosabati bilan yozyapman. Enagalar va ota-onalar uchun platforma qilyapmiz. 10 daqiqalik so'rovnomani to'ldirsangiz, **50 000 so'm bonus** olasiz. Bonus bilan platformadagi pullik xizmatlardan foydalanasiz, masalan TOP e'lon (naqdga aylanmaydi). 👉 [So'rovnomani boshlash](https://t.me/enagalaruz_bot?start=c_SURVEY_ENAGALAR)
 > Qiziq bo'lmasa, uzr, boshqa yozmaymiz.
 
 **So'rovnoma (RU)**
-> Здравствуйте! Я из команды enagalar.uz, пишу по поводу вашего объявления в @канал. Мы делаем проверенную платформу для нянь и родителей. Заполните опрос на 10 минут и получите **50 000 сум бонусами**. Бонусами можно оплатить платные услуги платформы, например ТОП-объявление (не обналичиваются). 👉 [Пройти опрос](https://t.me/enagalaruz_bot?start=c_SURVEY_ENAGALAR)
+> Здравствуйте! Я из команды enagalar.uz, пишу по поводу вашего объявления в @канал. Мы делаем платформу для нянь и родителей. Заполните опрос на 10 минут и получите **50 000 сум бонусами**. Бонусами можно оплатить платные услуги платформы, например ТОП-объявление (не обналичиваются). 👉 [Пройти опрос](https://t.me/enagalaruz_bot?start=c_SURVEY_ENAGALAR)
 > Если неинтересно, извините, больше не напишем.
 
 **E'lonni ko'chirish (UZ)**
@@ -82,7 +94,7 @@ Havolani xom ko'rinishda qoldirmang: ko'k matnga biriktiring. Telegram'da matnni
 
 **O'z kanal posti (UZ)**
 > **Enaga qidiryapsizmi yoki ish izlayapsizmi?**
-> enagalar.uz — tekshirilgan enagalar, ichki chat, AI yordamchi. Butun O'zbekiston bo'ylab.
+> enagalar.uz — enagalar va oilalar e'lonlari, pasport bilan tasdiqlash nishoni, ichki chat, AI yordamchi. Butun O'zbekiston bo'ylab.
 > • 10 daqiqalik so'rovnoma — **50 000 so'm bonus**
 > • Birinchi e'lon yoki anketa — **30 000 so'm bonus**
 > Bonus platformadagi pullik xizmatlar uchun ishlatiladi, naqdga aylanmaydi.
@@ -90,7 +102,7 @@ Havolani xom ko'rinishda qoldirmang: ko'k matnga biriktiring. Telegram'da matnni
 
 **O'z kanal posti (RU)**
 > **Ищете няню или работу?**
-> enagalar.uz — проверенные няни, чат внутри, AI-помощник. По всему Узбекистану.
+> enagalar.uz — объявления нянь и семей, значок подтверждения по паспорту, чат внутри, AI-помощник. По всему Узбекистану.
 > • опрос на 10 минут — **50 000 сум бонусами**
 > • первое объявление или анкета — **30 000 сум бонусами**
 > Бонусами оплачиваются платные услуги платформы, не обналичиваются.

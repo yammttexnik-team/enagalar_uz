@@ -7,6 +7,7 @@ use App\Enums\Role;
 use App\Filament\Resources\ImportedListings\Pages\ListImportedListings;
 use App\Filament\Resources\ImportedListings\Pages\ViewImportedListing;
 use App\Filament\Resources\ImportSources\Pages\ListImportSources;
+use App\Filament\Support\OwnerOutreach;
 use App\Filament\Widgets\ModerationQueue;
 use App\Models\AiRequest;
 use App\Models\ImportedListing;
@@ -318,6 +319,44 @@ class ListingImportTest extends TestCase
         Livewire::test(ViewImportedListing::class, ['record' => $one->getRouteKey()])->callAction('restore');
         $this->assertSame(ImportedListingStatus::Active, $one->fresh()->status);
         $this->assertNull($one->fresh()->archive_reason);
+    }
+
+    public function test_moderator_writes_to_owner_once_per_contact(): void
+    {
+        $moderator = User::factory()->create()->assignRole(Role::Moderator->value);
+        $hash = [ImportedListing::contactHash('90 123 45 67')];
+        $one = $this->listing(['raw_text' => 'Enaga kerak, tel 90 123 45 67, @Malika_ona', 'contact_hashes' => $hash]);
+        $two = $this->listing(['contact_hashes' => $hash]);
+
+        $labels = collect(OwnerOutreach::contacts($one))->pluck('label')->all();
+        $this->assertSame(['@Malika_ona', '+998901234567'], $labels);
+        $text = OwnerOutreach::message($one);
+        $this->assertStringContainsString('/elon/'.$one->id.'?c=CLAIM', $text);
+        $this->assertStringContainsString('@enagalar', $text);
+        $this->assertSame('ru', OwnerOutreach::language($this->listing(['raw_text' => 'Ищем няню для ребёнка, тел 90 123 45 67'])));
+
+        $this->actingAs($moderator);
+        Livewire::test(ViewImportedListing::class, ['record' => $one->getRouteKey()])->callAction('outreach');
+        $this->assertNotNull($one->fresh()->outreach_at);
+        $this->assertSame($moderator->id, $one->fresh()->outreach_by);
+
+        // Shu kontaktning boshqa e'loni orqali qayta yozilmaydi
+        Livewire::test(ViewImportedListing::class, ['record' => $two->getRouteKey()])->assertActionHidden('outreach');
+    }
+
+    public function test_moderator_confirms_or_dismisses_anonymous_removal_request(): void
+    {
+        $moderator = User::factory()->create()->assignRole(Role::Moderator->value);
+        $one = $this->listing(['removal_requested_at' => now(), 'removal_reason' => 'Topildi']);
+        $two = $this->listing(['removal_requested_at' => now()]);
+
+        $this->actingAs($moderator);
+        Livewire::test(ViewImportedListing::class, ['record' => $one->getRouteKey()])->callAction('confirmRemoval');
+        $this->assertSame(ImportedListingStatus::Removed, $one->fresh()->status);
+
+        Livewire::test(ViewImportedListing::class, ['record' => $two->getRouteKey()])->callAction('dismissRemoval');
+        $this->assertSame(ImportedListingStatus::Active, $two->fresh()->status);
+        $this->assertNull($two->fresh()->removal_requested_at);
     }
 
     public function test_admin_manages_import_sources(): void
