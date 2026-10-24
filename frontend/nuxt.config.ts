@@ -13,6 +13,8 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   runtimeConfig: {
+    // Faqat SSR uchun ichki API manzili (masalan, http://caddy/api/v1). Bo'sh bo'lsa public.apiBase ishlatiladi.
+    apiServer: '',
     public: {
       apiBase: 'http://localhost:8000/api/v1',
       siteName: 'enagalar.uz',

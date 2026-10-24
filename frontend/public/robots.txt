@@ -1,2 +1,9 @@
 User-Agent: *
-Disallow:
+Disallow: /kabinet
+Disallow: /ru/kabinet
+Disallow: /kirish
+Disallow: /ru/kirish
+Disallow: /admin
+Disallow: /api/
+
+Sitemap: https://enagalar.uz/sitemap.xml

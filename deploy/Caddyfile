@@ -1,6 +1,6 @@
 # Server umumiy: tashqi 80/443 ni mavjud Nginx boshqaradi (boshqa saytlar ham shu yerda).
 # Caddy faqat ichki HTTP: Nginx -> 127.0.0.1:${CADDY_LOCAL_PORT} -> Caddy -> Laravel/Nuxt/Reverb.
-# HTTPS va www -> asosiy domen yo'naltirish Nginx + certbot'da (deploy/nginx/enagalar.conf).
+# HTTPS Nginx + certbot'da (deploy/nginx/enagalar.conf). www -> asosiy domen yo'naltirish shu yerda.
 {
 	auto_https off
 	servers {
@@ -30,6 +30,10 @@
 		format console
 	}
 
+	# www.<domen> -> <domen> (Nginx Host sarlavhasini o'zgartirmay uzatadi)
+	@www header_regexp www Host ^www\.(.+)$
+	redir @www https://{re.www.1}{uri} permanent
+
 	# Yashirin fayllar
 	@dotfiles path */.*
 	respond @dotfiles 404
@@ -47,7 +51,7 @@
 	}
 
 	# Laravel (php-fpm). Livewire 4 skript va update yo'li: /livewire-<hash>/...
-	@laravel path /api/* /admin /admin/* /livewire /livewire/* /livewire-* /broadcasting/* /filament /filament/* /sanctum/* /up /js/filament/* /css/filament/* /fonts/filament/* /vendor/*
+	@laravel path /api/* /sitemap.xml /admin /admin/* /livewire /livewire/* /livewire-* /broadcasting/* /filament /filament/* /sanctum/* /up /js/filament/* /css/filament/* /fonts/filament/* /vendor/*
 	handle @laravel {
 		root * /var/www/html/public
 		php_fastcgi app:9000

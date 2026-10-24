@@ -127,6 +127,8 @@ services:
     init: true
     environment:
       NUXT_PUBLIC_API_BASE: ${NUXT_PUBLIC_API_BASE:?NUXT_PUBLIC_API_BASE kerak}
+      # SSR uchun ichki API (Docker tarmog'i orqali Caddy'ga, tashqi domen va TLS'siz)
+      NUXT_API_SERVER: ${NUXT_API_SERVER:-http://caddy/api/v1}
       NUXT_PUBLIC_SITE_URL: ${NUXT_PUBLIC_SITE_URL:?NUXT_PUBLIC_SITE_URL kerak}
       NUXT_PUBLIC_REVERB_APP_KEY: ${REVERB_APP_KEY}
       NUXT_PUBLIC_REVERB_HOST: ${NUXT_PUBLIC_REVERB_HOST:-}

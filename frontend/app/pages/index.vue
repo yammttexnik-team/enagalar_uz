@@ -11,14 +11,10 @@ useSeoMeta({
   ogDescription: () => t('home.seoDescription'),
 })
 
-const { data: regions } = await useAsyncData('regions', () =>
-  api<{ data: Region[] }>('/regions').then(r => r.data),
-  { default: () => [] },
-)
-const { data: badges } = await useAsyncData('badges', () =>
-  api<{ data: Badge[] }>('/badges').then(r => r.data),
-  { default: () => [] },
-)
+const [{ data: regions }, { data: badges }] = await Promise.all([
+  useAsyncData('regions', () => api<{ data: Region[] }>('/regions').then(r => r.data), { default: () => [] }),
+  useAsyncData('badges', () => api<{ data: Badge[] }>('/badges').then(r => r.data), { default: () => [] }),
+])
 </script>
 
 <template>

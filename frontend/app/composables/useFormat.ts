@@ -8,6 +8,8 @@ export type PriceUnit = typeof PRICE_UNITS[number]
 /** Narx, vaqt va enum yorliqlarini joriy tilda formatlash. */
 export function useFormat() {
   const { t, te, locale } = useI18n()
+  // SSR va hydration bir xil "hozir"ni ishlatadi (aks holda "59 daqiqa" / "1 soat" farqi — hydration mismatch)
+  const now = useRenderNow()
 
   /** 4500000 → "4 500 000" (uzilmas probel bilan). */
   function money(amount: number | string) {
@@ -39,7 +41,7 @@ export function useFormat() {
   /** Brauzer Intl'i oʻzbekcha uchun ishonchsiz (SSR bilan farq qiladi), shuning uchun oʻz matnlarimiz. */
   function relativeTime(iso: string | null | undefined) {
     if (!iso) return ''
-    const sec = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000)
+    const sec = Math.max(0, (now.value - new Date(iso).getTime()) / 1000)
     const min = Math.floor(sec / 60)
     if (min < 1) return t('format.ago.now')
     if (min < 60) return plural('format.ago.minutes', min)

@@ -11,22 +11,24 @@ const localePath = useLocalePath()
 const localizedName = useLocalizedName()
 const config = useRuntimeConfig()
 const { filters, page, activeCount, set, reset } = useSearchQuery(FILTER_KEYS)
-const { data: regions } = await useRegions()
-const { data: skills } = await useSkills()
-
-const { data, status, error, refresh } = await useAsyncData(
-  'nannies',
-  () => api<Paginated<NannyItem>>('/nannies', { query: filters.value }),
-  { watch: [filters] },
-)
-
 // Telegram kanallardan olingan e'lonlar soni (shu filtrlar bilan): bo'sh holat ixcham ko'rinadi, sanoqda ham chiqadi
 const importedQuery = computed(() => ({ type: 'nanny', region: filters.value.region || undefined, district: filters.value.district || undefined, work_format: filters.value.work_format || undefined }))
-const { data: importedTotal } = await useAsyncData(
-  'imported-count-nanny',
-  () => api<{ meta: { total: number } }>('/imported', { query: importedQuery.value }).then(r => r.meta.total).catch(() => 0),
-  { watch: [importedQuery] },
-)
+
+// So'rovlar parallel (SSR ketma-ket kutmaydi)
+const [{ data: regions }, { data: skills }, { data, status, error, refresh }, { data: importedTotal }] = await Promise.all([
+  useRegions(),
+  useSkills(),
+  useAsyncData(
+    'nannies',
+    () => api<Paginated<NannyItem>>('/nannies', { query: filters.value }),
+    { watch: [filters] },
+  ),
+  useAsyncData(
+    'imported-count-nanny',
+    () => api<{ meta: { total: number } }>('/imported', { query: importedQuery.value }).then(r => r.meta.total).catch(() => 0),
+    { watch: [importedQuery] },
+  ),
+])
 
 const pending = computed(() => status.value === 'pending')
 const total = computed(() => data.value?.meta.total ?? 0)

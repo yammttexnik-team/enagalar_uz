@@ -13,8 +13,12 @@ export const useAuthStore = defineStore('auth', () => {
   })
   const user = ref<User | null>(null)
 
+  // SSR: API ichki tarmoq orqali (tashqi domen, Nginx va TLS aylanib o'tmaydi). Brauzerda — ochiq manzil.
+  const serverBase = import.meta.server ? String(config.apiServer || '') : ''
+  // SSR so'rovlari Laravel'ga mijozning IP'si bilan boradi (aks holda hamma bitta IP — umumiy rate limit)
+  const clientIp = import.meta.server ? useRequestHeaders(['x-forwarded-for'])['x-forwarded-for'] : undefined
   const api = $fetch.create({
-    baseURL: config.public.apiBase,
+    baseURL: serverBase || config.public.apiBase,
     headers: { Accept: 'application/json' },
     onResponseError({ response }) {
       // Token eskirgan: foydalanuvchiga tegishli barcha holatni tozalaymiz
@@ -24,6 +28,14 @@ export const useAuthStore = defineStore('auth', () => {
       const headers = new Headers(options.headers as HeadersInit | undefined)
       headers.set('Accept-Language', String(nuxtApp.$i18n.locale.value))
       if (token.value) headers.set('Authorization', `Bearer ${token.value}`)
+      if (serverBase) {
+        // Laravel havolalarni (masalan, imzolangan fayl URL) ochiq domen bilan yasashi uchun
+        const site = new URL(config.public.siteUrl)
+        headers.set('X-Forwarded-Host', site.host)
+        headers.set('X-Forwarded-Proto', site.protocol.replace(':', ''))
+        headers.set('X-Forwarded-Port', site.protocol === 'https:' ? '443' : '80')
+      }
+      if (clientIp) headers.set('X-Forwarded-For', clientIp)
       options.headers = headers
     },
   })

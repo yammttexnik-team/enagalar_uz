@@ -11,21 +11,23 @@ const localePath = useLocalePath()
 const localizedName = useLocalizedName()
 const config = useRuntimeConfig()
 const { filters, page, activeCount, set, reset } = useSearchQuery(FILTER_KEYS)
-const { data: regions } = await useRegions()
-
-const { data, status, error, refresh } = await useAsyncData(
-  'vacancies',
-  () => api<Paginated<VacancyItem>>('/vacancies', { query: filters.value }),
-  { watch: [filters] },
-)
-
 // Telegram kanallardan olingan e'lonlar soni (shu filtrlar bilan): bo'sh holat ixcham ko'rinadi, sanoqda ham chiqadi
 const importedQuery = computed(() => ({ type: 'vacancy', region: filters.value.region || undefined, district: filters.value.district || undefined, work_format: filters.value.work_format || undefined }))
-const { data: importedTotal } = await useAsyncData(
-  'imported-count-vacancy',
-  () => api<{ meta: { total: number } }>('/imported', { query: importedQuery.value }).then(r => r.meta.total).catch(() => 0),
-  { watch: [importedQuery] },
-)
+
+// So'rovlar parallel (SSR ketma-ket kutmaydi)
+const [{ data: regions }, { data, status, error, refresh }, { data: importedTotal }] = await Promise.all([
+  useRegions(),
+  useAsyncData(
+    'vacancies',
+    () => api<Paginated<VacancyItem>>('/vacancies', { query: filters.value }),
+    { watch: [filters] },
+  ),
+  useAsyncData(
+    'imported-count-vacancy',
+    () => api<{ meta: { total: number } }>('/imported', { query: importedQuery.value }).then(r => r.meta.total).catch(() => 0),
+    { watch: [importedQuery] },
+  ),
+])
 
 const pending = computed(() => status.value === 'pending')
 const total = computed(() => data.value?.meta.total ?? 0)
