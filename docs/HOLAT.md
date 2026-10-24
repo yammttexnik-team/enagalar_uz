@@ -6,6 +6,14 @@
 
 ---
 
+## 00. 2026-10-24 yangilanish
+
+- **Xavfsizlik:** import e'lonni o'chirish so'rovi — anonim/begona bo'lsa moderatorga (admin: "O'chirish so'rovi bor" filtri), kontakti mos kirgan egasi darhol o'chiradi. Egasi o'chirgan kontakt qayta import qilinmaydi. Firibgarlik belgilari bo'lsa AI tasdiqlasa ham qo'lda ko'rish. Moderator o'z pasport arizasini ko'ra olmaydi. Bot tokeni xatolardan olib tashlanadi.
+- **Matnlar:** saytdan "Tekshirilgan/Tasdiqlangan enagalar" da'volari olib tashlandi (real tasdiqlangan anketa hali yo'q).
+- **Marketing:** admin → Import e'lonlar → "Egasiga yozish" (tayyor xabar, `CLAIM` kampaniyasi). Tartib: `MARKETING_REJA.md`, 4a-bo'lim. 24-oktabr holatiga 43 ta faol e'lon egasiga yozish mumkin.
+- **Holat (24-okt):** 6 foydalanuvchi, real faol anketa/vakansiya 0, kampaniya orqali kelgan 0.
+- **Ochiq:** sitemap.xml, TTFB ~2 s, /enagalar hydration xatosi, www → asosiy domen yo'naltirish, `production` environment himoyasi (reviewer + faqat main), yurist (import va raw_text saqlash, pd.gov.uz), Telegram 2FA va root parol.
+
 ## 0. 2026-10-22 kechki yangilanish
 
 - **Sayt ochildi:** `https://enagalar.uz` (23-oktabr; eski sslip manzil yangisiga yo'naltiriladi). Admin: `admin@enagalar.uz`, parol serverda `/root/enagalar-admin.txt`.
