@@ -2,10 +2,13 @@
 /** Rasmiy Telegram Login vidjeti: tugma → Telegram'da "Confirm" → imzolangan ma'lumot onAuth orqali keladi. */
 const props = defineProps<{ bot: string }>()
 const emit = defineEmits<{ auth: [data: Record<string, string | number>] }>()
-const box = ref<HTMLElement | null>(null)
 const failed = ref(false)
+const boxId = `tg-login-${Math.random().toString(36).slice(2, 8)}`
 
-onMounted(() => {
+onMounted(async () => {
+  await nextTick()
+  const box = document.getElementById(boxId)
+  if (!box) return
   const w = window as unknown as Record<string, unknown>
   w.onEnagalarTelegramAuth = (data: Record<string, string | number>) => emit('auth', data)
   const s = document.createElement('script')
@@ -17,7 +20,7 @@ onMounted(() => {
   s.setAttribute('data-request-access', 'write')
   s.setAttribute('data-onauth', 'onEnagalarTelegramAuth(user)')
   s.onerror = () => { failed.value = true }
-  box.value?.appendChild(s)
+  box.appendChild(s)
 })
 
 onBeforeUnmount(() => {
@@ -26,5 +29,5 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div v-show="!failed" ref="box" class="flex min-h-12 justify-center" />
+  <div v-show="!failed" :id="boxId" class="flex min-h-12 justify-center" />
 </template>
