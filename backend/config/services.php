@@ -43,6 +43,8 @@ return [
     'anthropic' => [
         'key' => env('ANTHROPIC_API_KEY'),
         'matching_model' => env('ANTHROPIC_MATCHING_MODEL', 'claude-haiku-5-5'),
+        // SEO maqolalari (articles:generate): sifatli matn kerak, shuning uchun kuchliroq model.
+        'content_model' => env('ANTHROPIC_CONTENT_MODEL', 'claude-sonnet-5-5'),
         'enabled' => (bool) env('AI_MATCHING_ENABLED', true),
         // Bitta foydalanuvchi uchun kuniga AI so'rovlar soni (undan keyin qoidalar bilan hisoblanadi).
         'daily_limit' => (int) env('AI_DAILY_LIMIT', 30),

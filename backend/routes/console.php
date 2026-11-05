@@ -30,7 +30,10 @@ $logged(Schedule::command('connections:ask')->hourlyAt(15), 'connections:ask');
 // Ochiq Telegram kanallardan e'lonlar: 08:00–22:00 har 2 soatda, manbadagi holat kuniga ikki marta
 $logged(Schedule::command('imports:fetch')->cron('0 8-22/2 * * *')->timezone('Asia/Tashkent')->withoutOverlapping(120), 'imports:fetch');
 $logged(Schedule::command('imports:check')->cron('30 9,18 * * *')->timezone('Asia/Tashkent')->withoutOverlapping(120), 'imports:check');
+$logged(Schedule::command('imports:translate')->hourlyAt(40)->withoutOverlapping(), 'imports:translate');
 $logged(Schedule::command('channel:digest')->dailyAt('19:00')->timezone('Asia/Tashkent')->withoutOverlapping(), 'channel:digest');
+// SEO maqolalar: har kuni bitta yangi qo'llanma (mavzular tugagach buyruq hech narsa qilmaydi)
+$logged(Schedule::command('articles:generate --count=1')->dailyAt('11:00')->timezone('Asia/Tashkent')->withoutOverlapping(60), 'articles:generate');
 
 // 30 kundan eski schedule-*.log fayllarini o'chirish (laravel-*.log ni daily kanalning o'zi tozalaydi)
 Schedule::call(function () {

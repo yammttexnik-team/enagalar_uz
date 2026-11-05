@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AiListingController;
 use App\Http\Controllers\Api\ApplicationController;
+use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\Auth\TelegramAuthController;
 use App\Http\Controllers\Api\BadgeController;
 use App\Http\Controllers\Api\BonusController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Api\MyNannyProfileController;
 use App\Http\Controllers\Api\MyVacancyController;
 use App\Http\Controllers\Api\MyVerificationController;
 use App\Http\Controllers\Api\NannyController;
+use App\Http\Controllers\Api\PriceController;
 use App\Http\Controllers\Api\PromotionController;
 use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\SkillController;
@@ -39,7 +41,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/nannies/{id}/reviews', [NannyController::class, 'reviews'])->whereNumber('id');
         Route::get('/vacancies', [VacancyController::class, 'index']);
         Route::get('/vacancies/{id}', [VacancyController::class, 'show'])->whereNumber('id');
+        // SEO qo'llanmalar
+        Route::get('/articles', [ArticleController::class, 'index']);
+        Route::get('/articles/{slug}', [ArticleController::class, 'show']);
         // Telegram kanallardan olingan e'lonlar (kontaktsiz, manbaga havola bilan)
+        Route::get('/prices', [PriceController::class, 'index']);
         Route::get('/imported', [ImportedListingController::class, 'index']);
         Route::get('/imported/{id}', [ImportedListingController::class, 'show'])->whereNumber('id');
     });

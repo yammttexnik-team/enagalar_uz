@@ -65,6 +65,8 @@ Rules:
 - Every field must be present. Fill a field only if it is clearly stated or obviously implied; otherwise use an empty value: "" for strings, 0 for numbers, [] for lists, false for booleans. Never guess. For kind "other" leave all other fields empty.
 - "title": short title in the SAME language as the post, at most 100 characters, e.g. "Ikki yoshli qizaloq uchun enaga kerak" or "Tajribali enaga ish qidiryapti".
 - "description": a clean, friendly rewrite of the post in the SAME language as the post, 2-5 sentences, at most 1200 characters. No phone numbers, usernames, links, names of people, hashtags, emoji spam or ALL CAPS.
+- "title_uz"/"description_uz": the same title and description translated into Uzbek (Latin script), same rules and limits (title at most 100, description at most 1200 characters). If the post is already Uzbek, just transliterate to Latin. "" for kind "other".
+- "title_ru"/"description_ru": the same title and description translated into Russian, same rules and limits. "" for kind "other".
 - "region": pick the matching slug from the allowed list. Tashkent districts (Chilonzor, Yunusobod, Sergeli, ...) mean "tashkent-city". "" if unclear.
 - "district": the district or city name as written (Uzbek Latin preferred), without words like "tumani", "район".
 - Money is in Uzbek so'm. "3 mln" = 3000000, "500 ming" = 500000, "50k" = 50000. Ignore amounts in other currencies.
@@ -458,6 +460,10 @@ TXT;
             ?? mb_substr(trim(ListingParser::stripContacts($rawText)), 0, 1500);
 
         return [
+            'title_uz' => $text('title_uz', 160),
+            'description_uz' => $text('description_uz', 1500),
+            'title_ru' => $text('title_ru', 160),
+            'description_ru' => $text('description_ru', 1500),
             'title' => $text('title', 120) ?? ($type === ImportedListing::TYPE_VACANCY ? 'Enaga kerak' : 'Enaga ish qidiryapti'),
             'description' => $description,
             'region_id' => $region?->id,
@@ -492,6 +498,10 @@ TXT;
             'kind' => $enum([ImportedListing::TYPE_VACANCY, ImportedListing::TYPE_NANNY, 'other']),
             'title' => $str,
             'description' => $str,
+            'title_uz' => $str,
+            'description_uz' => $str,
+            'title_ru' => $str,
+            'description_ru' => $str,
             'region' => $enum([...Region::orderBy('sort')->pluck('slug')->all(), '']),
             'district' => $str,
             'work_format' => $enum([...$values(WorkFormat::class), '']),

@@ -11,13 +11,26 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class ImportedListingResource extends JsonResource
 {
+    /** Til: Accept-Language (uz|ru), bo'lmasa ilova tili; boshqa til bo'lsa o'zbekcha. */
+    private function locale(Request $request): string
+    {
+        $locale = $request->headers->has('Accept-Language')
+            ? $request->getPreferredLanguage(['uz', 'ru'])
+            : app()->getLocale();
+
+        return $locale === 'ru' ? 'ru' : 'uz';
+    }
+
     public function toArray(Request $request): array
     {
+        $locale = $this->locale($request);
+
         return [
             'id' => $this->id,
             'type' => $this->type,
-            'title' => $this->title,
-            'description' => $this->description,
+            'title' => $this->{'title_'.$locale} ?: $this->title,
+            'original_title' => $this->title,
+            'description' => $this->{'description_'.$locale} ?: $this->description,
             'region' => $this->whenLoaded('region', fn () => $this->region ? ['id' => $this->region->id, 'slug' => $this->region->slug, 'name' => ['uz' => $this->region->name_uz, 'ru' => $this->region->name_ru]] : null),
             'district' => $this->whenLoaded('district', fn () => $this->district ? ['id' => $this->district->id, 'slug' => $this->district->slug, 'name' => ['uz' => $this->district->name_uz, 'ru' => $this->district->name_ru]] : null),
             'work_format' => $this->work_format?->value,
