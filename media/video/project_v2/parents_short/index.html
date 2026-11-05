@@ -1,0 +1,14 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../assets/fonts.css"><link rel="stylesheet" href="../assets/base.css"><link rel="stylesheet" href="../assets/brand2.css">
+</head><body><div id="stage"></div><script>window.__H=1920;</script>
+<script src="../assets/engine.js"></script><script src="../assets/brand.js"></script><script src="../assets/lib2.js"></script>
+<script src="../assets/parents.js"></script><script src="../assets/tx_parents.js"></script>
+<script>
+const scene = V.timeline(11.0, [
+{start:0,end:1.4,make:(L,c,d)=>PX.priceHook(L,c,d,TXP.uz,{})},
+{start:1.4,end:4.8,make:(L,c,d)=>PX.prices(L,c,d,TXP.uz,{})},
+{start:4.8,end:7.6,make:(L,c,d)=>PX.features(L,c,d,TXP.uz,{})},
+{start:7.6,end:11.0,make:(L,c,d)=>PX.end(L,c,d,TXP.uz,{short:1})}
+]);
+V.start(scene);
+</script></body></html>

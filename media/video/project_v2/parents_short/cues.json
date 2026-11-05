@@ -1,0 +1,159 @@
+{
+ "meta": {
+  "duration": 11,
+  "fps": 30,
+  "vo": []
+ },
+ "cues": [
+  {
+   "t": 0,
+   "name": "whoosh",
+   "gain": 0.35,
+   "pan": 0
+  },
+  {
+   "t": 0.02,
+   "name": "tap",
+   "gain": 0.4,
+   "pan": 0
+  },
+  {
+   "t": 0.25,
+   "name": "bubble",
+   "gain": 0.3,
+   "pan": -0.4
+  },
+  {
+   "t": 0.35,
+   "name": "bubble",
+   "gain": 0.3,
+   "pan": 0.4
+  },
+  {
+   "t": 0.45,
+   "name": "bubble",
+   "gain": 0.3,
+   "pan": -0.4
+  },
+  {
+   "t": 0.55,
+   "name": "bubble",
+   "gain": 0.3,
+   "pan": 0.4
+  },
+  {
+   "t": 1.4,
+   "name": "whoosh_s",
+   "gain": 0.4,
+   "pan": 0
+  },
+  {
+   "t": 1.42,
+   "name": "tap",
+   "gain": 0.4,
+   "pan": 0
+  },
+  {
+   "t": 1.5,
+   "name": "tap",
+   "gain": 0.35,
+   "pan": 0
+  },
+  {
+   "t": 1.85,
+   "name": "pop_soft",
+   "gain": 0.4,
+   "pan": 0
+  },
+  {
+   "t": 2,
+   "name": "pop_soft",
+   "gain": 0.4,
+   "pan": 0
+  },
+  {
+   "t": 4.8,
+   "name": "whoosh_s",
+   "gain": 0.4,
+   "pan": 0
+  },
+  {
+   "t": 4.85,
+   "name": "pop",
+   "gain": 0.55,
+   "pan": 0
+  },
+  {
+   "t": 5.4,
+   "name": "pop",
+   "gain": 0.55,
+   "pan": 0
+  },
+  {
+   "t": 5.55,
+   "name": "success",
+   "gain": 0.45,
+   "pan": 0
+  },
+  {
+   "t": 7.6,
+   "name": "whoosh",
+   "gain": 0.45,
+   "pan": 0
+  },
+  {
+   "t": 7.65,
+   "name": "pop",
+   "gain": 0.6,
+   "pan": 0
+  },
+  {
+   "t": 7.7,
+   "name": "magic",
+   "gain": 0.45,
+   "pan": 0
+  },
+  {
+   "t": 7.8,
+   "name": "tap",
+   "gain": 0.45,
+   "pan": 0
+  },
+  {
+   "t": 7.95,
+   "name": "pop",
+   "gain": 0.55,
+   "pan": 0
+  },
+  {
+   "t": 8.1,
+   "name": "reveal",
+   "gain": 0.45,
+   "pan": 0
+  },
+  {
+   "t": 8.25,
+   "name": "pop_soft",
+   "gain": 0.35,
+   "pan": 0
+  },
+  {
+   "t": 9,
+   "name": "click",
+   "gain": 0.9,
+   "pan": 0
+  },
+  {
+   "t": 9.05,
+   "name": "success",
+   "gain": 0.7,
+   "pan": 0
+  },
+  {
+   "t": 9.08,
+   "name": "sparkle",
+   "gain": 0.5,
+   "pan": 0
+  }
+ ]
+}

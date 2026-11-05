@@ -1,0 +1,16 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../assets/fonts.css"><link rel="stylesheet" href="../assets/base.css"><link rel="stylesheet" href="../assets/brand2.css">
+</head><body><div id="stage"></div><script>window.__H=1920;</script>
+<script src="../assets/engine.js"></script><script src="../assets/brand.js"></script><script src="../assets/lib2.js"></script>
+<script src="../assets/parents.js"></script><script src="../assets/tx_parents.js"></script>
+<script>
+const scene = V.timeline(25.7, [
+{start:0,end:7.1,make:(L,c,d)=>PX.hook(L,c,d,TXP.ru,{sw:3.6})},
+{start:7.1,end:12.0,make:(L,c,d)=>PX.filter(L,c,d,TXP.ru,{})},
+{start:12.0,end:15.6,make:(L,c,d)=>PX.verify(L,c,d,TXP.ru,{})},
+{start:15.6,end:19.3,make:(L,c,d)=>PX.chat(L,c,d,TXP.ru,{warn:2.0})},
+{start:19.3,end:22.7,make:(L,c,d)=>PX.bonus(L,c,d,TXP.ru,{})},
+{start:22.7,end:25.7,make:(L,c,d)=>PX.end(L,c,d,TXP.ru,{})}
+]);
+V.start(scene);
+</script></body></html>

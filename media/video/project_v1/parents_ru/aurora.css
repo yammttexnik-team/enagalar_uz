@@ -1,0 +1,24 @@
+/* ===== expert-reels STYLE PRESET: "aurora" (cinematic teal SaaS look) ===== */
+body.aurora{--bg-0:#070b14;--au-bg:#0b111c;--au-teal:#2de2d4;--au-teal-2:#7ff3e8;--au-blue:#5f93ff;--au-sky:#9dbff5;
+  --au-card:#0f1826;--au-card-2:#141f31;--au-line:rgba(45,226,212,.55);--au-line-2:rgba(157,191,245,.25);background:#070b14}
+body.aurora #stage{background:var(--au-bg)}
+.au-bg{position:absolute;inset:0;background:radial-gradient(1400px 1600px at 50% 55%,#101a2b 0%,#0b111c 55%,#070b14 100%)}
+.au-arc{position:absolute;width:1700px;height:1700px;border-radius:50%;
+  background:radial-gradient(circle,transparent 0 56%,rgba(127,243,232,.0) 56.5%,rgba(127,243,232,.95) 60.5%,rgba(45,226,212,.75) 63%,rgba(79,120,230,.7) 66%,rgba(40,60,140,.25) 69%,transparent 72%);
+  filter:blur(26px);will-change:transform,opacity}
+.au-grid{position:absolute;inset:0;opacity:.0}
+.au-bokeh{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(70,170,230,.85),rgba(70,170,230,0) 70%)}
+.au-head{font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:-1.5px;line-height:1.02;
+  background:linear-gradient(90deg,#2de2d4 0%,#6fb6ff 60%,#8fa8ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.au-label{font-family:'Montserrat',sans-serif;font-weight:600;color:#7ff3e8;letter-spacing:.5px}
+.au-text{font-family:'Inter',sans-serif;color:#e9f1ff}
+.au-text .t{color:#2de2d4}
+.au-card{position:absolute;background:linear-gradient(180deg,var(--au-card-2),var(--au-card));border:1.5px solid var(--au-line-2);border-radius:28px;
+  box-shadow:0 30px 70px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.06)}
+.au-card.glow{border-color:var(--au-line);box-shadow:0 0 0 1px rgba(45,226,212,.15),0 0 60px rgba(45,226,212,.28),0 30px 70px rgba(0,0,0,.55)}
+.au-pill{position:absolute;border-radius:999px;background:#0c1622;border:1.5px solid rgba(45,226,212,.6);box-shadow:0 0 30px rgba(45,226,212,.25)}
+.au-btn{display:inline-flex;align-items:center;gap:10px;border-radius:999px;padding:0 26px;font:600 28px 'Inter',sans-serif;color:#dffcf8;
+  background:rgba(45,226,212,.14);border:1.5px solid rgba(45,226,212,.75);box-shadow:0 0 22px rgba(45,226,212,.35)}
+.au-tab{position:absolute;left:0;right:0;height:66px;border-radius:18px 18px 0 0;display:flex;align-items:center;gap:16px;padding:0 22px;font:600 28px 'Inter',sans-serif}
+.au-icon{position:absolute;border-radius:30px;border:2px solid rgba(220,235,255,.55);background:rgba(14,22,36,.85);display:flex;align-items:center;justify-content:center}
+.p3d{transform-style:preserve-3d}

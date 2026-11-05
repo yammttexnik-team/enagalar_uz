@@ -1,0 +1,1 @@
+{"detail":{"type":"validation_error","code":"invalid_parameters","message":"Model 'eleven_v3' does not support language_code 'uz'.","status":"unsupported_language","request_id":"9c7f93c63234046d8269fcde2354fb62","param":"language_code"}}

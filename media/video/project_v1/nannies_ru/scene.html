@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="base.css"><link rel="stylesheet" href="brand.css">
+<style>.tile{position:absolute;border-radius:40px;display:flex;align-items:center;justify-content:center}
+.row{position:absolute;left:40px;width:572px;height:70px;border-bottom:2px solid var(--s200);display:flex;align-items:center;justify-content:space-between}
+.row .k{font:500 23px var(--ui);color:var(--s500)} .row .v{font:600 26px var(--ui);color:var(--s900);display:flex;align-items:center;gap:10px}
+.sk{width:170px;height:22px;border-radius:11px;background:linear-gradient(90deg,#ece8e2,#f5f2ee,#ece8e2)}
+.ntf{position:absolute;left:150px;width:780px;height:132px;display:flex;align-items:center;gap:22px;padding:0 28px}
+</style></head>
+<body><div id="stage"></div>
+<script src="engine.js"></script><script src="brand.js"></script>
+<script>
+/* enagalar.uz — nannies promo, 22.5 s. A hook -> B AI form fill (phone) -> C bonus + families -> D CTA */
+const { p, win, kf, tf, el, clamp, lerp, cue, caption, animWords, icon, cueTyping, typed, rnd } = E;
+const DUR = 22.5, POS = { A: [0, 0], B: [1200, 0], C: [1200, 2050], D: [0, 2050] };
+const PANS = [[4.3, 5.0, POS.A, POS.B], [10.0, 10.7, POS.B, POS.C], [17.0, 17.7, POS.C, POS.D]];
+const cam = B.camera(PANS, POS.A);
+const scene = { duration: DUR, fps: 30 };
+const R = {};
+const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+scene.build = (stage) => {
+  R.bg = B.background(stage);
+  R.world = el('div', 'abs', stage, { width: '1080px', height: '1920px', transformOrigin: '0 0' });
+  const L = k => el('div', 'layer', R.world, { left: POS[k][0] + 'px', top: POS[k][1] + 'px' });
+  const A = R.A = L('A'), Bl = R.B = L('B'), C = R.C = L('C'), D = R.D = L('D');
+
+  /* ===== A: hook ===== */
+  R.line = el('div', 'abs', A, { left: 0, top: '959px', width: '1080px', height: '3px', background: 'linear-gradient(90deg,rgba(248,137,80,0),#feb38e 35%,#81d3d5 65%,rgba(62,181,186,0))', boxShadow: '0 0 18px #feb38e' });
+  R.ringsA = B.rings(A, 3, 540, 960, 130, 'rgba(254,179,142,.9)');
+  R.flash = el('div', 'abs', A, { left: '240px', top: '660px', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,255,255,.9),rgba(254,212,190,.45) 35%,rgba(255,255,255,0) 70%)' });
+  R.tiles = [[B.ic.home(76, '#81d3d5'), 120, 430, -8], [B.ic.family(80, '#feb38e'), 810, 460, 7], [B.ic.clock(76, '#feb38e'), 140, 1250, 6], [B.ic.chat(76, '#81d3d5'), 790, 1280, -6]]
+    .map(([h, x, y, r]) => ({ e: el('div', 'tile gl', A, { left: x + 'px', top: y + 'px', width: '150px', height: '150px' }, h), r }));
+  R.cap1 = caption(A, [{ cls: 'l-serif', html: 'Ищете', style: { fontSize: '88px' } }, { cls: 'l-serif', html: 'работу', style: { fontSize: '88px' } }, { cls: 'l-hero', html: '<span class="acc">няней?</span>', style: { fontSize: '140px', marginTop: '6px' } }], 790);
+  R.tileA = el('div', 'tile gl', A, { left: '465px', top: '630px', width: '150px', height: '150px' }, B.ic.paper(84, '#feb38e'));
+  R.cap2 = caption(A, [{ cls: 'l-sans', html: 'Разместите анкету', style: { fontSize: '48px' } }, { cls: 'l-hero', html: '<span class="acc">бесплатно</span>', style: { fontSize: '124px' } }, { cls: 'l-sans', html: 'с помощью AI', style: { fontSize: '44px', marginTop: '10px' } }], 830);
+  cue(0, 'riser_soft', .4); cue(.05, 'glare', .4); cue(.3, 'impact', .55); cue(.32, 'whoosh', .4);
+  [.35, .7, 1.0].forEach(t => cue(t, 'tap', .45)); cue(1.05, 'shimmer', .5);
+  R.tiles.forEach((_, i) => cue(.5 + i * .14, 'pop_soft', .4, i % 2 ? .45 : -.45));
+  cue(2.8, 'swish', .55); cue(3.0, 'pop', .6); [3.15, 3.4, 3.75].forEach(t => cue(t, 'tap', .4)); cue(3.45, 'shimmer', .5); cue(3.5, 'sparkle', .35);
+  cue(4.3, 'transition', 1); cue(4.95, 'sub', .45);
+
+  /* ===== B: AI fills the form ===== */
+  R.capB1 = caption(Bl, [{ cls: 'l-sans', html: 'Просто вставьте объявление' }, { cls: 'l-serif', html: 'из <span class="acc">Telegram</span>', style: { fontSize: '76px', marginTop: '6px' } }], 300);
+  R.capB2 = caption(Bl, [{ cls: 'l-sans', html: 'AI-помощник:' }, { cls: 'l-serif', html: 'анкета', style: { fontSize: '76px', marginTop: '6px' } }, { cls: 'l-serif', html: '<span class="acc">заполнится сама</span>', style: { fontSize: '76px' } }], 276);
+  R.phone = el('div', 'phone', Bl, { left: '200px', top: '580px', width: '680px', height: '880px' });
+  const S = R.screen = el('div', 'screen', R.phone);
+  el('div', 'abs', S, { left: '48px', top: '24px', font: '600 22px var(--ui)', color: 'var(--s900)' }, '9:41');
+  el('div', 'abs', S, { left: '251px', top: '16px', width: '150px', height: '36px', borderRadius: '20px', background: '#0b1214' });
+  R.hdr = el('div', 'abs', S, { left: '44px', top: '78px' }, `<div class="ui-h">Создать анкету</div><div class="ui-lab" style="margin-top:6px;display:flex;align-items:center;gap:8px">${E.icon.spark(26, '#c55205')}AI-помощник</div>`);
+  el('div', 'abs ui-lab', S, { left: '44px', top: '178px' }, 'Текст объявления из Telegram');
+  R.ta = el('div', 'abs', S, { left: '40px', top: '212px', width: '572px', height: '170px', borderRadius: '20px', background: '#fff', border: '2px solid var(--s200)' });
+  R.taTx = el('div', 'abs', R.ta, { left: '22px', top: '16px', width: '528px', font: '400 24px/1.42 var(--ui)', color: 'var(--s900)' });
+  R.aiBtn = el('div', 'abs btn apr', S, { left: '40px', top: '400px', width: '572px', height: '80px', fontSize: '30px', transformOrigin: '50% 50%', overflow: 'hidden' }, `${E.icon.spark(34, '#fff')}<span>Заполнить с AI</span>`);
+  R.sheen = el('div', 'abs', R.aiBtn, { left: '-160px', top: 0, width: '120px', height: '80px', background: 'linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.55),rgba(255,255,255,0))', transform: 'skewX(-20deg)' });
+  const rows = [['Район', 'Ташкент, Чиланзар'], ['Опыт', '8 лет'], ['Где присмотр', 'У семьи дома'], ['Возраст детей', '1–5 лет']];
+  R.rows = rows.map(([k, v], i) => {
+    const r = el('div', 'row', S, { top: (506 + i * 80) + 'px' });
+    el('span', 'k', r, {}, k);
+    const sk = el('div', 'sk', r);
+    const vv = el('span', 'v', r, { position: 'absolute', right: 0 }, `<span>${v}</span>${icon.check(24, '#018186', 3.4)}`);
+    return { r, sk, vv };
+  });
+  R.scan = el('div', 'abs', S, { left: 0, top: '490px', width: '652px', height: '90px', background: 'linear-gradient(180deg,rgba(248,137,80,0),rgba(248,137,80,.16),rgba(248,137,80,0))' });
+  R.spk = [...Array(10)].map((_, i) => el('div', 'abs', Bl, {}, E.icon.spark(30 + (i % 3) * 10, i % 2 ? '#f88950' : '#3eb5ba')));
+  R.cur = E.mkCursor(Bl);
+  R.AD = 'Я няня, опыт 8 лет. Чиланзар. Выезжаю к семье, дети 1–5 лет.';
+  [5.0, 5.35].forEach(t => cue(t, 'tap', .42)); cue(5.4, 'shimmer', .4); cue(4.7, 'whoosh', .45);
+  cue(5.55, 'click', .7); cueTyping(5.7, R.AD, 40, .4, 'mech');
+  cue(7.65, 'swish', .3); [7.85, 8.15, 8.45].forEach(t => cue(t, 'tap', .4)); cue(8.2, 'shimmer', .45);
+  cue(8.0, 'click', .9); cue(8.05, 'magic', .7); cue(8.1, 'sparkle', .5);
+  R.rows.forEach((_, i) => { cue(8.4 + i * .25, 'tick', .55); cue(8.42 + i * .25, 'pop_soft', .3); }); cue(9.45, 'success', .55);
+  cue(10.0, 'transition', 1); cue(10.65, 'sub', .45);
+
+  /* ===== C: bonus + families find you ===== */
+  R.capC1 = caption(C, [{ cls: 'l-sans', html: 'За первую анкету' }, { cls: 'l-hero', html: '<span class="acc">бонус</span>', style: { fontSize: '128px' } }], 290);
+  R.capC2 = caption(C, [{ cls: 'l-sans', html: 'Анкета готова —' }, { cls: 'l-serif', html: 'семьи <span class="acc">найдут вас</span>', style: { fontSize: '76px', marginTop: '6px' } }], 300);
+  R.bon = el('div', 'abs gl', C, { left: '150px', top: '640px', width: '780px', height: '520px', borderRadius: '44px', transformOrigin: '50% 50%' });
+  R.coin = el('div', 'abs', R.bon, { left: '310px', top: '50px', width: '160px', height: '160px', borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%,#feb38e,#f88950 45%,#c55205)', boxShadow: '0 0 60px rgba(248,137,80,.55),inset 0 -6px 0 rgba(0,0,0,.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', transformOrigin: '50% 50%' }, B.ic.gift(84, '#fff'));
+  R.num = el('div', 'abs', R.bon, { left: 0, top: '240px', width: '780px', textAlign: 'center', font: '900 100px var(--head)', color: '#fff', letterSpacing: '-2px', whiteSpace: 'nowrap' });
+  R.bnote = el('div', 'abs', R.bon, { left: '60px', top: '376px', width: '660px', textAlign: 'center', font: '500 27px/1.4 var(--ui)', color: 'var(--ink-2)' }, 'Бонус на услуги сайта,<br>не обменивается на деньги');
+  R.spkC = [...Array(12)].map((_, i) => el('div', 'abs', C, {}, E.icon.star4(16 + rnd(i + 40) * 22, i % 2 ? '#feb38e' : '#81d3d5')));
+  const nt = [[B.ic.chat(36, '#fff'), '#018186', 'Новое сообщение', 'Семья из Юнусабада'], [B.ic.family(38, '#fff'), '#c55205', 'Анкету просмотрели', 'Семья из Чиланзара'], [B.ic.chat(36, '#fff'), '#3eb5ba', 'Новое сообщение', 'Семья из Мирзо-Улугбека']];
+  R.ntf = nt.map(([ic, c, h, s], i) => {
+    const n = el('div', 'card ntf', C, { top: (600 + i * 152) + 'px' });
+    el('div', 'av', n, { width: '78px', height: '78px', background: c, flex: '0 0 78px' }, ic);
+    el('div', '', n, {}, `<div style="font:800 30px var(--head);color:var(--s900)">${h}</div><div style="font:500 24px var(--ui);color:var(--s500);margin-top:4px">${s}</div>`);
+    el('div', 'abs', n, { right: '28px', left: 'auto', top: '26px', font: '500 20px var(--ui)', color: 'var(--s400)' }, 'сейчас');
+    return n;
+  });
+  R.pills = [[`${B.ic.plane(30, '#81d3d5')}<span>Вход через Telegram в 1 клик</span>`, 1080], [`${B.ic.lock(28, '#81d3d5')}<span>Без пароля</span>`, 1180]]
+    .map(([h, y]) => el('div', 'abs pill', C, { left: '50%', top: y + 'px' }, h));
+  [10.75, 11.1].forEach(t => cue(t, 'tap', .42)); cue(11.15, 'shimmer', .45); cue(10.6, 'whoosh', .45);
+  cue(11.0, 'pop', .7); cue(11.05, 'magic', .45); for (let i = 0; i < 14; i++) cue(11.3 + i * .07, 'count', .22 + i * .01); cue(12.3, 'chime', .55); cue(12.35, 'sparkle', .5); cue(12.6, 'tick', .35);
+  cue(13.2, 'swish', .45); [13.45, 13.8].forEach(t => cue(t, 'tap', .42)); cue(13.85, 'shimmer', .45);
+  R.ntf.forEach((_, i) => { cue(13.7 + i * .45, 'open', .45, (i - 1) * .3); cue(13.72 + i * .45, 'bubble', .35); });
+  cue(15.35, 'pop_soft', .45, -.2); cue(15.55, 'pop_soft', .45, .2); cue(15.6, 'select', .35);
+  cue(17.0, 'transition', 1); cue(17.65, 'sub', .45);
+
+  /* ===== D: end card ===== */
+  R.markD = B.mark(D, 230, 425, 520);
+  R.ringsD = B.rings(D, 3, 540, 640, 120, 'rgba(254,179,142,.85)');
+  R.word = el('div', 'abs', D, { left: 0, top: '790px', width: '1080px', textAlign: 'center', font: '900 120px var(--head)', letterSpacing: '-3px', color: '#fff' }, 'enagalar<span style="color:var(--s400);font-weight:800">.uz</span>');
+  R.capD = caption(D, [{ cls: 'l-serif', html: 'Разместите <span class="acc">анкету</span>', style: { fontSize: '76px' } }], 985);
+  R.cta = el('div', 'abs btn apr', D, { left: '170px', top: '1130px', width: '740px', height: '116px', borderRadius: '58px', font: '900 46px var(--head)', boxShadow: '0 20px 60px rgba(197,82,5,.45),0 0 0 2px rgba(254,179,142,.4)', transformOrigin: '50% 50%' }, `<span>enagalar.uz</span><svg viewBox="0 0 24 24" width="44" height="44"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`);
+  R.chips = [[`${icon.check(26, '#81d3d5', 3.4)}<span>Анкета бесплатно</span>`, 150], [`${B.ic.gift(26, '#feb38e')}<span>+30 000 сум бонус</span>`, 560]].map(([h, x]) => el('div', 'abs pill', D, { left: x + 'px', top: '1300px', fontSize: '26px', padding: '14px 22px' }, h));
+  R.burstD = B.burst(D, 26, 3); R.curD = E.mkCursor(D);
+  cue(17.6, 'riser_soft', .4); cue(17.8, 'swish', .4); cue(17.9, 'pop_soft', .5); cue(18.1, 'pop', .7); cue(18.2, 'magic', .6); cue(18.2, 'sparkle', .45);
+  cue(18.75, 'reveal', .6); cue(19.25, 'tap', .45); cue(19.3, 'shimmer', .45); cue(19.55, 'pop', .6);
+  cue(19.85, 'pop_soft', .4, -.3); cue(19.97, 'pop_soft', .4, .3);
+  cue(20.75, 'click', .9); cue(20.8, 'success', .8); cue(20.85, 'sparkle', .55);
+  for (let i = 0; i < 6; i++) cue(20.9 + i * .08, 'bubble', .28, (rnd(i + 9) - .5) * 1.2);
+  cue(21.4, 'chime', .4);
+  B.fixApos(stage);
+};
+scene.update = (t) => {
+  const c = cam(t); R.bg.update(t, c.x, c.y);
+  R.world.style.transform = `translate(540px,960px) scale(${c.z}) translate(${-c.x - 540}px,${-c.y - 960}px)`;
+  R.world.style.filter = c.blur > .1 ? `blur(${c.blur.toFixed(2)}px)` : 'none';
+  const vis = k => Math.abs(POS[k][0] - c.x) < 1180 && Math.abs(POS[k][1] - c.y) < 2000;
+  ['A', 'B', 'C', 'D'].forEach(k => R[k].style.display = vis(k) ? '' : 'none');
+  R.bg.warm.style.opacity = (.12 * win(t, 10.8, 13.0, .8, .6) + .22 * p(t, 17.5, 1.2)).toFixed(3);
+  if (vis('A')) {
+    tf(R.line, { sx: p(t, .0, .45, 'outExpo'), o: 1 - p(t, .55, .35) });
+    B.updRings(R.ringsA, t, .2, 2.6);
+    const fq = clamp((t - .25) / .45); tf(R.flash, { s: .3 + 1.2 * E.ease.outCubic(fq), o: fq > 0 && fq < 1 ? Math.sin(Math.PI * fq) * .75 : 0 });
+    R.tiles.forEach(({ e, r }, i) => {
+      const q = p(t, .5 + i * .14, .6, 'outBack'), out = p(t, 2.75 + i * .04, .4, 'inCubic');
+      tf(e, { y: Math.sin(t * 1.5 + i) * 8 + (1 - q) * 40, s: (.5 + .5 * q) * (1 - .5 * out), r: r + Math.sin(t + i) * 2, o: p(t, .5 + i * .14, .15) * (1 - out), blur: out * 12 });
+    });
+    animWords(R.cap1, t, .35, 2.62, { lineStarts: [.35, .7, 1.0] });
+    const tp = p(t, 2.95, .6, 'spring'); tf(R.tileA, { s: tp, y: Math.sin(t * 2) * 6, r: Math.sin(t * 1.3) * 3, o: p(t, 2.95, .1) });
+    animWords(R.cap2, t, 3.15, undefined, { lineStarts: [3.15, 3.4, 3.75] });
+  }
+  if (vis('B')) {
+    animWords(R.capB1, t, 5.0, 7.45, { lineStarts: [5.0, 5.35] });
+    animWords(R.capB2, t, 7.85, undefined, { lineStarts: [7.85, 8.15, 8.45] });
+    const ph = p(t, 4.55, .9, 'outExpo'); tf(R.phone, { y: (1 - ph) * 160 + Math.sin(t * 1.4) * 5, o: ph, s: .94 + .06 * ph });
+    tf(R.hdr, { y: (1 - p(t, 5.0, .6, 'outExpo')) * 30, o: p(t, 5.0, .3) });
+    const typing = t >= 5.6;
+    R.ta.style.borderColor = t >= 5.55 && t < 8.0 ? '#3eb5ba' : 'var(--s200)';
+    R.taTx.innerHTML = !typing ? '<span style="color:#a9a49c">Вставьте текст сюда…</span>' : typed(R.AD, t, 5.7, 40) + B.caret(t, t < 8.0);
+    const bp = t > 7.95 && t < 8.2 ? Math.sin(Math.PI * (t - 7.95) / .25) : 0; tf(R.aiBtn, { s: 1 - .05 * bp });
+    R.sheen.style.transform = `translateX(${(kf(t, [[8.0, 0], [8.6, 900, 'inOutCubic']])).toFixed(1)}px) skewX(-20deg)`;
+    const sq = clamp((t - 8.1) / 1.1); tf(R.scan, { y: sq * 330, o: sq > 0 && sq < 1 ? Math.sin(Math.PI * sq) : 0 });
+    R.rows.forEach(({ sk, vv }, i) => {
+      const t0 = 8.4 + i * .25, q = p(t, t0, .45, 'outBack');
+      tf(sk, { o: 1 - p(t, t0 - .05, .15) }); sk.style.backgroundPosition = `${(t * 300) % 600}px 0`;
+      tf(vv, { o: p(t, t0, .15), x: (1 - q) * 30, s: .85 + .15 * q });
+    });
+    R.spk.forEach((s, i) => { const q = clamp((t - 8.05 - rnd(i + 70) * .3) / .9), a = rnd(i + 71) * 6.283, rr = 150 + 220 * rnd(i + 72) * E.ease.outCubic(q);
+      tf(s, { x: 540 + Math.cos(a) * rr - 20, y: 1020 + Math.sin(a) * rr - 20, s: .4 + .8 * Math.sin(Math.PI * q), r: q * 120, o: q > 0 && q < 1 ? Math.sin(Math.PI * q) : 0 }); });
+    R.cur.update(t, [[5.0, 1000, 1500], [5.5, 640, 860, 'outCubic'], [7.4, 640, 860], [7.9, 560, 1028, 'outCubic'], [8.3, 560, 1028], [8.8, 980, 1500, 'inCubic']], [5.55, 8.0], [5.0, 8.7]);
+  }
+  if (vis('C')) {
+    animWords(R.capC1, t, 10.75, 13.0, { lineStarts: [10.75, 11.1] });
+    animWords(R.capC2, t, 13.45, undefined, { lineStarts: [13.45, 13.8] });
+    const bq = p(t, 10.6, .8, 'outExpo'), bo = p(t, 13.15, .45, 'inCubic');
+    tf(R.bon, { y: (1 - bq) * 100 - bo * 80 + Math.sin(t * 1.3) * 5, o: bq * (1 - bo), s: 1 - .08 * bo, blur: (1 - bq) * 10 + bo * 10 });
+    const cp = p(t, 11.0, .6, 'spring'); tf(R.coin, { s: cp, r: Math.sin(t * 2) * 6 });
+    const nq = p(t, 11.3, 1.0, 'outCubic'); R.num.textContent = '+' + fmt(Math.round(nq * 30) * 1000) + ' сум';
+    tf(R.num, { o: p(t, 11.25, .2), s: 1 + .05 * win(t, 12.25, 12.5, .1, .25) });
+    tf(R.bnote, { o: p(t, 12.6, .4), y: (1 - p(t, 12.6, .5, 'outExpo')) * 20 });
+    R.spkC.forEach((s, i) => { const q = clamp((t - 12.3 - rnd(i + 40) * .3) / .9), a = rnd(i + 41) * 6.283, rr = 330 * (.55 + .6 * rnd(i + 42)) * E.ease.outCubic(q);
+      tf(s, { x: 540 + Math.cos(a) * rr - 18, y: 900 + Math.sin(a) * rr - 18, s: .4 + .8 * Math.sin(Math.PI * q), r: q * 160, o: q > 0 && q < 1 ? Math.sin(Math.PI * q) : 0 }); });
+    R.ntf.forEach((n, i) => { const q = p(t, 13.7 + i * .45, .6, 'outBack'); tf(n, { x: (1 - q) * 120, y: Math.sin(t * 1.4 + i) * 4, o: p(t, 13.7 + i * .45, .15), s: .9 + .1 * q }); });
+    R.pills.forEach((pl, i) => { const q = p(t, 15.35 + i * .2, .5, 'outBack'); pl.style.transform = `translateX(-50%) scale(${(.7 + .3 * q).toFixed(3)})`; pl.style.opacity = p(t, 15.35 + i * .2, .15).toFixed(3); });
+  }
+  if (vis('D')) {
+    const ms = p(t, 17.3, .7, 'spring'); tf(R.markD.w, { s: ms, y: Math.sin(t * 1.8) * 6, o: p(t, 17.3, .1) });
+    R.markD.set(p(t, 17.35, .75, 'inOutCubic'), p(t, 17.9, .45, 'outBack'), p(t, 18.1, .5, 'outBack'));
+    B.updRings(R.ringsD, t, 18.15, 2.2);
+    const wq = p(t, 18.7, .8, 'outExpo'); tf(R.word, { y: (1 - wq) * 40, o: wq, blur: (1 - wq) * 18, s: 1.06 - .06 * wq });
+    animWords(R.capD, t, 19.25, undefined, { lineStarts: [19.25] });
+    const cq = p(t, 19.55, .6, 'outBack'), press = t > 20.7 && t < 20.95 ? Math.sin(Math.PI * (t - 20.7) / .25) : 0;
+    tf(R.cta, { s: (.6 + .4 * cq) * (1 - .05 * press) * (1 + .018 * Math.sin(t * 5) * (t > 20.2 ? 1 : 0)), o: p(t, 19.55, .15) });
+    R.chips.forEach((ch, i) => { const q = p(t, 19.85 + i * .12, .5, 'outBack'); tf(ch, { s: .7 + .3 * q, o: p(t, 19.85 + i * .12, .15), y: Math.sin(t * 1.5 + i) * 4 }); });
+    B.updBurst(R.burstD, t, 20.8, 540, 1188, 3);
+    R.curD.update(t, [[20.0, 1000, 1560], [20.65, 640, 1200, 'outCubic'], [21.4, 640, 1200], [22.0, 980, 1500, 'inCubic']], [20.75], [20.0, 21.9]);
+  }
+};
+B.loadFonts().then(() => E.run(scene));
+</script></body></html>

@@ -1,0 +1,60 @@
+/* ===== expert-reels design system (1080x1920, 9:16) ===== */
+:root{
+  --bg-0:#030817; --bg-1:#071231; --bg-2:#0c1d4a; --bg-glow:#1d3fa8;
+  --ink:#f4f6ff; --ink-2:rgba(236,241,255,.74); --ink-3:rgba(220,228,255,.46);
+  --gold:#f3c34a; --gold-2:#ffd978; --gold-deep:#b98a1f;
+  --claude:#d97757; --claude-2:#f0a080;
+  --blue:#4f7cff; --cyan:#7fd4ff; --ok:#57e39b; --bad:#ff6b7a;
+  --glass:rgba(150,175,255,.075); --glass-2:rgba(150,175,255,.12);
+  --stroke:rgba(190,210,255,.18); --stroke-2:rgba(190,210,255,.32);
+  --serif:'Playfair Display', Georgia, serif;
+  --sans:'Montserrat', 'Inter', Arial, sans-serif;
+  --ui:'Inter', 'Montserrat', Arial, sans-serif;
+  --mono:'JetBrains Mono', monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg-0)}
+body{font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+#stage{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden;background:var(--bg-0)}
+.abs{position:absolute;left:0;top:0;will-change:transform,opacity}
+.layer{position:absolute;left:0;top:0;width:1080px;height:1920px}
+
+/* ---- background ---- */
+#bg .base{position:absolute;inset:0;background:
+  radial-gradient(1200px 1100px at 50% 38%, #10286a 0%, #0a1843 38%, #060f2c 68%, #030817 100%);}
+#bg .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55}
+#bg .vig{position:absolute;inset:0;background:radial-gradient(900px 1500px at 50% 45%, transparent 55%, rgba(0,0,0,.55) 100%)}
+#bg .grain{position:absolute;left:-200px;top:-200px;width:1480px;height:2320px;opacity:.055;mix-blend-mode:overlay;
+  background-image:url(grain.png);background-size:540px 540px}
+#bg svg{position:absolute;left:0;top:0}
+
+/* ---- typography ---- */
+.cap{position:absolute;left:0;width:1080px;text-align:center;padding:0 110px}
+.l-sans{font-family:var(--sans);font-weight:500;font-size:40px;line-height:1.25;color:var(--ink-2);letter-spacing:.2px}
+.l-serif{font-family:var(--serif);font-weight:600;font-size:76px;line-height:1.08;color:var(--ink);letter-spacing:-.5px}
+.l-hero{font-family:var(--serif);font-weight:700;font-size:110px;line-height:1.02;letter-spacing:-1px}
+.gold{color:var(--gold);font-style:italic;font-weight:800;text-shadow:0 0 38px rgba(243,195,74,.35)}
+.goldn{color:var(--gold)}
+.claude-c{color:var(--claude-2)}
+.w{display:inline-block;white-space:pre;will-change:transform,opacity,filter}
+.line{display:block;white-space:nowrap}
+
+/* ---- glass ---- */
+.glass{background:linear-gradient(160deg,rgba(170,195,255,.16),rgba(120,150,255,.05) 45%,rgba(90,120,255,.07));
+  border:1.5px solid var(--stroke);border-radius:34px;
+  box-shadow:0 30px 80px rgba(0,4,20,.55), inset 0 1.5px 0 rgba(255,255,255,.14), inset 0 -1px 0 rgba(255,255,255,.04);}
+.glass.blur{backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%)}
+.chip{display:inline-flex;align-items:center;gap:14px;padding:16px 26px;border-radius:999px;font-family:var(--ui);font-weight:600;font-size:30px;color:var(--ink)}
+.glow-gold{filter:drop-shadow(0 0 26px rgba(243,195,74,.45))}
+.glow-blue{filter:drop-shadow(0 0 30px rgba(90,140,255,.5))}
+
+/* ---- sticker ---- */
+.sticker{position:absolute;left:0;top:0;transform-origin:50% 60%;will-change:transform}
+.sticker img{display:block;width:100%;height:auto}
+
+/* ---- cursor ---- */
+#cursor{position:absolute;left:0;top:0;width:54px;height:64px;z-index:90;filter:drop-shadow(0 6px 10px rgba(0,0,0,.5))}
+.ripple{position:absolute;border-radius:50%;border:3px solid rgba(255,255,255,.8);pointer-events:none}
+
+/* ---- debug safe zone ---- */
+#safe{position:absolute;inset:0;pointer-events:none;display:none;z-index:999}

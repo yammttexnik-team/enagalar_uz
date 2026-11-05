@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="uz"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="base.css"><link rel="stylesheet" href="brand.css">
+</head>
+<body><div id="stage"></div>
+<script src="engine.js"></script><script src="brand.js"></script>
+<script>
+/* enagalar.uz — parents promo, 22.5 s. Scenes: A hook -> B filter (phone) -> C trust + chat -> D CTA */
+const { p, win, kf, tf, el, clamp, lerp, cue, caption, animWords, icon, cueTyping, typed, rnd } = E;
+const DUR = 22.5, POS = { A: [0, 0], B: [1200, 0], C: [1200, 2050], D: [0, 2050] };
+const PANS = [[4.3, 5.0, POS.A, POS.B], [10.0, 10.7, POS.B, POS.C], [17.0, 17.7, POS.C, POS.D]];
+const cam = B.camera(PANS, POS.A);
+const scene = { duration: DUR, fps: 30 };
+const R = {};
+scene.build = (stage) => {
+  R.bg = B.background(stage);
+  R.world = el('div', 'abs', stage, { width: '1080px', height: '1920px', transformOrigin: '0 0' });
+  const L = k => el('div', 'layer', R.world, { left: POS[k][0] + 'px', top: POS[k][1] + 'px' });
+  const A = R.A = L('A'), Bl = R.B = L('B'), C = R.C = L('C'), D = R.D = L('D');
+
+  /* ===== A: hook ===== */
+  R.line = el('div', 'abs', A, { left: 0, top: '959px', width: '1080px', height: '3px', background: 'linear-gradient(90deg,rgba(62,181,186,0),#81d3d5 35%,#feb38e 65%,rgba(248,137,80,0))', boxShadow: '0 0 18px #81d3d5' });
+  R.ringsA = B.rings(A, 3, 540, 960, 130, 'rgba(129,211,213,.9)');
+  R.flash = el('div', 'abs', A, { left: '240px', top: '660px', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,255,255,.9),rgba(181,232,232,.45) 35%,rgba(255,255,255,0) 70%)' });
+  const bubs = [['Enaga kerak!!!', 110, 390, -6], ['Kim tanish? Yozinglar', 470, 530, 4], ['Eʼlon eskirib qolgan…', 150, 650, 3],
+    ['Narxi qancha?', 590, 1210, -4], ['Tekshirilganmi?', 120, 1290, 5], ['Raqamni lichkaga', 450, 1390, -3]];
+  R.bubs = bubs.map(([tx, x, y, r], i) => {
+    const b = el('div', 'bub', A, { left: x + 'px', top: y + 'px', background: 'rgba(245,242,238,.09)', border: '1.5px solid rgba(245,242,238,.2)', color: 'rgba(245,242,238,.78)', borderBottomLeftRadius: '8px' }, tx);
+    return { b, r, i };
+  });
+  R.cap1 = caption(A, [{ cls: 'l-serif', html: 'Ishonchli enaga', style: { fontSize: '86px' } }, { cls: 'l-serif', html: 'topish', style: { fontSize: '86px' } }, { cls: 'l-hero', html: '<span class="acc">qiyinmi?</span>', style: { fontSize: '150px', marginTop: '4px' } }], 790);
+  R.markA = B.mark(A, 150, 465, 650);
+  R.cap2 = caption(A, [{ cls: 'l-sans', html: 'Endi hammasi', style: { fontSize: '48px' } }, { cls: 'l-hero', html: '<span class="acc">bir joyda</span>', style: { fontSize: '136px', marginTop: '4px' } }, { cls: 'l-sans', html: 'butun Oʻzbekiston boʻylab', style: { fontSize: '40px', marginTop: '14px' } }], 840);
+  cue(0, 'riser_soft', .4); cue(.05, 'glare', .4); cue(.3, 'impact', .55); cue(.32, 'whoosh', .4);
+  [.35, .7, 1.0].forEach(t => cue(t, 'tap', .45)); cue(1.05, 'shimmer', .5);
+  R.bubs.forEach(({ i }) => cue(.45 + i * .16, 'bubble', .28, i % 2 ? .4 : -.4));
+  cue(2.8, 'swish', .55); cue(2.85, 'whoosh_s', .4);
+  cue(3.05, 'pop', .6); cue(3.2, 'sparkle', .4); [3.15, 3.4, 3.8].forEach(t => cue(t, 'tap', .4)); cue(3.45, 'shimmer', .45);
+  cue(4.3, 'transition', 1); cue(4.95, 'sub', .45);
+
+  /* ===== B: filter in phone ===== */
+  R.capB1 = caption(Bl, [{ cls: 'l-sans', html: 'Viloyat va tuman' }, { cls: 'l-serif', html: 'boʻyicha <span class="acc">filtr</span>', style: { fontSize: '80px', marginTop: '6px' } }], 300);
+  R.capB2 = caption(Bl, [{ cls: 'l-sans', html: 'Qayerda qaraladi:' }, { cls: 'l-serif', html: 'sizning uyingizda', style: { fontSize: '70px', marginTop: '6px' } }, { cls: 'l-serif', html: 'yoki <span class="acc">enaganikida</span>', style: { fontSize: '70px' } }], 276);
+  R.phone = el('div', 'phone', Bl, { left: '200px', top: '580px', width: '680px', height: '880px' });
+  const S = R.screen = el('div', 'screen', R.phone);
+  el('div', 'abs', S, { left: '48px', top: '24px', font: '600 22px var(--ui)', color: 'var(--s900)' }, '9:41');
+  el('div', 'abs', S, { left: '251px', top: '16px', width: '150px', height: '36px', borderRadius: '20px', background: '#0b1214' });
+  R.hdr = el('div', 'abs', S, { left: '44px', top: '82px' }, `<div class="ui-h">Enaga topish</div><div class="ui-lab" style="margin-top:6px">Butun Oʻzbekiston boʻylab</div>`);
+  const field = (lab, y) => {
+    const l = el('div', 'abs ui-lab', S, { left: '44px', top: y + 'px' }, lab);
+    const f = el('div', 'ui-field', S, { left: '40px', top: (y + 34) + 'px', width: '572px' });
+    const v = el('span', '', f, { color: 'var(--s400)', fontWeight: 500 }, 'Tanlang');
+    el('span', '', f, {}, icon.chevron(26, '#777169'));
+    return { l, f, v };
+  };
+  R.f1 = field('Viloyat', 200); R.f2 = field('Tuman', 330);
+  R.segL = el('div', 'abs ui-lab', S, { left: '44px', top: '462px' }, 'Qayerda qaraladi');
+  R.seg = el('div', 'abs', S, { left: '40px', top: '496px', width: '572px', height: '86px', borderRadius: '22px', background: 'var(--s100)', border: '2px solid var(--s200)' });
+  R.segOn = el('div', 'abs', R.seg, { left: '6px', top: '6px', width: '276px', height: '70px', borderRadius: '17px', background: 'var(--t500)', boxShadow: '0 6px 18px rgba(1,129,134,.35)', transformOrigin: '50% 50%' });
+  R.segA = el('div', 'abs', R.seg, { left: '6px', top: '6px', width: '276px', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', font: '600 25px var(--ui)', color: 'var(--s700)' }, `<span class="ico"></span>Uyimizga kelib`);
+  el('div', 'abs', R.seg, { left: '286px', top: '6px', width: '276px', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'center', font: '600 25px var(--ui)', color: 'var(--s700)' }, 'Enaga uyida');
+  R.btnB = el('div', 'abs btn', S, { left: '40px', top: '624px', width: '572px', height: '86px', transformOrigin: '50% 50%' }, `${icon.search(30, '#fff')}<span>Koʻrsatish</span>`);
+  R.res = el('div', 'abs', S, { left: 0, top: '170px', width: '652px', height: '700px', background: 'var(--s50)' });
+  el('div', 'abs', R.res, { left: '44px', top: '10px', display: 'flex', gap: '10px' }, `<span class="badge">${B.ic.pin(20, '#025a5f')}Toshkent · Yunusobod</span><span class="badge">${B.ic.home(20, '#025a5f')}Uyga kelib</span>`);
+  const ppl = [['Malika', 'M', '#018186', 'Tajriba 6 yil', true], ['Gulnora', 'G', '#c55205', 'Tajriba 4 yil', false], ['Sevara', 'S', '#3eb5ba', 'Tajriba 9 yil', true]];
+  R.cards = ppl.map(([n, i0, c, exp, ver], i) => {
+    const cd = el('div', 'card', R.res, { left: '30px', top: (80 + i * 206) + 'px', width: '592px', height: '186px' });
+    el('div', 'abs av', cd, { left: '24px', top: '26px', width: '96px', height: '96px', background: c }, i0);
+    el('div', 'abs', cd, { left: '142px', top: '26px', font: '900 34px var(--head)', color: 'var(--s900)' }, n);
+    el('div', 'abs', cd, { left: '142px', top: '72px', font: '500 22px var(--ui)', color: 'var(--s500)' }, 'Yunusobod · uyingizga kelib');
+    el('div', 'abs', cd, { left: '142px', top: '114px', display: 'flex', gap: '10px' }, (ver ? `<span class="badge">${icon.check(20, '#018186', 3.4)}Tasdiqlangan</span>` : '') + `<span class="badge apr">${exp}</span>`);
+    return cd;
+  });
+  R.cur = E.mkCursor(Bl);
+  [5.0, 5.35].forEach(t => cue(t, 'tap', .42)); cue(5.4, 'shimmer', .4); cue(4.7, 'whoosh', .45);
+  cue(5.98, 'click', .8); cue(6.05, 'select', .5); cue(6.63, 'click', .8); cue(6.7, 'select', .5);
+  cue(6.95, 'swish', .3); [7.2, 7.5, 7.85].forEach(t => cue(t, 'tap', .4)); cue(7.9, 'shimmer', .45);
+  cue(7.68, 'click', .85); cue(7.73, 'pop_soft', .5); cue(8.28, 'click', .85); cue(8.35, 'confirm', .55);
+  cue(8.45, 'whoosh_s', .4); [8.6, 8.75, 8.9].forEach((t, i) => cue(t, 'pop_soft', .4, (i - 1) * .3));
+  cue(10.0, 'transition', 1); cue(10.65, 'sub', .45);
+
+  /* ===== C: verified badge + safe chat ===== */
+  R.capC1 = caption(C, [{ cls: 'l-sans', html: 'Pasport bilan' }, { cls: 'l-serif', html: '<span class="acc">tasdiqlangan</span> nishon', style: { fontSize: '72px', marginTop: '6px' } }], 300);
+  R.capC2 = caption(C, [{ cls: 'l-sans', html: 'Ichki' }, { cls: 'l-serif', html: '<span class="acc">xavfsiz</span> chat', style: { fontSize: '84px', marginTop: '6px' } }], 300);
+  R.prof = el('div', 'card', C, { left: '130px', top: '590px', width: '820px', height: '330px' });
+  el('div', 'abs av', R.prof, { left: '34px', top: '34px', width: '140px', height: '140px', background: 'linear-gradient(135deg,#3eb5ba,#018186)', fontSize: '60px' }, 'M');
+  el('div', 'abs', R.prof, { left: '204px', top: '38px', font: '900 50px var(--head)', color: 'var(--s900)', letterSpacing: '-1px' }, 'Malika');
+  el('div', 'abs', R.prof, { left: '204px', top: '102px', font: '500 26px var(--ui)', color: 'var(--s500)' }, 'Yunusobod · uyga kelib qaraydi');
+  R.badgeBig = el('div', 'abs badge', R.prof, { left: '204px', top: '146px', height: '56px', fontSize: '27px', padding: '0 22px', transformOrigin: '20% 50%' }, `${E.icon.verified(32).replace(/#3b95f6/g, '#018186')}Tasdiqlangan`);
+  R.bRing = el('div', 'abs', R.prof, { left: '204px', top: '146px', width: '232px', height: '56px', borderRadius: '30px', border: '3px solid #3eb5ba', transformOrigin: '50% 50%' });
+  el('div', 'abs', R.prof, { left: '34px', top: '222px', width: '752px', height: '2px', background: 'var(--s200)' });
+  R.modRow = el('div', 'abs', R.prof, { left: '34px', top: '248px', display: 'flex', alignItems: 'center', gap: '14px', font: '600 25px var(--ui)', color: 'var(--t700)' }, `${B.ic.shield(34, '#018186')}<span>Pasportni moderator tekshiradi</span>`);
+  R.chat = el('div', 'card', C, { left: '130px', top: '960px', width: '820px', height: '480px', overflow: 'hidden' });
+  el('div', 'abs', R.chat, { left: '28px', top: '22px', display: 'flex', alignItems: 'center', gap: '16px' }, `<div class="av" style="width:56px;height:56px;font-size:26px;background:linear-gradient(135deg,#3eb5ba,#018186)">M</div><div><div style="font:800 28px var(--head);color:var(--s900)">Malika</div><div style="display:flex;align-items:center;gap:6px;font:500 20px var(--ui);color:var(--s500)">${B.ic.lock(18, '#777169')}Sayt ichidagi chat</div></div>`);
+  el('div', 'abs', R.chat, { left: 0, top: '100px', width: '820px', height: '2px', background: 'var(--s200)' });
+  R.warn = el('div', 'abs', R.chat, { left: '28px', top: '118px', width: '764px', height: '66px', borderRadius: '18px', background: 'var(--honey50)', border: '2px solid var(--honey200)', display: 'flex', alignItems: 'center', gap: '14px', padding: '0 20px', font: '600 25px var(--ui)', color: 'var(--honey800)', transformOrigin: '50% 50%' }, `${B.ic.warn(30)}<span>Maslahat: oldindan pul oʻtkazmang</span>`);
+  R.out = el('div', 'bub', R.chat, { right: '28px', left: 'auto', top: '200px', background: 'var(--t500)', color: '#fff', fontSize: '26px', padding: '16px 24px', borderBottomRightRadius: '8px', transformOrigin: '100% 100%' }, 'Assalomu alaykum! Suhbatlashsak boʻladimi?');
+  R.dots = el('div', 'bub', R.chat, { left: '28px', top: '296px', background: 'var(--s100)', padding: '18px 24px', display: 'flex', gap: '8px' }, [0, 1, 2].map(() => `<span style="width:12px;height:12px;border-radius:50%;background:#a9a49c;display:inline-block"></span>`).join(''));
+  R.inc = el('div', 'bub', R.chat, { left: '28px', top: '296px', background: 'var(--s100)', color: 'var(--s900)', fontSize: '26px', padding: '16px 24px', borderBottomLeftRadius: '8px', transformOrigin: '0 100%' }, 'Va alaykum assalom! Albatta 😊'.replace(' 😊', ''));
+  R.inBar = el('div', 'abs', R.chat, { left: '28px', top: '388px', width: '660px', height: '70px', borderRadius: '35px', background: 'var(--s100)', border: '2px solid var(--s200)' });
+  R.inTx = el('div', 'abs', R.inBar, { left: '24px', top: '17px', font: '400 25px var(--ui)', color: 'var(--s900)', whiteSpace: 'nowrap' });
+  R.sendB = el('div', 'abs', R.chat, { left: '710px', top: '388px', width: '70px', height: '70px', borderRadius: '50%', background: 'var(--t500)', display: 'flex', alignItems: 'center', justifyContent: 'center', transformOrigin: '50% 50%' }, B.ic.send(30));
+  R.MSG = 'Assalomu alaykum! Suhbatlashsak boʻladimi?';
+  [10.75, 11.1].forEach(t => cue(t, 'tap', .42)); cue(10.6, 'whoosh', .45); cue(11.1, 'shimmer', .4);
+  cue(11.55, 'pop', .75); cue(11.6, 'sparkle', .55); cue(12.0, 'tick', .5);
+  cue(12.75, 'swish', .3); [12.95, 13.25].forEach(t => cue(t, 'tap', .42)); cue(13.3, 'shimmer', .4); cue(12.85, 'whoosh_s', .4);
+  cueTyping(13.5, R.MSG, 26, .45, 'mech');
+  cue(15.2, 'click', .7); cue(15.25, 'send', .7); cue(15.5, 'pop_soft', .35); cue(15.95, 'bubble', .5); cue(16.3, 'open', .5); cue(16.35, 'pop', .5);
+  cue(17.0, 'transition', 1); cue(17.65, 'sub', .45);
+
+  /* ===== D: end card ===== */
+  R.markD = B.mark(D, 230, 425, 520);
+  R.ringsD = B.rings(D, 3, 540, 640, 120, 'rgba(254,179,142,.85)');
+  R.word = el('div', 'abs', D, { left: 0, top: '790px', width: '1080px', textAlign: 'center', font: '900 120px var(--head)', letterSpacing: '-3px', color: '#fff' }, 'enagalar<span style="color:var(--s400);font-weight:800">.uz</span>');
+  R.capD = caption(D, [{ cls: 'l-serif', html: 'Enaga <span class="acc">toping</span>', style: { fontSize: '84px' } }], 985);
+  R.cta = el('div', 'abs btn apr', D, { left: '170px', top: '1130px', width: '740px', height: '116px', borderRadius: '58px', font: '900 46px var(--head)', boxShadow: '0 20px 60px rgba(197,82,5,.45),0 0 0 2px rgba(254,179,142,.4)', transformOrigin: '50% 50%' }, `<span>enagalar.uz</span><svg viewBox="0 0 24 24" width="44" height="44"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`);
+  R.chips = [[`${icon.check(26, '#81d3d5', 3.4)}<span>Eʼlon joylash bepul</span>`, 120], [`${B.ic.plane(26, '#81d3d5')}<span>Telegram orqali kirish</span>`, 548]].map(([h, x]) => el('div', 'abs pill', D, { left: x + 'px', top: '1300px', fontSize: '26px', padding: '14px 22px' }, h));
+  R.burstD = B.burst(D, 26, 3); R.curD = E.mkCursor(D);
+  cue(17.6, 'riser_soft', .4); cue(17.8, 'swish', .4); cue(17.9, 'pop_soft', .5); cue(18.1, 'pop', .7); cue(18.2, 'magic', .6); cue(18.2, 'sparkle', .45);
+  cue(18.75, 'reveal', .6); cue(19.25, 'tap', .45); cue(19.3, 'shimmer', .45); cue(19.55, 'pop', .6);
+  cue(19.85, 'pop_soft', .4, -.3); cue(19.97, 'pop_soft', .4, .3);
+  cue(20.75, 'click', .9); cue(20.8, 'success', .8); cue(20.85, 'sparkle', .55);
+  for (let i = 0; i < 6; i++) cue(20.9 + i * .08, 'bubble', .28, (rnd(i + 9) - .5) * 1.2);
+  cue(21.4, 'chime', .4);
+  B.fixApos(stage);
+};
+scene.update = (t) => {
+  const c = cam(t); R.bg.update(t, c.x, c.y);
+  R.world.style.transform = `translate(540px,960px) scale(${c.z}) translate(${-c.x - 540}px,${-c.y - 960}px)`;
+  R.world.style.filter = c.blur > .1 ? `blur(${c.blur.toFixed(2)}px)` : 'none';
+  const vis = k => Math.abs(POS[k][0] - c.x) < 1180 && Math.abs(POS[k][1] - c.y) < 2000;
+  ['A', 'B', 'C', 'D'].forEach(k => R[k].style.display = vis(k) ? '' : 'none');
+  R.bg.warm.style.opacity = (.22 * p(t, 17.5, 1.2)).toFixed(3);
+  if (vis('A')) {
+    tf(R.line, { sx: p(t, .0, .45, 'outExpo'), o: 1 - p(t, .55, .35) });
+    B.updRings(R.ringsA, t, .2, 2.6);
+    const fq = clamp((t - .25) / .45); tf(R.flash, { s: .3 + 1.2 * E.ease.outCubic(fq), o: fq > 0 && fq < 1 ? Math.sin(Math.PI * fq) * .75 : 0 });
+    R.bubs.forEach(({ b, r, i }) => {
+      const q = p(t, .45 + i * .16, .55, 'outBack'), out = p(t, 2.8 + i * .03, .45, 'inCubic'), dir = (b.offsetLeft + 150 < 540 ? -1 : 1);
+      tf(b, { x: dir * out * 700, y: Math.sin(t * 1.6 + i) * 7 - (1 - q) * 30, s: (.6 + .4 * q), r: r + Math.sin(t * 1.2 + i) * 1.5, o: p(t, .45 + i * .16, .15) * (1 - out), blur: out * 14 });
+    });
+    animWords(R.cap1, t, .35, 2.62, { lineStarts: [.35, .7, 1.0] });
+    const mp = p(t, 3.0, .55, 'spring'); tf(R.markA.w, { s: mp, y: Math.sin(t * 2) * 6, o: p(t, 3.0, .1) });
+    R.markA.set(p(t, 3.0, .6, 'outCubic'), p(t, 3.15, .4, 'outBack'), p(t, 3.3, .45, 'outBack'));
+    animWords(R.cap2, t, 3.15, undefined, { lineStarts: [3.15, 3.4, 3.8] });
+  }
+  if (vis('B')) {
+    animWords(R.capB1, t, 5.0, 6.8, { lineStarts: [5.0, 5.35] });
+    animWords(R.capB2, t, 7.2, undefined, { lineStarts: [7.2, 7.5, 7.85] });
+    const ph = p(t, 4.55, .9, 'outExpo'); tf(R.phone, { y: (1 - ph) * 160 + Math.sin(t * 1.4) * 5, o: ph, s: .94 + .06 * ph });
+    tf(R.hdr, { y: (1 - p(t, 5.0, .6, 'outExpo')) * 30, o: p(t, 5.0, .3) });
+    const setF = (F, tc, val) => {
+      const on = t >= tc; F.v.textContent = on ? val : 'Tanlang'; F.v.style.color = on ? 'var(--s900)' : 'var(--s400)'; F.v.style.fontWeight = on ? 600 : 500;
+      F.f.classList.toggle('on', t >= tc - .08 && t < tc + .5);
+      const k = t >= tc && t < tc + .3 ? Math.sin(Math.PI * (t - tc) / .3) : 0; tf(F.v, { s: 1 + .06 * k });
+    };
+    setF(R.f1, 6.05, 'Toshkent shahri'); setF(R.f2, 6.7, 'Yunusobod tumani');
+    const sOn = p(t, 7.72, .35, 'outBack'); tf(R.segOn, { o: p(t, 7.72, .12), s: .85 + .15 * sOn });
+    R.segA.style.color = t >= 7.75 ? '#fff' : 'var(--s700)';
+    R.segA.firstChild.innerHTML = t >= 7.75 ? B.ic.home(26, '#fff') : B.ic.home(26, '#504941');
+    const bp = t > 8.25 && t < 8.5 ? Math.sin(Math.PI * (t - 8.25) / .25) : 0; tf(R.btnB, { s: 1 - .05 * bp });
+    const rq = p(t, 8.4, .6, 'outExpo'); tf(R.res, { y: (1 - rq) * 720, o: p(t, 8.4, .1) });
+    R.cards.forEach((cd, i) => { const q = p(t, 8.55 + i * .15, .6, 'outBack'); tf(cd, { y: (1 - q) * 80, o: p(t, 8.55 + i * .15, .2), s: .92 + .08 * q }); });
+    R.cur.update(t, [[5.4, 1000, 1520], [5.95, 720, 875, 'outCubic'], [6.1, 720, 875], [6.6, 720, 1005, 'outCubic'], [7.2, 720, 1005], [7.65, 420, 1140, 'outCubic'], [7.85, 420, 1140], [8.25, 560, 1262, 'outCubic'], [8.6, 560, 1262], [9.1, 980, 1500, 'inCubic']], [6.0, 6.65, 7.7, 8.3], [5.4, 9.0]);
+  }
+  if (vis('C')) {
+    animWords(R.capC1, t, 10.75, 12.55, { lineStarts: [10.75, 11.1] });
+    animWords(R.capC2, t, 12.95, undefined, { lineStarts: [12.95, 13.25] });
+    const pc = p(t, 10.55, .8, 'outExpo'); tf(R.prof, { y: (1 - pc) * 90 + Math.sin(t * 1.3) * 4, o: pc, blur: (1 - pc) * 10 });
+    const bq = p(t, 11.55, .55, 'outBack'); tf(R.badgeBig, { s: lerp(1.5, 1, bq) * (bq > 0 ? 1 : 0), o: p(t, 11.55, .1) });
+    const rr = clamp((t - 11.65) / .7); tf(R.bRing, { s: 1 + .35 * E.ease.outCubic(rr), o: rr > 0 && rr < 1 ? (1 - rr) * .9 : 0 });
+    const mq = p(t, 12.0, .55, 'outExpo'); tf(R.modRow, { x: (1 - mq) * -30, o: mq });
+    const cc = p(t, 12.85, .8, 'outExpo'); tf(R.chat, { y: (1 - cc) * 120, o: cc, blur: (1 - cc) * 10 });
+    const sent = t >= 15.25;
+    R.inTx.innerHTML = sent ? '<span style="color:#a9a49c">Xabar yozing…</span>' : (t < 13.45 ? '<span style="color:#a9a49c">Xabar yozing…</span>' : typed(R.MSG, t, 13.5, 26) + B.caret(t));
+    const sp = t > 15.15 && t < 15.4 ? Math.sin(Math.PI * (t - 15.15) / .25) : 0; tf(R.sendB, { s: 1 - .14 * sp });
+    const oq = p(t, 15.25, .5, 'outBack'); tf(R.out, { s: .6 + .4 * oq, o: p(t, 15.25, .12) });
+    const dq = win(t, 15.5, 15.9, .2, .1); tf(R.dots, { o: dq, s: .8 + .2 * dq }); [...R.dots.children].forEach((d, i) => tf(d, { y: -6 * Math.max(0, Math.sin(t * 9 - i * .8)) }));
+    const iq = p(t, 15.95, .5, 'outBack'); tf(R.inc, { s: .6 + .4 * iq, o: p(t, 15.95, .12) });
+    const wq = p(t, 16.3, .55, 'outBack'); tf(R.warn, { s: .8 + .2 * wq, o: p(t, 16.3, .15) });
+  }
+  if (vis('D')) {
+    const ms = p(t, 17.3, .7, 'spring'); tf(R.markD.w, { s: ms, y: Math.sin(t * 1.8) * 6, o: p(t, 17.3, .1) });
+    R.markD.set(p(t, 17.35, .75, 'inOutCubic'), p(t, 17.9, .45, 'outBack'), p(t, 18.1, .5, 'outBack'));
+    B.updRings(R.ringsD, t, 18.15, 2.2);
+    const wq = p(t, 18.7, .8, 'outExpo'); tf(R.word, { y: (1 - wq) * 40, o: wq, blur: (1 - wq) * 18, s: 1.06 - .06 * wq });
+    animWords(R.capD, t, 19.25, undefined, { lineStarts: [19.25] });
+    const cq = p(t, 19.55, .6, 'outBack'), press = t > 20.7 && t < 20.95 ? Math.sin(Math.PI * (t - 20.7) / .25) : 0;
+    tf(R.cta, { s: (.6 + .4 * cq) * (1 - .05 * press) * (1 + .018 * Math.sin(t * 5) * (t > 20.2 ? 1 : 0)), o: p(t, 19.55, .15) });
+    R.chips.forEach((ch, i) => { const q = p(t, 19.85 + i * .12, .5, 'outBack'); tf(ch, { s: .7 + .3 * q, o: p(t, 19.85 + i * .12, .15), y: Math.sin(t * 1.5 + i) * 4 }); });
+    B.updBurst(R.burstD, t, 20.8, 540, 1188, 3);
+    R.curD.update(t, [[20.0, 1000, 1560], [20.65, 640, 1200, 'outCubic'], [21.4, 640, 1200], [22.0, 980, 1500, 'inCubic']], [20.75], [20.0, 21.9]);
+  }
+};
+B.loadFonts().then(() => E.run(scene));
+</script></body></html>

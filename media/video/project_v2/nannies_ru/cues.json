@@ -1,0 +1,381 @@
+{
+ "meta": {
+  "duration": 17.8,
+  "fps": 30,
+  "vo": []
+ },
+ "cues": [
+  {
+   "t": 0,
+   "name": "whoosh",
+   "gain": 0.35,
+   "pan": 0
+  },
+  {
+   "t": 0.02,
+   "name": "tap",
+   "gain": 0.4,
+   "pan": 0
+  },
+  {
+   "t": 0.6,
+   "name": "shimmer",
+   "gain": 0.35,
+   "pan": 0
+  },
+  {
+   "t": 1,
+   "name": "pop_soft",
+   "gain": 0.35,
+   "pan": 0
+  },
+  {
+   "t": 2.5,
+   "name": "whoosh_s",
+   "gain": 0.4,
+   "pan": 0
+  },
+  {
+   "t": 2.52,
+   "name": "tap",
+   "gain": 0.4,
+   "pan": 0
+  },
+  {
+   "t": 2.9,
+   "name": "click",
+   "gain": 0.7,
+   "pan": 0
+  },
+  {
+   "t": 2.95,
+   "name": "pop_soft",
+   "gain": 0.35,
+   "pan": 0
+  },
+  {
+   "t": 3.2,
+   "name": "click",
+   "gain": 0.8,
+   "pan": 0
+  },
+  {
+   "t": 3.22,
+   "name": "paper",
+   "gain": 0.5,
+   "pan": 0
+  },
+  {
+   "t": 3.25,
+   "name": "shimmer",
+   "gain": 0.3,
+   "pan": 0
+  },
+  {
+   "t": 4.8,
+   "name": "click",
+   "gain": 0.9,
+   "pan": 0
+  },
+  {
+   "t": 4.83,
+   "name": "magic",
+   "gain": 0.7,
+   "pan": 0
+  },
+  {
+   "t": 4.88,
+   "name": "sparkle",
+   "gain": 0.5,
+   "pan": 0
+  },
+  {
+   "t": 5.1,
+   "name": "whoosh_s",
+   "gain": 0.35,
+   "pan": 0
+  },
+  {
+   "t": 5.1,
+   "name": "tap",
+   "gain": 0.4,
+   "pan": 0
+  },
+  {
+   "t": 5.4,
+   "name": "tick",
+   "gain": 0.55,
+   "pan": 0
+  },
+  {
+   "t": 5.42,
+   "name": "pop_soft",
+   "gain": 0.35,
+   "pan": 0
+  },
+  {
+   "t": 5.7,
+   "name": "tick",
+   "gain": 0.55,
+   "pan": 0
+  },
+  {
+   "t": 5.72,
+   "name": "pop_soft",
+   "gain": 0.35,
+   "pan": 0
+  },
+  {
+   "t": 6,
+   "name": "tick",
+   "gain": 0.55,
+   "pan": 0
+  },
+  {
+   "t": 6.02,
+   "name": "pop_soft",
+   "gain": 0.35,
+   "pan": 0
+  },
+  {
+   "t": 6.3,
+   "name": "tick",
+   "gain": 0.55,
+   "pan": 0
+  },
+  {
+   "t": 6.32,
+   "name": "pop_soft",
+   "gain": 0.35,
+   "pan": 0
+  },
+  {
+   "t": 6.65,
+   "name": "success",
+   "gain": 0.5,
+   "pan": 0
+  },
+  {
+   "t": 7.2,
+   "name": "whoosh_s",
+   "gain": 0.4,
+   "pan": 0
+  },
+  {
+   "t": 7.22,
+   "name": "tap",
+   "gain": 0.4,
+   "pan": 0
+  },
+  {
+   "t": 7.3,
+   "name": "pop",
+   "gain": 0.6,
+   "pan": 0
+  },
+  {
+   "t": 7.4,
+   "name": "count",
+   "gain": 0.22,
+   "pan": 0
+  },
+  {
+   "t": 7.465,
+   "name": "count",
+   "gain": 0.23,
+   "pan": 0
+  },
+  {
+   "t": 7.53,
+   "name": "count",
+   "gain": 0.24,
+   "pan": 0
+  },
+  {
+   "t": 7.595,
+   "name": "count",
+   "gain": 0.25,
+   "pan": 0
+  },
+  {
+   "t": 7.66,
+   "name": "count",
+   "gain": 0.26,
+   "pan": 0
+  },
+  {
+   "t": 7.725,
+   "name": "count",
+   "gain": 0.27,
+   "pan": 0
+  },
+  {
+   "t": 7.79,
+   "name": "count",
+   "gain": 0.28,
+   "pan": 0
+  },
+  {
+   "t": 7.855,
+   "name": "count",
+   "gain": 0.29000000000000004,
+   "pan": 0
+  },
+  {
+   "t": 7.92,
+   "name": "count",
+   "gain": 0.3,
+   "pan": 0
+  },
+  {
+   "t": 7.985,
+   "name": "count",
+   "gain": 0.31,
+   "pan": 0
+  },
+  {
+   "t": 8.05,
+   "name": "count",
+   "gain": 0.32,
+   "pan": 0
+  },
+  {
+   "t": 8.115,
+   "name": "count",
+   "gain": 0.33,
+   "pan": 0
+  },
+  {
+   "t": 8.2,
+   "name": "chime",
+   "gain": 0.55,
+   "pan": 0
+  },
+  {
+   "t": 8.25,
+   "name": "sparkle",
+   "gain": 0.45,
+   "pan": 0
+  },
+  {
+   "t": 10.7,
+   "name": "whoosh_s",
+   "gain": 0.4,
+   "pan": 0
+  },
+  {
+   "t": 10.72,
+   "name": "tap",
+   "gain": 0.4,
+   "pan": 0
+  },
+  {
+   "t": 10.8,
+   "name": "tap",
+   "gain": 0.35,
+   "pan": 0
+  },
+  {
+   "t": 11.05,
+   "name": "open",
+   "gain": 0.45,
+   "pan": -0.2
+  },
+  {
+   "t": 11.07,
+   "name": "bubble",
+   "gain": 0.35,
+   "pan": 0
+  },
+  {
+   "t": 11.45,
+   "name": "open",
+   "gain": 0.45,
+   "pan": 0.2
+  },
+  {
+   "t": 11.47,
+   "name": "bubble",
+   "gain": 0.35,
+   "pan": 0
+  },
+  {
+   "t": 12.8,
+   "name": "error",
+   "gain": 0.3,
+   "pan": 0
+  },
+  {
+   "t": 12.82,
+   "name": "pop",
+   "gain": 0.6,
+   "pan": 0
+  },
+  {
+   "t": 14.6,
+   "name": "whoosh",
+   "gain": 0.45,
+   "pan": 0
+  },
+  {
+   "t": 14.65,
+   "name": "pop",
+   "gain": 0.6,
+   "pan": 0
+  },
+  {
+   "t": 14.7,
+   "name": "magic",
+   "gain": 0.45,
+   "pan": 0
+  },
+  {
+   "t": 14.8,
+   "name": "tap",
+   "gain": 0.45,
+   "pan": 0
+  },
+  {
+   "t": 14.95,
+   "name": "pop",
+   "gain": 0.55,
+   "pan": 0
+  },
+  {
+   "t": 15.1,
+   "name": "reveal",
+   "gain": 0.45,
+   "pan": 0
+  },
+  {
+   "t": 15.25,
+   "name": "pop_soft",
+   "gain": 0.35,
+   "pan": 0
+  },
+  {
+   "t": 15.35,
+   "name": "pop_soft",
+   "gain": 0.35,
+   "pan": 0
+  },
+  {
+   "t": 16.1,
+   "name": "click",
+   "gain": 0.9,
+   "pan": 0
+  },
+  {
+   "t": 16.15,
+   "name": "success",
+   "gain": 0.7,
+   "pan": 0
+  },
+  {
+   "t": 16.18,
+   "name": "sparkle",
+   "gain": 0.5,
+   "pan": 0
+  }
+ ]
+}

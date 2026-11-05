@@ -1,0 +1,284 @@
+[
+ {
+  "name": "parents",
+  "lang": "uz",
+  "tx": "TXP",
+  "scripts": [
+   "parents.js",
+   "tx_parents.js"
+  ],
+  "scenes": [
+   [
+    "PX.hook",
+    0,
+    7.2,
+    "{sw:3.5}"
+   ],
+   [
+    "PX.filter",
+    7.2,
+    12.65,
+    null
+   ],
+   [
+    "PX.verify",
+    12.65,
+    16.35,
+    null
+   ],
+   [
+    "PX.chat",
+    16.35,
+    20.1,
+    "{warn:2.3}"
+   ],
+   [
+    "PX.bonus",
+    20.1,
+    23.0,
+    null
+   ],
+   [
+    "PX.end",
+    23.0,
+    26.0,
+    null
+   ]
+  ]
+ },
+ {
+  "name": "parents_short",
+  "lang": "uz",
+  "tx": "TXP",
+  "scripts": [
+   "parents.js",
+   "tx_parents.js"
+  ],
+  "scenes": [
+   [
+    "PX.priceHook",
+    0,
+    1.4,
+    null
+   ],
+   [
+    "PX.prices",
+    1.4,
+    4.8,
+    null
+   ],
+   [
+    "PX.features",
+    4.8,
+    7.6,
+    null
+   ],
+   [
+    "PX.end",
+    7.6,
+    11.0,
+    "{short:1}"
+   ]
+  ]
+ },
+ {
+  "name": "parents_ru",
+  "lang": "ru",
+  "tx": "TXP",
+  "scripts": [
+   "parents.js",
+   "tx_parents.js"
+  ],
+  "scenes": [
+   [
+    "PX.hook",
+    0,
+    7.1,
+    "{sw:3.6}"
+   ],
+   [
+    "PX.filter",
+    7.1,
+    12.0,
+    null
+   ],
+   [
+    "PX.verify",
+    12.0,
+    15.6,
+    null
+   ],
+   [
+    "PX.chat",
+    15.6,
+    19.3,
+    "{warn:2.0}"
+   ],
+   [
+    "PX.bonus",
+    19.3,
+    22.7,
+    null
+   ],
+   [
+    "PX.end",
+    22.7,
+    25.7,
+    null
+   ]
+  ]
+ },
+ {
+  "name": "nannies",
+  "lang": "uz",
+  "tx": "TXN",
+  "scripts": [
+   "nannies.js",
+   "tx_nannies.js"
+  ],
+  "scenes": [
+   [
+    "NX.poster",
+    0,
+    3.6,
+    null
+   ],
+   [
+    "NX.ai",
+    3.6,
+    8.2,
+    "{paste:.6,tap:1.95,form:2.25,capB:2.35,fills:[2.6,2.9,3.2,3.5]}"
+   ],
+   [
+    "NX.bonus",
+    8.2,
+    11.2,
+    null
+   ],
+   [
+    "NX.fam",
+    11.2,
+    15.3,
+    "{warn:2.05}"
+   ],
+   [
+    "NX.end",
+    15.3,
+    18.6,
+    null
+   ]
+  ]
+ },
+ {
+  "name": "nannies_4x5",
+  "H": 1350,
+  "lang": "uz",
+  "tx": "TXN",
+  "scripts": [
+   "nannies.js",
+   "tx_nannies.js"
+  ],
+  "scenes": [
+   [
+    "NX.poster",
+    0,
+    3.6,
+    null
+   ],
+   [
+    "NX.ai",
+    3.6,
+    8.2,
+    "{paste:.6,tap:1.95,form:2.25,capB:2.35,fills:[2.6,2.9,3.2,3.5]}"
+   ],
+   [
+    "NX.bonus",
+    8.2,
+    11.2,
+    null
+   ],
+   [
+    "NX.fam",
+    11.2,
+    15.3,
+    "{warn:2.05}"
+   ],
+   [
+    "NX.end",
+    15.3,
+    18.6,
+    null
+   ]
+  ]
+ },
+ {
+  "name": "nannies_short",
+  "lang": "uz",
+  "tx": "TXN",
+  "scripts": [
+   "nannies.js",
+   "tx_nannies.js"
+  ],
+  "scenes": [
+   [
+    "NX.ai",
+    0,
+    4.8,
+    "{single:1,paste:.5,tap:1.6,form:1.9,fills:[2.2,2.5,2.8,3.1]}"
+   ],
+   [
+    "NX.bonus",
+    4.8,
+    7.4,
+    null
+   ],
+   [
+    "NX.end",
+    7.4,
+    10.8,
+    "{short:1}"
+   ]
+  ]
+ },
+ {
+  "name": "nannies_ru",
+  "lang": "ru",
+  "tx": "TXN",
+  "scripts": [
+   "nannies.js",
+   "tx_nannies.js"
+  ],
+  "scenes": [
+   [
+    "NX.poster",
+    0,
+    2.5,
+    null
+   ],
+   [
+    "NX.ai",
+    2.5,
+    7.2,
+    "{paste:.7,tap:2.3,form:2.6,capB:2.6,fills:[2.9,3.2,3.5,3.8]}"
+   ],
+   [
+    "NX.bonus",
+    7.2,
+    10.7,
+    null
+   ],
+   [
+    "NX.fam",
+    10.7,
+    14.6,
+    "{warn:2.1}"
+   ],
+   [
+    "NX.end",
+    14.6,
+    17.8,
+    null
+   ]
+  ]
+ }
+]

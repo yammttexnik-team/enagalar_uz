@@ -1,0 +1,15 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../assets/fonts.css"><link rel="stylesheet" href="../assets/base.css"><link rel="stylesheet" href="../assets/brand2.css">
+</head><body><div id="stage"></div><script>window.__H=1920;</script>
+<script src="../assets/engine.js"></script><script src="../assets/brand.js"></script><script src="../assets/lib2.js"></script>
+<script src="../assets/nannies.js"></script><script src="../assets/tx_nannies.js"></script>
+<script>
+const scene = V.timeline(18.6, [
+{start:0,end:3.6,make:(L,c,d)=>NX.poster(L,c,d,TXN.uz,{})},
+{start:3.6,end:8.2,make:(L,c,d)=>NX.ai(L,c,d,TXN.uz,{paste:.6,tap:1.95,form:2.25,capB:2.35,fills:[2.6,2.9,3.2,3.5]})},
+{start:8.2,end:11.2,make:(L,c,d)=>NX.bonus(L,c,d,TXN.uz,{})},
+{start:11.2,end:15.3,make:(L,c,d)=>NX.fam(L,c,d,TXN.uz,{warn:2.05})},
+{start:15.3,end:18.6,make:(L,c,d)=>NX.end(L,c,d,TXN.uz,{})}
+]);
+V.start(scene);
+</script></body></html>
