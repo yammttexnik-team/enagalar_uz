@@ -29,6 +29,7 @@ class ImportedListingInfolist
                 TextEntry::make('region.name_uz')->label('Viloyat')->placeholder('—'),
                 TextEntry::make('district.name_uz')->label('Tuman')->placeholder('—'),
                 TextEntry::make('work_format')->label('Ish formati')->badge()->placeholder('—'),
+                TextEntry::make('care_location')->label('Qayerda qaraladi')->badge()->placeholder('—'),
                 TextEntry::make('schedule')->label('Ish jadvali')->placeholder('—'),
                 TextEntry::make('price_min')->label('Narx / maosh (dan)')->numeric(thousandsSeparator: ' ')->suffix(" so'm")->placeholder('—'),
                 TextEntry::make('price_max')->label('Narx / maosh (gacha)')->numeric(thousandsSeparator: ' ')->suffix(" so'm")->placeholder('—'),

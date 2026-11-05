@@ -117,6 +117,7 @@ class MyImportedClaimController extends Controller
             'title' => $listing->title ?: 'Enaga kerak',
             'description' => $listing->description ?: ($listing->title ?: 'Enaga kerak'),
             'work_format' => $listing->work_format ?? WorkFormat::FullTime,
+            'care_location' => $listing->care_location,
             'schedule' => $listing->schedule,
             'salary_min' => $listing->price_min,
             'salary_max' => $listing->price_max,
@@ -149,6 +150,7 @@ class MyImportedClaimController extends Controller
             'bio' => $listing->description,
             'birth_year' => $listing->person_age ? (int) now()->year - $listing->person_age : null,
             'work_formats' => $listing->work_format ? [$listing->work_format->value] : null,
+            'care_locations' => $listing->care_location ? [$listing->care_location->value] : null,
             'languages' => $listing->languages,
             'age_groups' => $listing->age_groups,
         ];

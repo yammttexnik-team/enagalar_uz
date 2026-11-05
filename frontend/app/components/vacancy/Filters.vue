@@ -13,6 +13,7 @@ const districts = computed(() => props.regions.find(r => r.slug === props.filter
 const districtItems = computed(() => [{ label: t('search.allDistricts'), value: ALL }, ...districts.value.map(d => ({ label: localizedName(d.name), value: d.slug }))])
 const languageItems = computed(() => [{ label: t('search.anyLanguage'), value: ALL }, ...LANGUAGES.map(l => ({ label: enumLabel('language', l), value: l }))])
 const unitItems = computed(() => PRICE_UNITS.map(u => ({ label: enumLabel('priceUnit', u), value: u })))
+const careItems = computed(() => CARE_LOCATIONS.map(c => ({ label: enumLabel('careLocation', c), value: c })))
 const formatItems = computed(() => WORK_FORMATS.map(f => ({ label: enumLabel('workFormat', f), value: f })))
 const ageItems = computed(() => [{ label: t('vacancy.anyAge'), value: ALL }, ...Array.from({ length: 11 }, (_, i) => ({ label: childAge(i), value: String(i) }))])
 
@@ -36,6 +37,10 @@ function setSalary(e: Event) {
         <USwitch :model-value="bool('is_urgent')" :label="t('vacancy.urgentOnly')" @update:model-value="v => emit('change', { is_urgent: v ? '1' : null })" />
         <USwitch :model-value="bool('live_in')" :label="t('vacancy.liveIn')" @update:model-value="v => emit('change', { live_in: v ? '1' : null })" />
       </div>
+    </SearchField>
+
+    <SearchField :label="t('search.careLocation')">
+      <SearchChips :label="t('search.careLocation')" :items="careItems" :model-value="filters.care_location" @update:model-value="v => emit('change', { care_location: v })" />
     </SearchField>
 
     <SearchField :label="t('search.workFormat')">

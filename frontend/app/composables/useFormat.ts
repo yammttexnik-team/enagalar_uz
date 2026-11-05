@@ -1,4 +1,5 @@
 export const WORK_FORMATS = ['hourly', 'daily', 'full_time', 'live_in'] as const
+export const CARE_LOCATIONS = ['family_home', 'nanny_home'] as const
 export const LANGUAGES = ['uz', 'ru', 'en', 'tg', 'kk'] as const
 export const AGE_GROUPS = ['infant', 'toddler', 'preschool', 'school'] as const
 export const PRICE_UNITS = ['hour', 'day', 'month'] as const
@@ -67,7 +68,7 @@ export function useFormat() {
   }
 
   /** enums.<group>.<value> — notanish qiymat boʻlsa, qiymatning oʻzi. */
-  function enumLabel(group: 'workFormat' | 'language' | 'ageGroup' | 'priceUnit', value: string) {
+  function enumLabel(group: 'workFormat' | 'careLocation' | 'language' | 'ageGroup' | 'priceUnit', value: string) {
     const key = `enums.${group}.${value}`
     return te(key) ? t(key) : value
   }

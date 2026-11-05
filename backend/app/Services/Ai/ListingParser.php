@@ -4,6 +4,7 @@ namespace App\Services\Ai;
 
 use Anthropic\Client;
 use App\Enums\AgeGroup;
+use App\Enums\CareLocation;
 use App\Enums\Language;
 use App\Enums\PriceUnit;
 use App\Enums\WorkFormat;
@@ -47,6 +48,7 @@ Rules:
 - Money is in Uzbek so'm. "3 mln" = 3000000, "500 ming" = 500000, "50k" = 50000. Omit amounts given in other currencies.
 - Price/salary unit: "hour" (soatiga, в час), "day" (kuniga, в день), "month" (oyiga, в месяц).
 - Work formats: "hourly" (soatbay), "daily" (kunlik), "full_time" (to'liq kun), "live_in" (yashab ishlash, с проживанием).
+- Care location: "family_home" if the nanny goes to the family's home ("на дом", "uyga borib"); "nanny_home" if the child is cared for at the nanny's own home ("у себя дома", "oʻz uyimda qarayman", home daycare). Nanny: "care_locations" list (both if she offers both); vacancy: single "care_location" ("" if unclear).
 - Age groups (nanny): "infant" 0-1 years, "toddler" 1-3, "preschool" 3-6, "school" 6+.
 - Children ages (vacancy): whole years; babies under 1 year are 0.
 - "age" (nanny): the nanny's own age in years, only if stated. "birth_year" only if the year is stated.
@@ -192,6 +194,7 @@ TXT;
                 'price_amount' => $int('price_amount'),
                 'price_unit' => $enum('price_unit', self::values(PriceUnit::class)),
                 'work_formats' => $enums('work_formats', self::values(WorkFormat::class)),
+                'care_locations' => $enums('care_locations', self::values(CareLocation::class)),
                 'languages' => $languages,
                 'age_groups' => $enums('age_groups', self::values(AgeGroup::class)),
                 'live_in' => $bool('live_in'),
@@ -213,6 +216,7 @@ TXT;
                 'title' => $text('title', 120),
                 'description' => $text('description', 3000),
                 'work_format' => $enum('work_format', self::values(WorkFormat::class)),
+                'care_location' => $enum('care_location', self::values(CareLocation::class)),
                 'schedule' => $text('schedule', 255),
                 'salary_min' => $min,
                 'salary_max' => $max,
@@ -329,6 +333,7 @@ TXT;
                 'price_amount' => $int,
                 'price_unit' => $optionalEnum(self::values(PriceUnit::class)),
                 'work_formats' => $list($enum(self::values(WorkFormat::class))),
+                'care_locations' => $list($enum(self::values(CareLocation::class))),
                 'age_groups' => $list($enum(self::values(AgeGroup::class))),
                 'free_trial_day' => $bool,
             ] + ($skills ? ['skills' => $list($enum($skills))] : []);
@@ -337,6 +342,7 @@ TXT;
                 'title' => $str,
                 'description' => $str,
                 'work_format' => $optionalEnum(self::values(WorkFormat::class)),
+                'care_location' => $optionalEnum(self::values(CareLocation::class)),
                 'schedule' => $str,
                 'salary_min' => $int,
                 'salary_max' => $int,

@@ -22,6 +22,7 @@ class NannyProfileResource extends JsonResource
             'experience_years' => $this->experience_years,
             'price' => ['amount' => $this->price_amount, 'unit' => $this->price_unit?->value],
             'work_formats' => $this->work_formats ?? [],
+            'care_locations' => $this->care_locations ?? [],
             'languages' => $this->languages ?? [],
             'age_groups' => $this->age_groups ?? [],
             'live_in' => $this->live_in,

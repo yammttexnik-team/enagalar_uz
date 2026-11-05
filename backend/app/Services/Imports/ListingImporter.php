@@ -4,6 +4,7 @@ namespace App\Services\Imports;
 
 use Anthropic\Client;
 use App\Enums\AgeGroup;
+use App\Enums\CareLocation;
 use App\Enums\ImportedListingStatus;
 use App\Enums\Language;
 use App\Enums\PriceUnit;
@@ -73,6 +74,7 @@ Rules:
 - "price_min"/"price_max": salary (vacancy) or price (nanny). A single amount goes to price_min.
 - "price_unit": "hour" (soatiga, в час), "day" (kuniga, в день), "month" (oyiga, в месяц).
 - "work_format": "hourly" (soatbay), "daily" (kunlik), "full_time" (to'liq kun), "live_in" (yashab ishlash, с проживанием).
+- "care_location": "family_home" if the nanny goes to the family's home ("на дом", "uyga borib", "uyingizga boraman"); "nanny_home" if the child is cared for at the nanny's own home ("у себя дома", "oʻz uyimda qarayman", home daycare); "" if unclear.
 - "age_groups": "infant" 0-1 years, "toddler" 1-3, "preschool" 3-6, "school" 6+.
 - "children_ages": whole years; babies under 1 year are 0. "children_count": number of children.
 - "person_age": the nanny's own age (kind nanny) or the required nanny age (kind vacancy), only if stated.
@@ -469,6 +471,7 @@ TXT;
             'region_id' => $region?->id,
             'district_id' => $district && $district->region_id === $region?->id ? $district->id : null,
             'work_format' => $enum('work_format', WorkFormat::class),
+            'care_location' => $enum('care_location', CareLocation::class),
             'schedule' => $text('schedule', 255),
             'price_min' => $min,
             'price_max' => $max,
@@ -505,6 +508,7 @@ TXT;
             'region' => $enum([...Region::orderBy('sort')->pluck('slug')->all(), '']),
             'district' => $str,
             'work_format' => $enum([...$values(WorkFormat::class), '']),
+            'care_location' => $enum([...$values(CareLocation::class), '']),
             'schedule' => $str,
             'price_min' => $int,
             'price_max' => $int,

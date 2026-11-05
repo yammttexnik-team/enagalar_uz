@@ -25,6 +25,7 @@ const form = reactive({
   birth_year: '',
   experience_years: 0,
   work_formats: [] as string[],
+  care_locations: [] as string[],
   age_groups: [] as string[],
   languages: [] as string[],
   skills: [] as string[],
@@ -40,6 +41,7 @@ function fill(p: OwnNanny) {
   form.birth_year = digits(p.birth_year)
   form.experience_years = p.experience_years ?? 0
   form.work_formats = [...p.work_formats]
+  form.care_locations = [...(p.care_locations ?? [])]
   form.age_groups = [...p.age_groups]
   form.languages = [...p.languages]
   form.skills = p.skills.map(s => s.slug)
@@ -62,6 +64,7 @@ const submitting = ref(false)
 
 const regionItems = computed(() => regions.value.map(r => ({ label: localizedName(r.name), value: r.id })))
 const districtItems = computed(() => (regions.value.find(r => r.id === form.region_id)?.districts ?? []).map(d => ({ label: localizedName(d.name), value: d.id })))
+const careItems = computed(() => CARE_LOCATIONS.map(c => ({ label: t(`careLocation.nanny.${c}`), value: c })))
 const formatItems = computed(() => WORK_FORMATS.map(f => ({ label: enumLabel('workFormat', f), value: f })))
 const ageItems = computed(() => AGE_GROUPS.map(f => ({ label: enumLabel('ageGroup', f), value: f })))
 const langItems = computed(() => LANGUAGES.map(f => ({ label: enumLabel('language', f), value: f })))
@@ -96,7 +99,7 @@ function validateStep(n: number) {
 
 function payloadFor(n: number) {
   if (n === 1) return { region_id: form.region_id, district_id: form.district_id ?? null, birth_year: form.birth_year ? Number(form.birth_year) : null, experience_years: form.experience_years }
-  if (n === 2) return { work_formats: form.work_formats, age_groups: form.age_groups, languages: form.languages, skills: form.skills, live_in: form.live_in, free_trial_day: form.free_trial_day, price_amount: Number(form.price_amount) || null, price_unit: form.price_unit }
+  if (n === 2) return { work_formats: form.work_formats, care_locations: form.care_locations, age_groups: form.age_groups, languages: form.languages, skills: form.skills, live_in: form.live_in, free_trial_day: form.free_trial_day, price_amount: Number(form.price_amount) || null, price_unit: form.price_unit }
   return { bio: form.bio.trim() || null }
 }
 
@@ -144,7 +147,7 @@ async function applyAi(f: Record<string, any>) {
   if (typeof f.district_id === 'number') form.district_id = f.district_id
   if (typeof f.birth_year === 'number') form.birth_year = String(f.birth_year)
   if (typeof f.experience_years === 'number') form.experience_years = f.experience_years
-  for (const k of ['work_formats', 'age_groups', 'languages', 'skills'] as const) {
+  for (const k of ['work_formats', 'care_locations', 'age_groups', 'languages', 'skills'] as const) {
     if (Array.isArray(f[k]) && f[k].length) form[k] = [...f[k]]
   }
   if (typeof f.live_in === 'boolean') form.live_in = f.live_in
@@ -317,6 +320,10 @@ const summaryPlace = computed(() => {
             <UFormField :label="t('search.workFormat')" :error="err('work_formats')" required data-field="work_formats">
               <DashboardChipsMulti v-model="form.work_formats" :items="formatItems" :label="t('search.workFormat')" />
             </UFormField>
+            <UFormField :label="t('search.careLocation')" :error="err('care_locations')" data-field="care_locations">
+              <DashboardChipsMulti v-model="form.care_locations" :items="careItems" :label="t('search.careLocation')" />
+              <template #hint>{{ t('careLocation.nannyHint') }}</template>
+            </UFormField>
             <UFormField :label="t('nanny.detail.ageGroups')" :error="err('age_groups')">
               <DashboardChipsMulti v-model="form.age_groups" :items="ageItems" :label="t('nanny.detail.ageGroups')" />
             </UFormField>
@@ -360,6 +367,7 @@ const summaryPlace = computed(() => {
               <div><dt class="eyebrow text-muted">{{ t('dashboard.profile.experience') }}</dt><dd class="mt-0.5 font-semibold text-highlighted">{{ plural('format.yearsExp', form.experience_years) }}</dd></div>
               <div><dt class="eyebrow text-muted">{{ t('nanny.detail.price') }}</dt><dd class="mt-0.5 font-semibold text-highlighted"><AppText :text="price(Number(form.price_amount) || null, form.price_unit)" /></dd></div>
               <div><dt class="eyebrow text-muted">{{ t('search.workFormat') }}</dt><dd class="mt-0.5 font-semibold text-highlighted">{{ form.work_formats.map(f => enumLabel('workFormat', f)).join(', ') || '—' }}</dd></div>
+              <div><dt class="eyebrow text-muted">{{ t('search.careLocation') }}</dt><dd class="mt-0.5 font-semibold text-highlighted">{{ form.care_locations.map(c => enumLabel('careLocation', c)).join(', ') || '—' }}</dd></div>
               <div><dt class="eyebrow text-muted">{{ t('search.language') }}</dt><dd class="mt-0.5 font-semibold text-highlighted">{{ form.languages.map(f => enumLabel('language', f)).join(', ') || '—' }}</dd></div>
               <div><dt class="eyebrow text-muted">{{ t('search.skills') }}</dt><dd class="mt-0.5 font-semibold text-highlighted">{{ form.skills.map(s => skillItems.find(x => x.value === s)?.label).join(', ') || '—' }}</dd></div>
               <div class="sm:col-span-2"><dt class="eyebrow text-muted">{{ t('nanny.detail.about') }}</dt><dd class="mt-0.5 whitespace-pre-line text-default">{{ form.bio || '—' }}</dd></div>

@@ -34,6 +34,7 @@ class ImportedListingResource extends JsonResource
             'region' => $this->whenLoaded('region', fn () => $this->region ? ['id' => $this->region->id, 'slug' => $this->region->slug, 'name' => ['uz' => $this->region->name_uz, 'ru' => $this->region->name_ru]] : null),
             'district' => $this->whenLoaded('district', fn () => $this->district ? ['id' => $this->district->id, 'slug' => $this->district->slug, 'name' => ['uz' => $this->district->name_uz, 'ru' => $this->district->name_ru]] : null),
             'work_format' => $this->work_format?->value,
+            'care_location' => $this->care_location?->value,
             'schedule' => $this->schedule,
             'price' => ['min' => $this->price_min, 'max' => $this->price_max, 'unit' => $this->price_unit?->value],
             'children_count' => $this->children_count,

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\CareLocation;
 use App\Enums\ImportedListingStatus;
 use App\Enums\WorkFormat;
 use App\Http\Controllers\Concerns\CountsViews;
@@ -26,6 +27,7 @@ class ImportedListingController extends Controller
             'region' => ['nullable', 'string', 'exists:regions,slug'],
             'district' => ['nullable', 'string', 'exists:districts,slug'],
             'work_format' => ['nullable', Rule::enum(WorkFormat::class)],
+            'care_location' => ['nullable', Rule::enum(CareLocation::class)],
         ]);
 
         $query = ImportedListing::visible()->with(['region', 'district'])
@@ -33,6 +35,7 @@ class ImportedListingController extends Controller
             ->when($f['region'] ?? null, fn (Builder $q, $v) => $q->whereHas('region', fn ($r) => $r->where('slug', $v)))
             ->when($f['district'] ?? null, fn (Builder $q, $v) => $q->whereHas('district', fn ($r) => $r->where('slug', $v)))
             ->when($f['work_format'] ?? null, fn (Builder $q, $v) => $q->where('work_format', $v))
+            ->when($f['care_location'] ?? null, fn (Builder $q, $v) => $q->where('care_location', $v))
             ->orderByDesc('published_at')
             ->orderByDesc('id');
 

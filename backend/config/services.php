@@ -36,7 +36,7 @@ return [
         'login_ttl_minutes' => 10,
         // Brend kanali va kunlik digest
         'channel_id' => env('TELEGRAM_CHANNEL_ID', '@enagalar_rasmiy'),
-        'digest_auto' => (bool) env('TELEGRAM_DIGEST_AUTO', false),
+        'digest_auto' => (bool) env('TELEGRAM_DIGEST_AUTO', true),
         'admin_chat_id' => env('TELEGRAM_ADMIN_CHAT_ID', env('DEPLOY_NOTIFY_CHAT_ID')),
     ],
 

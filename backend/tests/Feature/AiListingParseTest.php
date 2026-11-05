@@ -65,6 +65,7 @@ class AiListingParseTest extends TestCase
             'price_amount' => 40000,
             'price_unit' => 'hour',
             'work_formats' => ['hourly', 'flying'],
+            'care_locations' => ['nanny_home', 'moon'],
             'languages' => ['ru', 'uz', 'xx'],
             'skills' => ['cooking', 'unknown-skill'],
             'live_in' => false,
@@ -83,6 +84,7 @@ class AiListingParseTest extends TestCase
         $this->assertSame(40000, $fields['price_amount']);
         $this->assertSame('hour', $fields['price_unit']);
         $this->assertSame(['hourly'], $fields['work_formats']);
+        $this->assertSame(['nanny_home'], $fields['care_locations']);
         $this->assertSame(['ru', 'uz'], $fields['languages']);
         $this->assertSame(['cooking'], $fields['skills']);
         // false = "matnda aytilmagan": formadagi qiymatni bosib ketmasligi uchun qaytarilmaydi
@@ -110,6 +112,7 @@ class AiListingParseTest extends TestCase
             'title' => 'Ikki yoshli qizaloq uchun enaga kerak',
             'description' => 'Kunduzi qizimizga qarash uchun mehribon enaga kerak. Ish vaqti 9 dan 18 gacha.',
             'work_format' => 'full_time',
+            'care_location' => 'family_home',
             'salary_min' => 5_000_000,
             'salary_max' => 3_000_000,
             'salary_unit' => 'month',
@@ -127,6 +130,7 @@ class AiListingParseTest extends TestCase
         $this->assertSame(3_000_000, $fields['salary_min']);
         $this->assertSame(5_000_000, $fields['salary_max']);
         $this->assertSame('full_time', $fields['work_format']);
+        $this->assertSame('family_home', $fields['care_location']);
         $this->assertArrayNotHasKey('children_ages', $fields); // 40 yosh — yaroqsiz
         $this->assertSame(2, $fields['children_count']);
         $this->assertArrayNotHasKey('starts_at', $fields);

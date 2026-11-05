@@ -27,6 +27,7 @@ class NannyController extends Controller
             ->when($f['region'] ?? null, fn (Builder $q, $v) => $q->whereHas('region', fn ($r) => $r->where('slug', $v)))
             ->when($f['district'] ?? null, fn (Builder $q, $v) => $q->whereHas('district', fn ($r) => $r->where('slug', $v)))
             ->when($f['work_format'] ?? null, fn (Builder $q, $v) => $q->whereJsonContains('work_formats', $v))
+            ->when($f['care_location'] ?? null, fn (Builder $q, $v) => $q->whereJsonContains('care_locations', $v))
             ->when($f['language'] ?? null, fn (Builder $q, $v) => $q->whereJsonContains('languages', $v))
             ->when($f['age_group'] ?? null, fn (Builder $q, $v) => $q->whereJsonContains('age_groups', $v))
             ->when($f['skill'] ?? null, fn (Builder $q, $v) => $q->whereHas('skills', fn ($s) => $s->where('slug', $v)))

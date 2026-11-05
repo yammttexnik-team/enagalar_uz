@@ -22,7 +22,7 @@ use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'phone', 'telegram_id', 'telegram_username', 'email', 'password', 'avatar_path', 'locale', 'status', 'last_seen_at', 'campaign_id', 'referred_by_id'])]
+#[Fillable(['name', 'phone', 'telegram_id', 'telegram_username', 'email', 'password', 'avatar_path', 'locale', 'status', 'last_seen_at', 'campaign_id', 'referred_by_id', 'notify_telegram', 'last_match_notified_at', 'nudged_at'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser
 {
@@ -33,6 +33,7 @@ class User extends Authenticatable implements FilamentUser
     protected $attributes = [
         'status' => 'active',
         'locale' => 'uz',
+        'notify_telegram' => true,
     ];
 
     /**
@@ -46,6 +47,9 @@ class User extends Authenticatable implements FilamentUser
             'phone_verified_at' => 'datetime',
             'email_verified_at' => 'datetime',
             'last_seen_at' => 'datetime',
+            'notify_telegram' => 'boolean',
+            'last_match_notified_at' => 'datetime',
+            'nudged_at' => 'datetime',
             'password' => 'hashed',
             'status' => UserStatus::class,
         ];

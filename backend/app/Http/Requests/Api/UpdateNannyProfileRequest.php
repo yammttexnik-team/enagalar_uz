@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api;
 
 use App\Enums\AgeGroup;
+use App\Enums\CareLocation;
 use App\Enums\Language;
 use App\Enums\PriceUnit;
 use App\Enums\WorkFormat;
@@ -31,6 +32,8 @@ class UpdateNannyProfileRequest extends FormRequest
             'price_unit' => ['sometimes', Rule::enum(PriceUnit::class)],
             'work_formats' => ['sometimes', 'array'],
             'work_formats.*' => [Rule::enum(WorkFormat::class)],
+            'care_locations' => ['sometimes', 'nullable', 'array'],
+            'care_locations.*' => [Rule::enum(CareLocation::class)],
             'languages' => ['sometimes', 'array'],
             'languages.*' => [Rule::enum(Language::class)],
             'age_groups' => ['sometimes', 'array'],

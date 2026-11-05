@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable([
     'user_id', 'region_id', 'district_id', 'birth_year', 'bio', 'experience_years',
-    'price_amount', 'price_unit', 'work_formats', 'languages', 'age_groups',
+    'price_amount', 'price_unit', 'work_formats', 'care_locations', 'languages', 'age_groups',
     'live_in', 'free_trial_day', 'is_available', 'status', 'published_at',
 ])]
 #[ObservedBy(NannyProfileObserver::class)]
@@ -33,6 +33,7 @@ class NannyProfile extends Model
             'price_unit' => PriceUnit::class,
             'status' => NannyProfileStatus::class,
             'work_formats' => 'array',
+            'care_locations' => 'array',
             'languages' => 'array',
             'age_groups' => 'array',
             'live_in' => 'boolean',

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\NannyProfiles\Schemas;
 
 use App\Enums\AgeGroup;
+use App\Enums\CareLocation;
 use App\Enums\Language;
 use App\Enums\WorkFormat;
 use App\Filament\Support\AiModeration;
@@ -28,6 +29,9 @@ class NannyProfileInfolist
                 TextEntry::make('price_unit')->label('Narx davri')->badge(),
                 TextEntry::make('work_formats')->label('Ish formatlari')
                     ->badge()->formatStateUsing(EnumLabel::using(WorkFormat::class))
+                    ->placeholder('—')->columnSpanFull(),
+                TextEntry::make('care_locations')->label('Qayerda qaraydi')
+                    ->badge()->formatStateUsing(EnumLabel::using(CareLocation::class))
                     ->placeholder('—')->columnSpanFull(),
                 TextEntry::make('languages')->label('Tillar')
                     ->badge()->formatStateUsing(EnumLabel::using(Language::class))

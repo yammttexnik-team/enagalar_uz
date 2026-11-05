@@ -324,6 +324,10 @@
       "hour": "Soatiga",
       "day": "Kuniga",
       "month": "Oyiga"
+    },
+    "careLocation": {
+      "family_home": "Oilaning uyida",
+      "nanny_home": "Enaganing uyida"
     }
   },
   "search": {
@@ -359,7 +363,8 @@
     "loading": "Yuklanmoqda…",
     "favoriteAdd": "Sevimlilarga qoʻshish",
     "favoriteRemove": "Sevimlilardan olib tashlash",
-    "favoriteFail": "Sevimlilarni saqlab boʻlmadi. Qayta urinib koʻring."
+    "favoriteFail": "Sevimlilarni saqlab boʻlmadi. Qayta urinib koʻring.",
+    "careLocation": "Qayerda qaraladi"
   },
   "nanny": {
     "seoTitle": "Enaga topish — enagalar anketalari — enagalar.uz",
@@ -1357,5 +1362,16 @@
     "ctaNannies": "Enagalarni koʻrish",
     "ctaVacancies": "Vakansiyalarni koʻrish",
     "navLink": "Enaga narxlari"
+  },
+  "careLocation": {
+    "nanny": {
+      "family_home": "Oilaning uyiga borib qaraydi",
+      "nanny_home": "Oʻz uyida qaraydi"
+    },
+    "vacancy": {
+      "family_home": "Enaga uyimizga keladi",
+      "nanny_home": "Bolani enaganing uyiga olib boramiz"
+    },
+    "nannyHint": "Ikkalasini ham tanlashingiz mumkin."
   }
 }

@@ -98,6 +98,19 @@ class NannySearchTest extends TestCase
         $this->assertCount(3, $this->ids());
     }
 
+    public function test_filter_by_care_location(): void
+    {
+        $home = $this->nannyUser(['status' => 'active', 'care_locations' => ['family_home']])->nannyProfile;
+        $own = $this->nannyUser(['status' => 'active', 'care_locations' => ['nanny_home']])->nannyProfile;
+        $both = $this->nannyUser(['status' => 'active', 'care_locations' => ['family_home', 'nanny_home']])->nannyProfile;
+        $this->nannyUser(['status' => 'active']); // noma'lum
+
+        $this->assertEqualsCanonicalizing([$home->id, $both->id], $this->ids('?care_location=family_home'));
+        $this->assertEqualsCanonicalizing([$own->id, $both->id], $this->ids('?care_location=nanny_home'));
+        $this->assertSame(['family_home', 'nanny_home'], $this->getJson('/api/v1/nannies/'.$both->id)->json('data.care_locations'));
+        $this->getJson('/api/v1/nannies?care_location=moon')->assertUnprocessable();
+    }
+
     public function test_invalid_filter_is_rejected(): void
     {
         $this->getJson('/api/v1/nannies?work_format=nonsense')->assertUnprocessable();

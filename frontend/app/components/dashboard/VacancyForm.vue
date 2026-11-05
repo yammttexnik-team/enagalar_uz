@@ -18,6 +18,7 @@ const form = reactive({
   region_id: (v?.region_id ?? undefined) as number | undefined,
   district_id: (v?.district_id ?? undefined) as number | undefined,
   work_format: v?.work_format ?? '',
+  care_location: v?.care_location ?? '',
   schedule: v?.schedule ?? '',
   salary_min: digits(v?.salary.min),
   salary_max: digits(v?.salary.max),
@@ -39,6 +40,7 @@ watch(() => form.region_id, (_, old) => { if (old !== undefined) form.district_i
 
 const regionItems = computed(() => regions.value.map(r => ({ label: localizedName(r.name), value: r.id })))
 const districtItems = computed(() => (regions.value.find(r => r.id === form.region_id)?.districts ?? []).map(d => ({ label: localizedName(d.name), value: d.id })))
+const careItems = computed(() => CARE_LOCATIONS.map(c => ({ label: t(`careLocation.vacancy.${c}`), value: c })))
 const formatItems = computed(() => WORK_FORMATS.map(f => ({ label: enumLabel('workFormat', f), value: f })))
 const langItems = computed(() => LANGUAGES.map(l => ({ label: enumLabel('language', l), value: l })))
 const unitItems = computed(() => PRICE_UNITS.map(u => ({ label: enumLabel('priceUnit', u), value: u })))
@@ -84,6 +86,7 @@ async function submit() {
     title: form.title.trim(),
     description: form.description.trim(),
     work_format: form.work_format,
+    care_location: form.care_location || null,
     schedule: form.schedule.trim() || null,
     salary_min: form.salary_min ? Number(form.salary_min) : null,
     salary_max: form.salary_max ? Number(form.salary_max) : null,
@@ -139,6 +142,7 @@ async function applyAi(f: Record<string, any>) {
   if (typeof f.district_id === 'number') form.district_id = f.district_id
   if (Array.isArray(f.children_ages)) f.children_ages.slice(0, form.ages.length).forEach((a: number, i: number) => { form.ages[i] = String(a) })
   if (typeof f.work_format === 'string') form.work_format = f.work_format
+  if (typeof f.care_location === 'string') form.care_location = f.care_location
   if (typeof f.schedule === 'string') form.schedule = f.schedule
   if (typeof f.salary_min === 'number') form.salary_min = String(f.salary_min)
   if (typeof f.salary_max === 'number') form.salary_max = String(f.salary_max)
@@ -200,6 +204,9 @@ function focusFirstEmpty() {
       </div>
       <UFormField :label="t('search.workFormat')" :error="err('work_format')" required :data-invalid="!!err('work_format')" data-field="work_format">
         <SearchChips :label="t('search.workFormat')" :items="formatItems" :model-value="form.work_format" @update:model-value="x => (form.work_format = x ?? '')" />
+      </UFormField>
+      <UFormField :label="t('search.careLocation')" :error="err('care_location')" data-field="care_location">
+        <SearchChips :label="t('search.careLocation')" :items="careItems" :model-value="form.care_location" @update:model-value="x => (form.care_location = x ?? '')" />
       </UFormField>
       <div class="grid gap-5 sm:grid-cols-2">
         <UFormField :label="t('vacancy.detail.schedule')" :error="err('schedule')" :data-invalid="!!err('schedule')">

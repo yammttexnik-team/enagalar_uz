@@ -3,7 +3,7 @@ import type { NannyItem } from '~/components/nanny/Card.vue'
 
 interface Paginated<T> { data: T[], meta: { total: number, per_page: number, current_page: number, last_page: number } }
 
-const FILTER_KEYS = ['region', 'district', 'work_format', 'language', 'age_group', 'skill', 'price_max', 'price_unit', 'experience_min', 'live_in', 'available_only', 'verified_only', 'badge', 'sort'] as const
+const FILTER_KEYS = ['region', 'district', 'work_format', 'care_location', 'language', 'age_group', 'skill', 'price_max', 'price_unit', 'experience_min', 'live_in', 'available_only', 'verified_only', 'badge', 'sort'] as const
 
 const { t } = useI18n()
 const api = useApi()
@@ -12,7 +12,7 @@ const localizedName = useLocalizedName()
 const config = useRuntimeConfig()
 const { filters, page, activeCount, set, reset } = useSearchQuery(FILTER_KEYS)
 // Telegram kanallardan olingan e'lonlar soni (shu filtrlar bilan): bo'sh holat ixcham ko'rinadi, sanoqda ham chiqadi
-const importedQuery = computed(() => ({ type: 'nanny', region: filters.value.region || undefined, district: filters.value.district || undefined, work_format: filters.value.work_format || undefined }))
+const importedQuery = computed(() => ({ type: 'nanny', region: filters.value.region || undefined, district: filters.value.district || undefined, work_format: filters.value.work_format || undefined, care_location: filters.value.care_location || undefined }))
 
 // So'rovlar parallel (SSR ketma-ket kutmaydi)
 const [{ data: regions }, { data: skills }, { data, status, error, refresh }, { data: importedTotal }] = await Promise.all([

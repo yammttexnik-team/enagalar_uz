@@ -77,6 +77,18 @@ class ImportedListingApiTest extends TestCase
         $this->getJson('/api/v1/imported/'.$pending->id)->assertNotFound();
     }
 
+    public function test_filter_by_care_location(): void
+    {
+        $a = $this->listing(['care_location' => 'family_home']);
+        $b = $this->listing(['care_location' => 'nanny_home']);
+        $this->listing();
+
+        $ids = fn (string $q) => collect($this->getJson('/api/v1/imported'.$q)->assertOk()->json('data'))->pluck('id')->all();
+        $this->assertSame([$a->id], $ids('?care_location=family_home'));
+        $this->assertSame([$b->id], $ids('?care_location=nanny_home'));
+        $this->assertSame('nanny_home', $this->getJson('/api/v1/imported/'.$b->id)->json('data.care_location'));
+    }
+
     public function test_view_counted_once_per_viewer(): void
     {
         $listing = $this->listing();

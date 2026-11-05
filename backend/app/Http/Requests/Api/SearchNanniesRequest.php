@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api;
 
 use App\Enums\AgeGroup;
+use App\Enums\CareLocation;
 use App\Enums\Language;
 use App\Enums\PriceUnit;
 use App\Enums\WorkFormat;
@@ -22,6 +23,7 @@ class SearchNanniesRequest extends FormRequest
             'region' => ['nullable', 'string', 'exists:regions,slug'],
             'district' => ['nullable', 'string', 'exists:districts,slug'],
             'work_format' => ['nullable', Rule::enum(WorkFormat::class)],
+            'care_location' => ['nullable', Rule::enum(CareLocation::class)],
             'language' => ['nullable', Rule::enum(Language::class)],
             'age_group' => ['nullable', Rule::enum(AgeGroup::class)],
             'skill' => ['nullable', 'string', 'exists:skills,slug'],

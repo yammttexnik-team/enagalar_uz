@@ -60,6 +60,18 @@ class VacancySearchTest extends TestCase
         $this->assertSame([], $this->ids('?salary_min=7000000'));
     }
 
+    public function test_filter_by_care_location(): void
+    {
+        $a = $this->make(['care_location' => 'family_home']);
+        $b = $this->make(['care_location' => 'nanny_home']);
+        $this->make(); // noma'lum
+
+        $this->assertSame([$a->id], $this->ids('?care_location=family_home'));
+        $this->assertSame([$b->id], $this->ids('?care_location=nanny_home'));
+        $this->assertSame('nanny_home', $this->getJson('/api/v1/vacancies/'.$b->id)->json('data.care_location'));
+        $this->getJson('/api/v1/vacancies?care_location=moon')->assertUnprocessable();
+    }
+
     public function test_salary_desc_sort(): void
     {
         $low = $this->make(['salary_max' => 2_000_000]);

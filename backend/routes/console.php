@@ -32,6 +32,11 @@ $logged(Schedule::command('imports:fetch')->cron('0 8-22/2 * * *')->timezone('As
 $logged(Schedule::command('imports:check')->cron('30 9,18 * * *')->timezone('Asia/Tashkent')->withoutOverlapping(120), 'imports:check');
 $logged(Schedule::command('imports:translate')->hourlyAt(40)->withoutOverlapping(), 'imports:translate');
 $logged(Schedule::command('channel:digest')->dailyAt('19:00')->timezone('Asia/Tashkent')->withoutOverlapping(), 'channel:digest');
+// Foydalanuvchilarga shaxsiy Telegram xabarlari: yangi mos e'lonlar (18:30) va to'ldirilmagan profil eslatmasi (12:00)
+$logged(Schedule::command('notify:matches')->dailyAt('18:30')->timezone('Asia/Tashkent')->withoutOverlapping(), 'notify:matches');
+$logged(Schedule::command('notify:nudges')->dailyAt('12:00')->timezone('Asia/Tashkent')->withoutOverlapping(), 'notify:nudges');
+// Kanalga haftalik narxlar posti (dushanba)
+$logged(Schedule::command('channel:prices')->weeklyOn(1, '10:00')->timezone('Asia/Tashkent')->withoutOverlapping(), 'channel:prices');
 // SEO maqolalar: har kuni bitta yangi qo'llanma (mavzular tugagach buyruq hech narsa qilmaydi)
 $logged(Schedule::command('articles:generate --count=1')->dailyAt('11:00')->timezone('Asia/Tashkent')->withoutOverlapping(60), 'articles:generate');
 

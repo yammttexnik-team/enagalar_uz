@@ -14,6 +14,7 @@ const query = computed(() => ({
   region: props.filters.region || undefined,
   district: props.filters.district || undefined,
   work_format: props.filters.work_format || undefined,
+  care_location: props.filters.care_location || undefined,
 }))
 
 const page = ref(1)

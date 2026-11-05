@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Services\Content\ArticleTopics;
 use App\Services\Content\ArticleWriter;
+use App\Services\Telegram\ChannelPoster;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -13,7 +14,7 @@ use Throwable;
 #[Description("Rejadagi keyingi mavzular bo'yicha SEO maqolalarini Claude bilan yozib e'lon qiladi")]
 class GenerateArticles extends Command
 {
-    public function handle(ArticleTopics $topics, ArticleWriter $writer): int
+    public function handle(ArticleTopics $topics, ArticleWriter $writer, ChannelPoster $poster): int
     {
         if (! config('services.anthropic.enabled') || ! config('services.anthropic.key')) {
             $this->warn('AI o\'chiq yoki kalit yo\'q.');
@@ -41,6 +42,15 @@ class GenerateArticles extends Command
 
             $this->info("{$key} -> /maqolalar/{$article->slug}");
             $made++;
+
+            // Kanalga post chiqarish xatosi maqola yaratishga to'sqinlik qilmaydi.
+            if ($article->wasRecentlyCreated && config('services.telegram.bot_token')) {
+                try {
+                    $poster->postArticle($article);
+                } catch (Throwable $e) {
+                    report($e);
+                }
+            }
         }
 
         $this->info("{$made} ta maqola e'lon qilindi.");

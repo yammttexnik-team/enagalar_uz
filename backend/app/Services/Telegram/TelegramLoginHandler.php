@@ -34,6 +34,12 @@ class TelegramLoginHandler
 
         $text = trim($message['text'] ?? '');
 
+        if (preg_match('~^/(stop|notify|xabarlar)(@\w+)?\s*$~i', $text, $m)) {
+            $this->handleNotifyToggle($from, strtolower($m[1]) !== 'stop', $lang);
+
+            return;
+        }
+
         if (Str::startsWith($text, '/start')) {
             $payload = trim(Str::after($text, '/start'));
             $this->handleStart($from, $payload, $lang);
@@ -45,6 +51,19 @@ class TelegramLoginHandler
         if (TelegramLoginRequest::usable()->where('telegram_id', $from['id'])->exists()) {
             $this->askContact($from['id'], $lang);
         }
+    }
+
+    /** /stop — shaxsiy xabarlarni o'chiradi, /notify (/xabarlar) — qayta yoqadi. */
+    private function handleNotifyToggle(array $from, bool $on, string $lang): void
+    {
+        $user = User::where('telegram_id', $from['id'])->first();
+
+        if ($user) {
+            $lang = $user->locale === 'ru' ? 'ru' : 'uz';
+            $user->forceFill(['notify_telegram' => $on])->save();
+        }
+
+        $this->bot->sendMessage($from['id'], $this->t($on ? 'notify_on' : 'notify_off', $lang));
     }
 
     private function askContact(int $chatId, string $lang): void
@@ -236,6 +255,14 @@ class TelegramLoginHandler
             'blocked' => [
                 'uz' => 'Akkauntingiz bloklangan. Savollar bo\'lsa, qo\'llab-quvvatlash xizmatiga yozing.',
                 'ru' => 'Ваш аккаунт заблокирован. По вопросам обратитесь в поддержку.',
+            ],
+            'notify_off' => [
+                'uz' => "🔕 Xabarlar o'chirildi. Qayta yoqish: /notify",
+                'ru' => '🔕 Уведомления отключены. Включить снова: /notify',
+            ],
+            'notify_on' => [
+                'uz' => "🔔 Xabarlar yoqildi. O'chirish: /stop",
+                'ru' => '🔔 Уведомления включены. Отключить: /stop',
             ],
             'expired' => [
                 'uz' => 'Havola eskirgan. Saytda «Telegram orqali kirish» tugmasini qaytadan bosing.',

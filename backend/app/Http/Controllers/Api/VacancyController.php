@@ -25,6 +25,7 @@ class VacancyController extends Controller
             ->when($f['region'] ?? null, fn (Builder $q, $v) => $q->whereHas('region', fn ($r) => $r->where('slug', $v)))
             ->when($f['district'] ?? null, fn (Builder $q, $v) => $q->whereHas('district', fn ($r) => $r->where('slug', $v)))
             ->when($f['work_format'] ?? null, fn (Builder $q, $v) => $q->where('work_format', $v))
+            ->when($f['care_location'] ?? null, fn (Builder $q, $v) => $q->where('care_location', $v))
             ->when($f['language'] ?? null, fn (Builder $q, $v) => $q->whereJsonContains('languages', $v))
             // Maosh: yuqori chegara (yoki yagona qiymat) so'ralgan minimumdan kam bo'lmasin.
             ->when($f['salary_min'] ?? null, fn (Builder $q, $v) => $q

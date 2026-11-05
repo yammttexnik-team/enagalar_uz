@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\CareLocation;
 use App\Enums\ImportedListingStatus;
 use App\Enums\Role;
 use App\Filament\Resources\ImportedListings\Pages\ListImportedListings;
@@ -79,7 +80,7 @@ class ListingImportTest extends TestCase
             'description' => "Chilonzorda 2 yoshli qizimizga mehribon enaga qidiryapmiz. Oyiga 3 mln so'm.",
             'title_uz' => 'Ikki yoshli qizaloqqa enaga kerak', 'description_uz' => "Chilonzorda 2 yoshli qizimizga enaga kerak. Oyiga 3 mln so'm.",
             'title_ru' => 'Нужна няня для двухлетней девочки', 'description_ru' => 'Ищем добрую няню для дочки 2 лет в Чиланзаре. 3 млн в месяц.',
-            'region' => 'tashkent-city', 'district' => 'Chilonzor', 'work_format' => 'full_time', 'schedule' => '',
+            'region' => 'tashkent-city', 'district' => 'Chilonzor', 'work_format' => 'full_time', 'care_location' => 'family_home', 'schedule' => '',
             'price_min' => 3000000, 'price_max' => 0, 'price_unit' => 'month', 'children_count' => 1, 'children_ages' => [2],
             'age_groups' => [], 'languages' => [], 'experience_years' => 0, 'person_age' => 0, 'live_in' => false, 'is_urgent' => false,
         ];
@@ -163,6 +164,7 @@ class ListingImportTest extends TestCase
         $this->assertSame(Region::where('slug', 'tashkent-city')->value('id'), $listing->region_id);
         $this->assertNotNull($listing->district_id);
         $this->assertSame(3000000, $listing->price_min);
+        $this->assertSame(CareLocation::FamilyHome, $listing->care_location);
         $this->assertSame('Ikki yoshli qizaloqqa enaga kerak', $listing->title_uz);
         $this->assertSame('Нужна няня для двухлетней девочки', $listing->title_ru);
         $this->assertNotNull($listing->description_uz);

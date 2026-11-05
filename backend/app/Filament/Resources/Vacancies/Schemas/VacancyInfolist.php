@@ -23,6 +23,7 @@ class VacancyInfolist
                 TextEntry::make('district.name_uz')->label('Tuman')->placeholder('—'),
                 TextEntry::make('description')->label('Tavsif')->columnSpanFull(),
                 TextEntry::make('work_format')->label('Ish formati')->badge(),
+                TextEntry::make('care_location')->label('Qayerda qaraladi')->badge()->placeholder('—'),
                 TextEntry::make('schedule')->label('Ish jadvali')->placeholder('—'),
                 TextEntry::make('salary_min')->label('Maosh (dan)')->numeric(thousandsSeparator: ' ')->suffix(" so'm")->placeholder('—'),
                 TextEntry::make('salary_max')->label('Maosh (gacha)')->numeric(thousandsSeparator: ' ')->suffix(" so'm")->placeholder('—'),

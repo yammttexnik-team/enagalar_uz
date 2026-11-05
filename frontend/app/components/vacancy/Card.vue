@@ -8,6 +8,7 @@ export interface VacancyItem {
   region?: { slug: string, name: LocalizedName } | null
   district?: { slug: string, name: LocalizedName } | null
   work_format: string
+  care_location?: string | null
   schedule: string | null
   salary: { min: number | null, max: number | null, unit: string | null }
   children_count: number
@@ -58,6 +59,7 @@ const ages = computed(() => props.vacancy.children_ages.map(a => childAge(a)).jo
 
     <div class="flex flex-wrap gap-1.5">
       <UBadge color="neutral" variant="subtle" :label="enumLabel('workFormat', vacancy.work_format)" />
+      <UBadge v-if="vacancy.care_location" color="neutral" variant="outline" icon="i-lucide-house" :label="enumLabel('careLocation', vacancy.care_location)" />
       <UBadge v-if="vacancy.live_in" color="neutral" variant="subtle" :label="t('vacancy.liveIn')" />
     </div>
 

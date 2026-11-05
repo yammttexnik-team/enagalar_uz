@@ -3,7 +3,7 @@ import type { VacancyItem } from '~/components/vacancy/Card.vue'
 
 interface Paginated<T> { data: T[], meta: { total: number, per_page: number, current_page: number, last_page: number } }
 
-const FILTER_KEYS = ['region', 'district', 'work_format', 'language', 'salary_min', 'salary_unit', 'live_in', 'is_urgent', 'children_age', 'sort'] as const
+const FILTER_KEYS = ['region', 'district', 'work_format', 'care_location', 'language', 'salary_min', 'salary_unit', 'live_in', 'is_urgent', 'children_age', 'sort'] as const
 
 const { t } = useI18n()
 const api = useApi()
@@ -12,7 +12,7 @@ const localizedName = useLocalizedName()
 const config = useRuntimeConfig()
 const { filters, page, activeCount, set, reset } = useSearchQuery(FILTER_KEYS)
 // Telegram kanallardan olingan e'lonlar soni (shu filtrlar bilan): bo'sh holat ixcham ko'rinadi, sanoqda ham chiqadi
-const importedQuery = computed(() => ({ type: 'vacancy', region: filters.value.region || undefined, district: filters.value.district || undefined, work_format: filters.value.work_format || undefined }))
+const importedQuery = computed(() => ({ type: 'vacancy', region: filters.value.region || undefined, district: filters.value.district || undefined, work_format: filters.value.work_format || undefined, care_location: filters.value.care_location || undefined }))
 
 // So'rovlar parallel (SSR ketma-ket kutmaydi)
 const [{ data: regions }, { data, status, error, refresh }, { data: importedTotal }] = await Promise.all([

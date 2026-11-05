@@ -23,6 +23,7 @@ class VacanciesTable
                 TextColumn::make('region.name_uz')->label('Hudud'),
                 TextColumn::make('district.name_uz')->label('Tuman')->placeholder('—'),
                 TextColumn::make('work_format')->label('Format')->badge()->color('gray'),
+                TextColumn::make('care_location')->label('Qayerda')->badge()->color('gray')->placeholder('—')->toggleable(isToggledHiddenByDefault: true),
                 IconColumn::make('is_urgent')->label('Shoshilinch')->boolean(),
                 TextColumn::make('status')->label('Holat')->badge(),
                 AiModeration::column(),

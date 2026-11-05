@@ -27,6 +27,7 @@ const experienceItems = computed(() => [
   { label: t('search.experienceAny'), value: ALL },
   ...[1, 3, 5, 10].map(n => ({ label: t('search.experienceOption', { n }), value: String(n) })),
 ])
+const careItems = computed(() => CARE_LOCATIONS.map(c => ({ label: enumLabel('careLocation', c), value: c })))
 const formatItems = computed(() => WORK_FORMATS.map(f => ({ label: enumLabel('workFormat', f), value: f })))
 const ageItems = computed(() => AGE_GROUPS.map(a => ({ label: enumLabel('ageGroup', a), value: a })))
 const skillItems = computed(() => props.skills.map(s => ({ label: localizedName(s.name), value: s.slug })))
@@ -68,6 +69,10 @@ function setPrice(e: Event) {
         <USwitch :model-value="bool('available_only')" :label="t('nanny.availableOnly')" @update:model-value="v => emit('change', { available_only: v ? '1' : null })" />
         <USwitch :model-value="bool('live_in')" :label="t('nanny.liveIn')" @update:model-value="v => emit('change', { live_in: v ? '1' : null })" />
       </div>
+    </SearchField>
+
+    <SearchField :label="t('search.careLocation')">
+      <SearchChips :label="t('search.careLocation')" :items="careItems" :model-value="filters.care_location" @update:model-value="v => emit('change', { care_location: v })" />
     </SearchField>
 
     <SearchField :label="t('search.workFormat')">

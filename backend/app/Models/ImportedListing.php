@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\CareLocation;
 use App\Enums\ImportedListingStatus;
 use App\Enums\PriceUnit;
 use App\Enums\WorkFormat;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 #[Fillable([
     'import_source_id', 'type', 'status', 'source_channel', 'source_post_id', 'source_url', 'source_posted_at',
-    'raw_text', 'content_hash', 'title', 'description', 'title_uz', 'description_uz', 'title_ru', 'description_ru', 'region_id', 'district_id', 'work_format', 'schedule',
+    'raw_text', 'content_hash', 'title', 'description', 'title_uz', 'description_uz', 'title_ru', 'description_ru', 'region_id', 'district_id', 'work_format', 'care_location', 'schedule',
     'price_min', 'price_max', 'price_unit', 'children_count', 'children_ages', 'age_groups', 'languages',
     'experience_years', 'person_age', 'live_in', 'is_urgent', 'contact_hashes', 'published_at', 'expires_at',
     'last_checked_at', 'archived_at', 'archive_reason', 'removal_requested_at', 'removal_reason',
@@ -39,6 +40,7 @@ class ImportedListing extends Model
         return [
             'status' => ImportedListingStatus::class,
             'work_format' => WorkFormat::class,
+            'care_location' => CareLocation::class,
             'price_unit' => PriceUnit::class,
             'raw_text' => 'encrypted',
             'children_ages' => 'array',

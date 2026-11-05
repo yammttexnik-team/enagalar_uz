@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api;
 
+use App\Enums\CareLocation;
 use App\Enums\Language;
 use App\Enums\PriceUnit;
 use App\Enums\WorkFormat;
@@ -24,6 +25,7 @@ class VacancyRequest extends FormRequest
             'title' => ['required', 'string', 'max:120'],
             'description' => ['required', 'string', 'min:20', 'max:3000'],
             'work_format' => ['required', Rule::enum(WorkFormat::class)],
+            'care_location' => ['nullable', Rule::enum(CareLocation::class)],
             'schedule' => ['nullable', 'string', 'max:255'],
             'salary_min' => ['nullable', 'integer', 'min:0'],
             'salary_max' => ['nullable', 'integer', 'min:0', Rule::when($this->filled('salary_min'), ['gte:salary_min'])],

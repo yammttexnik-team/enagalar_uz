@@ -10,6 +10,7 @@ export interface NannyItem {
   experience_years: number
   price: { amount: number | null, unit: string | null }
   work_formats: string[]
+  care_locations?: string[]
   languages: string[]
   live_in: boolean
   is_available: boolean
@@ -64,6 +65,7 @@ const shownBadges = computed(() => props.nanny.badges.slice(0, 4))
 
     <div class="flex flex-wrap gap-1.5">
       <UBadge v-for="f in nanny.work_formats" :key="f" color="neutral" variant="subtle" :label="enumLabel('workFormat', f)" />
+      <UBadge v-for="c in nanny.care_locations ?? []" :key="c" color="neutral" variant="outline" icon="i-lucide-house" :label="enumLabel('careLocation', c)" />
     </div>
 
     <div class="mt-auto flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-default pt-3.5">

@@ -10,6 +10,7 @@ export interface ImportedItem {
   region?: { slug: string, name: LocalizedName } | null
   district?: { slug: string, name: LocalizedName } | null
   work_format: string | null
+  care_location?: string | null
   schedule: string | null
   price: { min: number | null, max: number | null, unit: string | null }
   children_count: number | null
@@ -29,7 +30,7 @@ const props = defineProps<{ item: ImportedItem }>()
 const { t } = useI18n()
 const localePath = useLocalePath()
 const localizedName = useLocalizedName()
-const { salary, relativeTime } = useFormat()
+const { salary, relativeTime, enumLabel } = useFormat()
 
 const place = computed(() => [props.item.district, props.item.region].filter(Boolean).map(p => localizedName(p!.name)).slice(0, 2).join(', '))
 const title = computed(() => props.item.title || t(`imported.fallbackTitle.${props.item.type}`))
@@ -68,6 +69,10 @@ const descLang = computed(() => langOf(props.item.description))
     </div>
 
     <p v-if="hasPrice" class="font-display text-xl font-black tabular-nums text-highlighted"><AppText :text="salary(item.price)" /></p>
+
+    <p v-if="item.care_location" class="inline-flex w-fit items-center gap-1 rounded-full border border-default px-2.5 py-0.5 text-xs font-medium text-default">
+      <UIcon name="i-lucide-house" class="size-3.5 text-muted" aria-hidden="true" />{{ enumLabel('careLocation', item.care_location) }}
+    </p>
 
     <p v-if="item.description" class="line-clamp-2 text-sm leading-relaxed text-default" :lang="descLang">{{ item.description }}</p>
 

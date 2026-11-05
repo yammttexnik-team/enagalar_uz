@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\AiVerdict;
+use App\Enums\CareLocation;
 use App\Enums\PriceUnit;
 use App\Enums\UserStatus;
 use App\Enums\VacancyStatus;
@@ -20,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable([
-    'parent_profile_id', 'region_id', 'district_id', 'title', 'description', 'work_format',
+    'parent_profile_id', 'region_id', 'district_id', 'title', 'description', 'work_format', 'care_location',
     'schedule', 'salary_min', 'salary_max', 'salary_unit', 'children_count', 'children_ages',
     'languages', 'live_in', 'is_urgent', 'starts_at', 'status', 'published_at', 'expires_at',
 ])]
@@ -36,6 +37,7 @@ class Vacancy extends Model
     {
         return [
             'work_format' => WorkFormat::class,
+            'care_location' => CareLocation::class,
             'salary_unit' => PriceUnit::class,
             'status' => VacancyStatus::class,
             'children_ages' => 'array',
