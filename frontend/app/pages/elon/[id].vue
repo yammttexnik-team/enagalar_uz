@@ -85,86 +85,86 @@ async function sendRemoval() {
         <UIcon name="i-lucide-arrow-left" class="size-4" aria-hidden="true" />{{ t('imported.detail.back') }}
       </NuxtLink>
 
-      <div class="mt-5 grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
-        <div class="space-y-6">
-          <section class="surface flex flex-col gap-5 p-6 sm:flex-row sm:items-start sm:p-8">
-            <ImportedIllustration :type="l.type" size="lg" />
-            <div class="min-w-0 flex-1">
-              <ImportedSourceBadge :channel="l.source.channel" />
-              <h1 class="h1-title mt-3 text-highlighted">{{ heading }}</h1>
-              <p class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-muted">
-                <span v-if="place" class="inline-flex items-center gap-1.5"><UIcon name="i-lucide-map-pin" class="size-4" aria-hidden="true" />{{ place }}</span>
-                <span>· {{ relativeTime(l.source.posted_at || l.published_at) }}</span>
-              </p>
-              <p class="mt-4 text-sm text-muted" data-testid="imported-source-line">
-                {{ t('imported.detail.source', { channel: l.source.channel, date: date(l.source.posted_at || l.published_at) }) }}
-              </p>
-            </div>
-          </section>
-
-          <section v-if="facts.length" class="surface p-6 sm:p-8">
-            <h2 class="h3-title text-highlighted">{{ t('vacancy.detail.details') }}</h2>
-            <dl class="mt-5 grid gap-5 sm:grid-cols-2">
-              <div v-for="f in facts" :key="f.label" class="flex items-start gap-3">
-                <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-100 text-brand-700 dark:bg-brand-900 dark:text-brand-200">
-                  <UIcon :name="f.icon" class="size-5" aria-hidden="true" />
-                </span>
-                <div>
-                  <dt class="text-xs font-semibold uppercase tracking-wide text-muted">{{ f.label }}</dt>
-                  <dd class="mt-0.5 font-medium text-highlighted">{{ f.value }}</dd>
-                </div>
-              </div>
-            </dl>
-          </section>
-
-          <section v-if="l.description" class="surface p-6 sm:p-8">
-            <h2 class="h3-title text-highlighted">{{ t('vacancy.detail.description') }}</h2>
-            <p class="mt-3 whitespace-pre-line text-base leading-relaxed text-default">{{ l.description }}</p>
-          </section>
-        </div>
-
-        <aside class="space-y-4 lg:sticky lg:top-20">
-          <section class="surface p-6">
-            <template v-if="l.price.min || l.price.max">
-              <p class="eyebrow text-muted">{{ t(l.type === 'nanny' ? 'imported.detail.price' : 'vacancy.detail.salary') }}</p>
-              <p class="mt-1.5 font-display text-xl font-black tabular-nums text-highlighted"><AppText :text="priceText" /></p>
-            </template>
-            <UButton
-              block
-              size="xl"
-              class="mt-5 justify-center first:mt-0"
-              icon="i-lucide-external-link"
-              :label="t('imported.detail.open')"
-              :to="l.source.url"
-              target="_blank"
-              rel="noopener"
-              external
-            />
-            <p class="mt-2 text-center text-xs text-muted">{{ t('imported.detail.openHint') }}</p>
-            <UButton
-              block
-              size="xl"
-              color="neutral"
-              variant="outline"
-              class="mt-4 justify-center"
-              icon="i-lucide-user-check"
-              :label="t('imported.detail.mine')"
-              :to="claimTo"
-            />
-            <div class="mt-4 text-center">
-              <button type="button" class="text-sm text-muted underline underline-offset-2 hover:text-highlighted" @click="removeOpen = true">
-                {{ t('imported.detail.removeLink') }}
-              </button>
-            </div>
-          </section>
-
-          <section class="rounded-3xl border border-honey-200 bg-honey-50 p-5 dark:border-honey-800 dark:bg-honey-950">
-            <p class="flex items-center gap-2 font-semibold text-honey-800 dark:text-honey-200">
-              <UIcon name="i-lucide-shield-alert" class="size-5" aria-hidden="true" />{{ t('imported.detail.noticeTitle') }}
+      <div class="mx-auto mt-5 max-w-3xl space-y-6">
+        <section class="surface flex flex-col gap-5 p-6 sm:flex-row sm:items-start sm:p-8">
+          <ImportedIllustration :type="l.type" size="lg" />
+          <div class="min-w-0 flex-1">
+            <ImportedSourceBadge :channel="l.source.channel" />
+            <h1 class="h1-title mt-3 text-highlighted">{{ heading }}</h1>
+            <p class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-muted">
+              <span v-if="place" class="inline-flex items-center gap-1.5"><UIcon name="i-lucide-map-pin" class="size-4" aria-hidden="true" />{{ place }}</span>
+              <span>· {{ relativeTime(l.source.posted_at || l.published_at) }}</span>
             </p>
-            <p class="mt-2 text-sm leading-relaxed text-honey-800 dark:text-honey-200">{{ t('imported.detail.notice') }}</p>
-          </section>
-        </aside>
+            <p class="mt-4 text-sm text-muted" data-testid="imported-source-line">
+              {{ t('imported.detail.source', { channel: l.source.channel, date: date(l.source.posted_at || l.published_at) }) }}
+            </p>
+          </div>
+        </section>
+
+        <section v-if="l.description" class="surface p-6 sm:p-8">
+          <h2 class="h3-title text-highlighted">{{ t('vacancy.detail.description') }}</h2>
+          <p class="mt-3 whitespace-pre-line text-base leading-relaxed text-default">{{ l.description }}</p>
+        </section>
+
+        <section class="surface p-6">
+          <template v-if="l.price.min || l.price.max">
+            <p class="eyebrow text-muted">{{ t(l.type === 'nanny' ? 'imported.detail.price' : 'vacancy.detail.salary') }}</p>
+            <p class="mt-1.5 font-display text-xl font-black tabular-nums text-highlighted"><AppText :text="priceText" /></p>
+          </template>
+          <UButton
+            block
+            size="xl"
+            class="mt-5 justify-center first:mt-0"
+            icon="i-lucide-external-link"
+            :label="t('imported.detail.open')"
+            :to="l.source.url"
+            target="_blank"
+            rel="noopener"
+            external
+          />
+          <p class="mt-2 text-center text-xs text-muted">{{ t('imported.detail.openHint') }}</p>
+          <UButton
+            block
+            size="xl"
+            color="neutral"
+            variant="outline"
+            class="mt-4 justify-center"
+            icon="i-lucide-user-check"
+            :to="claimTo"
+          >
+            <span class="flex flex-col items-center leading-tight">
+              <span>{{ t('imported.detail.mine') }}</span>
+              <span class="text-xs font-normal text-muted">{{ t('imported.detail.mineBonus') }}</span>
+            </span>
+          </UButton>
+          <div class="mt-4 text-center">
+            <button type="button" class="text-sm text-muted underline underline-offset-2 hover:text-highlighted" @click="removeOpen = true">
+              {{ t('imported.detail.removeLink') }}
+            </button>
+          </div>
+        </section>
+
+        <section class="rounded-3xl border border-honey-200 bg-honey-50 p-5 dark:border-honey-800 dark:bg-honey-950">
+          <p class="flex items-center gap-2 font-semibold text-honey-800 dark:text-honey-200">
+            <UIcon name="i-lucide-shield-alert" class="size-5" aria-hidden="true" />{{ t('imported.detail.noticeTitle') }}
+          </p>
+          <p class="mt-2 text-sm leading-relaxed text-honey-800 dark:text-honey-200">{{ t('imported.detail.notice') }}</p>
+        </section>
+
+        <section v-if="facts.length >= 2" class="surface p-6 sm:p-8">
+          <h2 class="h3-title text-highlighted">{{ t('vacancy.detail.details') }}</h2>
+          <dl class="mt-5 grid gap-5 sm:grid-cols-2">
+            <div v-for="f in facts" :key="f.label" class="flex items-start gap-3">
+              <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-100 text-brand-700 dark:bg-brand-900 dark:text-brand-200">
+                <UIcon :name="f.icon" class="size-5" aria-hidden="true" />
+              </span>
+              <div>
+                <dt class="text-xs font-semibold uppercase tracking-wide text-muted">{{ f.label }}</dt>
+                <dd class="mt-0.5 font-medium text-highlighted">{{ f.value }}</dd>
+              </div>
+            </div>
+          </dl>
+        </section>
       </div>
     </UContainer>
 

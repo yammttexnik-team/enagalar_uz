@@ -148,6 +148,18 @@ async function applyAi(f: Record<string, any>) {
   if (typeof f.is_urgent === 'boolean') form.is_urgent = f.is_urgent
   if (typeof f.starts_at === 'string' && f.starts_at >= today) form.starts_at = f.starts_at
   errors.value = {}
+  focusFirstEmpty()
+}
+
+// AI to'ldirgandan keyin: birinchi bo'sh majburiy maydonga o'tamiz.
+function focusFirstEmpty() {
+  const empty = !form.title.trim() ? 'title' : form.description.trim().length < 20 ? 'description' : !form.region_id ? 'region_id' : !form.work_format ? 'work_format' : ''
+  if (!empty) return
+  nextTick(() => {
+    const el = document.querySelector<HTMLElement>(`[data-field="${empty}"]`)
+    el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    el?.querySelector<HTMLElement>('input, textarea, button')?.focus({ preventScroll: true })
+  })
 }
 </script>
 
@@ -157,17 +169,18 @@ async function applyAi(f: Record<string, any>) {
       <UIcon name="i-lucide-shield-check" class="mt-0.5 size-5 shrink-0" aria-hidden="true" />
       <span>{{ vacancy && vacancy.status === 'active' ? t('dashboard.vacancyForm.noteEdit') : t('dashboard.vacancyForm.note') }}</span>
     </p>
-    <div class="flex justify-end">
+    <DashboardAiPaste v-if="!vacancy" type="vacancy" inline @parsed="applyAi" />
+    <div v-else class="flex justify-end">
       <DashboardAiPaste type="vacancy" @parsed="applyAi" />
     </div>
     <p v-if="topError"class="rounded-xl bg-pomegranate-50 px-4 py-3 text-sm text-pomegranate-700 dark:bg-pomegranate-950 dark:text-pomegranate-300" role="alert">{{ topError }}</p>
 
     <section class="surface space-y-5 p-5 sm:p-7">
       <h2 class="font-display text-lg font-extrabold text-highlighted">{{ t('dashboard.vacancyForm.about') }}</h2>
-      <UFormField :label="t('dashboard.vacancyForm.title')" :error="err('title')" required :hint="`${form.title.length}/120`" :data-invalid="!!err('title')">
+      <UFormField :label="t('dashboard.vacancyForm.title')" :error="err('title')" required :hint="`${form.title.length}/120`" :data-invalid="!!err('title')" data-field="title">
         <UInput v-model="form.title" class="w-full" maxlength="120" size="lg" :placeholder="t('dashboard.vacancyForm.titlePlaceholder')" />
       </UFormField>
-      <UFormField :label="t('dashboard.vacancyForm.description')" :error="err('description')" required :data-invalid="!!err('description')">
+      <UFormField :label="t('dashboard.vacancyForm.description')" :error="err('description')" required :data-invalid="!!err('description')" data-field="description">
         <UTextarea v-model="form.description" class="w-full" :rows="5" maxlength="3000" :placeholder="t('dashboard.vacancyForm.descriptionPlaceholder')" />
         <template #hint>
           <span :class="form.description.trim().length < 20 ? 'text-muted' : 'text-leaf-700 dark:text-leaf-400'">{{ form.description.trim().length }}/3000 · {{ t('dashboard.validation.min', { n: 20 }) }}</span>
@@ -178,14 +191,14 @@ async function applyAi(f: Record<string, any>) {
     <section class="surface space-y-5 p-5 sm:p-7">
       <h2 class="font-display text-lg font-extrabold text-highlighted">{{ t('dashboard.vacancyForm.where') }}</h2>
       <div class="grid gap-5 sm:grid-cols-2">
-        <UFormField :label="t('search.region')" :error="err('region_id')" required :data-invalid="!!err('region_id')">
+        <UFormField :label="t('search.region')" :error="err('region_id')" required :data-invalid="!!err('region_id')" data-field="region_id">
           <USelect v-model="form.region_id" :items="regionItems" icon="i-lucide-map-pin" class="w-full" :placeholder="t('dashboard.common.choose')" />
         </UFormField>
         <UFormField :label="t('search.district')" :error="err('district_id')" :data-invalid="!!err('district_id')">
           <USelect v-model="form.district_id" :items="districtItems" :disabled="!form.region_id" class="w-full" :placeholder="form.region_id ? t('dashboard.common.choose') : t('search.pickRegionFirst')" />
         </UFormField>
       </div>
-      <UFormField :label="t('search.workFormat')" :error="err('work_format')" required :data-invalid="!!err('work_format')">
+      <UFormField :label="t('search.workFormat')" :error="err('work_format')" required :data-invalid="!!err('work_format')" data-field="work_format">
         <SearchChips :label="t('search.workFormat')" :items="formatItems" :model-value="form.work_format" @update:model-value="x => (form.work_format = x ?? '')" />
       </UFormField>
       <div class="grid gap-5 sm:grid-cols-2">

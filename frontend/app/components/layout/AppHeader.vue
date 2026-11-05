@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const localePath = useLocalePath()
+const authLink = useAuthLink()
 const auth = useAuthStore()
 const chat = useChatStore()
 const open = ref(false)
@@ -50,10 +51,14 @@ async function logout() {
           </UButton>
           <UButton color="neutral" variant="ghost" icon="i-lucide-log-out" :aria-label="t('nav.logout')" @click="logout" />
         </template>
-        <UButton v-else :to="localePath('/kirish')" :label="t('nav.login')" />
+        <template v-else>
+          <UButton :to="localePath('/kirish')" color="neutral" variant="ghost" :label="t('nav.login')" />
+          <UButton :to="authLink('/kabinet/vakansiyalar/yangi')" color="secondary" icon="i-lucide-plus" :label="t('nav.post')" />
+        </template>
       </div>
 
       <div class="flex md:hidden items-center gap-1">
+        <UButton v-if="!auth.isLoggedIn" :to="authLink('/kabinet/vakansiyalar/yangi')" color="secondary" size="sm" icon="i-lucide-plus" :label="t('nav.post')" />
         <UColorModeButton color="neutral" variant="ghost" :aria-label="t('nav.theme')" />
         <UChip :show="chat.unreadTotal > 0" size="lg" color="primary" inset>
           <UButton

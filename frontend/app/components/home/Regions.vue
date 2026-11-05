@@ -7,13 +7,13 @@ const localizedName = useLocalizedName()
 </script>
 
 <template>
-  <section class="py-16 sm:py-24">
+  <section class="py-10 sm:py-12">
     <UContainer>
-      <HomeSectionHead center :eyebrow="t('home.regions.eyebrow')" :title="t('home.regions.title')" :subtitle="t('home.regions.subtitle')" />
-      <ul class="mx-auto mt-10 flex max-w-4xl flex-wrap justify-center gap-2.5">
+      <p class="eyebrow text-center text-primary">{{ t('home.regions.title') }}</p>
+      <ul class="mx-auto mt-4 flex max-w-4xl flex-wrap justify-center gap-2">
         <li v-for="r in regions" :key="r.id">
-          <span class="inline-flex items-center gap-1.5 rounded-full border border-default bg-default px-4 py-2 text-[15px] font-medium text-default shadow-[var(--shadow-soft)] dark:bg-sand-900">
-            <UIcon name="i-lucide-map-pin" class="size-4 text-primary" aria-hidden="true" />
+          <span class="inline-flex items-center gap-1 rounded-full border border-default bg-default px-3 py-1 text-sm font-medium text-default dark:bg-sand-900">
+            <UIcon name="i-lucide-map-pin" class="size-3.5 text-primary" aria-hidden="true" />
             {{ localizedName(r.name) }}
           </span>
         </li>

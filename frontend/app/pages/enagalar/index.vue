@@ -30,6 +30,9 @@ const [{ data: regions }, { data: skills }, { data, status, error, refresh }, { 
   ),
 ])
 
+// Haqiqiy natija yo'q, lekin Telegram e'lonlari bor: ular asosiy natija sifatida chiqadi
+const importedPrimary = computed(() => !nannies.value.length && !!importedTotal.value)
+const { plural } = useFormat()
 const pending = computed(() => status.value === 'pending')
 const total = computed(() => data.value?.meta.total ?? 0)
 const nannies = computed(() => data.value?.data ?? [])
@@ -56,7 +59,7 @@ function changePage(p: number) {
   <SearchShell
     :title="t('nanny.title')"
     :subtitle="t('nanny.subtitle')"
-    :count-label="importedTotal ? (total ? t('nanny.count', { n: total }) + ' · ' + t('imported.section.countPlus', { n: importedTotal }) : t('imported.section.countOnly', { n: importedTotal })) : t('nanny.count', { n: total })"
+    :count-label="importedPrimary ? plural('imported.list.count', importedTotal) : importedTotal ? (total ? t('nanny.count', { n: total }) + ' · ' + t('imported.section.countPlus', { n: importedTotal }) : t('imported.section.countOnly', { n: importedTotal })) : t('nanny.count', { n: total })"
     :pending="pending"
     :sort-items="sortItems"
     :sort="filters.sort || 'newest'"
@@ -77,8 +80,7 @@ function changePage(p: number) {
       <UButton class="mt-6" icon="i-lucide-rotate-cw" :label="t('search.retry')" @click="refresh()" />
     </div>
     <SearchEmpty
-      v-else-if="!nannies.length"
-      :compact="!!importedTotal"
+      v-else-if="!nannies.length && !importedTotal"
       :title="t('nanny.empty.title')"
       :text="t('nanny.empty.text')"
       :clear="t('nanny.empty.clear')"
@@ -86,7 +88,7 @@ function changePage(p: number) {
       post-to="/kabinet/vakansiyalar/yangi"
       @clear="reset"
     />
-    <template v-else>
+    <template v-else-if="nannies.length">
       <div class="grid gap-4 sm:grid-cols-2">
         <NannyCard v-for="n in nannies" :key="n.id" :nanny="n" />
       </div>
@@ -103,6 +105,6 @@ function changePage(p: number) {
     </template>
 
     <!-- Telegram kanallardan olingan e'lonlar: mahalliy natija bo'lmasa ham ko'rinadi -->
-    <ImportedSection type="nanny" :filters="filters" />
+    <ImportedSection type="nanny" :filters="filters" :primary="importedPrimary && !pending && !error" promo-to="/kabinet/anketa" />
   </SearchShell>
 </template>

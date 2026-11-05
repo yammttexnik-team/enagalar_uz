@@ -3,7 +3,7 @@
  * "Matnni joylash (AI)": eski Telegram e'lon matnidan forma maydonlarini oladi.
  * Hech narsa saqlanmaydi — maydonlar `parsed` hodisasi bilan formaga beriladi.
  */
-const props = defineProps<{ type: 'nanny' | 'vacancy' }>()
+const props = defineProps<{ type: 'nanny' | 'vacancy', inline?: boolean }>()
 const emit = defineEmits<{ parsed: [fields: Record<string, unknown>] }>()
 const { t } = useI18n()
 const api = useApi()
@@ -43,8 +43,22 @@ async function submit() {
 </script>
 
 <template>
-  <UButton type="button" color="primary" variant="soft" icon="i-lucide-sparkles" :label="t('dashboard.aiPaste.button')" @click="open = true" />
-  <UModal v-model:open="open" :title="t('dashboard.aiPaste.title')" :description="t('dashboard.aiPaste.description')" :close="{ 'aria-label': t('search.close') }">
+  <!-- Asosiy kirish: yangi e'lon/anketada forma tepasida ochiq turadi -->
+  <section v-if="inline" class="rounded-3xl border border-brand-200 bg-brand-50 p-5 dark:border-brand-800 dark:bg-brand-950/60 sm:p-6">
+    <h2 class="flex items-center gap-2 font-display text-lg font-extrabold text-highlighted">
+      <UIcon name="i-lucide-sparkles" class="size-5 text-primary" aria-hidden="true" />{{ t('dashboard.aiPaste.inlineTitle') }}
+    </h2>
+    <UTextarea v-model="text" :rows="6" :maxlength="MAX" class="mt-4 w-full" :aria-label="t('dashboard.aiPaste.label')" :placeholder="type === 'nanny' ? t('dashboard.aiPaste.placeholderNanny') : t('dashboard.aiPaste.placeholderVacancy')" />
+    <div class="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <p class="flex items-start gap-2 text-sm text-muted">
+        <UIcon name="i-lucide-shield-check" class="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+        <span>{{ text && tooShort ? t('dashboard.aiPaste.tooShort', { n: MIN }) : t('dashboard.aiPaste.privacy') }}</span>
+      </p>
+      <UButton type="button" class="shrink-0 justify-center" icon="i-lucide-sparkles" :loading="busy" :disabled="tooShort" :label="t('dashboard.aiPaste.submit')" @click="submit" />
+    </div>
+  </section>
+  <UButton v-else type="button" color="primary" variant="soft" icon="i-lucide-sparkles" :label="t('dashboard.aiPaste.button')" @click="open = true" />
+  <UModal v-if="!inline" v-model:open="open" :title="t('dashboard.aiPaste.title')" :description="t('dashboard.aiPaste.description')" :close="{ 'aria-label': t('search.close') }">
     <template #body>
       <UFormField :label="t('dashboard.aiPaste.label')" :hint="`${text.length}/${MAX}`">
         <UTextarea v-model="text" :rows="8" :maxlength="MAX" class="w-full" autofocus :placeholder="type === 'nanny' ? t('dashboard.aiPaste.placeholderNanny') : t('dashboard.aiPaste.placeholderVacancy')" />

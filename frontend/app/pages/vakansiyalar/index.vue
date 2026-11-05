@@ -29,6 +29,9 @@ const [{ data: regions }, { data, status, error, refresh }, { data: importedTota
   ),
 ])
 
+// Haqiqiy natija yo'q, lekin Telegram e'lonlari bor: ular asosiy natija sifatida chiqadi
+const importedPrimary = computed(() => !items.value.length && !!importedTotal.value)
+const { plural } = useFormat()
 const pending = computed(() => status.value === 'pending')
 const total = computed(() => data.value?.meta.total ?? 0)
 const items = computed(() => data.value?.data ?? [])
@@ -55,7 +58,7 @@ function changePage(p: number) {
   <SearchShell
     :title="t('vacancy.title')"
     :subtitle="t('vacancy.subtitle')"
-    :count-label="importedTotal ? (total ? t('vacancy.count', { n: total }) + ' · ' + t('imported.section.countPlus', { n: importedTotal }) : t('imported.section.countOnly', { n: importedTotal })) : t('vacancy.count', { n: total })"
+    :count-label="importedPrimary ? plural('imported.list.count', importedTotal) : importedTotal ? (total ? t('vacancy.count', { n: total }) + ' · ' + t('imported.section.countPlus', { n: importedTotal }) : t('imported.section.countOnly', { n: importedTotal })) : t('vacancy.count', { n: total })"
     :pending="pending"
     :sort-items="sortItems"
     :sort="filters.sort || 'newest'"
@@ -76,8 +79,7 @@ function changePage(p: number) {
       <UButton class="mt-6" icon="i-lucide-rotate-cw" :label="t('search.retry')" @click="refresh()" />
     </div>
     <SearchEmpty
-      v-else-if="!items.length"
-      :compact="!!importedTotal"
+      v-else-if="!items.length && !importedTotal"
       :title="t('vacancy.empty.title')"
       :text="t('vacancy.empty.text')"
       :clear="t('vacancy.empty.clear')"
@@ -85,7 +87,7 @@ function changePage(p: number) {
       post-to="/kabinet/anketa"
       @clear="reset"
     />
-    <template v-else>
+    <template v-else-if="items.length">
       <div class="grid gap-4 sm:grid-cols-2">
         <VacancyCard v-for="v in items" :key="v.id" :vacancy="v" />
       </div>
@@ -102,6 +104,6 @@ function changePage(p: number) {
     </template>
 
     <!-- Telegram kanallardan olingan e'lonlar: mahalliy natija bo'lmasa ham ko'rinadi -->
-    <ImportedSection type="vacancy" :filters="filters" />
+    <ImportedSection type="vacancy" :filters="filters" :primary="importedPrimary && !pending && !error" promo-to="/kabinet/vakansiyalar/yangi" />
   </SearchShell>
 </template>

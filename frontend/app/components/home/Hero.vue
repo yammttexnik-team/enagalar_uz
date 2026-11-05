@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import type { Region } from '~/composables/useApi'
 
-const props = defineProps<{ regions: Region[] }>()
+import type { ImportedItem } from '~/components/imported/Card.vue'
+
+const props = defineProps<{ regions: Region[], nanny: ImportedItem | null, vacancy: ImportedItem | null, total: number }>()
 const { t } = useI18n()
 const localePath = useLocalePath()
+const authLink = useAuthLink()
 const localizedName = useLocalizedName()
 
 type Mode = 'nanny' | 'job'
@@ -21,9 +24,9 @@ const tabs = computed(() => [
 ])
 
 const chips = computed(() => [
-  { icon: 'i-lucide-badge-check', label: t('home.hero.chips.verified') },
-  { icon: 'i-lucide-gift', label: t('home.hero.chips.bonus') },
+  ...(props.total > 0 ? [{ icon: 'i-lucide-send', label: t('home.hero.chips.listings', { n: props.total }) }] : []),
   { icon: 'i-lucide-map-pin', label: t('home.hero.chips.regions') },
+  { icon: 'i-lucide-gift', label: t('home.hero.chips.free') },
 ])
 
 // Tanlangan rejimga qarab enagalar yoki vakansiyalar qidiruviga oʻtadi (region = URL query).
@@ -49,10 +52,21 @@ function search() {
           <span class="block text-primary">{{ t('home.hero.title2') }}</span>
         </h1>
         <p class="mt-5 max-w-xl text-lg leading-relaxed text-muted sm:text-xl">
-          {{ t('home.hero.subtitle') }}
+          {{ total > 0 ? t('home.hero.subtitleLive', { n: total }) : t('home.hero.subtitle') }}
         </p>
 
-        <form class="surface mt-8 max-w-xl p-3 sm:p-4" @submit.prevent="search">
+        <div class="mt-7 flex flex-wrap items-center gap-x-4 gap-y-3">
+          <div class="flex flex-col items-start gap-1">
+            <UButton size="xl" color="secondary" icon="i-lucide-plus" :to="authLink('/kabinet/vakansiyalar/yangi')" :label="t('home.hero.postCta')" />
+            <span class="px-1 text-xs text-muted">{{ t('home.hero.postNote') }}</span>
+          </div>
+          <UButton size="xl" color="neutral" variant="outline" icon="i-lucide-search" :to="localePath('/enagalar')" :label="t('home.hero.findCta')" class="self-start" />
+          <NuxtLink :to="authLink('/kabinet/anketa')" class="self-start py-3 text-sm font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-primary">
+            {{ t('home.hero.profileCta') }}
+          </NuxtLink>
+        </div>
+
+        <form class="surface mt-7 max-w-xl p-3 sm:p-4" @submit.prevent="search">
           <div role="group" :aria-label="t('home.hero.tabsLabel')" class="grid grid-cols-2 gap-1 rounded-xl bg-elevated p-1 dark:bg-sand-800">
             <button
               v-for="tab in tabs"
@@ -98,7 +112,7 @@ function search() {
         </ul>
       </div>
 
-      <HomeHeroVisual />
+      <HomeHeroVisual :nanny="nanny" :vacancy="vacancy" />
     </UContainer>
   </section>
 </template>

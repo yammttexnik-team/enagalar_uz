@@ -16,7 +16,9 @@
     "toHome": "Bosh sahifa",
     "skip": "Asosiy qismga oʻtish",
     "main": "Asosiy",
-    "mobile": "Mobil menyu"
+    "mobile": "Mobil menyu",
+    "post": "Eʼlon joylash",
+    "createProfile": "Anketa yaratish"
   },
   "footer": {
     "tagline": "Oʻzbekistondagi ota-onalar uchun enaga topish va u bilan xavfsiz gaplashishning eng sodda yoʻli.",
@@ -34,27 +36,29 @@
   },
   "home": {
     "seoTitle": "Enaga topish — enagalar.uz",
-    "seoDescription": "Enagalar va oilalar uchun eʼlonlar, pasport bilan tasdiqlash nishoni, xavfsiz chat va AI yordamchi — butun Oʻzbekiston boʻylab.",
+    "seoDescription": "Telegram kanallardagi enaga va oila eʼlonlari bir joyda, filtr bilan. Eʼlon joylash bepul. Roʻyxatdan oʻtgan enagalar pasport bilan tasdiqlanadi.",
     "hero": {
       "eyebrow": "Xotirjam ota-onalar uchun",
       "title1": "Farzandingiz uchun",
       "title2": "ishonchli enaga",
-      "subtitle": "Enagalar va oilalar uchun eʼlonlar, pasport bilan tasdiqlash nishoni, xavfsiz chat va AI yordamchi — butun Oʻzbekiston boʻylab.",
+      "subtitle": "Enaga va oila eʼlonlari bir joyda, filtr bilan. Roʻyxatdan oʻtganlar pasport bilan tasdiqlanadi.",
       "tabsLabel": "Qidiruv turi",
       "tabNanny": "Enaga kerak",
       "tabJob": "Ish kerak",
       "region": "Hudud",
       "regionPlaceholder": "Viloyatni tanlang",
       "allRegions": "Barcha viloyatlar",
-      "ctaNanny": "Enaga topish",
+      "ctaNanny": "Qidirish",
       "ctaJob": "Vakansiyalarni koʻrish",
       "chips": {
         "verified": "Tasdiqlash nishonlari",
         "bonus": "Bonus bilan toʻlash",
-        "regions": "Barcha viloyatlar"
+        "regions": "14 viloyat",
+        "listings": "{n} ta eʼlon",
+        "free": "Bepul"
       },
       "visual": {
-        "alt": "Enaga anketasi, nishonlar va chat namunasi",
+        "alt": "Soʻnggi eʼlonlar",
         "name": "Dilnoza, 34 yosh",
         "meta": "Chilonzor · 6 yil tajriba",
         "verified": "Tasdiqlangan",
@@ -63,8 +67,16 @@
         "msgIn": "Assalomu alaykum! Ertaga soat 9 da kela olasizmi?",
         "msgOut": "Ha, albatta. Mayli, tanishib chiqamiz.",
         "second": "Malika, 41 yosh",
-        "secondMeta": "Yunusobod · 11 yil"
-      }
+        "secondMeta": "Yunusobod · 11 yil",
+        "nanny": "Soʻnggi enaga eʼloni",
+        "vacancy": "Soʻnggi oila eʼloni",
+        "empty": "Eʼlonlar tez orada paydo boʻladi"
+      },
+      "subtitleLive": "Telegram kanallardagi {n} ta enaga va oila eʼloni — bir joyda, filtr bilan. Roʻyxatdan oʻtganlar pasport bilan tasdiqlanadi.",
+      "postCta": "Eʼlon joylash",
+      "postNote": "bepul, +30 000 bonus",
+      "findCta": "Enaga topish",
+      "profileCta": "Enaga boʻlsangiz — anketa yarating"
     },
     "audiences": {
       "eyebrow": "Ikki tomonlama platforma",
@@ -105,8 +117,8 @@
           "text": "Botga oʻting va raqamingizni yuboring. Parol eslab yurish shart emas."
         },
         {
-          "title": "E’lon yoki anketa joylang",
-          "text": "Ota-ona nimaga ehtiyoj borligini yozadi, enaga oʻzi haqida gapirib beradi."
+          "title": "Eʼlon yoki anketa joylang",
+          "text": "Ota-ona nimaga ehtiyoj borligini yozadi, enaga oʻzi haqida gapirib beradi. Ikkala tomon ham bir-birini qidiradi."
         },
         {
           "title": "AI mos nomzodlarni tanlaydi",
@@ -120,12 +132,12 @@
     },
     "trust": {
       "eyebrow": "Ishonch va xavfsizlik",
-      "title": "Nishon — bu haqiqiy tekshiruv, bezak emas",
-      "subtitle": "Har bir nishon administrator tekshiruvidan keyin beriladi. Ota-ona nimaga ishonishi mumkinligini koʻrib turadi.",
+      "title": "Nishon — bezak emas, haqiqiy tekshiruv",
+      "subtitle": "Roʻyxatdan oʻtgan enagalar pasport bilan tasdiqlanadi — nishon profilida koʻrinadi. Nishonni administrator tekshiruvdan keyin beradi.",
       "badgesTitle": "Nishonlar",
       "passport": {
         "title": "Pasport tekshiruvi",
-        "text": "Moderator pasport maʼlumotlarini tekshiradi va “Tasdiqlangan” nishonini beradi."
+        "text": "Enaga pasport maʼlumotlarini kiritsa, moderator tekshiradi va “Tasdiqlangan” nishonini beradi."
       },
       "deleted": {
         "title": "Hujjat rasmi oʻchiriladi",
@@ -135,13 +147,13 @@
         "title": "Maʼlumotlar yashirin",
         "text": "Pasport maʼlumotlari shifrlangan holda saqlanadi va profilda hech kimga koʻrinmaydi — faqat nishon."
       },
-      "tip": "Ehtiyot boʻling: tanishuvdan oldin pul oʻtkazmang va pasport rasmini yubormang.",
+      "tip": "Telegram kanallardagi eʼlonlar egasi tomonidan tasdiqlanmagan. Ehtiyot boʻling: tanishuvdan oldin pul oʻtkazmang va pasport rasmini yubormang.",
       "badgeText": {
         "phone-verified": "Raqam Telegram bot orqali tasdiqlangan.",
-        "verified": "Pasport maʼlumotlari moderator tomonidan tekshirilgan.",
-        "medical-certificate": "Tibbiy maʼlumotnoma administrator tomonidan tekshirilgan.",
-        "dispensary-clear": "Narkologik va psixonevrologik dispanserda hisobda turmaydi.",
-        "certificate": "Pedagog, hamshira yoki birinchi yordam sertifikati bor."
+        "verified": "Pasport maʼlumotlari moderator tekshiruvidan oʻtsa beriladi.",
+        "medical-certificate": "Tibbiy maʼlumotnoma administrator tekshiruvidan oʻtsa beriladi.",
+        "dispensary-clear": "Dispanser hisobida turmasligi maʼlumotnoma bilan tasdiqlansa beriladi.",
+        "certificate": "Pedagog, hamshira yoki birinchi yordam sertifikati tasdiqlansa beriladi."
       }
     },
     "ai": {
@@ -166,7 +178,7 @@
       "promptLabel": "Siz yozasiz",
       "prompt": "Yunusobodda 2 yoshli qizimga rus tilini biladigan enaga kerak, 9:00 dan 18:00 gacha.",
       "answerLabel": "AI yordamchi",
-      "answer": "Tushundim. 3 ta mos enaga topildi: hammasi Yunusobodda, rus tilini biladi, pasporti tekshirilgan."
+      "answer": "Tushundim. 3 ta mos enaga topildi: hammasi Yunusobodda va rus tilini biladi."
     },
     "regions": {
       "eyebrow": "Hududlar",
@@ -179,7 +191,7 @@
       "items": [
         {
           "label": "Xizmat pullikmi?",
-          "content": "Ha, platforma pullik. Narx xizmat tanlanganda aniq koʻrsatiladi, yashirin toʻlov yoʻq. E’lon, anketa va soʻrovnomalar uchun bonus beriladi — bonuslar bilan xizmat uchun toʻlash mumkin."
+          "content": "Eʼlon joylash va anketa yaratish bepul, birinchi eʼlon yoki anketa uchun bonus beriladi. Qoʻshimcha xizmatlar (TOP, “Shoshilinch”) hozircha faqat bonus bilan olinadi — real pul toʻlovi yoʻq."
         },
         {
           "label": "Roʻyxatdan qanday oʻtaman?",
@@ -256,7 +268,12 @@
     "role": {
       "parent": "Ota-ona",
       "nanny": "Enaga"
-    }
+    },
+    "stepsLabel": "Kirish bosqichlari",
+    "step1": "Bot ochiladi ({bot})",
+    "step2": "«Raqamni yuborish» tugmasini bosasiz",
+    "step3": "6 xonali kodni shu yerga kiritasiz",
+    "benefit": "Birinchi eʼlon yoki anketa — 30 000 soʻm bonus"
   },
   "format": {
     "som": "soʻm",
@@ -496,7 +513,8 @@
       "filled": "Formada {n} ta maydon toʻldirildi. Tekshirib, keyin saqlang.",
       "empty": "Matndan maydon topilmadi. Formani qoʻlda toʻldiring.",
       "limit": "Bugungi AI soʻrovlar limiti tugadi. Ertaga urinib koʻring yoki qoʻlda toʻldiring.",
-      "unavailable": "AI hozir ishlamayapti. Formani qoʻlda toʻldiring yoki keyinroq urinib koʻring."
+      "unavailable": "AI hozir ishlamayapti. Formani qoʻlda toʻldiring yoki keyinroq urinib koʻring.",
+      "inlineTitle": "Telegramdagi eʼloningizni shu yerga tashlang — AI formani oʻzi toʻldiradi"
     },
     "nav": {
       "label": "Kabinet menyusi",
@@ -1242,7 +1260,8 @@
       "age": "Yoshi",
       "years": "{n} yil",
       "noticeTitle": "Egasi hali tasdiqlamagan",
-      "notice": "Bu eʼlon ochiq Telegram kanaldan olingan. Maʼlumotni asl eʼlonda tekshiring va oldindan pul toʻlamang."
+      "notice": "Kontakt asl eʼlonda. Oldindan pul oʻtkazmang.",
+      "mineBonus": "7 kun TOP bepul · 30 000 soʻm bonus"
     },
     "remove": {
       "title": "Eʼlonni oʻchirishni soʻrash",
@@ -1275,6 +1294,13 @@
       "title": "Telegram kanallardan eʼloningizni topdik",
       "text": "Tasdiqlashni kutmoqda: {n} ta. Tasdiqlasangiz — 7 kun TOP sovgʻa",
       "cta": "Koʻrish"
+    },
+    "list": {
+      "count": "{n} ta eʼlon",
+      "promo": {
+        "nanny": "Siz ham eʼlon joylang — bepul, 30 000 soʻm bonus",
+        "vacancy": "Siz ham eʼlon joylang — bepul, 30 000 soʻm bonus"
+      }
     }
   }
 }

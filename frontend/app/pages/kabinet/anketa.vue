@@ -152,9 +152,14 @@ async function applyAi(f: Record<string, any>) {
   if (typeof f.price_amount === 'number') form.price_amount = String(f.price_amount)
   if (typeof f.price_unit === 'string') form.price_unit = f.price_unit
   if (typeof f.bio === 'string') form.bio = f.bio
-  step.value = 1
   errors.value = {}
-  top()
+  const miss = REQUIRED.find(r => !r.ok())
+  if (!miss) { step.value = 1; return top() }
+  step.value = miss.step
+  await nextTick()
+  const el = document.querySelector<HTMLElement>(`[data-field="${miss.key}"]`)
+  el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  el?.querySelector<HTMLElement>('input, textarea, button')?.focus({ preventScroll: true })
 }
 
 // --- Ko'rib chiqish ---
@@ -167,6 +172,8 @@ const REQUIRED = [
   { key: 'bio', step: 3, ok: () => bioLen.value >= 50 },
 ]
 const checklist = computed(() => REQUIRED.map(r => ({ ...r, done: r.ok() })))
+// Anketa hali bo'sh (yangi) — AI joylash ochiq turadi.
+const profileEmpty = computed(() => !!profile.value && profile.value.status === 'draft' && !profile.value.region_id && !profile.value.bio)
 const complete = computed(() => checklist.value.every(c => c.done))
 const canSubmit = computed(() => !!profile.value && ['draft', 'rejected', 'hidden'].includes(profile.value.status))
 
@@ -279,7 +286,8 @@ const summaryPlace = computed(() => {
           </li>
         </ol>
 
-        <div class="mb-4 flex justify-end">
+        <DashboardAiPaste v-if="profileEmpty" class="mb-6" type="nanny" inline @parsed="applyAi" />
+        <div v-else class="mb-4 flex justify-end">
           <DashboardAiPaste type="nanny" @parsed="applyAi" />
         </div>
 
@@ -288,7 +296,7 @@ const summaryPlace = computed(() => {
           <template v-if="step === 1">
             <h2 class="h3-title text-highlighted"><AppText :text="t('dashboard.profile.step.basic')" /></h2>
             <div class="grid gap-5 sm:grid-cols-2">
-              <UFormField :label="t('search.region')" :error="err('region_id')" required>
+              <UFormField :label="t('search.region')" :error="err('region_id')" required data-field="region_id">
                 <USelect v-model="form.region_id" :items="regionItems" icon="i-lucide-map-pin" class="w-full" :placeholder="t('dashboard.common.choose')" />
               </UFormField>
               <UFormField :label="t('search.district')" :error="err('district_id')">
@@ -306,13 +314,13 @@ const summaryPlace = computed(() => {
           <!-- 2 -->
           <template v-else-if="step === 2">
             <h2 class="h3-title text-highlighted"><AppText :text="t('dashboard.profile.step.work')" /></h2>
-            <UFormField :label="t('search.workFormat')" :error="err('work_formats')" required>
+            <UFormField :label="t('search.workFormat')" :error="err('work_formats')" required data-field="work_formats">
               <DashboardChipsMulti v-model="form.work_formats" :items="formatItems" :label="t('search.workFormat')" />
             </UFormField>
             <UFormField :label="t('nanny.detail.ageGroups')" :error="err('age_groups')">
               <DashboardChipsMulti v-model="form.age_groups" :items="ageItems" :label="t('nanny.detail.ageGroups')" />
             </UFormField>
-            <UFormField :label="t('search.language')" :error="err('languages')" required>
+            <UFormField :label="t('search.language')" :error="err('languages')" required data-field="languages">
               <DashboardChipsMulti v-model="form.languages" :items="langItems" :label="t('search.language')" />
             </UFormField>
             <UFormField :label="t('search.skills')" :error="err('skills')">
@@ -323,7 +331,7 @@ const summaryPlace = computed(() => {
               <USwitch v-model="form.free_trial_day" :label="t('nanny.detail.freeTrial')" />
             </div>
             <div class="grid max-w-xl gap-5 sm:grid-cols-[1fr_auto]">
-              <UFormField :label="t('nanny.detail.price')" :error="err('price_amount')" required>
+              <UFormField :label="t('nanny.detail.price')" :error="err('price_amount')" required data-field="price_amount">
                 <UInput :model-value="spaced(form.price_amount)" inputmode="numeric" class="w-full" :placeholder="t('search.pricePlaceholder')" @input="onPrice" />
               </UFormField>
               <UFormField :label="t('search.unit')" :error="err('price_unit')">
@@ -335,7 +343,7 @@ const summaryPlace = computed(() => {
           <!-- 3 -->
           <template v-else-if="step === 3">
             <h2 class="h3-title text-highlighted"><AppText :text="t('dashboard.profile.step.about')" /></h2>
-            <UFormField :error="err('bio')" :label="t('nanny.detail.about')" required>
+            <UFormField :error="err('bio')" :label="t('nanny.detail.about')" required data-field="bio">
               <UTextarea v-model="form.bio" class="w-full" :rows="8" maxlength="3000" :placeholder="t('dashboard.profile.bioPlaceholder')" />
               <template #hint>
                 <span :class="bioLen >= 50 ? 'font-semibold text-leaf-700 dark:text-leaf-400' : 'text-muted'" role="status">{{ bioLen }} / 50<template v-if="bioLen >= 50"> ✓</template></span>

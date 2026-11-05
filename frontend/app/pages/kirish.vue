@@ -62,8 +62,18 @@ const waiting = computed(() => status.value === 'waiting')
           <p v-if="status === 'blocked'" class="mt-5 rounded-xl bg-pomegranate-50 px-4 py-3 text-sm text-pomegranate-700 dark:bg-pomegranate-950 dark:text-pomegranate-300" role="alert">{{ t('auth.blocked') }}</p>
           <p v-if="status === 'error'"class="mt-5 rounded-xl bg-pomegranate-50 px-4 py-3 text-sm text-pomegranate-700 dark:bg-pomegranate-950 dark:text-pomegranate-300" role="alert">{{ t('auth.error') }}</p>
 
+          <ol class="mt-6 space-y-2.5 text-start" :aria-label="t('auth.stepsLabel')">
+            <li v-for="(n, i) in 3" :key="n" class="flex items-start gap-3 text-[15px] text-default">
+              <span class="grid size-6 shrink-0 place-items-center rounded-full bg-brand-100 text-sm font-bold text-brand-700 dark:bg-brand-900 dark:text-brand-200">{{ i + 1 }}</span>
+              <span>{{ t(`auth.step${n}`, { bot: '@enagalaruz_bot' }) }}</span>
+            </li>
+          </ol>
+          <p class="mt-4 flex items-center justify-center gap-2 rounded-xl bg-honey-50 px-4 py-2.5 text-sm font-semibold text-honey-800 dark:bg-honey-950 dark:text-honey-200">
+            <UIcon name="i-lucide-gift" class="size-4 shrink-0" aria-hidden="true" />{{ t('auth.benefit') }}
+          </p>
+
           <UButton
-            class="mt-7 justify-center"
+            class="mt-6 justify-center"
             block
             size="xl"
             icon="i-lucide-send"
