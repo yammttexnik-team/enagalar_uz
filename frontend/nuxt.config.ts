@@ -19,6 +19,9 @@ export default defineNuxtConfig({
       apiBase: 'http://localhost:8000/api/v1',
       siteName: 'enagalar.uz',
       siteUrl: 'https://enagalar.uz',
+      // Telegram Login vidjeti uchun bot (BotFather'da /setdomain qilingan bo'lishi kerak)
+      telegramBot: 'enagalaruz_bot',
+      telegramWidget: false,
       // Laravel Reverb (Pusher protokoli). NUXT_PUBLIC_REVERB_* bilan almashtiriladi (deploy/docker-compose.prod.yml).
       reverbAppKey: 'enagalar-local-key',
       reverbHost: 'localhost',

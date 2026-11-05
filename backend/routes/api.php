@@ -59,6 +59,7 @@ Route::prefix('v1')->group(function () {
     // Polling 3 soniyada bir (daqiqasiga ~20) — boshlash va kod kiritishdan alohida limit, aks holda bir daqiqada 429 bo'ladi.
     Route::prefix('auth/telegram')->group(function () {
         Route::post('/start', [TelegramAuthController::class, 'start'])->middleware('throttle:10,1');
+        Route::post('/widget', [TelegramAuthController::class, 'widget'])->middleware('throttle:10,1');
         Route::get('/status/{token}', [TelegramAuthController::class, 'status'])->middleware('throttle:90,1');
         Route::post('/status/{token}/confirm', [TelegramAuthController::class, 'confirm'])->middleware('throttle:20,1');
     });

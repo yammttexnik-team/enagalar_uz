@@ -109,6 +109,24 @@ export function useTelegramLogin() {
     }
   }
 
+  /** Telegram Login vidjeti (oauth.telegram.org) qaytargan imzolangan ma'lumot bilan kirish. */
+  async function widgetLogin(data: Record<string, string | number>) {
+    status.value = 'starting'
+    try {
+      const res = await auth.api<{ access_token: string, user: User }>('/auth/telegram/widget', {
+        method: 'POST',
+        body: { ...data, campaign: campaign.value || undefined, referral: referral.value || undefined },
+      })
+      auth.setSession(res.access_token, res.user)
+      const redirect = safeRedirect(route.query.redirect)
+      if (!res.user.roles.length) await navigateTo(localePath({ path: '/boshlash', query: redirect ? { redirect } : {} }))
+      else await navigateTo(redirect ?? localePath('/kabinet'))
+    }
+    catch (e: unknown) {
+      status.value = (e as { statusCode?: number }).statusCode === 403 ? 'blocked' : 'error'
+    }
+  }
+
   async function start() {
     stop()
     status.value = 'starting'
@@ -179,5 +197,5 @@ export function useTelegramLogin() {
     window.removeEventListener('focus', onVisible)
   })
 
-  return { status, botUrl, start, confirm, confirming, codeError, attemptsLeft }
+  return { status, botUrl, start, confirm, widgetLogin, confirming, codeError, attemptsLeft }
 }

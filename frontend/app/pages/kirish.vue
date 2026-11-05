@@ -2,7 +2,8 @@
 const { t, tm, rt } = useI18n()
 const localePath = useLocalePath()
 const auth = useAuthStore()
-const { status, botUrl, start, confirm, confirming, codeError, attemptsLeft } = useTelegramLogin()
+const { status, botUrl, start, confirm, widgetLogin, confirming, codeError, attemptsLeft } = useTelegramLogin()
+const { telegramBot, telegramWidget } = useRuntimeConfig().public as { telegramBot: string, telegramWidget: boolean }
 const pin = ref<string[]>([])
 const code = computed(() => pin.value.join(''))
 
@@ -72,10 +73,16 @@ const waiting = computed(() => status.value === 'waiting')
             <UIcon name="i-lucide-gift" class="size-4 shrink-0" aria-hidden="true" />{{ t('auth.benefit') }}
           </p>
 
+          <!-- Asosiy: rasmiy Telegram Login (kodsiz). Zaxira: bot + 6 xonali kod -->
+          <div v-if="telegramWidget" class="mt-6">
+            <AuthTelegramWidget :bot="telegramBot" @auth="widgetLogin" />
+            <p class="mt-3 text-xs text-muted">{{ t('auth.widgetOr') }}</p>
+          </div>
           <UButton
-            class="mt-6 justify-center"
+            :class="telegramWidget ? 'mt-3 justify-center' : 'mt-6 justify-center'"
             block
             size="xl"
+            :variant="telegramWidget ? 'outline' : 'solid'"
             icon="i-lucide-send"
             :loading="loading"
             :label="status === 'expired' || status === 'error' ? t('auth.retry') : loading ? t('auth.starting') : t('auth.loginButton')"

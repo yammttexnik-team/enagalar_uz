@@ -273,7 +273,8 @@
     "step1": "Bot ochiladi ({bot})",
     "step2": "«Raqamni yuborish» tugmasini bosasiz",
     "step3": "6 xonali kodni shu yerga kiritasiz",
-    "benefit": "Birinchi eʼlon yoki anketa — 30 000 soʻm bonus"
+    "benefit": "Birinchi eʼlon yoki anketa — 30 000 soʻm bonus",
+    "widgetOr": "yoki bot orqali kod bilan kiring"
   },
   "format": {
     "som": "soʻm",
