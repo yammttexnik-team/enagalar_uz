@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /** Rasmiy Telegram Login vidjeti: tugma → Telegram'da "Confirm" → imzolangan ma'lumot onAuth orqali keladi. */
-const props = defineProps<{ bot: string }>()
+const props = defineProps<{ bot: string, lang?: string }>()
 const emit = defineEmits<{ auth: [data: Record<string, string | number>] }>()
 const failed = ref(false)
 const boxId = `tg-login-${Math.random().toString(36).slice(2, 8)}`
@@ -18,6 +18,7 @@ onMounted(async () => {
   s.setAttribute('data-size', 'large')
   s.setAttribute('data-radius', '12')
   s.setAttribute('data-request-access', 'write')
+  if (props.lang) s.setAttribute('data-lang', props.lang)
   s.setAttribute('data-onauth', 'onEnagalarTelegramAuth(user)')
   s.onerror = () => { failed.value = true }
   box.appendChild(s)

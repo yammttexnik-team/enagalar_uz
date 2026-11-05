@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { t, tm, rt } = useI18n()
+const { t, tm, rt, locale } = useI18n()
 const localePath = useLocalePath()
 const auth = useAuthStore()
 const { status, botUrl, start, confirm, widgetLogin, confirming, codeError, attemptsLeft } = useTelegramLogin()
@@ -75,7 +75,7 @@ const waiting = computed(() => status.value === 'waiting')
 
           <!-- Asosiy: rasmiy Telegram Login (kodsiz). Zaxira: bot + 6 xonali kod -->
           <div v-if="telegramWidget" class="mt-6">
-            <AuthTelegramWidget :bot="telegramBot" @auth="widgetLogin" />
+            <AuthTelegramWidget :bot="telegramBot" :lang="locale" @auth="widgetLogin" />
             <p class="mt-3 text-xs text-muted">{{ t('auth.widgetOr') }}</p>
           </div>
           <UButton
