@@ -13,7 +13,7 @@ class ListingTranslationTest extends TestCase
 {
     use RefreshDatabase;
 
-    private int $calls = 0;
+    public int $calls = 0;
 
     protected function setUp(): void
     {
@@ -92,7 +92,7 @@ class ListingTranslationTest extends TestCase
         $this->getJson('/api/v1/imported', ['Accept-Language' => 'ru'])->assertOk()
             ->assertJsonPath('data.0.title', 'Нужна няня')->assertJsonPath('data.0.description', 'Текст ru');
         $this->getJson("/api/v1/imported/{$l->id}", ['Accept-Language' => 'uz'])->assertOk()
-            ->assertJsonPath('data.title', 'Enaga kerak')->assertJsonPath('data.original_title', 'Нужна няня');
+            ->assertJsonPath('data.title', 'Enaga kerak')->assertJsonPath('data.original_title', 'Нужна няня в Чиланзар');
         $this->getJson('/api/v1/imported')->assertOk()->assertJsonPath('data.0.title', 'Enaga kerak');
     }
 

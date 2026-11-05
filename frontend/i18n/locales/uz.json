@@ -1302,5 +1302,59 @@
         "vacancy": "Siz ham eʼlon joylang — bepul, 30 000 soʻm bonus"
       }
     }
+  },
+  "articles": {
+    "seoTitle": "Enaga tanlash boʻyicha qoʻllanmalar va maslahatlar",
+    "seoDescription": "Enaga qanday tanlanadi, narxlar, suhbat savollari, shartnoma va xavfsizlik: ota-onalar va enagalar uchun amaliy qoʻllanmalar.",
+    "title": "Qoʻllanmalar va maslahatlar",
+    "lead": "Enaga tanlash, narxlar, xavfsizlik va shartnoma haqida ota-onalar va enagalar uchun amaliy maqolalar.",
+    "read": "Oʻqish",
+    "empty": "Hozircha maqolalar yoʻq. Tez orada paydo boʻladi.",
+    "loadFailed": "Maqolalarni yuklab boʻlmadi. Keyinroq urinib koʻring.",
+    "notFound": "Maqola topilmadi",
+    "back": "Barcha maqolalar",
+    "pages": "Sahifalar",
+    "prev": "Oldingi",
+    "next": "Keyingi",
+    "ctaTitle": "Enaga yoki ish qidiryapsizmi?",
+    "ctaText": "enagalar.uz da vakansiya joylang yoki mos enagani qidiring. Boshlash bepul.",
+    "ctaNannies": "Enagalarni koʻrish",
+    "ctaVacancies": "Vakansiyalarni koʻrish",
+    "navLink": "Foydali maqolalar"
+  },
+  "prices": {
+    "seoTitle": "Enaga narxlari {year}: viloyatlar boʻyicha",
+    "seoTitleRegion": "Enaga narxlari {year}: {region}",
+    "seoDescription": "Oʻzbekistonda enaga xizmati qancha turadi? Viloyatlar boʻyicha oylik, kunlik va soatlik oʻrtacha narxlar — real eʼlonlar asosida avtomatik hisoblanadi.",
+    "seoDescriptionRegion": "{region}da enaga xizmati qancha turadi? Oylik, kunlik va soatlik oʻrtacha narxlar — real eʼlonlar asosida avtomatik hisoblanadi.",
+    "title": "Enaga narxlari {year}: viloyatlar boʻyicha",
+    "titleRegion": "Enaga narxlari {year}: {region}",
+    "lead": "Oilalar adolatli narx bilan vakansiya joylashi, enagalar esa anketa narxini toʻgʻri qoʻyishi uchun: real eʼlonlardan avtomatik hisoblangan oʻrtacha narxlar.",
+    "regionLabel": "Viloyatni tanlang",
+    "unit": {
+      "month": "Oylik",
+      "day": "Kunlik",
+      "hour": "Soatlik"
+    },
+    "side": {
+      "nanny": "Enagalar soʻraydi",
+      "vacancy": "Oilalar taklif qiladi"
+    },
+    "typical": "odatda {from} – {to} soʻm",
+    "count": "{n} ta eʼlon",
+    "minMax": "eng kam {min}, eng koʻp {max}",
+    "notEnough": "maʼlumot yetarli emas",
+    "tableTitle": "Viloyatlar boʻyicha oylik narx",
+    "colRegion": "Viloyat",
+    "colMedian": "Oylik (median)",
+    "colCount": "Eʼlonlar",
+    "note": "{n} ta eʼlon asosida, oxirgi {days} kun, avtomatik yangilanadi.",
+    "updated": "Yangilangan: {date}.",
+    "emptyTitle": "Hozircha maʼlumot yetarli emas",
+    "emptyText": "Ishonchli statistika uchun kamida 3 ta eʼlon kerak. Boshqa viloyatni tanlab koʻring.",
+    "allRegions": "Barcha viloyatlar",
+    "ctaNannies": "Enagalarni koʻrish",
+    "ctaVacancies": "Vakansiyalarni koʻrish",
+    "navLink": "Enaga narxlari"
   }
 }

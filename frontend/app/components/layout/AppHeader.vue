@@ -11,7 +11,8 @@ watch(() => route.fullPath, () => { open.value = false })
 const links = computed(() => [
   { label: t('nav.nannies'), to: localePath('/enagalar') },
   { label: t('nav.vacancies'), to: localePath('/vakansiyalar') },
-  { label: t('nav.how'), to: localePath({ path: '/', hash: '#how' }) },
+  { label: t('prices.navLink'), to: localePath('/narxlar') },
+  { label: t('articles.navLink'), to: localePath('/maqolalar') },
 ])
 
 async function logout() {

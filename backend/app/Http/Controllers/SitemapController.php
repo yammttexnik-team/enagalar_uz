@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use App\Models\NannyProfile;
 use App\Models\Region;
 use App\Models\Vacancy;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Cache;
  */
 class SitemapController extends Controller
 {
-    private const STATIC = ['/', '/enagalar', '/vakansiyalar', '/bonus-shartlari'];
+    private const STATIC = ['/', '/enagalar', '/vakansiyalar', '/narxlar', '/maqolalar', '/bonus-shartlari'];
 
     public function __invoke(): Response
     {
@@ -32,6 +33,10 @@ class SitemapController extends Controller
         foreach (Region::orderBy('sort')->pluck('slug') as $slug) {
             $entries[] = ['/enagalar?region='.$slug, null];
             $entries[] = ['/vakansiyalar?region='.$slug, null];
+            $entries[] = ['/narxlar?region='.$slug, null];
+        }
+        foreach (Article::published()->orderBy('id')->get(['slug', 'updated_at']) as $a) {
+            $entries[] = ['/maqolalar/'.$a->slug, $a->updated_at];
         }
         NannyProfile::active()->select(['id', 'updated_at'])->orderBy('id')
             ->each(function ($p) use (&$entries) {
